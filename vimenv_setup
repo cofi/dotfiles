@@ -1,0 +1,7 @@
+let vimdir = expand("~/.vim")
+let vimlocal_dir = expand("~/.vim_local")
+let &runtimepath = vimdir . '/vim'
+let &runtimepath = &runtimepath . ',$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,'
+let &runtimepath = &runtimepath . vimdir . '/templates,' . vimdir . '/xpt'
+let &runtimepath = &runtimepath . ',' . vimlocal_dir
+exec "source " . vimdir . "/vimrc"

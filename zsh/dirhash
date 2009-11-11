@@ -1,0 +1,13 @@
+function add_hash() {
+    test -d "$1" && hash -d $2="$1"
+}
+
+add_hash ~/Work/Uni/WS09 uni
+add_hash ~/Work/Uni/WS09/MfI math
+add_hash ~/Work/Uni/WS09/GdI gdi
+add_hash ~/Work/Uni/WS09/TGdI tgdi
+add_hash ~/dev/projects proj
+add_hash ~/dev/projects/python-doc/py-tutorial-de pytut
+add_hash ~/config/dotfiles dot
+
+unfunction add_hash

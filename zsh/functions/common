@@ -1,0 +1,124 @@
+emulate -L zsh
+trans() {
+    case "$1" in
+        [dD]*)
+            translate -l de-en $2
+            ;;
+        [eE]*)
+            translate -l de-en -i $2
+            ;;
+        [hH]|-help|-h|--help)
+            echo "Usage $0 [ dD | eE ]"
+            echo "      d : German -> English"
+            echo "      e : English -> German"
+            ;;
+        *)
+            translate -l de-en $2
+            translate -l de-en -i $2
+            ;;
+    esac
+}
+
+unpack() {
+    if [[ -f $1 ]] {
+        case $1 in
+            *.tar.bz2)  bzip2 -v -d $1      ;;
+            *.tar.gz)   tar -xvzf $1        ;;
+            *.rar)      unrar e $1          ;;
+            *.deb)      ar -x $1            ;;
+            *.bz2)      bzip2 -d $1         ;;
+            *.lzh)      lha x $1            ;;
+            *.gz)       gunzip -d $1        ;;
+            *.tar)      tar -xvf $1         ;;
+            *.tgz)      gunzip -d $1        ;;
+            *.tbz2)     tar -jxvf $1        ;;
+            *.zip)      unzip $1            ;;
+            *.lzma)     lzma -dk $1  ;;
+            *.7z)       lzma -dk -S .7z $1  ;;
+            *)          echo "'$1' Error. Please go away" ;;
+        esac
+    } else {
+        echo "'$1' is not a valid file"
+    }
+}
+
+pack() {
+    if [[ -n $2 ]] {
+        case $2 in
+            tgz | tar.gz)   tar -zcvf$1.$2 $1 ;;
+            tbz2 | tar.bz2) tar -jcvf$1.$2 $1 ;;
+            tar)            tar -cvf$1.$2  $1 ;;
+            gz | gzip)      gzip           $1 ;;
+            bz2 | bzip2)    bzip2          $1 ;;
+            7z)             lzma -zk -S .7z $1 ;; 
+            lzma)             lzma -zk $1 ;; 
+            *)
+                    echo "Usage:"
+                    echo "pack file compression"
+                    echo "Supported compressions: tar(gz,bz2), gz, bz2, 7z, lzma (defaulting to tar.gz)"
+                    ;;
+        esac
+    } else {
+        pack $1 tar.gz
+    }
+}
+
+lsarchive() {
+    if [[ -f $1 ]] {
+        case $1 in
+            *.tar.gz)      gunzip -c $1 | tar -tf - -- ;;
+            *.tar)         tar -tf $1 ;;
+            *.tgz)         tar -ztf $1 ;;
+            *.zip)         unzip -l $1 ;;
+            *.bz2)         bzless $1 ;;
+            *.deb)         dpkg-deb --fsys-tarfile $1 | tar -tf - -- ;;
+            *)
+                           echo "Usage:"
+                           echo "lsarchive archive [tar(gz|bz2), zip, deb])"
+                           ;;
+        esac
+    } else {
+        echo "'$1' is not a valid archive"
+    }
+}
+
+#Show space dir occupies
+dirspace() {
+    if [[ -n "$1" ]] {
+        for dir in "$@" ; do
+            if [[ -d "$dir" ]] {
+                ( cd $dir; echo "-<$dir>"; du -shx .; echo);
+            } else {
+                echo "warning: $dir does not exist" >&2
+            }
+        done
+    } else {
+        for dir in $path; do
+            if [[ -d "$dir" ]] {
+                ( cd $dir; echo "-<$dir>"; du -shx .; echo);
+            } else {
+                echo "warning: $dir does not exist" >&2
+            }
+        done
+    }
+}
+
+viless() {
+        vim --cmd 'let no_plugin_maps = 1' -c "so \$VIMRUNTIME/macros/less.vim" "${@:--}"
+}
+
+mcd() { mkdir -p "$@" && cd "$@" }
+cl() { cd "$@" && l }
+cls() { cd "$@" && ls }
+
+dcp() {
+    if [[ -d $2 ]] {
+        mkdir -p $2 && cp $1 $2
+    } else {
+        mkdir -p dirname $2 && cp $1 $2
+    }
+}
+
+silent_okular() {
+    okular $1 2&> /dev/null &
+}

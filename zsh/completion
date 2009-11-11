@@ -1,0 +1,156 @@
+autoload -Uz compinit
+compinit
+
+autoload -Uz bashcompinit
+bashcompinit
+
+if [ -d $LOCALDIR/cache ] ; then
+    zstyle ':completion:*' use-cache on 
+    zstyle ':completion:*' cache-path $LOCALDIR/cache/
+fi
+
+  # completion colours
+  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+### highlight parameters with uncommon names
+    zstyle ':completion:*:parameters' \
+        list-colors "=[^a-zA-Z]*=$color[red]"
+
+### highlight aliases
+    zstyle ':completion:*:aliases' \
+        list-colors "=*=$color[green]"
+
+### highlight the original input.
+    zstyle ':completion:*:original' \
+        list-colors "=*=$color[red];$color[bold]"
+
+### highlight words like 'esac' or 'end'
+    zstyle ':completion:*:reserved-words' \
+        list-colors "=*=$color[red]"
+
+### colorize processlist for 'kill'
+    zstyle ':completion:*:*:kill:*:processes' \
+        list-colors "=(#b) #([0-9]#) #([^ ]#)*=$color[cyan]=$color[yellow]=$color[green]"
+
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' list-suffixes true
+zstyle ':completion:*' ignore-parents pwd parent ..
+zstyle ':completion:*' remove-all-dups true
+zstyle ':completion:*' special-dirs '..'
+zstyle ':completion:*' ambiguous true
+zstyle ':completion:*' glob true
+zstyle ':completion:*' word true
+zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=** r:|=**'
+
+#Formatting
+zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+zstyle ':completion:*:corrections' format $'%{\e[0;31m%}%d (errors: %e)%}'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format $'%{\e[0;31m%}No matches for:%{\e[0m%} %d'
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+zstyle ':completion:*' format 'completing %d'
+zstyle ':completion:*' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' verbose true
+
+zstyle ':completion:*:correct:*' insert-unambiguous true
+zstyle ':completion:*:correct:*' max-errors 2 numeric
+zstyle ':completion:*:correct:*' original true
+zstyle ':completion:*:expand:*' group-order all-expansions expansions
+
+# remove slash if argument is a directory
+zstyle ':completion:*' squeeze-slashes true
+
+# history
+zstyle ':completion:*:history-words' stop yes
+zstyle ':completion:*:history-words' remove-all-dups yes
+zstyle ':completion:*:history-words' list false
+zstyle ':completion:*:history-words' menu yes
+
+# describe options in full
+zstyle ':completion:*:options'         description 'yes'
+
+# cd directory stack menu
+zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
+
+# array completion element sorting
+zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
+
+zstyle ':completion::*:(-command-|export):*' fake-parameters ${${${_comps[(I)-value-*]#*,}%%,*}:#-*-}
+zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
+
+# approximation
+zstyle ':completion:*' completer _expand _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
+
+# ssh, scp, ping, host
+test ! -d "$HOME/.ssh" && mkdir "$HOME/.ssh"
+test ! -f "$HOME/.ssh/known_hosts" && touch "$HOME/.ssh/known_hosts"
+test ! -f "$HOME/.ssh/config" && touch "$HOME/.ssh/config"
+
+zstyle ':completion:*:(scp|rsync):*' tag-order \
+        'hosts:-host hosts:-domain:domain hosts:-ipaddr:IP\ address *'
+zstyle ':completion:*:(scp|rsync):*' group-order \
+        users files all-files hosts-domain hosts-host hosts-ipaddr
+zstyle ':completion:*:ssh:*' tag-order \
+        users 'hosts:-host hosts:-domain:domain hosts:-ipaddr:IP\ address *'
+zstyle ':completion:*:ssh:*' group-order \
+        hosts-domain hosts-host users hosts-ipaddr
+
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns \
+        '*.*' loopback localhost
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-domain' ignored-patterns \
+        '<->.<->.<->.<->' '^*.*' '*@*'
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns \
+        '^<->.<->.<->.<->' '127.0.0.<->'
+zstyle ':completion:*:(ssh|scp|rsync):*:users' ignored-patterns \
+        adm bin daemon halt lp named shutdown sync
+
+zstyle -e ':completion:*:(ssh|scp|ping|host|nmap|rsync):*' hosts 'reply=(
+        ${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) \
+                        /dev/null)"}%%[#| ]*}//,/ }
+        ${=${(f)"$(cat /etc/hosts(|)(N) <<(ypcat hosts 2>/dev/null))"}%%\#*}
+        ${=${${${${(@M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }:#*\**}:#*\?*}}
+        )'
+
+# kill
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:kill:*' force-list always
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:kill:*' insert-ids single
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:kill:*' force-list always
+zstyle ':completion:*:processes' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+#
+# Prevent CVS/SVN files/directories from being completed
+zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
+zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
+
+# Prevent lost+found directory from being completed
+zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found'
+
+# ignore completion functions for commands you don't have
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+
+# Ignore same file on rm
+zstyle ':completion:*:(rm|kill|diff):*' ignore-line yes
+zstyle ':completion:*:rm:*' file-patterns '*:all-files'
+
+# Ignore all for mcd
+zstyle ':completion:*:mcd:*' ignored-patterns '*'
+
+zstyle ':completion:*:wine:*' file-patterns '*.(exe|EXE):exe'
+
+# man
+zstyle ':completion:*:man:*' separate-sections true
+
+# add gnu default completions
+compdef _gnu_generic ctags
+
+# automagic url quoter
+autoload -U url-quote-magic
+zle -N self-insert url-quote-magic
+

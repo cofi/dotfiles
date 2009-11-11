@@ -1,0 +1,43 @@
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey "^e" edit-command-line #<C>+e for command-line editor
+
+#PgUp/Dn for history completion
+bindkey "\e[5~" history-search-backward
+bindkey "\e[6~" history-search-forward
+
+# mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
+bindkey "\e[1;5C" forward-word
+bindkey "\e[1;5D" backward-word
+bindkey "\e[5C" forward-word
+bindkey "\e[5D" backward-word
+bindkey "\e\e[C" forward-word
+bindkey "\e\e[D" backward-word
+
+# allow the use of the Home/End keys
+bindkey "\e[1~" beginning-of-line
+bindkey "\e[4~" end-of-line
+
+# allow the use of the Delete/Insert keys
+bindkey "\e[3~" delete-char
+bindkey "\e[2~" quoted-insert
+
+#Navigate vi-like through menu-completion
+bindkey ';' menu-select #enter menuselect
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'i' accept-and-menu-complete
+
+bindkey "^[e" expand-cmd-path		# C-e for expanding path of typed command
+bindkey "^[[A" up-line-or-search	# up arrow for back-history-search
+bindkey "^[[B" down-line-or-search	# down arrow for fwd-history-search
+bindkey " " magic-space			# do history expansion on space
+
+run-with-sudo () { LBUFFER="sudo $LBUFFER" }
+zle -N run-with-sudo
+bindkey '^N' run-with-sudo
+run-in-bg () { LBUFFER="$LBUFFER&" }
+zle -N run-in-bg
+bindkey '^B' run-in-bg

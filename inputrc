@@ -1,0 +1,5 @@
+$include /etc/inputrc
+set show-all-if-ambiguous on
+set bell-style none
+set convert-meta on
+set completion-query-items 350

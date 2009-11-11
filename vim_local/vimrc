@@ -1,0 +1,191 @@
+cd ~
+"Basic Settings
+	syntax on
+	filetype on
+	filetype plugin on
+	filetype indent on
+    set ttyfast
+    set nomodeline
+	set showcmd
+	set showmatch
+	set cursorline
+	set nocompatible	"Don't be compatible to vi
+	set number	        "Show line numbers
+	set wildmenu	    "Enhance command-line completion
+	set confirm	    	"Ask for confirmation
+	set showmatch	    "Jump to corresponding bracket, when bracket typed
+	set noautowrite
+    set splitright
+    set grepprg=grep\ -nH\ $* "grep always displays filename
+    set encoding=utf-8
+
+    set background=dark
+	colorscheme moria
+    set t_Co=256
+
+fun! ToggleBG()
+    if &bg == "dark"
+        let &bg = "light"
+    else
+        let &bg = "dark"
+    endif
+endfun
+
+"make cursorline in terminal readable
+if !has('gui_running')
+    hi cursorline ctermfg=none
+endif
+
+let mapleader = ","
+
+"Fast reloading of the .vimrc
+map <leader>so :exec "source" . vimdir . "/vimrc"<cr>
+"Fast editing of .vimrc
+map <leader>rc :exec "edit!" . vimdir . "/vimrc"<cr>
+"When .vimrc is edited, reload it
+au! BufWritePost vimrc exec "source" . vimdir . "/vimrc"
+
+"Do magic!
+set magic
+
+"Organize clutter files
+let &directory = vimdir . "/swap"
+set nobackup "no need for that clutter
+set nowritebackup
+
+"No sound on errors.
+set noerrorbells
+set novisualbell
+set t_vb=
+
+"Buffer Settings
+    set hidden
+
+"Folding Settings
+    set foldmethod=indent
+    set foldlevelstart=1
+
+"Indenting Settings
+    set autoindent
+    set smartindent
+
+"Search Settings
+	set hlsearch	"Highlight searchterm
+	set incsearch	"Search incrementally
+    set ignorecase
+    set smartcase
+
+"Tab Settings
+	set tabstop=4		"Set tab-width to 4 chars
+	set shiftwidth=4	"indent by 4 spaces
+	set softtabstop=4
+	set expandtab
+
+"Statusline
+	set laststatus=2 "show statusline all the time
+	set statusline=
+	set statusline+=%F "full filename
+	set statusline+=%m%r\  "modified/readonly flag
+	set statusline+=[TYPE=%Y]\  "filetype
+	set statusline+=[ENCODING=%{&fenc\ ?\ &fenc\ :\ &enc}]\  "Fileencoding
+	set statusline+=[FORMAT=%{&ff}]\ "fileformat
+	set statusline+=%= "right align
+	set statusline+=[POS=%04l,%04v]\  "cursor position
+	set statusline+=Lines=%L\  "file lenght
+	set statusline+=%p%% "percentage of file
+
+exec "source " . vimdir . "/mappings"
+
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+
+"Autocommands
+    "Sync Syntax-Highlighting
+    au BufEnter * :syntax sync fromstart
+
+    "FTDetection
+    augroup ftdetect
+        au!
+        autocmd BufNewFile,BufRead *.xpt.vim set ft=xpt.vim
+        autocmd BufNewFile,BufRead *zsh/* set ft=zsh
+        autocmd BufNewFile,BufRead *vim_local/* set ft=vim
+        autocmd BufNewFile,BufRead *.pyf setlocal ft=python, textwidth=0
+        autocmd BufNewFile,BufRead *.bb setlocal ft=text, textwidth=0
+    augroup END
+
+	"Python
+	augroup python
+        au!
+		au FileType python setlocal textwidth=80
+		au FileType python map <F5> :w<CR>:!python "%"<CR>
+		au FileType python map <F6> :w<CR>:!python -i "%"<CR>
+		au FileType python map <F7> :w<CR>:!pylint "%"<CR>
+		au FileType python map <F8> :w<CR>:!ipython "%"<CR>
+        au BufWrite *.py,*.pyw :call DeleteTrailingWS()
+	augroup END
+
+	"C,CPP
+	augroup c
+        au!
+		au FileType c,cpp setlocal cindent textwidth=80
+        au FileType c,cpp inoremap ;; <END>;
+        au FileType cpp cmap cpptags !ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+	augroup END
+
+	"Tex
+	augroup tex
+        au!
+		au FileType texplain,tex setlocal spell spelllang=de,en textwidth=80
+		au FileType texplain,tex setlocal tabstop=2 shiftwidth=2 softtabstop=2
+	augroup END
+
+	"ReST
+	augroup rst
+        au!
+		au FileType rst setlocal spell spelllang=de,en textwidth=80
+	augroup END
+
+	"HTML/XML
+	augroup ML
+        au!
+		au FileType html setlocal omnifunc=htmlcomplete#CompleteTags
+		au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+		au FileType html,xml setlocal spell spelllang=de,en textwidth=80
+		au FileType html,xml imap < <><LEFT>
+	augroup END
+
+    "Mail
+    augroup Mail
+        au!
+        au FileType mail source .vim_local/mailrc
+    augroup END
+
+"Addons
+	"MiniBufExplorer
+    let g:miniBufExplMapWindowNavArrows = 1
+    let g:miniBufExplModSelTarget = 1
+	let g:bufExplorerSortBy = "name"
+	au BufRead,BufNew :call UMiniBufExplorer
+
+	"VCSCommand
+    nnoremap <F4> :VCSVimDiff<CR>
+
+    "Windows
+	nnoremap <silent> ntree :NERDTreeToggle<CR>
+	nnoremap <silent> tag :TlistToggle<CR>
+	nnoremap <silent> task :TaskList<CR>
+	nnoremap <silent> <F1> :NERDTreeToggle<CR>
+	nnoremap <silent> <F2> :TlistToggle<CR>
+	nnoremap <silent> <F3> :TaskList<CR>
+    cnoremap ntree NERDTreeToggle
+    cnoremap taglist TlistToggle
+    cnoremap tasks TaskList
+
+"Abbreviations
+	iabbr _me	Michael Markert
+    iabbr _email markert.michael@gmail.com
+	iabbr _mail	Michael Markert <markert.michael@gmail.com>
+	iabbr _cr	(c) 2009 Michael Markert <markert.michael@gmail.com>

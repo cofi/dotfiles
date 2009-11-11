@@ -1,0 +1,20 @@
+##
+# vcs_info
+#
+FMT_BRANCH="[${PR_GREEN}%b%u${PR_RESET}]" # e.g. master¹²
+FMT_ACTION="(${PR_CYAN}%a${PR_RESET})"   # e.g. (rebase-i)
+FMT_PATH="${PR_YELLOW}%r/%S ${PR_RESET}"              # e.g. repo/subdir
+
+zstyle ':vcs_info:*' enable git hg svn
+zstyle ':vcs_info:*:prompt:*' check-for-changes true
+zstyle ':vcs_info:*:prompt:*' unstagedstr '¹'  # display ¹ if there are unstaged changes
+zstyle ':vcs_info:*:prompt:*' stagedstr '²'    # display ² if there are staged changes
+zstyle ':vcs_info:*:prompt:*' actionformats "${FMT_PATH}- ${FMT_BRANCH}${FMT_ACTION}"
+zstyle ':vcs_info:*:prompt:*' formats       "${FMT_PATH}- ${FMT_BRANCH}"
+zstyle ':vcs_info:*:prompt:*' nvcsformats   "%c"
+
+##
+#   ft-complete
+#
+zstyle ':zle:ft-complete:tilde' widget ft-complete-tilde
+zstyle ':zle:ft-complete:empty' action dot-slash-complete

@@ -1,0 +1,20 @@
+[ui]
+username = Michael Markert <markert.michael@gmail.com>
+
+[extensions]
+alias=
+extdiff=
+imerge=
+pager=
+hgshelve= ~/.bin/hgshelve.py
+
+
+[merge-tools]
+kdiff3.executable = /usr/bin/kdiff3
+kdiff3.gui = True
+
+[extdiff]
+cmd.kdiff = kompare
+
+[pager]
+attend = diff, log

@@ -1,0 +1,75 @@
+*xpt-api*
+
+
+							    *g:XPTaddBundle()*
+g:XPTaddBundle({filetype}, {bundle})
+	Load a bundle. {filetype} is the current buffer file type in most
+	case. And {bundle} is the file name who supplies the bundle. 
+
+	For example loading jquery bundle for html file: >
+		call g:XPTaddBundle('javascript', 'jquery')
+<
+	
+								  *XPTfuncs()*
+	g:XPTfuncs() returns a |Dictionary| container of functions which can
+	be used in templates in the current buffer. The normal usage of
+	g:XPTfuncs() to define a template function is : >
+		let s:f = g:XPTfuncs()
+
+		fun! s:f.date() dict
+		  return strftime("%Y %b %d")
+		endfunction
+<
+	Now you can use functions and variables in the template : >
+	call XPTemplate("filehead", [
+	      \'/**--------------------/// `sum^ \\\----------------------',
+	      \' *',
+	      \' * @version : `1.0^',
+	      \' * @since : `date()^',
+	      \' * @author : `$author^ | `$email^',
+	      \' * @copyright `.com.cn^ ',
+	      \' * @TODO : ',
+	      \' * ',
+	      \' *---------------------\\\ `sum^ ///----------------------*/',
+	      \''])
+<
+
+
+								*XPTemplate()*
+XPTemplate({name}, [, {context}], {template})
+	XPTemplate defines a template for the current buffer. It takes 2 or 3
+	parameters:
+	{name} is a string representing the key to trigger this template.
+	{context} can be omitted or an |Dictionary| which defines where this
+	template can be triggered. For now only "syn" is supported.
+	{template} is a string or |List|. |List| will be joined with "\n"
+	forming a template string. This saves you adding "\n" to each line.
+
+							    *XPTemplateMark()*
+XPTemplateMark({leftmark}, {rightmark})
+	XPTemplateMark defines which characters are used as item quoter in the
+	current buffer. See |xpt-placeholder-mark|.
+
+	NOTE this function affects only the current script and current buffer.
+
+							*XPTemplatePriority()*
+XPTemplatePriority({priority})
+	XPTemplatePriority sets the default priority for the current *.xpt.vim
+	script and current buffer. See |xpt-priority-value|.
+
+	NOTE this function affects only the current script and current buffer.
+
+
+				       *self._ctx*  *xpt-snippet-function-ctx*
+	The template context can be accessed from within an
+	|xpt-snippet-function|. For example the reference function: >
+		fun! s:f.R(name)
+		  let ctx = self._ctx
+		  if has_key(ctx.namedStep, a:name)
+		    return ctx.namedStep[a:name]
+		  endif
+
+		  return a:ctx.name
+		endfunction
+<
+" vim:tw=78:ts=8:sw=8:sts=8:noet:ft=help:norl:

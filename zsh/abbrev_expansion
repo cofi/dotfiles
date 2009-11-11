@@ -1,0 +1,81 @@
+# power completion / abbreviation expansion / buffer expansion
+# see http://zshwiki.org/home/examples/zleiab for details
+# less risky than the global aliases but powerful as well
+# just type the abbreviation key and afterwards ',.' to expand it
+setopt extendedglob
+setopt interactivecomments
+typeset -Ag abbreviations
+abbreviations=(
+    'M'         '| most'
+    'N'         '&>/dev/null'
+    'DN'        '&>/dev/null'
+    'DN1'       '1>/dev/null'
+    'DN2'       '2>/dev/null'
+    'NULL'      '>/dev/null 2>&1'
+    '21'        '2>&1'
+    'PI'        '|'
+    'L'         '| less' 
+    'LL'        '|& less'
+    'G'         '| grep'
+    'GI'        '| grep -i'
+    'GRI'       '| grep -ri'
+    'GV'        "| grep -v"
+    'GVI'       '| grep -vi'
+    'GVRI'      '| grep -vri'
+    'EG'        '| egrep'
+    'EGI'       '| egrep -i'
+    'EGRI'      '| egrep -ri'
+    'H'         '| head'
+    'HH'        '|& head'
+    'T'         '| tail'
+    'TT'        '|& tail'
+    'WC'        '| wc'
+    'WCB'       '| wc -c'
+    'WCC'       '| wc -m'
+    'WCW'       '| wc -w'
+    'WCL'       '| wc -l'
+    'S'         '| sort'
+    'SU'        '| sort -u'
+    'SL'        '| sort | less'
+    'A'         '| awk'
+    'A1'        "| awk '{print \$1}'"
+    'A2'        "| awk '{print \$2}'"
+    'A3'        "| awk '{print \$3}'"
+    'A4'        "| awk '{print \$4}'"
+    'A5'        "| awk '{print \$5}'"
+    'A6'        "| awk '{print \$6}'"
+    'A7'        "| awk '{print \$7}'"
+    'A8'        "| awk '{print \$8}'"
+    'A9'        "| awk '{print \$9}'"
+    'CA'        "|& cat -A"
+    'V'         '|& vim -'
+    'X'         '| xargs'
+    'XX'        '|& xargs'
+    'hide'      "echo -en '\033]50;nil2\007'"
+    'tiny'      'echo -en "\033]50;-misc-fixed-medium-r-normal-*-*-80-*-*-c-*-iso8859-15\007"'
+    'small'     'echo -en "\033]50;6x10\007"'
+    'da'        'du -sch'
+    'j'         'jobs -l'
+    'co'        "./configure && make && sudo make install"
+    'CH'        "./configure --help"
+    'rw-'       'chmod 600'
+    '600'       'chmod u+rw-x,g-rwx,o-rwx'
+    'rwx'       'chmod u+rwx'
+    '700'       'chmod u+rwx,g-rwx,o-rwx'
+    'r--'       'chmod u+r-wx,g-rwx,o-rwx'
+    '644'       'chmod u+rw-x,g+r-wx,o+r-wx\n # 4=r,2=w,1=x'
+    '755'       'chmod u+rwx,g+r-w+x,o+r-w+x'
+    'cx'        'chmod +x'
+    'DE'        'export DISPLAY=:0.0'
+    'D'         'DISPLAY=:0.0'
+)   
+    
+globalias() {
+    local MATCH
+    LBUFFER=${LBUFFER%%(#m)[_a-zA-Z0-9]#}
+    LBUFFER+=${abbreviations[$MATCH]:-$MATCH}" "
+}
+
+zle -N globalias
+bindkey ",." globalias
+

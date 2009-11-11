@@ -1,0 +1,38 @@
+!==========
+! Urxvt
+!==========
+ 
+! url launcher thing
+URxvt.perl-lib:         /usr/lib/urxvt/perl/
+URxvt.perl-ext-common:  default,option-popup,matcher
+URxvt.urlLauncher:      /usr/bin/firefox3.5
+URxvt.matcher.button:   1
+
+URxvt.cutchars:         `"()'*<>[]{|}"
+ 
+URxvt.geometry:         100x45
+URxvt.borderLess:       true
+URxvt.transparent:      false
+URxvt.depth:            32
+URxvt.background:       rgba:0000/0000/0000/cccc
+URxvt.foreground:       white
+
+URxvt.saveLines:        10000
+URxvt.xftAntialias:     true
+URxvt.font:             xft:inconsolata:pixelsize=13:antialias=true:hinting=true
+URxvt.boldFont:         xft:inconsolata:pixelsize=13:antialias=true:hinting=true
+URxvt.italicFont:       xft:inconsolata:pixelsize=13:antialias=true:hinting=true
+URxvt.bolditalicFont:   xft:inconsolata:pixelsize=13:antialias=true:hinting=true
+
+URxvt.internalBorder:   1
+URxvt.underlineColor:	#999999
+URxvt.cursorBlink:      true
+URxvt.cursorColor:      #850A0C
+URxvt.cursorColor2:     #000000
+
+URxvt.scrollBar:        False
+URxvt.scrollBar_right:  False
+ 
+URxvt.scrollTtyOutput:  False
+URxvt.scrollWithBuffer: True
+URxvt.scrollTtyKeypress: True

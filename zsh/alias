@@ -1,0 +1,61 @@
+alias ..='cls ..'
+alias ...='cls ../..'
+alias ..2="cls ../../"
+alias ..3="cls ../../../"
+alias ..4="cls ../../../../"
+alias ..5="cls ../../../../../"
+alias ..6="cls ../../../../../../"
+alias ..7="cls ../../../../../../../"
+alias ..8="cls ../../../../../../../../"
+alias ..9="cls ../../../../../../../../../"
+alias ..10="cls ../../../../../../../../../../"
+alias v='vim'
+alias ipy='ipython'
+alias bpy='bpython'
+
+alias md='mkdir -p'
+
+alias cp='nocorrect cp'         # no spelling correction on cp
+alias mkdir='nocorrect mkdir'   # no spelling correction on mkdir
+alias mv='nocorrect mv'         # no spelling correction on mv
+alias rm='nocorrect rm'         # no spelling correction on rm
+
+alias -s tex=vim
+alias -s txt=vim
+alias -s py=vim
+alias -s pdf=silent_okular
+
+#color grep
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# usefull listing
+alias ls='ls -Fh --color=auto'
+alias ll='ls -l'
+alias la='ls -A'
+alias l='ls -Al'
+
+alias lad='ls -d .*(/)'                 # only show dot-directories
+alias ldf='ls -a .*(.)'                 # only show dot-files
+alias lss='ls -l *(s,S,t)'              # only files with setgid/setuid/sticky flag
+alias lsl='ls -l *(@[1,10])'            # only symlinks
+alias lsx='ls -l *(*[1,10])'            # only executables
+alias lsw='ls -ld *(R,W,X.^ND/)'        # world-{readable,writable,executable} files
+alias lsbig="ls -flh *(.OL[1,10])"      # display the biggest files
+alias lsd='ls -d *(/)'                  # only show directories
+alias lse='ls -d *(/^F)'                # only show empty directories
+alias lsnew="ls -rl *(D.om[1,10])"      # display the newest files
+alias lsold="ls -rtlh *(D.om[1,10])"    # display the oldest files
+alias lssmall="ls -Srl *(.oL[1,10])"    # display the smallest files
+
+# zmv
+alias zcp='zmv -C'
+alias zln='zmv -L'
+
+# stuff
+alias rh='rehash'
+alias h='history'
+alias which='builtin which -a'
+
+alias diff='diff -Naur'

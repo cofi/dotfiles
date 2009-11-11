@@ -1,0 +1,11 @@
+set textwidth=72
+
+iabbr mfg Mit freundlichen Grüßen,
+iabbr vg Viele Grüße,
+iabbr sghd Sehr geehrte Damen und Herren,
+iabbr sgf Sehr geehrte Frau
+iabbr sgh Sehr geehrter Herr
+
+iabbr s Sincerely,
+iabbr r Regards,
+iabbr dsor Dear Sir or Madam,

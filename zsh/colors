@@ -1,0 +1,12 @@
+autoload -U colors
+export COLORTERM=yes
+
+if [[ -f ~/.dircolors ]] {
+    if [[ ${TERM} == screen* ]] {
+        eval $( TERM=screen dircolors ~/.dircolors )
+    } else {
+        eval $( dircolors ~/.dircolors )
+    }
+} else {
+    eval $( dircolors -b )
+}

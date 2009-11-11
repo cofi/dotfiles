@@ -1,0 +1,26 @@
+[user]
+	name = Michael Markert
+	email = markert.michael@gmail.com
+[color]
+	status = auto
+	branch = auto
+	status = auto
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+[merge]
+	tool = kdiff3
+[diff]
+	tool = gvimdiff
+[alias]
+	st = status
+	ci = commit
+	br = branch
+	co = checkout
+	df = diff
+	lg = log -p

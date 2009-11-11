@@ -1,0 +1,70 @@
+inoremap " ""<Left>
+inoremap ( ()<Left>
+inoremap { {}<Left>
+inoremap [ []<Left>
+inoremap ( ()<Left>
+
+"center after search
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+"Quick search
+nnoremap <Space> /
+
+"Quick commandmode
+inoremap jj  <Esc>
+
+"Fix that f*cking yank inconsistency
+nnoremap Y  y$
+
+"Quick cd starting file location
+if has("unix")
+    nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "/" <CR>
+else
+    nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "\" <CR>
+endif
+
+"System clipboard goodness
+nnoremap <C-v>   "*p
+inoremap <C-v>  <ESC>"*pa
+vnoremap <C-c>  "*y
+
+"Movement
+	"Buffer movement
+    nnoremap <C-h>      :bp<CR>
+    nnoremap <C-l>      :bn<CR>
+
+	"Visual Move
+	nnoremap <S-UP>		V<UP>
+	nnoremap <S-DOWN>	V<DOWN>
+	nnoremap <S-RIGHT>	v<RIGHT>
+	nnoremap <S-LEFT>	v<LEFT>
+
+"<leader>s to replace word under the cursor
+	nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+
+"Use `<leader>e` in normal mode to edit files in filedir
+if has("unix")
+    nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+else
+    nnoremap <leader>e :e <C-R>=expand("%:p:h") . "\" <CR>
+endif
+"Use `<leader>w` in normal mode to save file in filedir
+if has("unix")
+    nnoremap <leader>w :w <C-R>=expand("%:p:h") . "/" <CR>
+else
+    nnoremap <leader>w :w <C-R>=expand("%:p:h") . "\" <CR>
+endif
+
+if exists("*strftime")
+    inoremap <leader>gdate <C-R>=strftime("%d.%m.%y")<CR>
+    inoremap <leader>date <C-R>=strftime("%y/%m/%d")<CR>
+    inoremap <leader>time <C-R>=strftime("%H:%M")<CR>
+endif
+
+nnoremap <silent> <F12> :call ToggleBG()<CR>
+nnoremap <silent> <F11> :nohlsearch<CR>

@@ -49,7 +49,7 @@ au! BufWritePost vimrc exec "source" . vimdir . "/vimrc"
 set magic
 
 "Organize clutter files
-let &directory = vimdir . "/swap"
+let &directory = vimlocal_dir . "/swap"
 set nobackup "no need for that clutter
 set nowritebackup
 
@@ -160,7 +160,7 @@ endfunc
     "Mail
     augroup Mail
         au!
-        au FileType mail source .vim_local/mailrc
+        au FileType mail source .vim/mailrc
     augroup END
 
 "Addons

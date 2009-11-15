@@ -1,7 +1,7 @@
 ##
 # vcs_info
 #
-FMT_BRANCH="[${PR_GREEN}%b%u${PR_RESET}]" # e.g. master¹²
+FMT_BRANCH="[${PR_GREEN}%b%u%c${PR_RESET}]" # e.g. master¹²
 FMT_ACTION="(${PR_CYAN}%a${PR_RESET})"   # e.g. (rebase-i)
 FMT_PATH="${PR_YELLOW}%r/%S ${PR_RESET}"              # e.g. repo/subdir
 

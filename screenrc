@@ -17,7 +17,7 @@ crlf                  off
 deflogin              off
 nethack               on
 startup_message       off
-vbell                 on
+vbell                 off
 altscreen             on
 defutf8               on
 

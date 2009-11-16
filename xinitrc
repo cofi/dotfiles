@@ -1,7 +1,7 @@
 keychain --quiet ~/.ssh/id_rsa
 
-setxkbmap -model evdev -layout us -option compose:ralt,caps:escape
+setxkbmap -model evdev -layout us -option compose:menu,caps:escape
 xmodmap ~/.Xmodmap
 xrdb -merge .Xresources
 
-urxvtcd -e screen -R
+urxvtcd -pe tabbed -e screen -R

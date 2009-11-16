@@ -31,9 +31,9 @@ fun! ToggleBG()
     endif
 endfun
 
-"Color in console yieha
+"make cursorline in terminal readable
 if !has('gui_running')
-    colorscheme xoria256
+    hi cursorline ctermfg=none
 endif
 
 let mapleader = ","

@@ -4,7 +4,7 @@ hardstatus alwayslastline
 hardstatus string "$LOGNAME@%H %= %Y-%m-%d %0c:%s"
 
 termcapinfo xterm*|rxvt*|k*|Eterm* hs:ts=\E]0;:fs=\007:ds=\E]0;\00
-termcapinfo rxvt* OL=10000
+termcapinfo rxvt* OL=5000
 
 term screen-256color
 terminfo rxvt* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
@@ -21,7 +21,7 @@ vbell                 off
 altscreen             on
 defutf8               on
 
-defscrollback         50000
+defscrollback         20000
 silencewait           15
 
 hardcopydir           $HOME/.hardcopy

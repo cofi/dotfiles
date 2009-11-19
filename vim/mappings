@@ -66,5 +66,4 @@ if exists("*strftime")
     inoremap <leader>time <C-R>=strftime("%H:%M")<CR>
 endif
 
-nnoremap <silent> <F12> :call ToggleBG()<CR>
 nnoremap <silent> <F11> :nohlsearch<CR>

@@ -19,22 +19,7 @@ cd ~
     set grepprg=grep\ -nH\ $* "grep always displays filename
     set encoding=utf-8
 
-    set background=dark
-	colorscheme moria
-    set t_Co=256
-
-fun! ToggleBG()
-    if &bg == "dark"
-        let &bg = "light"
-    else
-        let &bg = "dark"
-    endif
-endfun
-
-"Color in console yieha
-if !has('gui_running')
-    colorscheme xoria256
-endif
+	colorscheme inkpot
 
 let mapleader = ","
 
@@ -56,7 +41,6 @@ set nowritebackup
 "No sound on errors.
 set noerrorbells
 set novisualbell
-set t_vb=
 
 "Buffer Settings
     set hidden

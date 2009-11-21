@@ -8,15 +8,15 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 <Multi_key> <asciicircum> <minus> : "‾" U203E # OVERLINE
 
 #GERMAN UMLAUTS
-<Multi_key> <a> : "ä" U00E4 #SMALL A WITH DIAERESIS
-<Multi_key> <a> : "Ä" U00C4 #CAPITAL A WITH DIAERESIS
-<Multi_key> <u> : "ü" U00FC #SMALL U WITH DIAERESIS
-<Multi_key> <u> : "Ü" U00DC #CAPITAL U WITH DIAERESIS
-<Multi_key> <o> : "ö" U00F6 #SMALL O WITH DIAERESIS
-<Multi_key> <o> : "Ö" U00D6 #CAPITAL O WITH DIAERESIS
-<Multi_key> <s> : "ß" U00DF #SMALL SHARP S
+<Multi_key> <a> <u> : "ä" U00E4 #SMALL A WITH DIAERESIS
+<Multi_key> <A> <u> : "Ä" U00C4 #CAPITAL A WITH DIAERESIS
+<Multi_key> <u> <u> : "ü" U00FC #SMALL U WITH DIAERESIS
+<Multi_key> <U> <u> : "Ü" U00DC #CAPITAL U WITH DIAERESIS
+<Multi_key> <o> <u> : "ö" U00F6 #SMALL O WITH DIAERESIS
+<Multi_key> <O> <u> : "Ö" U00D6 #CAPITAL O WITH DIAERESIS
+<Multi_key> <s> <u> : "ß" U00DF #SMALL SHARP S
 
-<Multi_key> <e> : "€" U20AC #EURO SIGN
+<Multi_key> <e> <s> : "€" U20AC #EURO SIGN
 
 #SIMPLE ARROWS
 <Multi_key> <minus> <less> : "←" U2190 # LEFTWARDS ARROW

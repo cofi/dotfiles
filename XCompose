@@ -136,7 +136,4 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 <Multi_key> <S> <s> : "☆" U2606 # WHITE STAR
 <Multi_key> <O> <O> : "●" U25CF # BIG DOT
 <Multi_key> <O> <o> : "•" U2022 # SMALL DOT
-
-<Multi_key> <:> <)> : "☺" U263A # HAPPY SMILIE
-<Multi_key> <:> <(> : "☹" U2639 # SAD SMILIE
 <Multi_key> <T> <M> : "™"   U2122 # TRADE MARK SIGN

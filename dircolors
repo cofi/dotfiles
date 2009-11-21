@@ -85,108 +85,98 @@ STICKY_OTHER_WRITABLE 30;42 # dir that is sticky and other-writable (+t,o+w)
 OTHER_WRITABLE 34;42 # dir that is other-writable (o+w) and not sticky
 STICKY 37;44	# dir with the sticky bit set (+t) and not other-writable
 
-# This is for files with execute permission:
-EXEC 01;32
+#files with execute permission
+EXEC 0;31
 
 # List any file extensions like '.gz' or '.tar' that you would like ls
 # to colorize below. Put the extension, a space, and the color init string.
 # (and any comments you want to add after a '#')
 
-# If you use DOS-style suffixes, you may want to uncomment the following:
-.cmd 01;32 # executables (bright green)
-#.exe 01;32
-#.com 01;32
-#.btm 01;32
-#.bat 01;32
-# Or if you want to colorize scripts even if they do not have the
-# executable bit actually set.
-#.sh  01;32
-#.csh 01;32
-
- # archives or compressed (bright red)
-.tar 01;31
-.tgz 01;31
-.arj 01;31
-.taz 01;31
-.lzh 01;31
-.lzma 01;31
-.tlz 01;31
-.txz 01;31
-.zip 01;31
-.z   01;31
-.Z   01;31
-.dz  01;31
-.gz  01;31
-.xz  01;31
-.bz2 01;31
-.bz  01;31
-.tbz 01;31
-.tbz2 01;31
-.tz  01;31
-.deb 01;31
-.rpm 01;31
-.jar 01;31
-.rar 01;31
-.ace 01;31
-.zoo 01;31
-.cpio 01;31
-.7z  01;31
-.rz  01;31
+ # archives or compressed (bright yellow)
+.tar 01;33
+.tgz 01;33
+.arj 01;33
+.taz 01;33
+.lzh 01;33
+.lzma 01;33
+.tlz 01;33
+.txz 01;33
+.zip 01;33
+.z   01;33
+.Z   01;33
+.dz  01;33
+.gz  01;33
+.xz  01;33
+.bz2 01;33
+.bz  01;33
+.tbz 01;33
+.tbz2 01;33
+.tz  01;33
+.deb 01;33
+.rpm 01;33
+.jar 01;33
+.rar 01;33
+.ace 01;33
+.zoo 01;33
+.cpio 01;33
+.7z  01;33
+.rz  01;33
 
 # image formats
-.jpg 01;35
-.jpeg 01;35
-.gif 01;35
-.bmp 01;35
-.pbm 01;35
-.pgm 01;35
-.ppm 01;35
-.tga 01;35
-.xbm 01;35
-.xpm 01;35
-.tif 01;35
-.tiff 01;35
-.png 01;35
-.svg 01;35
-.svgz 01;35
-.mng 01;35
-.pcx 01;35
-.mov 01;35
-.mpg 01;35
-.mpeg 01;35
-.m2v 01;35
-.mkv 01;35
-.ogm 01;35
-.mp4 01;35
-.m4v 01;35
-.mp4v 01;35
-.vob 01;35
-.qt  01;35
-.nuv 01;35
-.wmv 01;35
-.asf 01;35
-.rm  01;35
-.rmvb 01;35
-.flc 01;35
-.avi 01;35
-.fli 01;35
-.flv 01;35
-.gl 01;35
-.dl 01;35
-.xcf 01;35
-.xwd 01;35
-.yuv 01;35
+.jpg 0;30;46
+.jpeg 0;30;46
+.gif 0;30;46
+.bmp 0;30;46
+.pbm 0;30;46
+.pgm 0;30;46
+.ppm 0;30;46
+.tga 0;30;46
+.xbm 0;30;46
+.xpm 0;30;46
+.tif 0;30;46
+.tiff 0;30;46
+.png 0;30;46
+.svg 0;30;46
+.svgz 0;30;46
+.mng 0;30;46
+.pcx 0;30;46
 
-# http://wiki.xiph.org/index.php/MIME_Types_and_File_Extensions
-.axv 01;35
-.anx 01;35
-.ogv 01;35
-.ogx 01;35
+#videos 
+.mov 0;30;47
+.mpg 0;30;47
+.mpeg 0;30;47
+.m2v 0;30;47
+.mkv 0;30;47
+.ogm 0;30;47
+.mp4 0;30;47
+.m4v 0;30;47
+.mp4v 0;30;47
+.vob 0;30;47
+.qt  0;30;47
+.nuv 0;30;47
+.wmv 0;30;47
+.asf 0;30;47
+.rm  0;30;47
+.rmvb 0;30;47
+.flc 0;30;47
+.avi 0;30;47
+.fli 0;30;47
+.flv 0;30;47
+.gl 0;30;47
+.dl 0;30;47
+.xcf 0;30;47
+.xwd 0;30;47
+.yuv 0;30;47
+.axv 0;30;47
+.anx 0;30;47
+.ogv 0;30;47
+.ogx 0;30;47
 
 # Document files
-*README 00;32
+*README* 00;32
 .pdf 00;32
 .ps 00;32
+.chm 00;32
 .txt 00;32
 .patch 00;32
 .diff 00;32
@@ -214,11 +204,16 @@ EXEC 01;32
 .xspf 00;36
 
 # Development
-*Makefile 0;35
-*tags 00;32
-.c 01;33
-.h 01;33
-.cpp 01;33
-.cxx 01;33
-.c 01;33
+*Makefile 0;34
+*tags 0;34
 
+.c 0;30;43
+.h 0;30;43
+.cpp 0;30;43
+.cxx 0;30;43
+.c 0;30;43
+.py 0;30;43
+.pyw 0;30;43
+.ss 0;30;43
+.scm 0;30;43
+.hs 0;30;43

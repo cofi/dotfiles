@@ -36,3 +36,30 @@ URxvt.scrollBar_right:  False
 URxvt.scrollTtyOutput:  False
 URxvt.scrollWithBuffer: True
 URxvt.scrollTtyKeypress: True
+
+*foreground:     #DDDDDD
+*background:     #121212
+!black
+*color0:         #151515
+*color8:         #333333
+!red
+*color1:         #AE4747
+*color9:         #EE6363
+!green
+*color2:         #556B2F
+*color10:        #9ACD32
+!brown/yellow
+*color3:         #DAA520
+*color11:        #FFC125
+!blue
+*color4:         #003399
+*color12:        #3300FF
+!magenta
+*color5:         #8B7B8B
+*color13:        #D8BFD8
+!cyan
+*color6:         #A7A15E
+*color14:        #F0E68C
+!white
+*color7:         #DDDDDD
+*color15:        #FFFFFF

@@ -23,4 +23,7 @@
 	br = branch
 	co = checkout
 	df = diff
+    l1 = log HEAD^1..
 	lg = log -p
+    pom = pull origin master
+    pum = push origin master

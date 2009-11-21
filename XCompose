@@ -2,44 +2,57 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 
 include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 
-<Multi_key> <period> <minus> : "…" U2026 # HORIZONTAL ELLIPSIS
+<Multi_key> <period> <period> : "…" U2026 # HORIZONTAL ELLIPSIS
 <Multi_key> <bar> <minus> : "†" U2020 # DAGGER
 <Multi_key> <bar> <equal> : "‡" U2021 # DOUBLE DAGGER
 <Multi_key> <asciicircum> <minus> : "‾" U203E # OVERLINE
 
+#GERMAN UMLAUTS
+<Multi_key> <a> : "ä" U00E4 #SMALL A WITH DIAERESIS
+<Multi_key> <a> : "Ä" U00C4 #CAPITAL A WITH DIAERESIS
+<Multi_key> <u> : "ü" U00FC #SMALL U WITH DIAERESIS
+<Multi_key> <u> : "Ü" U00DC #CAPITAL U WITH DIAERESIS
+<Multi_key> <o> : "ö" U00F6 #SMALL O WITH DIAERESIS
+<Multi_key> <o> : "Ö" U00D6 #CAPITAL O WITH DIAERESIS
+<Multi_key> <s> : "ß" U00DF #SMALL SHARP S
 
+<Multi_key> <e> : "€" U20AC #EURO SIGN
 
+#SIMPLE ARROWS
 <Multi_key> <minus> <less> : "←" U2190 # LEFTWARDS ARROW
 <Multi_key> <minus> <asciicircum> : "↑" U2191 # UPWARDS ARROW
 <Multi_key> <minus> <greater> : "→" U2192 # RIGHTWARDS ARROW
 <Multi_key> <minus> <v> : "↓" U2193 # DOWNWARDS ARROW
-
+#DOUBLE ARROWS
 <Multi_key> <equal> <less> :  "⇐" U21D0 # LEFTWARDS DOUBLE ARROW
 <Multi_key> <equal> <asciicircum> : "⇑" U21D1 # UPWARDS DOUBLE ARROW
 <Multi_key> <equal> <greater> : "⇒" U21D2 # RIGHTWARDS DOUBLE ARROW
 <Multi_key> <equal> <v> : "⇓" U21D3 # DOWNWARDS DOUBLE ARROW
 
+#MATH
 <Multi_key> <0> <0> : "∞" U221E # INFINITY
-<Multi_key> <m> <greater> : "≫" # U226B MUCH GREATER-THAN
-<Multi_key> <m> <smaller> : "≪" # U226B MUCH GREATER-THAN
+<Multi_key> <m> <greater> : "≫" U226B # MUCH GREATER-THAN
+<Multi_key> <m> <smaller> : "≪" U226B # MUCH GREATER-THAN
 <Multi_key> <m> <i> <n> : "∈" U2208 # ELEMENT OF
 <Multi_key> <m> <n> <i> : "∉" U2209 # NOT AN ELEMENT OF
-<Multi_key> <m> <n> <e> <q>     : "≠" U2260 # NOT EQUAL TO
-<Multi_key> <m> <A>     : "∀" U2200 # FOR ALL
-<Multi_key> <m> <E>     : "∃" U2203 # THERE EXISTS
+<Multi_key> <m> <n> <e> : "≠" U2260 # NOT EQUAL TO
 <Multi_key> <m> <d>     : "∂" U2202 # PARTIAL DIFFERENTIAL
 <Multi_key> <m> <0>     : "∅" U2205 # EMPTY SET
-<Multi_key> <m> <s> <o>     : "⊆" U2286 # subset of
-<Multi_key> <m> <r> <s> : "⊂" U2282 # real subset
-<Multi_key> <T> <M>       : "™"   U2122 # TRADE MARK SIGN
-<Multi_key> <m> <a>     : "∧" U2227 # and
-<Multi_key> <m> <o>     : "∨" U2228 # or
-<Multi_key> <m> <U>     : "∪" U222A # union
-<Multi_key> <m> <I>     : "∩" U2229 # intersection
-<Multi_key> <m> <m>     : "≡" U2261 # modulo
-<Multi_key> <m> <n>     : "¬"  U00AC # not
+<Multi_key> <m> <s> <o> : "⊆" U2286 # SUBSET OF
+<Multi_key> <m> <r> <s> : "⊂" U2282 # REAL SUBSET
+<Multi_key> <m> <U>     : "∪" U222A # UNION
+<Multi_key> <m> <I>     : "∩" U2229 # INTERSECTION
+<Multi_key> <m> <m>     : "≡" U2261 # MODULO
 
+<Multi_key> <m> <A>     : "∀" U2200 # FOR ALL
+<Multi_key> <m> <E>     : "∃" U2203 # THERE EXISTS
+<Multi_key> <m> <n>     : "¬"  U00AC # NOT
+<Multi_key> <m> <a>     : "∧" U2227 # AND
+<Multi_key> <m> <o>     : "∨" U2228 # OR
+<Multi_key> <m> <x> : "⊕" U2295 # XOR
+<Multi_key> <m> <b> : "⊥" U22A5 # BOTTOM
 
+#SUBSCRIPTS
 <Multi_key> <_> <0> : "₀" U2080 # SUBSCRIPT 0
 <Multi_key> <_> <1> : "₁" U2081 # SUBSCRIPT 1
 <Multi_key> <_> <2> : "₂" U2082 # SUBSCRIPT 2
@@ -51,7 +64,22 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 <Multi_key> <_> <8> : "₈" U2088 # SUBSCRIPT 8
 <Multi_key> <_> <9> : "₉" U2089 # SUBSCRIPT 9
 
+#SUPERSCRIPTS
+<Multi_key> <asciicircum> <0> : "⁰" U2070 #SUPERSCRIPT 0
+<Multi_key> <asciicircum> <1> : "¹" U00B9 #SUPERSCRIPT 1
+<Multi_key> <asciicircum> <2> : "²" U00B2 #SUPERSCRIPT 2
+<Multi_key> <asciicircum> <3> : "³" U00B3 #SUPERSCRIPT 3
+<Multi_key> <asciicircum> <4> : "⁴" U2074 #SUPERSCRIPT 4
+<Multi_key> <asciicircum> <5> : "⁵" U2075 #SUPERSCRIPT 5
+<Multi_key> <asciicircum> <6> : "⁶" U2076 #SUPERSCRIPT 6
+<Multi_key> <asciicircum> <7> : "⁷" U2077 #SUPERSCRIPT 7
+<Multi_key> <asciicircum> <8> : "⁸" U2078 #SUPERSCRIPT 8
+<Multi_key> <asciicircum> <9> : "⁹" U2079 #SUPERSCRIPT 9
+<Multi_key> <asciicircum> <i> : "ⁱ" U2071 #SUPERSCRIPT i
+<Multi_key> <asciicircum> <+> : "⁺" U207A #SUPERSCRIPT +
+<Multi_key> <asciicircum> <-> : "⁻" U207B #SUPERSCRIPT -
 
+#GREEK LETTERS
 <Multi_key> <g> <a> : "α" U03B1 # GRREK SMALL LETTER ALPHA
 <Multi_key> <g> <b> : "β" U03B2 # GRREK SMALL LETTER BETA
 <Multi_key> <g> <c> : "γ" U03B3 # GRREK SMALL LETTER GAMMA
@@ -109,18 +137,6 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 <Multi_key> <O> <O> : "●" U25CF # BIG DOT
 <Multi_key> <O> <o> : "•" U2022 # SMALL DOT
 
-<Multi_key> <a> <e> : "ä" U00E4
-<Multi_key> <o> <e> : "ö" U00F6
-<Multi_key> <u> <e> : "ü" U00FC
-<Multi_key> <A> <e> : "Ä" U00C4
-<Multi_key> <O> <e> : "Ö" U00D6
-<Multi_key> <U> <e> : "Ü" U00DC
-
-<Multi_key> <s> <s> : "ß" U00DF
-
 <Multi_key> <:> <)> : "☺" U263A # HAPPY SMILIE
 <Multi_key> <:> <(> : "☹" U2639 # SAD SMILIE
-
-
-<Multi_key> <m> <x> : "⊕" U2295 # XOR
-<Multi_key> <m> <b> : "⊥" U22A5 # bottom
+<Multi_key> <T> <M> : "™"   U2122 # TRADE MARK SIGN

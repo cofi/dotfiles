@@ -96,7 +96,7 @@ endfunc
         autocmd BufNewFile,BufRead *.xpt.vim set ft=xpt.vim
         autocmd BufNewFile,BufRead *zsh/* set ft=zsh
         autocmd BufNewFile,BufRead *vim_local/* set ft=vim
-        autocmd BufNewFile,BufRead *mutt/* set ft=mutt
+        autocmd BufNewFile,BufRead *mutt/* set ft=muttrc
         autocmd BufNewFile,BufRead *.pyf setlocal ft=python, textwidth=0
         autocmd BufNewFile,BufRead *.bb setlocal ft=text, textwidth=0
     augroup END

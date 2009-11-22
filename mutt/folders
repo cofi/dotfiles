@@ -1,0 +1,14 @@
+set mbox_type = Maildir
+set folder = ~/Mail
+set spoolfile = "+INBOX"
+set postponed = "+Drafts"
+set record = "+Sent"
+
+mailboxes ! + `\
+for file in ~/Mail/.*; do \
+  box=$(basename "$file"); \
+    if [ ! "$box" = '.' -a ! "$box" = '..' -a ! "$box" = '.customflags' \
+         -a ! "$box" = '.subscriptions' ]; then \
+      echo -n "\"+$box\" "; \
+    fi; \
+done`

@@ -1,0 +1,53 @@
+# color terminals
+# (default, white, black, green, magenta, blue, cyan, yellow, red)
+# (bright...)
+# (color1,color2,...,colorN-1)
+
+#     object	 fg	        bg
+color normal	 default	default
+color indicator	 white	    red
+color tree	     magenta	default
+color status	 yellow	    default
+color error	     brightred	default
+color message	 red		default
+color signature	 red		default
+color attachment yellow	    red
+color search	 yellow	    red
+color tilde	     magenta	default
+color markers	 red		default
+color hdrdefault green		default
+color bold	     red		default
+color underline	 green		default
+color quoted	 blue		default
+color quoted1	 magenta	default
+color quoted2	 red		default
+color quoted3	 green		default
+color quoted4	 cyan		default
+color quoted5	 blue		default
+color quoted6	 magenta	default
+color quoted7	 red		default
+color quoted8	 green		default
+color quoted9	 cyan		default
+
+#     object	fg         bg       RegExp
+color header	red	       default  "^(from|subject|to|date):"
+color body	    cyan	   default  "((ftp|http|https)://|(file|news):|www\\.)[-a-z0-9_.:]*[a-z0-9](/[^][{} \t\n\r\"<>()]*[^][{} \t\n\r\"<>().,:!])?/?"
+color body	    cyan	   default  "[-a-z_0-9.+]+@[-a-z_0-9.]+"
+color body	    red	       default  "(^| )\\*[-a-z0-9*]+\\*[,.?]?[ \n]"
+color body	    green	   default  "(^| )_[-a-z0-9_]+_[,.?]?[ \n]"
+
+# Firewall (iptables) logs:
+color body      magenta    default  "(PROTO=[A-Z]+)|(DPT=[0-9]+)|(SRC=[0-9.]+)"
+
+# German GnuPG messages
+color body	    red	       default  "(Korrekte Unterschrift|Good signature)"
+color body	    yellow     black    "(Öffentlicher Schlüssel nicht gefunden|keine vertrauenswürdige Signatur|Dieser Schlüssel ist verfallen)"
+color body	    red        black    "FALSCHE Unterschrift"
+color body	    green      black    "nicht durch hinreichend vertrauenswürdige Signaturen zertifiziert"
+
+uncolor index *		# unset all color index entries
+#     object fg         bg       flag
+color index	 blue	    default  ~F		# Flagged
+color index	 red	    default  ~N		# New
+color index	 magenta    default  ~T		# Tagged
+color index	 yellow	    default  ~D		# Deleted

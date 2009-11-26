@@ -93,8 +93,8 @@ HISTSIZE=5000
 SAVEHIST=8000
 
 export EDITOR=vim
-export LESS=most
-export PAGER=most
+export LESS=vimpager
+export PAGER=vimpager
 
 if [[ -z "$SSH_CONNECTION" ]] {
 	source ~/.keychain/$HOST-sh

@@ -61,13 +61,19 @@ bindkey "\e[B" down-line-or-search	# down arrow for fwd-history-search
 
 bindkey " " magic-space			# do history expansion on space
 
+#<C> + N -> run command with sudo
 run-with-sudo () { LBUFFER="sudo $LBUFFER" }
 zle -N run-with-sudo
 bindkey '^N' run-with-sudo
+#<C> + B -> run command in bg
 run-in-bg () { LBUFFER="$LBUFFER&" }
 zle -N run-in-bg
 bindkey '^B' run-in-bg
-#
+#<C> + <Space> -> pipe output to /dev/null
+run-silent () { LBUFFER="$LBUFFER 2&> /dev/null" }
+zle -N run-silent
+bindkey '^@' run-silent
+
 #Navigate vi-like through menu-completion
 bindkey ';' menu-select #enter menuselect
 bindkey -M menuselect 'h' vi-backward-char

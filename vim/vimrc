@@ -1,4 +1,8 @@
-cd ~
+" Those variables should be set by environment file (~/.vimrc) :
+" vimlocal_dir : Contains path of local vimruntine
+" vimdir : Contains path of VCS-controlled runtime
+
+cd ~ "Good point to start
 "Basic Settings
 	syntax on
 	filetype on
@@ -19,7 +23,7 @@ cd ~
     set grepprg=grep\ -nH\ $* "grep always displays filename
     set encoding=utf-8
 
-	colorscheme inkpot
+	colorscheme cocol
 
 let mapleader = ","
 
@@ -46,8 +50,7 @@ set novisualbell
     set hidden
 
 "Folding Settings
-    set foldmethod=indent
-    set foldlevelstart=1
+    set foldmethod=manual
 
 "Indenting Settings
     set autoindent
@@ -134,7 +137,7 @@ endfunc
 	augroup END
 
 	"HTML/XML
-	augroup ML
+	augroup Markup
         au!
 		au FileType html setlocal omnifunc=htmlcomplete#CompleteTags
 		au FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
@@ -165,9 +168,6 @@ endfunc
 	nnoremap <silent> <F1> :NERDTreeToggle<CR>
 	nnoremap <silent> <F2> :TlistToggle<CR>
 	nnoremap <silent> <F3> :TaskList<CR>
-    cnoremap ntree NERDTreeToggle
-    cnoremap taglist TlistToggle
-    cnoremap tasks TaskList
 
 "Abbreviations
 	iabbr _me	Michael Markert

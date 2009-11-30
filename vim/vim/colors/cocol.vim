@@ -78,8 +78,8 @@ hi SpecialKey ctermfg=185 guibg=bg guifg=#DFDF5F gui=none
 hi Title gui=bold cterm=bold
 
 " Diff colors
-hi diffAdded ctermfg=82 guibg=#5FFF00 guifg=fg gui=none
-hi diffRemoved ctermfg=160 guibg=#DF0000 guifg=fg gui=none
+hi diffAdded ctermfg=82 guifg=#5FFF00 gui=none
+hi diffRemoved ctermfg=160 guifg=#DF0000 gui=none
 hi DiffDelete ctermfg=160 guibg=#DF0000 guifg=fg gui=none
 hi DiffAdd ctermfg=82 guibg=#5FFF00 guifg=fg gui=none
 hi Diff ctermfg=202 guibg=#DF5F00 guifg=fg gui=none

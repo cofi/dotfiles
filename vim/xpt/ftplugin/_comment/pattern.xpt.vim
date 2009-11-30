@@ -1,8 +1,7 @@
 " priority is a bit lower than 'spec'
 XPTemplate priority=spec+
 
-
-let s:f = g:XPTfuncs() 
+echom "_comment/pattern is deprecated."
 
 
 " XPTvar $CL  Warn_$CL_IS_NOT_SET
@@ -14,29 +13,29 @@ let s:f = g:XPTfuncs()
 
 if has_key(s:v, '$CL') && has_key(s:v, '$CR')
 
-  call XPTemplate('cc', {'hint' : '$CL $CR'}, [ '`$CL^ `cursor^ `$CR^' ])
-  call XPTemplate('cc_', {'hint' : '$CL ... $CR'}, [ '`$CL^ `wrapped^ `$CR^' ])
+  call XPTdefineSnippet('cc', {'hint' : '$CL $CR'}, [ '`$CL^ `cursor^ `$CR^' ])
+  call XPTdefineSnippet('cc_', {'hint' : '$CL ... $CR'}, [ '`$CL^ `wrapped^ `$CR^' ])
 
   " block comment
-  call XPTemplate('cb', {'hint' : '$CL ...'}, [
-        \'`$CL^', 
-        \' `$CM^ `cursor^', 
+  call XPTdefineSnippet('cb', {'hint' : '$CL ...'}, [
+        \'`$CL^',
+        \' `$CM^ `cursor^',
         \' `$CR^' ])
 
   " block doc comment
-  call XPTemplate('cd', {'hint' : '$CL$CM ...'}, [
-        \'`$CL^`$CM^', 
-        \' `$CM^ `cursor^', 
+  call XPTdefineSnippet('cd', {'hint' : '$CL$CM ...'}, [
+        \'`$CL^`$CM^',
+        \' `$CM^ `cursor^',
         \' `$CR^' ])
 
 endif
 
 " line comment
 if has_key(s:v, '$CS')
-  call XPTemplate('cl', {'hint' : '$CS'}, [ '`$CS^ `cursor^' ])
+  call XPTdefineSnippet('cl', {'hint' : '$CS'}, [ '`$CS^ `cursor^' ])
 
 else
-  call XPTemplate('cl', {'hint' : '$CL .. $CR'}, [ '`$CL^ `cursor^ `$CR^' ])
+  call XPTdefineSnippet('cl', {'hint' : '$CL .. $CR'}, [ '`$CL^ `cursor^ `$CR^' ])
 
 endif
 

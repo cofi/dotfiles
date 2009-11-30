@@ -1,15 +1,15 @@
 XPTemplate priority=lang mark=`~
 
-let s:f = g:XPTfuncs() 
- 
+let s:f = g:XPTfuncs()
+
 XPTvar $TRUE          1
 XPTvar $FALSE         0
 XPTvar $NULL          NULL
 XPTvar $UNDEFINED     NULL
 XPTvar $VOID_LINE     /* void */;
-XPTvar $IF_BRACKET_STL \n
+XPTvar $BRif \n
 
-XPTinclude 
+XPTinclude
       \ _common/common
       \ _common/personal
 
@@ -87,7 +87,7 @@ XPT lbl hint=label{..}
 ..XPT
 
 XPT ref hint=ref{..}
-\ref{`curosr~}
+\ref{`cursor~}
 ..XPT
 
 XPT integral hint=int_..^..
@@ -95,7 +95,7 @@ XPT integral hint=int_..^..
 ..XPT
 
 XPT lim hint=lim_....
-\lim_{`what^}
+\lim_{`what~}
 ..XPT
 
 XPT itemize hint=begin{itemize}\ ...\ end{itemize}
@@ -139,6 +139,17 @@ XPT beg hint=begin{..}\ ..\ end{..}
 \begin{`something~}
 `cursor~
 \end{`something~}
+..XPT
+
+XPT columns hint=\begin{columns}...
+\begin{columns}
+    \begin{column}[l]{`size~5cm~}
+    \end{column}`...~
+
+    \begin{column}[l]{`size~5cm~}
+    \end{column}`...~
+    `cursor~
+\end{columns}
 ..XPT
 
 XPT enclose_ hint=\begin{..}\ SEL\ \end{..}

@@ -1,22 +1,22 @@
 XPTemplate priority=lang
 
-let s:f = g:XPTfuncs() 
- 
+let s:f = g:XPTfuncs()
+
 XPTvar $TRUE          1
 XPTvar $FALSE         0
 
-XPTinclude 
+XPTinclude
       \ _common/common
 
 XPTvar $CS    "
-XPTinclude 
+XPTinclude
       \ _comment/singleSign
 
 " ========================= Function and Variables =============================
 
 
 " ================================= Snippets ===================================
-call XPTemplate('vimformat', [ '" vim:tw=78:ts=8:sw=2:sts=2:et:norl:fdm=marker:fmr={{{,}}}' ])
+call XPTdefineSnippet('vimformat', {}, [ '" vim:tw=78:ts=8:sw=4:sts=4:et:norl:fdm=marker:fmr={{{,}}}' ])
 
 XPTemplateDef
 
@@ -127,7 +127,7 @@ XSET exception=.*
 try
     `wrapped^
 catch /`exception^/
-`
+    `handle^`
 `finally...{{^
 finally
     `cursor^`}}^

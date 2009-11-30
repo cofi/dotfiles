@@ -1,15 +1,15 @@
 XPTemplate priority=sub
 
-let s:f = g:XPTfuncs() 
- 
-XPTinclude 
+let s:f = g:XPTfuncs()
+
+XPTinclude
       \ _common/common
       \ vim/vim
 
 
 " ========================= Function and Variables =============================
 
-fun! s:f.hintEscape()
+fun! s:f.xpt_vim_hint_escape()
   " let v = substitute( self.V(), '\(\\*\)\([( ]\)', '\1\1\\\2', 'g' )
   let v = substitute( self.V(), '\(\\*\)\([(]\)', '\1\1\\\2', 'g' )
   return v
@@ -29,9 +29,6 @@ for v in s:xpt_snip
   let s:xpts[ ft ] += [ snip ]
 endfor
 
-" echom string( s:xpts )
-
-
 
 fun! s:f.xpt_vim_path()
   return keys( s:xpts )
@@ -41,7 +38,7 @@ fun! s:f.xpt_vim_name(path)
   let path = matchstr( a:path, '\w\+' )
   if has_key( s:xpts, path )
     return s:xpts[ path ]
-  else 
+  else
     return ''
   endif
 endfunction
@@ -49,11 +46,11 @@ endfunction
 " ================================= Snippets ===================================
 XPTemplateDef
 
-" TODO detect path to generate popup list 
+" TODO detect path to generate popup list
 XPT incf hint=XPTinclude\ ...
 XSET path=xpt_vim_path()
 XSET name=xpt_vim_name( R( 'path' ) )
-XPTinclude 
+XPTinclude
     \ _common/common`
     `...{{^`
     \ `path^/`name^`
@@ -61,11 +58,11 @@ XPTinclude
 
 
 XPT container hint=let\ [s:f,\ s:v]\ =...
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 
 XPT tmpl hint=XPT\ name\ ...
-XSET tips|post=hintEscape()
+XSET tips|post=xpt_vim_hint_escape()
 \XPT `name^ " `tips^
 `cursor^
 
@@ -86,32 +83,46 @@ XPTvar $VAR_PRE
 
 XPT varFormat hint=variables\ to\ define\ format
 " if () ** {
-XPTvar $IF_BRACKET_STL     ' '
+" else ** {
+XPTvar $BRif     ' '
+
 " } ** else {
-XPTvar $ELSE_BRACKET_STL   \n
+XPTvar $BRel     \n
+
 " for () ** {
-XPTvar $FOR_BRACKET_STL    ' '
 " while () ** {
-XPTvar $WHILE_BRACKET_STL  ' '
+" do ** {
+XPTvar $BRloop   ' '
+
 " struct name ** {
-XPTvar $STRUCT_BRACKET_STL ' '
+XPTvar $BRstc    ' '
+
 " int fun() ** {
-XPTvar $FUNC_BRACKET_STL   ' '
 " class name ** {
-XPTvar $CLS_BRACKET_STL    ' '
+XPTvar $BRfun    ' '
 
 
 XPT varSpaces hint=variable\ to\ define\ spacing
+" int fun ** (
+" class name ** (
+XPTvar $SPfun      ''
+
 " int fun( ** arg ** )
-XPTvar $SP_ARG      ' '
 " if ( ** condition ** )
-XPTvar $SP_IF       ' '
+" for ( ** statement ** )
+" [ ** a, b ** ]
+" { ** 'k' : 'v' ** }
+XPTvar $SParg      ' '
+
+" if ** (
+" while ** (
+" for ** (
+XPTvar $SPcmd      ' '
+
 " a ** = ** b
-XPTvar $SP_EQ       ' '
 " a = a ** + ** 1
-XPTvar $SP_OP       ' '
 " (a, ** b, ** )
-XPTvar $SP_COMMA    ' '
+XPTvar $SPop       ' '
 
 
 XPT varConst hint=variables\ to\ define\ constants
@@ -135,20 +146,18 @@ XPTvar $CL    `left sign^
 XPTvar $CM    `cursor^
 XPTvar $CR    `right sign^
 
-XPT sparg " `\$SP_ARG^
-\`$SP_ARG\^
+XPT spfun " `\$SPfun^
+\`$SPfun\^
 
-XPT spif hint=`\$SP_ARG^
-\`$SP_IF\^
+XPT sparg " `\$SParg^
+\`$SParg\^
 
-XPT speq hint=`\$SP_EQ^
-\`$SP_EQ\^
+XPT spcmd " `\$SPcmd^
+\`$SPcmd\^
 
-XPT spop hint=`\$SP_OP^
-\`$SP_OP\^
+XPT spop hint=`\$SPop^
+\`$SPop\^
 
-XPT spcomma hint=`\$SP_COMMA^
-\`$SP_COMMA\^
 
 XPT buildifeq hint={{}}
 \``name^{{\^`cursor^\`}}\^
@@ -160,7 +169,7 @@ XPT inc hint=`::^
 XPT fun hint=fun!\ s:f.**
 XSET parameters|def=
 XSET parameters|post=Echo( V() =~ '^\s*$' ? '' : V() )
-fun! s:f.`name^(` `parameters` ^)
+fun! s:f.`name^(`$SParg`parameters`$SParg^)
     `cursor^
 endfunction
 
@@ -169,12 +178,9 @@ endfunction
 XPT xpt hint=start\ template\ to\ write\ template
 XPTemplate priority=`prio^` `mark...^
 XSET prio=ChooseStr( 'all', 'spec', 'like', 'lang', 'sub', 'personal' )
-XSET keyword_disable...|post= keyword=`char^
 XSET mark...|post= mark=`char^
-XSET indent_disable...|post= indent=`indentValue^
-XSET indentValue=ChooseStr( 'auto', 'keep' )
 
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 `Include:varConst^
 

@@ -1,15 +1,15 @@
 XPTemplate priority=lang
 
-let s:f = g:XPTfuncs() 
- 
+let s:f = g:XPTfuncs()
+
 XPTvar $TRUE          1
 XPTvar $FALSE         0
 XPTvar $NULL          NULL
 XPTvar $UNDEFINED     NULL
 XPTvar $VOID_LINE /* void */;
-XPTvar $IF_BRACKET_STL \n
+XPTvar $BRif \n
 
-XPTinclude 
+XPTinclude
       \ _common/common
 
 

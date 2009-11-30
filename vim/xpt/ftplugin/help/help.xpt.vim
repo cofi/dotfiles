@@ -2,13 +2,13 @@ XPTemplate priority=lang
 
 
 " containers
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 " inclusion
 XPTinclude
       \ _common/common
 
-" ========================= Function and Varaibles =============================
+" ========================= Function and Variables =============================
 
 " ================================= Snippets ===================================
 XPTemplateDef

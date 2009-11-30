@@ -1,7 +1,7 @@
 XPTemplate priority=lang
 
-let s:f = g:XPTfuncs() 
- 
+let s:f = g:XPTfuncs()
+
 XPTvar $TRUE          true
 XPTvar $FALSE         false
 XPTvar $NULL          null
@@ -10,22 +10,21 @@ XPTvar $UNDEFINED     null
 XPTvar $VOID_LINE  /* void */;
 XPTvar $CURSOR_PH      /* cursor */
 
-XPTvar $IF_BRACKET_STL     \ 
-XPTvar $FOR_BRACKET_STL    \ 
-XPTvar $WHILE_BRACKET_STL  \ 
-XPTvar $STRUCT_BRACKET_STL \ 
-XPTvar $FUNC_BRACKET_STL   \ 
+XPTvar $BRif          ' '
+XPTvar $BRloop        ' '
+XPTvar $BRstc         ' '
+XPTvar $BRfun         ' '
 
-XPTinclude 
+XPTinclude
       \ _common/common
 
 XPTvar $CL    /*
 XPTvar $CM    *
 XPTvar $CR    */
-XPTinclude 
+XPTinclude
       \ _comment/doubleSign
 
-XPTinclude 
+XPTinclude
       \ _condition/c.like
       \ _loops/java.for.like
       \ _loops/c.while.like
@@ -40,7 +39,7 @@ XPTemplateDef
 
 
 XPT foreach hint=for\ \(\ ..\ :\ ..\ \)
-for ( `type^ `var^ : `inWhat^ )`$FOR_BRACKET_STL^{
+for ( `type^ `var^ : `inWhat^ )`$BRloop^{
     `cursor^
 }
 
@@ -56,14 +55,14 @@ protected `type^ `varName^;
 
 XPT class hint=class\ ..\ ctor
 public class `className^ {
-    public `className^(` `ctorParam` ^)`$FUNC_BRACKET_STL^{
+    public `className^(` `ctorParam` ^)`$BRfun^{
         `cursor^
     }
 }
 
 
 XPT main hint=main\ (\ String\ )
-public static void main( String[] args )`$FUNC_BRACKET_STL^{
+public static void main( String[] args )`$BRfun^{
     `cursor^
 }
 

@@ -7,16 +7,16 @@ XPTvar $NULL          NULL
 
 XPTvar $VOID_LINE /* void */;
 
-XPTvar $STRUCT_BRACKET_STL \ 
+XPTvar $BRstc         ' '
 
 " containers
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 
 
 
 
-" ========================= Function and Varaibles =============================
+" ========================= Function and Variables =============================
 " fun! s:f.c_enum_next(ptn) dict
   " let v = self.V()
   " if v == a:ptn
@@ -32,7 +32,7 @@ XPTemplateDef
 
 XPT enum hint=enum\ {\ ..\ }
 XSET postQuoter={,}
-enum `name^`$STRUCT_BRACKET_STL^{
+enum `name^`$BRstc^{
     `elt^;`
     `...{^
     `elt^;`
@@ -41,7 +41,7 @@ enum `name^`$STRUCT_BRACKET_STL^{
 
 
 XPT struct hint=struct\ {\ ..\ }
-struct `structName^`$STRUCT_BRACKET_STL^{
+struct `structName^`$BRstc^{
     `type^ `field^;`
     `...^
     `type^ `field^;`
@@ -50,7 +50,7 @@ struct `structName^`$STRUCT_BRACKET_STL^{
 
 
 XPT bitfield hint=struct\ {\ ..\ :\ n\ }
-struct `structName^`$STRUCT_BRACKET_STL^{
+struct `structName^`$BRstc^{
     `type^ `field^ : `bits^;`
     `...^
     `type^ `field^ : `bits^;`

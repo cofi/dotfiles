@@ -1,7 +1,7 @@
 XPTemplate priority=lang keyword=:%#
 
 " containers
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 " inclusion
 XPTinclude
@@ -86,7 +86,7 @@ let s:assert_map = {
 "}}}
 
 fun! s:RubyAssertPopupSort(a, b) "{{{
-  return a:a.word > a:b.word
+    return a:a.word == a:b.word ? 0 : a:a.word > a:b.word ? 1 : -1
 endfunction "}}}
 
 fun! s:f.RubyAssertPopup() "{{{
@@ -126,7 +126,7 @@ fun! s:f.RepeatInsideEdges(sep) "{{{
 
   let newName = 'n' . n
   let res  = edgeLeft . v
-  let res .= markLeft . a:sep .  markLeft . newName . markRight 
+  let res .= markLeft . a:sep .  markLeft . newName . markRight
   let res .= 'ExpandIfNotEmpty("' . a:sep . '", "' . newName . '")' . markRight . markRight
   let res .=  edgeRight
 
@@ -414,7 +414,7 @@ end
 XPT deft hint=def\ test_..\ ..\ end
 XSET name|post=RubySnakeCase()
 XSET arg*|post=RepeatInsideEdges(', ')
-def test_`name^`(`arg*`)^
+def test_`name^
     `cursor^
 end
 

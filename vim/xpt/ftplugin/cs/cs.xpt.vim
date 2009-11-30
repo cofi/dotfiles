@@ -1,16 +1,16 @@
 XPTemplate priority=lang-
 
-let s:f = g:XPTfuncs() 
- 
+let s:f = g:XPTfuncs()
+
 XPTvar $TRUE          true
 XPTvar $FALSE         false
 XPTvar $NULL          null
 
-XPTvar $IF_BRACKET_STL     \n
-XPTvar $FOR_BRACKET_STL    \n
-XPTvar $WHILE_BRACKET_STL  \n
-XPTvar $STRUCT_BRACKET_STL \n
-XPTvar $FUNC_BRACKET_STL   \n
+XPTvar $BRif     \n
+XPTvar $BRloop    \n
+XPTvar $BRloop  \n
+XPTvar $BRstc \n
+XPTvar $BRfun   \n
 
 XPTvar $VOID_LINE  /* void */;
 XPTvar $CURSOR_PH      /* cursor */
@@ -38,7 +38,7 @@ XPTemplateDef
 
 
 XPT foreach hint=foreach\ (..\ in\ ..)\ {..}
-foreach ( `var^ `e^ in `what^ )`$FOR_BRACKET_STL^{
+foreach ( `var^ `e^ in `what^ )`$BRloop^{
     `cursor^
 }
 

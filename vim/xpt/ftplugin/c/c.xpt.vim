@@ -5,11 +5,10 @@ XPTvar $TRUE           1
 XPTvar $FALSE          0
 XPTvar $NULL           NULL
 
-XPTvar $IF_BRACKET_STL     \ 
-XPTvar $FOR_BRACKET_STL    \ 
-XPTvar $WHILE_BRACKET_STL  \ 
-XPTvar $STRUCT_BRACKET_STL \ 
-XPTvar $FUNC_BRACKET_STL   \n
+XPTvar $BRif           ' '
+XPTvar $BRloop         ' '
+XPTvar $BRstc          ' '
+XPTvar $BRfun          \n
 
 XPTvar $VOID_LINE      /* void */;
 XPTvar $CURSOR_PH      /* cursor */
@@ -34,13 +33,13 @@ XPTinclude
       \ _loops/for
 
 
-" ========================= Function and Varaibles =============================
+" ========================= Function and Variables =============================
 
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 let s:printfElts = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-"  %[flags][width][.precision][length]specifier  
+"  %[flags][width][.precision][length]specifier
 let s:printfItemPattern = '\V\C' . '%' . '\[+\- 0#]\*' . '\%(*\|\d\+\)\?' . '\(.*\|.\d\+\)\?' . '\[hlL]\?' . '\(\[cdieEfgGosuxXpn]\)'
 
 let s:printfSpecifierMap = {
@@ -93,7 +92,7 @@ fun! s:f.c_printfElts( v )
     endwhile
     return post
 
-  else 
+  else
     return self.Next( '' )
 
   endif
@@ -107,21 +106,25 @@ XPTemplateDef
 
 
 XPT printf	hint=printf\(...)
+XSET elts|pre=Echo('')
 XSET elts=c_printfElts( R( 'pattern' ) )
 printf( "`pattern^"`elts^ )
 
 
 XPT sprintf	hint=sprintf\(...)
+XSET elts|pre=Echo('')
 XSET elts=c_printfElts( R( 'pattern' ) )
 sprintf( `str^, "`pattern^"`elts^ )
 
 
 XPT snprintf	hint=snprintf\(...)
+XSET elts|pre=Echo('')
 XSET elts=c_printfElts( R( 'pattern' ) )
 snprintf( `str^, `size^, "`pattern^"`elts^ )
 
 
 XPT fprintf	hint=fprintf\(...)
+XSET elts|pre=Echo('')
 XSET elts=c_printfElts( R( 'pattern' ) )
 fprintf( `stream^, "`pattern^"`elts^ )
 
@@ -150,15 +153,15 @@ XSET cursor|pre=CURSOR
  * <b>`function^</b>
  * @version : `1.0^
  * @since : `strftime("%Y %b %d")^
- * 
+ *
  * @description :
  *     `cursor^
- * @usage : 
- * 
+ * @usage :
+ *
  * @author : `$author^ | `$email^
- * @copyright `.com.cn^ 
- * @TODO : 
- * 
+ * @copyright `.com.cn^
+ * @TODO :
+ *
  *--------------------------\\\ `sum^ ///---------------------------*/
 
 ..XPT

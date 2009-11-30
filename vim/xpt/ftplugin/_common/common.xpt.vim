@@ -1,41 +1,62 @@
+" Default settings and functions used in every snippet file.
 XPTemplate priority=all
 
 " containers
-let s:f = g:XPTfuncs() 
+let s:f = g:XPTfuncs()
 
 XPTvar $author $author is not set, you need to set g:xptemplate_vars="$author=your_name"
-XPTvar $email  $email is not set, you need to set g:xptemplate_vars="$author=your_email@com"
+XPTvar $email  $email is not set, you need to set g:xptemplate_vars="$email=your_email@com"
 
 XPTvar $VOID
 
 " if () ** {
-XPTvar $IF_BRACKET_STL     ' '
+" else ** {
+XPTvar $BRif     ' '
+
 " } ** else {
-XPTvar $ELSE_BRACKET_STL   \n
+XPTvar $BRel     \n
+
 " for () ** {
-XPTvar $FOR_BRACKET_STL    ' '
 " while () ** {
-XPTvar $WHILE_BRACKET_STL  ' '
+" do ** {
+XPTvar $BRloop   ' '
+
 " struct name ** {
-XPTvar $STRUCT_BRACKET_STL ' '
+XPTvar $BRstc    ' '
+
 " int fun() ** {
-XPTvar $FUNC_BRACKET_STL   ' '
 " class name ** {
-XPTvar $CLS_BRACKET_STL    ' '
+XPTvar $BRfun    ' '
 
 
-XPTvar $SP_ARG      ' '
-XPTvar $SP_IF       ' '
-XPTvar $SP_EQ       ' '
-XPTvar $SP_OP       ' '
-XPTvar $SP_COMMA    ' '
+" int fun ** (
+" class name ** (
+XPTvar $SPfun      ''
+
+" int fun( ** arg ** )
+" if ( ** condition ** )
+" for ( ** statement ** )
+" [ ** a, b ** ]
+" { ** 'k' : 'v' ** }
+XPTvar $SParg      ' '
+
+" if ** (
+" while ** (
+" for ** (
+XPTvar $SPcmd      ' '
+
+" a ** = ** b
+" a = a ** + ** 1
+" (a, ** b, ** )
+XPTvar $SPop       ' '
+
 
 XPTvar $TRUE          1
 XPTvar $FALSE         0
 XPTvar $NULL          0
 XPTvar $UNDEFINED     0
 
-XPTvar $VOID_LINE  
+XPTvar $VOID_LINE
 XPTvar $CURSOR_PH      CURSOR
 
 
@@ -43,7 +64,7 @@ XPTinclude
       \ _common/personal
       \ _common/cmn.counter
 
-" ========================= Function and Varaibles =============================
+" ========================= Function and Variables =============================
 
 
 
@@ -69,8 +90,30 @@ fun! s:f.ItemValue() dict "{{{
 endfunction "}}}
 let s:f.V = s:f.ItemValue
 
+fun! s:f.ItemInitValue()
+    return get( self.Item(), 'initValue', '' )
+endfunction
+let s:f.IV = s:f.ItemInitValue
+
+fun! s:f.ItemValueStripped( ... )
+    let ptn = a:0 == 0 || a:1 =~ 'lr'
+          \ ? '\V\^\s\*\|\s\*\$'
+          \ : ( a:1 == 'l'
+          \     ? '\V\^\s\*'
+          \     : '\V\s\*\$' )
+    return substitute( self.ItemValue(), ptn, '', 'g' )
+endfunction
+let s:f.VS = s:f.ItemValueStripped
+
+
+fun! s:f.ItemInitValueWithEdge()
+    let [ l, r ] = self.ItemEdges()
+    return l . self.IV() . r
+endfunction
+let s:f.IVE = s:f.ItemInitValueWithEdge
+
 " if value match one of the regexps
-fun! s:f.Vmatch( ... ) 
+fun! s:f.Vmatch( ... )
     let v = self.V()
     for reg in a:000
         if match(v, reg) != -1
@@ -79,12 +122,12 @@ fun! s:f.Vmatch( ... )
     endfor
 
     return 0
-endfunction 
+endfunction
 
 " value matchstr
-fun! s:f.VMS( reg ) 
+fun! s:f.VMS( reg )
     return matchstr(self.V(), a:reg)
-endfunction 
+endfunction
 
 " edge stripped value
 fun! s:f.ItemStrippedValue()
@@ -138,6 +181,10 @@ fun! s:f.Reference(name) "{{{
 endfunction "}}}
 let s:f.R = s:f.Reference
 
+fun! s:f.Snippet( name )
+    return get( self._ctx.ftScope.normalTemplates, a:name, { 'tmpl' : '' } )[ 'tmpl' ]
+endfunction
+
 " black hole
 fun! s:f.Void(...) "{{{
   return ""
@@ -147,31 +194,31 @@ let s:f.VOID = s:f.Void
 " Echo several expression and concat them.
 " That's the way to use normal vim script expression instead of mixed string
 fun! s:f.Echo(...)
-  return join( a:000, '' )
+    return join( a:000, '' )
 endfunction
 
 fun! s:f.EchoIf( isTrue, ... )
-  if a:isTrue
-    return join( a:000, '' )
-  else
-    return self.V()
-  endif
+    if a:isTrue
+        return join( a:000, '' )
+    else
+        return self.V()
+    endif
 endfunction
 
 fun! s:f.EchoIfEq( expected, ... )
-  if self.V() ==# a:expected
-    return join( a:000, '' )
-  else
-    return self.V()
-  endif
+    if self.V() ==# a:expected
+        return join( a:000, '' )
+    else
+        return self.V()
+    endif
 endfunction
 
 fun! s:f.EchoIfNoChange( ... )
-  if self.V() ==# self.ItemFullname()
-    return join( a:000, '' )
-  else
-    return self.V()
-  endif
+    if self.V0() ==# self.ItemName()
+        return join( a:000, '' )
+    else
+        return self.V()
+    endif
 endfunction
 
 fun! s:f.Commentize( text )
@@ -198,7 +245,8 @@ endfunction
 
 fun! s:f.BuildIfChanged( ... )
   let v = substitute( self.V(), "\\V\n\\|\\s", '', 'g')
-  let fn = substitute( self.ItemFullname(), "\\V\n\\|\\s", '', 'g')
+  " let fn = substitute( self.ItemFullname(), "\\V\n\\|\\s", '', 'g')
+  let fn = substitute( self.ItemInitValueWithEdge(), "\\V\n\\|\\s", '', 'g')
 
   if v ==# fn || v == ''
       " return { 'action' : 'keepIndent', 'text' : self.V() }
@@ -210,7 +258,9 @@ endfunction
 
 fun! s:f.BuildIfNoChange( ... )
   let v = substitute( self.V(), "\\V\n\\|\\s", '', 'g')
-  let fn = substitute( self.ItemFullname(), "\\V\n\\|\\s", '', 'g')
+  " let fn = substitute( self.ItemFullname(), "\\V\n\\|\\s", '', 'g')
+  let fn = substitute( self.ItemInitValueWithEdge(), "\\V\n\\|\\s", '', 'g')
+
 
   if v ==# fn
       return { 'action' : 'build', 'text' : join( a:000, '' ) }
@@ -226,7 +276,11 @@ endfunction "}}}
 
 
 fun! s:f.Finish(...)
-    return { 'action' : 'finishTemplate', 'postTyping' : join( a:000 ) }
+    if empty( self._ctx.itemList )
+        return { 'action' : 'finishTemplate', 'postTyping' : join( a:000 ) }
+    else
+        return self.ItemName()
+    endif
 endfunction
 
 fun! s:f.Embed( snippet )
@@ -241,7 +295,7 @@ fun! s:f.Next( ... )
   endif
 endfunction
 
-" This function is intented to be used for popup selection :
+" This function is intended to be used for popup selection :
 " XSET bidule=Choose([' ','dabadi','dabada'])
 fun! s:f.Choose( lst ) "{{{
     return a:lst
@@ -252,13 +306,13 @@ fun! s:f.ChooseStr(...) "{{{
 endfunction "}}}
 
 " XXX
-" Fill in postType, and finish template rendering at once. 
+" Fill in postType, and finish template rendering at once.
 " This make nested template rendering go back to upper level, top-level
 " template rendering quit.
 fun! s:f.xptFinishTemplateWith(postType) dict
 endfunction
 
-" XXX  
+" XXX
 " Fill in postType, jump to next item. For creating item being able to be
 " automatically filled in
 fun! s:f.xptFinishItemWith(postType) dict
@@ -338,9 +392,9 @@ fun! s:f.ItemCreate( name, edges, filters )
 
 
   let item = ml . a:name
-  
+
   if has_key( a:edges, 'left' )
-    let item = ml . a:edges.left . item 
+    let item = ml . a:edges.left . item
   endif
 
   if has_key( a:edges, 'right' )
@@ -369,22 +423,39 @@ endfunction
 fun! s:f.ExpandIfNotEmpty( sep, item, ... ) "{{{
   let v = self.V()
 
-  let marks = XPTmark()
+  let [ ml, mr ] = XPTmark()
 
   if a:0 != 0
     let r = a:1
   else
     let r = ''
   endif
-  
-  let t = ( v == '' || v == a:item || v == ( a:sep . a:item ) )
+
+  " let t = ( v == '' || v == a:item || v == ( a:sep . a:item . r ) )
+  let t = ( v == '' || v =~ '\V' . a:item )
         \ ? ''
-        \ : ( v . marks[0] . a:sep . marks[0] . a:item . marks[0] . r . marks[1] . 'ExpandIfNotEmpty("' . a:sep . '", "' . a:item  . '")' . marks[1] . marks[1] )
+        \ : ( v . ml . a:sep . ml . a:item . ml . r . mr . 'ExpandIfNotEmpty("' . a:sep . '", "' . a:item  . '")' . mr . mr )
 
   return t
 endfunction "}}}
 
-let s:xptCompleteMap = [ 
+fun! s:f.ExpandInsideEdge( newLeftEdge, newRightEdge )
+    let v = self.V()
+    let fullname = self.ItemFullname()
+
+    let [ el, er ] = self.ItemEdges()
+
+    if v ==# fullname || v == ''
+        return ''
+    endif
+
+    return substitute( v, '\V' . er . '\$' , '' , '' )
+                \. self.ItemCreate( self.ItemName(), { 'left' : a:newLeftEdge, 'right' : a:newRightEdge }, {} )
+                \. er
+endfunction
+
+
+let s:xptCompleteMap = [
             \"''",
             \'""',
             \'()',
@@ -393,13 +464,13 @@ let s:xptCompleteMap = [
             \'<>',
             \'||',
             \'**',
-            \'``', 
+            \'``',
             \]
 let s:xptCompleteLeft = join( map( deepcopy( s:xptCompleteMap ), 'v:val[0:0]' ), '' )
 let s:xptCompleteRight = join( map( deepcopy( s:xptCompleteMap ), 'v:val[1:1]' ), '' )
 
 fun! s:f.CompleteRightPart( left ) dict
-    if !g:xptemplate_brace_complete 
+    if !g:xptemplate_brace_complete
         return ''
     endif
 
@@ -407,7 +478,7 @@ fun! s:f.CompleteRightPart( left ) dict
     " let left = substitute( a:left, '[', '[[]', 'g' )
     let left = escape( a:left, '[\' )
     let v = matchstr( v, '^\V\[' . left . ']\+' )
-    if v == '' 
+    if v == ''
         return ''
     endif
 
@@ -418,7 +489,7 @@ fun! s:f.CompleteRightPart( left ) dict
 endfunction
 
 fun! s:f.CmplQuoter_pre() dict
-    if !g:xptemplate_brace_complete 
+    if !g:xptemplate_brace_complete
         return ''
     endif
 
@@ -439,28 +510,56 @@ fun! s:f.CmplQuoter_pre() dict
 endfunction
 
 
+fun! s:f.AutoCmpl( keepInPost, list, ... )
+
+    if !a:keepInPost && self.Phase() == 'post'
+        return ''
+    endif
+
+    if type( a:list ) == type( [] )
+        let list = a:list
+    else
+        let list = [ a:list ] + a:000
+    endif
+    
+    
+    let v = self.V0()
+    if v == ''
+        return ''
+    endif
+    
+    
+    for word in list
+        if word =~ '\V\^' . v
+            return word[ len( v ) : ]
+        endif
+    endfor
+
+    return ''
+endfunction
 
 
-" Short name is not good. Some alias to those short name functions are
-" made, with a meaningful names.
-" 
-" They all start with prefix 'xpt'
+
+" Short names are normally not good. Some alias to those short name functions are
+" made, with meaningful names.
+"
+" They all start with prefix 'xpt'.
 "
 
 " ================================= Snippets ===================================
 
 " Shortcuts
-call XPTemplate('Author', '`$author^')
-call XPTemplate('Email', '`$email^')
-call XPTemplate("Date", "`date()^")
-call XPTemplate("File", "`file()^")
-call XPTemplate("Path", "`path()^")
+call XPTdefineSnippet('Author', {}, '`$author^')
+call XPTdefineSnippet('Email', {}, '`$email^')
+call XPTdefineSnippet("Date", {}, "`date()^")
+call XPTdefineSnippet("File", {}, "`file()^")
+call XPTdefineSnippet("Path", {}, "`path()^")
 
 " wrapping snippets do not need using \w as name
-call XPTemplate('"_', {'hint' : '" ... "'}, '"`wrapped^"')
-call XPTemplate("'_", {'hint' : "' ... '"}, "'`wrapped^'")
-call XPTemplate("<_", {'hint' : '< ... >'}, '<`wrapped^>')
-call XPTemplate("(_", {'hint' : '( ... )'}, '(`wrapped^)')
-call XPTemplate("[_", {'hint' : '[ ... ]'}, '[`wrapped^]')
-call XPTemplate("{_", {'hint' : '{ ... }'}, '{`wrapped^}')
-call XPTemplate("`_", {'hint' : '` ... `'}, '\``wrapped^\`')
+call XPTdefineSnippet('"_', {'hint' : '" ... "'}, '"`wrapped^"')
+call XPTdefineSnippet("'_", {'hint' : "' ... '"}, "'`wrapped^'")
+call XPTdefineSnippet("<_", {'hint' : '< ... >'}, '<`wrapped^>')
+call XPTdefineSnippet("(_", {'hint' : '( ... )'}, '(`wrapped^)')
+call XPTdefineSnippet("[_", {'hint' : '[ ... ]'}, '[`wrapped^]')
+call XPTdefineSnippet("{_", {'hint' : '{ ... }'}, '{`wrapped^}')
+call XPTdefineSnippet("`_", {'hint' : '` ... `'}, '\``wrapped^\`')

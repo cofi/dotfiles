@@ -1,29 +1,36 @@
 [user]
-	name = Michael Markert
-	email = markert.michael@gmail.com
+    name = Michael Markert
+    email = markert.michael@gmail.com
 [color]
-	status = auto
-	branch = auto
-	status = auto
+    status = auto
+    branch = auto
 [color "branch"]
-	current = yellow reverse
-	local = yellow
-	remote = green
+    current = yellow reverse
+    local = yellow
+    remote = green
 [color "status"]
-	added = yellow
-	changed = green
-	untracked = cyan
+    added = yellow
+    changed = green
+    untracked = cyan
 [merge]
-	tool = kdiff3
+    tool = kdiff3
 [diff]
-	tool = gvimdiff
+    tool = gvimdiff
 [alias]
-	st = status
-	ci = commit
-	br = branch
-	co = checkout
-	df = diff
+    st = status
+    ci = commit
+    br = branch
+    co = checkout
+    df = diff
+    dfc = diff --cached
+    gdf = difftool
+    mg = merge
+    gmg = mergetool
     l1 = log HEAD^1..
-	lg = log -p
+    lg = log -p
     pom = pull origin master
     pum = push origin master
+    stats = shortlog -s -n -e --no-merges
+    incoming = !git-incoming
+    outgoing = !git-outgoing
+    addremove = !git-addremove

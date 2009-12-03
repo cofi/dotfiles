@@ -1,6 +1,6 @@
 export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
-export PATH=$PATH:$HOME/.bin
+export PATH=$PATH:$HOME/.bin:$HOME/.bin_local
  
 # load extra modules
 autoload -U zmv
@@ -87,6 +87,7 @@ if [[ -d $ZSHDIR ]] {
     load_config $LOCALDIR/zshrc
     load_config $ZSHDIR/style
 }
+unfunction load_config
 
 HISTFILE=~/.zshhistory
 HISTSIZE=5000

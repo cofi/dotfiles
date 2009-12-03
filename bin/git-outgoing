@@ -5,17 +5,22 @@ emulate zsh
 CURRENT_BRANCH="$(git branch | grep '^*' | sed s/\*\ //)"
 
 if [[ "${CURRENT_BRANCH}" != "" ]] {
-    TARGET="${1}"
-    if [[ "${TARGET}" == "" ]] {
-        TRACKING_REPOSITORY="$(git config branch.${CURRENT_BRANCH}.remote)"
+    TRACKED_REPOSITORY="$(git config branch.${CURRENT_BRANCH}.remote)"
 
-    if [[ "${TRACKING_REPOSITORY}" != "" ]] {
-        REMOTE_REPOSITORY="${TRACKING_REPOSITORY}"
+    if [[ "${TRACKED_REPOSITORY}" != "" ]] {
         REMOTE_BRANCH="$(git config branch.${CURRENT_BRANCH}.merge | cut -d"/" -f3)"
-        TARGET="${REMOTE_REPOSITORY}/${REMOTE_BRANCH}"
-        git fetch ${REMOTE_REPOSITORY} ${REMOTE_BRANCH}
 
-        git log ${TARGET}..
-      }
-    }
+        if [[ "${REMOTE_BRANCH}" != "" ]] {
+            TARGET="${TRACKED_REPOSITORY}/${REMOTE_BRANCH}"
+            git fetch ${TRACKED_REPOSITORY} ${REMOTE_BRANCH}
+
+            git log ${TARGET}..
+        } else {
+              echo "Current branch has no corresponding remote repository."
+              echo 'Try setting branch.$CurrentBranch.merge'
+          }
+    } else {
+          echo "Current branch doesn't track any repository."
+          echo 'Try setting branch.$CurrentBranch.remote'
+        }
 }

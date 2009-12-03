@@ -31,3 +31,6 @@
     pom = pull origin master
     pum = push origin master
     stats = shortlog -s -n -e --no-merges
+    incoming = !git-incoming
+    outgoing = !git-outgoing
+    addremove = !git-addremove

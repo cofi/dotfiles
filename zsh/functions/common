@@ -22,19 +22,19 @@ trans() {
 unpack() {
     if [[ -f $1 ]] {
         case $1 in
-            *.tar.bz2)  bzip2 -v -d $1      ;;
-            *.tar.gz)   tar -xvzf $1        ;;
-            *.rar)      unrar e $1          ;;
-            *.deb)      ar -x $1            ;;
-            *.bz2)      bzip2 -d $1         ;;
-            *.lzh)      lha x $1            ;;
-            *.gz)       gunzip -d $1        ;;
-            *.tar)      tar -xvf $1         ;;
-            *.tgz)      gunzip -d $1        ;;
-            *.tbz2)     tar -jxvf $1        ;;
-            *.zip)      unzip $1            ;;
-            *.lzma)     lzma -dk $1  ;;
-            *.7z)       lzma -dk -S .7z $1  ;;
+            *.tar.bz2)  bzip2 -v -d         $1 ;;
+            *.tar.gz)   tar -xvzf           $1 ;;
+            *.rar)      unrar e             $1 ;;
+            *.deb)      ar -x               $1 ;;
+            *.bz2)      bzip2 -d            $1 ;;
+            *.lzh)      lha x               $1 ;;
+            *.gz)       gunzip -d           $1 ;;
+            *.tar)      tar -xvf            $1 ;;
+            *.tgz)      gunzip -d           $1 ;;
+            *.tbz2)     tar -jxvf           $1 ;;
+            *.zip)      unzip               $1 ;;
+            *.lzma)     lzma -dk            $1 ;;
+            *.7z)       lzma -dk -S .7z     $1 ;;
             *)          echo "'$1' Error. Please go away" ;;
         esac
     } else {
@@ -45,21 +45,24 @@ unpack() {
 pack() {
     if [[ -n $2 ]] {
         case $2 in
-            tgz | tar.gz)   tar -zcvf$1.$2 $1 ;;
-            tbz2 | tar.bz2) tar -jcvf$1.$2 $1 ;;
-            tar)            tar -cvf$1.$2  $1 ;;
-            gz | gzip)      gzip           $1 ;;
-            bz2 | bzip2)    bzip2          $1 ;;
+            tgz | tar.gz)   tar -zcvf$1.$2  $1 ;;
+            tbz2 | tar.bz2) tar -jcvf$1.$2  $1 ;;
+            tar)            tar -cvf$1.$2   $1 ;;
+            gz | gzip)      gzip            $1 ;;
+            bz2 | bzip2)    bzip2           $1 ;;
+            zip)            zip $1.$2       $1 ;;
             7z)             lzma -zk -S .7z $1 ;; 
-            lzma)             lzma -zk $1 ;; 
+            lzma)           lzma -zk        $1 ;; 
             *)
                     echo "Usage:"
-                    echo "pack file compression"
-                    echo "Supported compressions: tar(gz,bz2), gz, bz2, 7z, lzma (defaulting to tar.gz)"
+                    echo "pack FILE COMPRESSION"
+                    echo "Supported compressions: tar(gz,bz2), gz, bz2, zip, 7z, lzma"
                     ;;
         esac
     } else {
-        pack $1 tar.gz
+        echo "Usage:"
+        echo "pack FILE COMPRESSION"
+        echo "Supported compressions: tar(gz,bz2), gz, bz2, zip, 7z, lzma"
     }
 }
 
@@ -71,10 +74,11 @@ lsarchive() {
             *.tgz)         tar -ztf $1 ;;
             *.zip)         unzip -l $1 ;;
             *.bz2)         bzless $1 ;;
+            *.rar)         rar l $1 ;;
             *.deb)         dpkg-deb --fsys-tarfile $1 | tar -tf - -- ;;
             *)
                            echo "Usage:"
-                           echo "lsarchive archive [tar(gz|bz2), zip, deb])"
+                           echo "lsarchive ARCHIVE [tar(gz|bz2), zip, rar, deb])"
                            ;;
         esac
     } else {
@@ -89,7 +93,7 @@ dirspace() {
             if [[ -d "$dir" ]] {
                 ( cd $dir; echo "-<$dir>"; du -shx .; echo);
             } else {
-                echo "warning: $dir does not exist" >&2
+                echo "Warning: $dir does not exist." >&2
             }
         done
     } else {
@@ -97,14 +101,10 @@ dirspace() {
             if [[ -d "$dir" ]] {
                 ( cd $dir; echo "-<$dir>"; du -shx .; echo);
             } else {
-                echo "warning: $dir does not exist" >&2
+                echo "Warning: $dir does not exist." >&2
             }
         done
     }
-}
-
-viless() {
-        vim --cmd 'let no_plugin_maps = 1' -c "so \$VIMRUNTIME/macros/less.vim" "${@:--}"
 }
 
 mcd() { mkdir -p "$@" && cd "$@" }

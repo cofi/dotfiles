@@ -9,9 +9,15 @@ alias ..7="cls ../../../../../../../"
 alias ..8="cls ../../../../../../../../"
 alias ..9="cls ../../../../../../../../../"
 alias ..10="cls ../../../../../../../../../../"
+
+alias ta='tmux attach'
+
 alias v='vim'
+alias sv='sudo vim'
+
 alias ipy='ipython'
 alias bpy='bpython'
+alias py='python'
 
 alias md='mkdir -p'
 
@@ -22,11 +28,10 @@ alias rm='nocorrect rm'         # no spelling correction on rm
 
 #Globbing sucks with git's revision modifiers
 alias git='noglob git'
+alias g='git'
 
-alias -s tex=vim
-alias -s txt=vim
-alias -s py=vim
-alias -s pdf=silent_okular
+alias -s {txt,tex,py}=vim
+alias -s {ps,pdf}=silent_okular
 
 #color grep
 alias grep='grep --color=auto'

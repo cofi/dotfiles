@@ -68,6 +68,8 @@ abbreviations=(
     'cx'        'chmod +x'
     'DE'        'export DISPLAY=:0.0'
     'D'         'DISPLAY=:0.0'
+    's'         'sudo'
+    'sv'        'sudo vim'
 )   
     
 globalias() {

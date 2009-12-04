@@ -57,12 +57,14 @@ bindkey " " magic-space			# do history expansion on space
 run-with-sudo () { LBUFFER="sudo $LBUFFER" }
 zle -N run-with-sudo
 bindkey '^N' run-with-sudo
+
 #<C> + B -> run command in bg
-run-in-bg () { LBUFFER="$LBUFFER&" }
+run-in-bg () { RBUFFER="$RBUFFER &" }
 zle -N run-in-bg
 bindkey '^B' run-in-bg
-#<C> + <Space> -> pipe output to /dev/null
-run-silent () { LBUFFER="$LBUFFER 2&> /dev/null" }
+
+#<C> + <Space> -> pipe STDERR/STDOUT to /dev/null
+run-silent () { RBUFFER="$RBUFFER 2&> /dev/null" }
 zle -N run-silent
 bindkey '^@' run-silent
 

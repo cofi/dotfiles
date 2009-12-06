@@ -66,7 +66,7 @@ hi lCursor ctermbg=40 ctermfg=0 guibg=#00D700 guifg=#000000 gui=none
 
 hi Directory ctermfg=126 guibg=bg guifg=#AF0087 gui=none
 
-hi ErrorMsg ctermfg=9 guibg=#EE2C2C guifg=#FFFFFF gui=bold cterm=bold
+hi ErrorMsg ctermbg=bg ctermfg=9 guibg=#EE2C2C guifg=#FFFFFF gui=bold cterm=bold
 hi ModeMsg ctermfg=214 guibg=bg guifg=#FFAF00 gui=bold cterm=bold
 hi MoreMsg ctermfg=214 guibg=bg guifg=#FFAF00 gui=bold cterm=bold
 hi Question guibg=bg guifg=#E8B87E gui=bold cterm=bold
@@ -89,7 +89,7 @@ hi DiffText ctermfg=94 guibg=#875F00 guifg=fg gui=bold
 " Syntax colors
 hi Comment ctermfg=228 guibg=bg guifg=#FFFF87 gui=none
 hi Constant ctermfg=229 guibg=bg guifg=#FFFFAF gui=none
-hi Error ctermfg=196 guibg=bg guifg=#DF0000 gui=none
+hi Error ctermbg=bg ctermfg=196 guibg=bg guifg=#DF0000 gui=none
 hi Identifier ctermfg=62 guibg=bg guifg=#5F5FDF gui=none
 hi PreProc guibg=bg guifg=#D7A0D7 gui=none
 hi Special ctermfg=179 guibg=bg guifg=#DFAF5F gui=none

@@ -5,6 +5,9 @@ for file in `ls`; do
             ;;
         "deploy.sh") #Ignore deploy skript.
             ;;
+        "newsbeuterconfig")
+            ln --symbolic --force -T `pwd`/$file ~/.newsbeuter/config
+            ;;
         *)
             ln --symbolic --force -T `pwd`/$file ~/.$file
             ;;

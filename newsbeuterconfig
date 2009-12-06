@@ -1,0 +1,28 @@
+auto-reload yes
+reload-time 30
+reload-threads 4
+refresh-on-startup yes
+
+datetime-format "%m-%d %H:%M"
+max-items 200
+save-path "~/Feed-Articles"
+
+show-read-feeds no
+show-read-articles no
+
+browser "firefox %u"
+
+feedlist-title-format "Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
+articlelist-title-format "Articles in feed %T (%u unread, %t total) - %U"
+
+feedlist-format     "%4i %n %11u %t"
+articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
+
+notify-format       "%d new articles (%n unread articles, %f unread feeds)"
+notify-screen yes
+
+color background white  black
+color listnormal white  black
+color listfocus  white  red   bold
+color info       yellow black bold
+color article    white  black

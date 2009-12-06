@@ -21,6 +21,18 @@ articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 notify-format       "%d new articles (%n unread articles, %f unread feeds)"
 notify-screen yes
 
+macro o open-in-browser ; toggle-article-read "read"
+
+unbind-key l
+bind-key L toggle-show-read-feeds
+
+bind-key h prev-unread-feed
+bind-key j down
+bind-key k up
+bind-key l next-unread-feed
+bind-key { pageup
+bind-key } pagedown
+
 color background white  black
 color listnormal white  black
 color listfocus  white  red   bold

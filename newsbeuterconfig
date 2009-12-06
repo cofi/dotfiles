@@ -32,6 +32,8 @@ bind-key k up
 bind-key l next-unread-feed
 bind-key { pageup
 bind-key } pagedown
+bind-key c set-tag
+bind-key ^C clear-tag
 
 color background white  black
 color listnormal white  black

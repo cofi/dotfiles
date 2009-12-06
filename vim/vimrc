@@ -23,7 +23,11 @@ cd ~ "Good point to start
     set grepprg=grep\ -nH\ $* "grep always displays filename
     set encoding=utf-8
 
-	colorscheme cocol
+    if has('gui_running') || &t_Co == 256 
+        colorscheme cocol
+    else
+        colorscheme desert
+    endif
 
 let mapleader = ","
 

@@ -103,6 +103,7 @@ endfunc
         autocmd BufNewFile,BufRead *.xpt.vim set ft=xpt.vim
         autocmd BufNewFile,BufRead *zsh/* set ft=zsh
         autocmd BufNewFile,BufRead *vim_local/* set ft=vim
+        autocmd BufNewFile,BufRead *vim/* set ft=vim
         autocmd BufNewFile,BufRead *mutt/* set ft=muttrc
         autocmd BufNewFile,BufRead *.pyf setlocal ft=python, textwidth=0
         autocmd BufNewFile,BufRead *.bb setlocal ft=text, textwidth=0
@@ -124,8 +125,17 @@ endfunc
         au!
 		au FileType c,cpp setlocal cindent textwidth=80
         au FileType c,cpp inoremap ;; <END>;
+        au FileType c,cpp noremap ;; A;<ESC>
         au FileType cpp cmap cpptags !ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 	augroup END
+
+    "Java
+    augroup java
+        au!
+        au FileType java setlocal foldmethod=syntax
+        au FileType java inoremap ;; <END>;
+        au FileType java noremap ;; A;<ESC>
+    augroup END
 
 	"Tex
 	augroup tex

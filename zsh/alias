@@ -61,9 +61,10 @@ alias lssmall="ls -Srl *(.oL[1,10])"    # display the smallest files
 alias zcp='zmv -C'
 alias zln='zmv -L'
 
-# stuff
+# zsh stuff
 alias rh='rehash'
 alias h='history'
 alias which='builtin which -a'
 
+# dev
 alias diff='diff -Naur'

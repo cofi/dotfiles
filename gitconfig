@@ -17,6 +17,9 @@
 [diff]
     tool = gvimdiff
 [alias]
+    pl = pull
+    ps = push
+    fe = fetch
     st = status
     ci = commit
     br = branch

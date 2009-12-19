@@ -1,0 +1,3 @@
+fname=$1
+javac -cp .:/usr/share/java/junit4.jar:$CLASSPATH $fname.java
+java -cp .:/usr/share/java/junit4.jar:$CLASSPATH org.junit.runner.JUnitCore $fname

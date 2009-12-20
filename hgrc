@@ -2,11 +2,8 @@
 username = Michael Markert <markert.michael@gmail.com>
 
 [extensions]
-alias=
 extdiff=
-imerge=
 pager=
-hgshelve= ~/.bin/hgshelve.py
 
 
 [merge-tools]

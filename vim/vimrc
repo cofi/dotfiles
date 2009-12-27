@@ -125,7 +125,7 @@ endfunc
         au!
 		au FileType c,cpp setlocal cindent textwidth=80
         au FileType c,cpp inoremap ;; <END>;
-        au FileType c,cpp noremap ;; A;<ESC>
+        au FileType c,cpp noremap <leader>; A;<ESC>
         au FileType cpp cmap cpptags !ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 	augroup END
 
@@ -134,7 +134,7 @@ endfunc
         au!
         au FileType java setlocal foldmethod=syntax
         au FileType java inoremap ;; <END>;
-        au FileType java noremap ;; A;<ESC>
+        au FileType java noremap <leader>; A;<ESC>
     augroup END
 
 	"Tex

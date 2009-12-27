@@ -39,3 +39,4 @@
     in = incoming
     out = outgoing
     addr = addremove
+    amend = commit --amend

@@ -31,7 +31,7 @@
     mg = merge
     gmg = mergetool
     l1 = log HEAD^1..
-    lg = log -p
+    lp = log -p
     stats = shortlog -s -n -e --no-merges
     incoming = !git-incoming
     outgoing = !git-outgoing

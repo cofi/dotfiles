@@ -29,7 +29,7 @@ public class `className^ {
 
 XPT suitesetup hint=junit\ suite\ setup
 @BeforeClass
-public void setUpSuite() {
+public static void setUpSuite() {
     `cursor^
 }
 

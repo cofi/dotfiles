@@ -1,9 +1,9 @@
-#!/usr/bin/zsh
+#!/usr/bin/env zsh
 emulate zsh
 
 fname=$1
 #without extension
 base=$fname:r
 
-javac -cp .:/usr/share/java/junit4.jar:$CLASSPATH $fname
-java -cp .:/usr/share/java/junit4.jar:$CLASSPATH org.junit.runner.JUnitCore $base
+javac -cp .:/usr/share/java/junit.jar:$CLASSPATH $fname
+java -cp .:/usr/share/java/junit.jar:$CLASSPATH org.junit.runner.JUnitCore $base

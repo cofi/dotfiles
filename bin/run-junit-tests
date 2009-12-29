@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+emulate zsh
+
+for file in Test*.java
+    junit $file
+
+rm *.class

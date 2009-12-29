@@ -16,6 +16,7 @@
     tool = kdiff3
 [diff]
     tool = gvimdiff
+    renames = copy
 [alias]
     pl = pull
     ps = push
@@ -32,6 +33,7 @@
     gmg = mergetool
     l1 = log HEAD^1..
     lp = log -p
+    slog = log --pretty=format:\"%h - %cr - %s (%cn)\"
     stats = shortlog -s -n -e --no-merges
     incoming = !git-incoming
     outgoing = !git-outgoing

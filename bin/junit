@@ -1,9 +1,12 @@
 #!/usr/bin/env zsh
 emulate zsh
 
+junitdeps=$HOME/libs/java/junit4-deps.jar
+junit=$HOME/libs/java/junit4.jar
+
 fname=$1
 #without extension
 base=$fname:r
 
-javac -cp .:/usr/share/java/junit.jar:$CLASSPATH $fname
-java -cp .:/usr/share/java/junit.jar:$CLASSPATH org.junit.runner.JUnitCore $base
+javac -cp .:$junitdeps:$junit:$CLASSPATH $fname
+java -cp .:$junitdeps:$junit:$CLASSPATH org.junit.runner.JUnitCore $base

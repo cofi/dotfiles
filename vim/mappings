@@ -1,9 +1,3 @@
-inoremap " ""<Left>
-inoremap ( ()<Left>
-inoremap { {}<Left>
-inoremap [ []<Left>
-inoremap ( ()<Left>
-
 "center after search
 nnoremap n nzz
 nnoremap N Nzz

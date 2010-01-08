@@ -1,12 +1,23 @@
 !==========
 ! Urxvt
 !==========
- 
-! url launcher thing
-URxvt.perl-lib:         /usr/lib/urxvt/perl/
-URxvt.perl-ext-common:  default,option-popup,matcher
+
+! mark-yank-urls bindings (see http://www.jukie.net/~bart/blog/urxvt-url-yank)
+!==========
+! Alt-u: Enter yank mode
+! Esc: Exit yank mode
+! y: copy to clipboard
+! Enter: Launch Browser
+! Ctrl-n: select next url
+! Ctrl-p: select previous url
+!==========
+
+URxvt.perl-lib:         /home/cofi/.urxvt
+URxvt.perl-ext-common:  option-popup,matcher,selection,mark-yank-urls
 URxvt.urlLauncher:      /usr/bin/firefox3.5
 URxvt.matcher.button:   1
+URxvt.underlineURLSs:   true
+URxvt.keysym.M-u:       perl:mark-yank-urls
 
 URxvt.cutchars:         `"()'*<>[]{|}"
  

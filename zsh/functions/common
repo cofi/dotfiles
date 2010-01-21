@@ -45,9 +45,9 @@ unpack() {
 pack() {
     if [[ -n $2 ]] {
         case $2 in
-            tgz | tar.gz)   tar -zcvf$1.$2  $1 ;;
-            tbz2 | tar.bz2) tar -jcvf$1.$2  $1 ;;
-            tar)            tar -cvf$1.$2   $1 ;;
+            tgz | tar.gz)   tar -zcf$1.$2  $1 ;;
+            tbz2 | tar.bz2) tar -jcf$1.$2  $1 ;;
+            tar)            tar -cf$1.$2   $1 ;;
             gz | gzip)      gzip            $1 ;;
             bz2 | bzip2)    bzip2           $1 ;;
             zip)            zip $1.$2       $1 ;;
@@ -64,6 +64,16 @@ pack() {
         echo "pack FILE COMPRESSION"
         echo "Supported compressions: tar(gz,bz2), gz, bz2, zip, 7z, lzma"
     }
+}
+
+archive() {
+    if [[ -d $1 ]] {
+        pack $1 tar
+        lzma -z $1.tar
+    } else {
+        echo "Directory expected."
+    }
+
 }
 
 lsarchive() {

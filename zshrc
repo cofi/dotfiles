@@ -71,7 +71,7 @@ function load_config() {
     }
 }
 
-export PROMPT="%F{green}%~ %#> %F{white}"
+export PROMPT="%F{green}%n@%m %~ %#> %F{white}"
 
 if [[ -d $ZSHDIR ]] {
     load_config $ZSHDIR/colors
@@ -83,7 +83,9 @@ if [[ -d $ZSHDIR ]] {
     load_config $ZSHDIR/completion
     load_config $ZSHDIR/extensions
     load_config $ZSHDIR/bindkey
-    load_config $ZSHDIR/prompt
+    if [[ $TERM != "linux" ]] {
+        load_config $ZSHDIR/prompt
+    }
     load_config $LOCALDIR/zshrc
     load_config $ZSHDIR/style
 }

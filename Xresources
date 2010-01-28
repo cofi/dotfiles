@@ -12,12 +12,11 @@
 ! Ctrl-p: select previous url
 !==========
 
-URxvt.perl-lib:         /home/cofi/.urxvt
-URxvt.perl-ext-common:  option-popup,matcher,selection,mark-yank-urls
-URxvt.urlLauncher:      /usr/bin/firefox3.5
-URxvt.matcher.button:   1
-URxvt.underlineURLSs:   true
-URxvt.keysym.M-u:       perl:mark-yank-urls
+URxvt.perl-lib:         /home/cofi/.urxvt/
+URxvt.perl-ext:         option-popup,matcher,selection,mark-yank-urls
+URxvt.urlLauncher:      /usr/bin/firefox
+URxvt.underlineURLs:    true
+URxvt.keysym.M-u:       perl:mark-yank-urls:activate_mark_mode
 
 URxvt.cutchars:         `"()'*<>[]{|}"
  

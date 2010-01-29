@@ -1,10 +1,3 @@
-"center after search
-nnoremap n nzz
-nnoremap N Nzz
-nnoremap * *zz
-nnoremap # #zz
-nnoremap g* g*zz
-nnoremap g# g#zz
 
 "Quick search
 nnoremap <Space> /

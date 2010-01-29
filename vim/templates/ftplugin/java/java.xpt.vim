@@ -18,7 +18,7 @@ public static void main(String[] args)`$BRfun^{
     `cursor^
 }
 
-XPT test hint=junit\ testsuite
+XPT suite hint=junit\ testsuite
 XSET className=fileRoot()
 import junit.framework.Assert;
 import org.junit.*;
@@ -39,7 +39,7 @@ public void setUp() {
     `cursor^
 }
 
-XPT case hint=junit\ testcase
+XPT test hint=junit\ testcase
 @Test
 public void test`Name^() {
     `cursor^

@@ -2,7 +2,6 @@
 " vimlocal_dir : Contains path of local vimruntine
 " vimdir : Contains path of VCS-controlled runtime
 
-cd ~ "Good point to start
 "Basic Settings
 	syntax on
 	filetype on

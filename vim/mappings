@@ -1,3 +1,12 @@
+"cd bookmarks
+nnoremap <silent> <Leader>h :cd ~<ESC>
+"cd to file location
+if has("unix")
+    nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "/" <CR>
+else
+    nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "\" <CR>
+endif
+
 
 "Quick search
 nnoremap <Space> /
@@ -7,13 +16,6 @@ inoremap jj  <Esc>
 
 "Fix that f*cking yank inconsistency
 nnoremap Y  y$
-
-"Quick cd starting file location
-if has("unix")
-    nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "/" <CR>
-else
-    nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "\" <CR>
-endif
 
 "System clipboard goodness
 nnoremap <C-v>   "*p

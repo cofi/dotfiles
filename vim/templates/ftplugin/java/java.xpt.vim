@@ -18,6 +18,10 @@ public static void main(String[] args)`$BRfun^{
     `cursor^
 }
 
+XPT exception hint=class\ ..\ extends Exception
+XSET className=fileRoot()
+public class `className^ extends Exception {}
+
 XPT suite hint=junit\ testsuite
 XSET className=fileRoot()
 import junit.framework.Assert;

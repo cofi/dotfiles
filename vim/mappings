@@ -7,7 +7,6 @@ else
     nnoremap <leader>cd :cd <C-R>=expand("%:p:h") . "\" <CR>
 endif
 
-
 "Quick search
 nnoremap <Space> /
 
@@ -24,8 +23,13 @@ vnoremap <C-c>  "*y
 
 "Movement
 	"Buffer movement
-    nnoremap <C-h>      :bp<CR>
-    nnoremap <C-l>      :bn<CR>
+    nnoremap <Leader>p         :bp<CR>
+    nnoremap <Leader>n         :bn<CR>
+    "Window movement
+    nnoremap <C-h>      <C-w>h<CR>
+    nnoremap <C-l>      <C-w>l<CR>
+    nnoremap <C-j>      <C-w>j<CR>
+    nnoremap <C-k>      <C-w>k<CR>
 
 	"Visual Move
 	nnoremap <S-UP>		V<UP>
@@ -56,6 +60,7 @@ if exists("*strftime")
 endif
 
 nnoremap <silent> <F11> :nohlsearch<CR>
+nnoremap <silent> <Leader>c :nohlsearch<CR>
 
 "VCS blame mappings
 "vmap <Leader>b :<C-U>!svn blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR> 

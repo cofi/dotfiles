@@ -165,14 +165,9 @@ endfunc
     augroup END
 
 "Addons
-	"MiniBufExplorer
-    let g:miniBufExplMapWindowNavArrows = 1
-    let g:miniBufExplModSelTarget = 1
-	let g:bufExplorerSortBy = "name"
-	au BufRead,BufNew :call UMiniBufExplorer
-
 	"VCSCommand
     nnoremap <F4> :VCSVimDiff<CR>
+    nnoremap <Leader>d :VCSVimDiff<CR>
 
     "Windows
 	nnoremap <silent> ntree :NERDTreeToggle<CR>

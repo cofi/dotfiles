@@ -161,7 +161,12 @@ endfunc
     "Mail
     augroup Mail
         au!
-        au FileType mail source .vim/mailrc
+        au FileType mail exec "source" . vimdir . "/mailrc"
+    augroup END
+    "Gitcommit
+    augroup Gitcommit
+        au!
+        au FileType gitcommit exec "source"  . vimdir . "/git"
     augroup END
 
 "Addons

@@ -18,6 +18,8 @@
     tool = gvimdiff
     renames = copy
 [alias]
+    ad = add
+    ap = add -p
     pl = pull
     pr = pull --rebase
     ps = push

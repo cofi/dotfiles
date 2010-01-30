@@ -134,6 +134,7 @@ endfunc
         au FileType java setlocal foldmethod=syntax
         au FileType java inoremap ;; <END>;
         au FileType java noremap <leader>; A;<ESC>
+        au FileType java nnoremap <leader>f :%!astyle --style=java "%"
     augroup END
 
 	"Tex

@@ -169,8 +169,10 @@ endfunc
     let g:bufExplorerSplitRight = 0 "force bufexplorer to split left
 
 	"VCSCommand
-    nnoremap <F4> :VCSVimDiff<CR>
-    nnoremap <Leader>d :VCSVimDiff<CR>
+    nnoremap <silent> <F4> :VCSVimDiff<CR>
+    nnoremap <silent> <Leader>d :VCSVimDiff<CR>
+    "Yankring
+    nnoremap <silent> <Leader>ys :YRShow<cr>
 
     "Windows
 	nnoremap <silent> ntree :NERDTreeToggle<CR>

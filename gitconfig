@@ -19,6 +19,7 @@
     renames = copy
 [alias]
     pl = pull
+    pr = pull --rebase
     ps = push
     fe = fetch
     st = status

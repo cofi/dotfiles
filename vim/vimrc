@@ -18,9 +18,14 @@
 	set confirm	    	"Ask for confirmation
 	set showmatch	    "Jump to corresponding bracket, when bracket typed
 	set noautowrite
-    set splitright
     set grepprg=grep\ -nH\ $* "grep always displays filename
     set encoding=utf-8
+    set nostartofline
+
+    if v:version >= 600
+        set clipboard=unnamed "Use system clipboard ("*)
+        set splitright
+    endif
 
     if has('gui_running') || &t_Co == 256 
         colorscheme cocol
@@ -95,6 +100,9 @@ endfunc
 "Autocommands
     "Sync Syntax-Highlighting
     au BufEnter * :syntax sync fromstart
+
+    "Man
+    au FileType man setlocal nonumber "number kills layout
 
     "FTDetection
     augroup ftdetect

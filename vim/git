@@ -5,6 +5,7 @@ function! GitViewCommit()
     exec "normal :%! git diff -p --stat --cached \r"
     setlocal nomodifiable
     noremap <buffer> q :bwipeout<cr>
+    wincmd p "Move to edit
 endfunction
 
 imap ,f [Fix]

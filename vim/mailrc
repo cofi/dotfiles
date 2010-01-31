@@ -1,5 +1,8 @@
-set textwidth=72
-nmap <F8> :w<CR>:!aspell -e -c "%"<CR>:e<CR>
+setlocal textwidth=72
+setlocal spell
+setlocal spelllang=de,en
+
+nmap <Leader>sc :w<CR>:!aspell -e -c "%"<CR>:e<CR>
 
 iabbr mfg Mit freundlichen Grüßen,
 iabbr vg Viele Grüße,

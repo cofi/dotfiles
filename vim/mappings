@@ -16,6 +16,11 @@ inoremap jj  <Esc>
 "Fix that f*cking yank inconsistency
 nnoremap Y  y$
 
+"and again for yankring :(
+function! YRRunAfterMaps()
+    nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
+endfunction
+
 "System clipboard goodness
 nnoremap <C-v>   "*p
 inoremap <C-v>  <ESC>"*pa

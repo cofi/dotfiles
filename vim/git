@@ -11,6 +11,6 @@ endfunction
 imap ,f [Fix]
 imap ,r [Refactor]
 imap ,a [Add]
-imap _f [Format]
+imap _f [Format] Formatted codebase.
 
 nnoremap <Leader>vd :call GitViewCommit()<cr>

@@ -59,7 +59,7 @@ zle -N run-with-sudo
 bindkey '^N' run-with-sudo
 
 #<C> + B -> run command in bg
-run-in-bg () { RBUFFER="$RBUFFER &" }
+run-in-bg () { RBUFFER="$RBUFFER &|" }
 zle -N run-in-bg
 bindkey '^B' run-in-bg
 

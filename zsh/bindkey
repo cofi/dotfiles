@@ -64,7 +64,7 @@ zle -N run-in-bg
 bindkey '^B' run-in-bg
 
 #<C> + <Space> -> pipe STDERR/STDOUT to /dev/null
-run-silent () { RBUFFER="$RBUFFER 2&> /dev/null" }
+run-silent () { RBUFFER="$RBUFFER >/dev/null 2>/dev/null" }
 zle -N run-silent
 bindkey '^@' run-silent
 

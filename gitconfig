@@ -28,6 +28,7 @@
     ci = commit
     br = branch
     co = checkout
+    d1 = diff HEAD^1..
     df = diff
     dfc = diff --cached
     gdf = difftool

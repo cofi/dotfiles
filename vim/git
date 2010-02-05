@@ -1,11 +1,13 @@
 "View the commit you are about to commit as diff
-function! GitViewCommit()
+function! GitViewCommit(browse)
     rightbelow new
     silent! setlocal filetype=diff bufhidden=delete nobackup noswapfile nobuflisted nowrap buftype=nofile
     exec "normal :%! git diff -p --stat --cached \r"
     setlocal nomodifiable
     noremap <buffer> q :bwipeout<cr>
-    wincmd p "Move to edit
+    if ! a:browse
+        wincmd p "Move to edit
+    endif
 endfunction
 
 imap ,f [Fix]
@@ -13,4 +15,5 @@ imap ,r [Refactor]
 imap ,a [Add]
 imap _f [Format] Formatted codebase.
 
-nnoremap <Leader>vd :call GitViewCommit()<cr>
+nnoremap <Leader>vd :call GitViewCommit(0)<cr>
+nnoremap <Leader>bd :call GitViewCommit(1)<cr>

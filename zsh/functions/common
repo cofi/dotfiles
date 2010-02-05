@@ -50,7 +50,7 @@ pack() {
             tar)            tar -cf$1.$2   $1 ;;
             gz | gzip)      gzip            $1 ;;
             bz2 | bzip2)    bzip2           $1 ;;
-            zip)            zip $1.$2       $1 ;;
+            zip)            zip -r $1.$2    $1 ;;
             7z)             lzma -zk -S .7z $1 ;; 
             lzma)           lzma -zk        $1 ;; 
             *)

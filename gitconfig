@@ -35,7 +35,8 @@
     gdfc = difftool --cached
     mg = merge
     gmg = mergetool
-    l1 = !git --no-pager log HEAD^1..
+    vu = ls-files -u                #view unmerged files
+    l1 = !git --no-pager log HEAD^1.. 
     lp = log -p
     slog = log --pretty=format:\"%h - %cr - %s (%cn)\"
     stats = shortlog -s -n -e --no-merges

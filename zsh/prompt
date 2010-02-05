@@ -8,11 +8,12 @@ GIT_PROMPT_DIRTY="%{$fg[green]%}!"
 GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 GIT_PROMPT_CLEAN=""
 
-#Adapted from oh-my-zsh
 function vcs_char {
-    git branch >/dev/null 2>/dev/null && echo '±' && return
-    hg root >/dev/null 2>/dev/null && echo '☿' && return
-    echo '○'
+    local char="%{$fg[cyan]%}"
+    git branch >/dev/null 2>/dev/null && char=$char"±" && return
+    hg root >/dev/null 2>/dev/null && char=$char"☿" && return
+    char=$char"○"
+    echo $char
 }
 
 # get the name of the branch we are on

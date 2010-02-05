@@ -3,8 +3,8 @@ if [ $terminfo[colors] -ge 8 ]; then
 fi
 
 #Adapted from oh-my-zsh
-RPROMPT_PREFIX="[%{$fg[red]%}"
-RPROMPT_SUFFIX="%{$reset_color%}]"
+VCS_PREFIX="[%{$fg[red]%}"
+VCS_SUFFIX="%{$reset_color%}]"
 GIT_PROMPT_DIRTY="%{$fg[green]%}!"
 GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 GIT_PROMPT_CLEAN=""
@@ -17,7 +17,7 @@ function prompt_char {
 
 # get the name of the branch we are on
 function git_prompt_info() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  local ref=$(git symbolic-ref HEAD 2> /dev/null) || return
   echo "${ref#refs/heads/}$(parse_git_dirty)"
 }
  
@@ -37,16 +37,19 @@ echo -n "$GIT_PROMPT_CLEAN"
   fi
 }
  
-function current_branch() {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo ${ref#refs/heads/}
-}
-
 function hg_prompt_info {
     local branch=$(hg branch 2>/dev/null) || return
     echo $branch
 }
 
-PROMPT='$(prompt_char) ${fg[green]%}<%U%n@%m%u>%{$reset_color%} %{$fg[yellow]%}%~%{$reset_color%} %%> '
+function vcs_prompt {
+    local prompt=$(git_prompt_info) || '[$(hg_prompt_info)]' || ''
+    if [[ -z $prompt ]]; then
+        echo ''
+    else
+        echo "$VCS_PREFIX$prompt$VCS_SUFFIX "
+    fi
+}
 
-RPROMPT='$RPROMPT_PREFIX$(hg_prompt_info)$(git_prompt_info)$RPROMPT_SUFFIX'
+PROMPT='$(prompt_char) ${fg[green]%}<%U%n@%m%u>%{$reset_color%} $(vcs_prompt)%{$fg[yellow]%}%~%{$reset_color%} 
+%%> '

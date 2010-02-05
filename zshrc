@@ -55,7 +55,6 @@ setopt        local_options
 ### prompt options
 setopt prompt_subst
 setopt prompt_percent
-setopt transient_rprompt
 
 setopt vi
 

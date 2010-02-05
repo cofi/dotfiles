@@ -1,75 +1,49 @@
-setopt transient_rprompt
-autoload -Uz vcs_info
-function precmd {
-    vcs_info 'prompt'
+#Adapted from oh-my-zsh
 
-    local TERMWIDTH
-    (( TERMWIDTH = ${COLUMNS} - 1 ))
-    ###
-    # Truncate the path if it's too long.
-    
-    PR_FILLBAR=""
-    PR_PWDLEN=""
-    local promptsize=${#${(%):---(%n@%m)---()--}}
-    local pwdsize=${#${(%):-%~}}
-    
-    if [[ "$promptsize + $pwdsize" -gt $TERMWIDTH ]]; then
-	    ((PR_PWDLEN=$TERMWIDTH - $promptsize))
-    else
-	PR_FILLBAR="\${(l.(($TERMWIDTH - ($promptsize + $pwdsize)))..${PR_HBAR}.)}"
-    fi
+RPROMPT_PREFIX="[%{$fg[red]%}"
+RPROMPT_SUFFIX="%{$reset_color%}]"
+GIT_PROMPT_DIRTY="%{$fg[green]%}!"
+GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
+GIT_PROMPT_CLEAN=""
+
+function prompt_char {
+    git branch >/dev/null 2>/dev/null && echo '±' && return
+    hg root >/dev/null 2>/dev/null && echo '☿' && return
+    echo '○'
 }
 
-setprompt () {
-    setopt prompt_subst
-    ###
-    # See if we can use colors.
-
-    autoload colors zsh/terminfo
-    if [[ "$terminfo[colors]" -ge 8 ]]; then
-        colors
-    fi
-    for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
-        eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
-        eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
-        (( count = $count + 1 ))
-    done
-    PR_RESET="%{$terminfo[sgr0]%}"
-
-    #Use extended charset
-    typeset -A altchar
-    set -A altchar ${(s..)terminfo[acsc]}
-    PR_SET_CHARSET="%{$terminfo[enacs]%}"
-    PR_SHIFT_IN="%{$terminfo[smacs]%}"
-    PR_SHIFT_OUT="%{$terminfo[rmacs]%}"
-    PR_HBAR=${altchar[q]:--}
-    PR_ULCORNER=${altchar[l]:--}
-    PR_LLCORNER=${altchar[m]:--}
-    PR_LRCORNER=${altchar[j]:--}
-    PR_URCORNER=${altchar[k]:--}
-
-    local vcs='$vcs_info_msg_0_'
-
-    local upper_bar='$PR_SET_CHARSET$PR_BLUE$PR_SHIFT_IN$PR_ULCORNER$PR_RED$PR_HBAR\
-$PR_SHIFT_OUT(%U$PR_GREEN%(!.%SROOT%s.%n)$PR_GREEN@%m%u$PR_RED)$PR_SHIFT_IN\
-$PR_HBAR$PR_BLUE$PR_HBAR${(e)PR_FILLBAR}$PR_RED$PR_HBAR$PR_SHIFT_OUT(\
-$PR_YELLOW%$PR_PWDLEN<...<%~%<<\
-$PR_RED)$PR_SHIFT_IN$PR_HBAR$PR_BLUE$PR_URCORNER$PR_SHIFT_OUT'
-
-    PROMPT="$upper_bar
-$PR_BLUE$PR_SHIFT_IN$PR_LLCORNER$PR_RED$PR_HBAR$PR_SHIFT_OUT$PR_GREEN $vcs %#> $PR_RESET"
-
-if [[ $SSH_CLIENT = *.* || $REMOTEHOST = *.* ]]; then
-	RPROMPT='%F{red}$SSH_CLIENT%f$PR_SHIFT_IN$PR_HBAR$PR_BLUE$PR_LRCORNER$PR_SHIFT_OUT$PR_RESET'
-else
-    RPROMPT=' $PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_RED$PR_HBAR$PR_SHIFT_OUT\
-($PR_CYAN%T$PR_RED)$PR_SHIFT_IN$PR_HBAR$PR_BLUE$PR_LRCORNER$PR_SHIFT_OUT$PR_RESET'
-fi
-
-    PS2='$PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-$PR_RED$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT(\
-$PR_LIGHT_GREEN%_$PR_RED)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
-$PR_BLUE$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT$PR_RESET '
+# get the name of the branch we are on
+function git_prompt_info() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo "${ref#refs/heads/}$(parse_git_dirty)"
+}
+ 
+parse_git_dirty () {
+  gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
+ 
+  if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
+echo -n "$GIT_PROMPT_DIRTY"
+  fi
+ 
+  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
+echo -n "$GIT_PROMPT_UNTRACKED"
+  fi
+ 
+  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
+echo -n "$GIT_PROMPT_CLEAN"
+  fi
+}
+ 
+function current_branch() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo ${ref#refs/heads/}
 }
 
-setprompt
+function hg_prompt_info {
+    local branch=$(hg branch 2>/dev/null) || return
+    echo $branch
+}
+
+PROMPT='$(prompt_char) ${fg[green]%}<%U%n@%m%u>%{$reset_color%} %{$fg[yellow]%}%~%{$reset_color%} %%> '
+
+RPROMPT='$RPROMPT_PREFIX$(hg_prompt_info)$(git_prompt_info)$RPROMPT_SUFFIX'

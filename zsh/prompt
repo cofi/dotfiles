@@ -1,66 +1,38 @@
 if [ $terminfo[colors] -ge 8 ]; then
     colors 
+    for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do
+        eval PR_$color='%{$terminfo[bold]$fg[${(L)color}]%}'
+        eval PR_LIGHT_$color='%{$fg[${(L)color}]%}'
+    done
+    PR_RESET="%{$reset_color%}"
 fi
 
-VCS_PREFIX="[%{$fg[red]%}"
-VCS_SUFFIX="%{$reset_color%}]"
-GIT_PROMPT_DIRTY="%{$fg[green]%}!"
-GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
-GIT_PROMPT_CLEAN=""
+function precmd() {
+    vcs_info 'prompt'
+
+    VCS_SYS=$vcs_info_msg_0_
+    VCS_PATH=$vcs_info_msg_1_
+    VCS_BRANCH=$vcs_info_msg_2_
+}
 
 function vcs_char {
-    local char="%{$fg[cyan]%}"
-    git branch >/dev/null 2>/dev/null && char=$char"±" && return
-    hg root >/dev/null 2>/dev/null && char=$char"☿" && return
-    char=$char"○"
-    echo $char
+    case $VCS_SYS in
+        git) echo "$PR_CYAN±$PR_RESET" && return ;;
+         hg) echo "$PR_CYAN☿$PR_RESET" && return ;;
+          *) echo "$PR_CYAN○$PR_RESET" && return ;;
+    esac
 }
 
-# get the name of the branch we are on
-function git_prompt_info() {
-  local ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-  echo "${ref#refs/heads/}$(parse_git_dirty)"
-}
- 
-function parse_git_dirty () {
-  gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
- 
-  if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
-echo -n "$GIT_PROMPT_DIRTY"
-  fi
- 
-  if [[ $(echo ${gitstat} | grep -c "^\(# Untracked files:\|# Changed but not updated:\)$") > 0 ]]; then
-echo -n "$GIT_PROMPT_UNTRACKED"
-  fi
- 
-  if [[ $(echo ${gitstat} | grep -v '^$' | wc -l | tr -d ' ') == 0 ]]; then
-echo -n "$GIT_PROMPT_CLEAN"
-  fi
-}
- 
-function hg_prompt_info {
-    local branch=$(hg branch 2>/dev/null) || return
-    echo $branch
-}
-
-function vcs_prompt {
-    local prompt=$(git_prompt_info) || $(hg_prompt_info) || ''
-    if [[ -z $prompt ]]; then
-        echo ''
-    else
-        echo "$VCS_PREFIX$prompt$VCS_SUFFIX "
-    fi
-}
 function login_prompt() {
-    echo "${fg[green]%}<%U%n@%m%u>%{$reset_color%} "
+    echo "$PR_GREEN<%U%n@%m%u>$PR_RESET "
 }
 function dir_prompt() {
-    echo "%{$fg[yellow]%}%~%{$reset_color%}"
+    echo "$PR_YELLOW%~$PR_RESET"
 }
 
 function set_prompt() {
-    export PROMPT='$(vcs_char) $(login_prompt)$(vcs_prompt)$(dir_prompt) 
-%%> '
+    export PROMPT='╭─ $(vcs_char) $(login_prompt)$(dir_prompt) $VCS_BRANCH
+╰─$VCS_PATH %#> '
 }
 
 set_prompt

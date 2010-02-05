@@ -4,6 +4,7 @@ export PATH=$PATH:$HOME/.bin:$HOME/.bin_local
  
 # load extra modules
 autoload -U zmv
+autoload -Uz vcs_info
 
 zmodload -i zsh/complist
 

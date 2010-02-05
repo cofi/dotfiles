@@ -2,14 +2,14 @@ if [ $terminfo[colors] -ge 8 ]; then
     colors 
 fi
 
-#Adapted from oh-my-zsh
 VCS_PREFIX="[%{$fg[red]%}"
 VCS_SUFFIX="%{$reset_color%}]"
 GIT_PROMPT_DIRTY="%{$fg[green]%}!"
 GIT_PROMPT_UNTRACKED="%{$fg[green]%}?"
 GIT_PROMPT_CLEAN=""
 
-function prompt_char {
+#Adapted from oh-my-zsh
+function vcs_char {
     git branch >/dev/null 2>/dev/null && echo '±' && return
     hg root >/dev/null 2>/dev/null && echo '☿' && return
     echo '○'
@@ -21,7 +21,7 @@ function git_prompt_info() {
   echo "${ref#refs/heads/}$(parse_git_dirty)"
 }
  
-parse_git_dirty () {
+function parse_git_dirty () {
   gitstat=$(git status 2>/dev/null | grep '\(# Untracked\|# Changes\|# Changed but not updated:\)')
  
   if [[ $(echo ${gitstat} | grep -c "^# Changes to be committed:$") > 0 ]]; then
@@ -43,13 +43,23 @@ function hg_prompt_info {
 }
 
 function vcs_prompt {
-    local prompt=$(git_prompt_info) || '[$(hg_prompt_info)]' || ''
+    local prompt=$(git_prompt_info) || $(hg_prompt_info) || ''
     if [[ -z $prompt ]]; then
         echo ''
     else
         echo "$VCS_PREFIX$prompt$VCS_SUFFIX "
     fi
 }
+function login_prompt() {
+    echo "${fg[green]%}<%U%n@%m%u>%{$reset_color%} "
+}
+function dir_prompt() {
+    echo "%{$fg[yellow]%}%~%{$reset_color%}"
+}
 
-PROMPT='$(prompt_char) ${fg[green]%}<%U%n@%m%u>%{$reset_color%} $(vcs_prompt)%{$fg[yellow]%}%~%{$reset_color%} 
+function set_prompt() {
+    export PROMPT='$(vcs_char) $(login_prompt)$(vcs_prompt)$(dir_prompt) 
 %%> '
+}
+
+set_prompt

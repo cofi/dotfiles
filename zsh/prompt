@@ -1,5 +1,8 @@
-#Adapted from oh-my-zsh
+if [ $terminfo[colors] -ge 8 ]; then
+    colors 
+fi
 
+#Adapted from oh-my-zsh
 RPROMPT_PREFIX="[%{$fg[red]%}"
 RPROMPT_SUFFIX="%{$reset_color%}]"
 GIT_PROMPT_DIRTY="%{$fg[green]%}!"

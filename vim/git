@@ -4,16 +4,22 @@ function! GitViewCommit(browse)
     silent! setlocal filetype=diff bufhidden=delete nobackup noswapfile nobuflisted nowrap buftype=nofile
     exec "normal :%! git diff -p --stat --cached \r"
     setlocal nomodifiable
-    noremap <buffer> q :bwipeout<cr>
+    noremap <buffer> q :bwipeout<CR>
     if ! a:browse
         wincmd p "Move to edit
     endif
 endfunction
 
+imap ,d [Doc]
 imap ,f [Fix]
 imap ,r [Refactor]
 imap ,a [Add]
+imap ,c [Clean]
 imap _f [Format] Formatted codebase.
 
-nnoremap <Leader>vd :call GitViewCommit(0)<cr>
-nnoremap <Leader>bd :call GitViewCommit(1)<cr>
+imap <Leader>q <ESC>:wqall<CR>
+nnoremap <Leader>q <ESC>:wqall<CR>
+
+nnoremap <silent> <Leader>vd :call GitViewCommit(0)<CR>
+nnoremap <silent> <Leader>bd :call GitViewCommit(1)<CR>
+nnoremap <silent> <Leader>dq :wincmd j<CR>:bwipeout<CR>

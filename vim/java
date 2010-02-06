@@ -1,0 +1,14 @@
+setlocal foldmethod=syntax
+
+inoremap <buffer> ;; <END>;
+nnoremap <buffer> <leader>d :JavaDocComment<CR>
+nnoremap <buffer> <leader>co :JavaCorrect<CR>
+nnoremap <buffer> <leader>im :JavaImportMissing<CR>
+nnoremap <buffer> <leader>ic :JavaImportClean<CR>
+nnoremap <buffer> <leader>gs :JavaGetSet<CR>
+nnoremap <buffer> <leader>ag :JavaGet<CR>
+nnoremap <buffer> <leader>as :JavaSet<CR>
+nnoremap <buffer> <leader>j :Java<CR>
+
+noremap <buffer> <leader>; A;<ESC>
+nnoremap <buffer> <leader>f :%!astyle --style=java "%"

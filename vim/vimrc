@@ -138,10 +138,7 @@ endfunc
     "Java
     augroup java
         au!
-        au FileType java setlocal foldmethod=syntax
-        au FileType java inoremap ;; <END>;
-        au FileType java noremap <leader>; A;<ESC>
-        au FileType java nnoremap <leader>f :%!astyle --style=java "%"
+        au FileType java exec "source" . vimdir . "/java"
     augroup END
 
 	"Tex

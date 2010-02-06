@@ -1,8 +1,7 @@
 setlocal textwidth=72
 setlocal spell
-setlocal spelllang=de,en
 
-nmap <Leader>sc :w<CR>:!aspell -e -c "%"<CR>:e<CR>
+nmap <buffer> <Leader>sc :w<CR>:!aspell -e -c "%"<CR>:e<CR>
 
 iabbr mfg Mit freundlichen Grüßen,
 iabbr vg Viele Grüße,

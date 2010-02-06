@@ -67,6 +67,10 @@ endif
 nnoremap <silent> <F11> :nohlsearch<CR>
 nnoremap <silent> <Leader>c :nohlsearch<CR>
 
+nnoremap <leader>se :setlocal spelllang=en spell<CR>
+nnoremap <leader>sg :setlocal spelllang=de spell<CR>
+nnoremap <leader>ss :setlocal spell!<CR>
+
 "VCS blame mappings
 "vmap <Leader>b :<C-U>!svn blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR> 
 vmap <Leader>g :<C-U>!git blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p <CR> 

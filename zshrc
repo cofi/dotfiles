@@ -102,3 +102,4 @@ export PAGER=vimpager
 if [[ -z "$SSH_CONNECTION" ]] {
 	source ~/.keychain/$HOST-sh
 }
+fortune -a

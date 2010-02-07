@@ -65,7 +65,7 @@ if exists("*strftime")
 endif
 
 nnoremap <silent> <F11> :nohlsearch<CR>
-nnoremap <silent> <Leader>c :nohlsearch<CR>
+nnoremap <silent> _c :nohlsearch<CR>
 
 nnoremap <leader>se :setlocal spelllang=en spell<CR>
 nnoremap <leader>sg :setlocal spelllang=de spell<CR>

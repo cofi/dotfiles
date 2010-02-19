@@ -47,8 +47,6 @@ URxvt.scrollTtyOutput:  False
 URxvt.scrollWithBuffer: True
 URxvt.scrollTtyKeypress: True
 
-*foreground:     #DDDDDD
-*background:     #121212
 !black
 *color0:         #151515
 *color8:         #333333
@@ -73,3 +71,6 @@ URxvt.scrollTtyKeypress: True
 !white
 *color7:         #DDDDDD
 *color15:        #FFFFFF
+
+Emacs.font:     inconsolata-10
+Xft.hinting:    1

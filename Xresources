@@ -73,6 +73,4 @@ URxvt.scrollTtyKeypress: True
 *color15:        #FFFFFF
 
 Emacs.font:     inconsolata-10
-Emacs.toolBar:  off
 Xft.hinting:    1
-

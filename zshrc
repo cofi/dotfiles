@@ -1,7 +1,7 @@
 export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
 export PATH=$PATH:$HOME/.bin:$HOME/.bin_local
-export PYTHONPATH=$HOME/libs/python
+export PYTHONPATH=$HOME/lib/python
  
 # load extra modules
 autoload -U zmv

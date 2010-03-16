@@ -5,7 +5,6 @@ username = Michael Markert <markert.michael@gmail.com>
 extdiff=
 pager=
 
-
 [merge-tools]
 kdiff3.executable = /usr/bin/kdiff3
 kdiff3.gui = True
@@ -15,3 +14,9 @@ cmd.kdiff = kompare
 
 [pager]
 attend = diff, log
+
+[alias]
+ps = push
+ad = add
+adr = addremove
+df = diff

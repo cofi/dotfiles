@@ -172,7 +172,7 @@
      (trailing-whitespace ((t (:background "red"))))
      (underline ((t (:underline t))))
      (variable-pitch ((t (:family "helv"))))
-     (linum ((t (:inherit (shadow default) :background "grey16" :foreground "khaki"))))
+     (linum ((t (:inherit (shadow default) :background "slate gray" :foreground "khaki1"))))
      (vcursor ((t (:background "grey20" :foreground "blue" :underline t))))
      (viper-minibuffer-emacs-face ((t (:background "darkseagreen2" :foreground "Black"))))
      (viper-minibuffer-insert-face ((t (:background "pink" :foreground "Black"))))

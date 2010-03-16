@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 for file in `ls`; do
     case $file in
         "vimenv_setup")
@@ -13,3 +15,5 @@ for file in `ls`; do
             ;;
         esac
 done
+
+emacs --batch --no-site-file -f batch-byte-compile elisp/**/*.el

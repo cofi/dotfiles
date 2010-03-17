@@ -1,8 +1,8 @@
 "View the commit you are about to commit as diff
-function! GitViewCommit(browse)
+function! HgViewCommit(browse)
     rightbelow new
     silent! setlocal filetype=diff bufhidden=delete nobackup noswapfile nobuflisted nowrap buftype=nofile
-    exec "normal :%! git diff -p --stat --cached \r"
+    exec "normal :%! hg diff\r"
     setlocal nomodifiable
     noremap <buffer> q :bwipeout<CR>
     if ! a:browse
@@ -12,6 +12,6 @@ endfunction
 
 exec "source" . vimdir . "/vcs-common"
 
-nnoremap <silent> <Leader>vd :call GitViewCommit(0)<CR>
-nnoremap <silent> <Leader>bd :call GitViewCommit(1)<CR>
+nnoremap <silent> <Leader>vd :call HgViewCommit(0)<CR>
+nnoremap <silent> <Leader>bd :call HgViewCommit(1)<CR>
 nnoremap <silent> <Leader>dq :wincmd j<CR>:bwipeout<CR>

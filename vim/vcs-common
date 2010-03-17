@@ -1,0 +1,10 @@
+iabbr d [Doc]
+iabbr f [Fix]
+iabbr r [Refactor]
+iabbr a [Add]
+iabbr c [Clean]
+iabbr fo [Format] Formatted codebase.
+
+imap <Leader>q <ESC>:wqall<CR>
+nnoremap <Leader>q <ESC>:wqall<CR>
+

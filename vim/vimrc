@@ -173,6 +173,11 @@ endfunc
         au!
         au FileType gitcommit exec "source"  . vimdir . "/git"
     augroup END
+    "Mercurial commit
+    augroup mercurial
+        au!
+        au FileType hg exec "source" . vimdir . "/hg"
+    augroup END
 
 "Addons
     "Bufexplorer

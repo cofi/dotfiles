@@ -128,4 +128,4 @@
 
 (setq next-line-add-newlines t)
 
-(setq mouse-avoidance-nudge-mouse t)
+(mouse-avoidance-mode 'cat-and-mouse)

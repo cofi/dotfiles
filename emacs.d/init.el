@@ -25,6 +25,7 @@
             "cofi-buffer"
             "cofi-color"
             "cofi-column"
+            "cofi-eldoc"
             "cofi-lisp"
             "cofi-python"
             "cofi-recentf"
@@ -93,10 +94,10 @@
         global-hl-line-mode
         winner-mode))
 
-(setq uniquify-buffer-name-style 'reverse) 
-(setq uniquify-separator "/") 
+(setq uniquify-buffer-name-style 'reverse)
+(setq uniquify-separator "/")
 (setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special 
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special
 
 (setq-default abbrev-mode t)
 (setq abbrev-file-name "~/.emacs.d/abbrevs")
@@ -119,3 +120,12 @@
 (defalias 'sb 'bookmark-save)
 
 (defalias 'sl 'sort-lines)
+(defalias 'dtw 'delete-trailing-whitespace)
+
+(enable-command 'narrow-to-defun)
+(enable-command 'narrow-to-region)
+(enable-command 'narrow-to-page)
+
+(setq next-line-add-newlines t)
+
+(setq mouse-avoidance-nudge-mouse t)

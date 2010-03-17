@@ -1,10 +1,10 @@
 ;;;
 ;; Smart Tab
 ;; Taken from http://www.emacswiki.org/cgi-bin/wiki/TabCompletion
-(global-set-key [(tab)] 'smart-tab)
 (defvar smart-tab-completion-functions
   '((emacs-lisp-mode lisp-complete-symbol)
-    (lisp-mode slime-complete-symbol)
+    (lisp-mode lisp-complete-symbol)
+;;     (lisp-mode slime-complete-symbol)
 ;;    (python-mode rope-code-assist)
     (text-mode dabbrev-completion))
   "List of major modes in which to use a mode specific completion
@@ -48,5 +48,16 @@ Otherwise, analyses point position and answers."
       (indent-region (region-beginning)
                      (region-end))
     (indent-for-tab-command)))
+
+(setq smart-tab-hooks '(
+                        python-mode-hook
+                        emacs-lisp-mode
+                        lisp-mode-hook
+                        ))
+(mapc (lambda (mode-hook)
+          (add-hook mode-hook (lambda ()
+                                (local-set-key (kbd "TAB" 'smart-tab))
+          )))
+      smart-tab-hooks)
 
 (provide 'cofi-tab)

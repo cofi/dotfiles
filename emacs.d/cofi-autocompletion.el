@@ -15,7 +15,7 @@
                         ac-source-yasnippet
                         )))
 
-(defun ac-emacs-lisp-mode-setup ()
+(defun ac-lisp-mode-setup ()
   (append '(
             ac-source-symbols
             ac-source-functions
@@ -24,13 +24,17 @@
             )
           'ac-sources))
 
-(add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
+(add-hook 'emacs-lisp-mode-hook 'ac-lisp-mode-setup)
+(add-hook 'lisp-mode-hook 'ac-lisp-mode-setup)
 
 (defun ac-python-mode-setup ()
   (append '(
             ac-source-ropemacs
             )
           'ac-sources))
+
+(add-hook 'python-mode-hook 'ac-python-mode-setup)
+
 (ac-config-default)
 
 (provide 'cofi-autocompletion)

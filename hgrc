@@ -13,7 +13,7 @@ kdiff3.gui = True
 cmd.kdiff = kompare
 
 [pager]
-attend = diff, log
+attend = diff, log, df
 
 [alias]
 ps = push

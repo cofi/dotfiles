@@ -122,9 +122,9 @@
 (defalias 'sl 'sort-lines)
 (defalias 'dtw 'delete-trailing-whitespace)
 
-(enable-command 'narrow-to-defun)
-(enable-command 'narrow-to-region)
-(enable-command 'narrow-to-page)
+(put 'narrow-to-defun 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
 
 (setq next-line-add-newlines t)
 

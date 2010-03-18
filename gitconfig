@@ -2,6 +2,12 @@
     name = Michael Markert
     email = markert.michael@gmail.com
 
+[core]
+    whitespace = fix,-indent-with-non-tab,trailing-space
+
+[apply]
+    whitespace = fix
+
 [color]
     status = auto
     diff = auto

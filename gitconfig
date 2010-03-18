@@ -46,4 +46,6 @@
     in = incoming
     out = outgoing
     addr = addremove
-    amend = commit --amend
+    amend = commit --amend -C HEAD
+    amendc = commit --amend
+    tree = log --graph --pretty=oneline --decorate

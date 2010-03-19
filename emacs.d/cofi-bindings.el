@@ -1,7 +1,7 @@
 (global-set-key (kbd "C-x f") 'auto-fill-mode)
 
 ;; use C-Tab instead of M-Tab
-(define-key function-key-map [(control tab)] [?\M-\t])
+(define-key function-key-map (kbd "C-<tab>") (kbd "M-<tab>"))
 
 (global-set-key (kbd "C-c f") (make-hippie-expand-function
                                '(try-complete-file-name-partially

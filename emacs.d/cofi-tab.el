@@ -56,8 +56,8 @@ Otherwise, analyses point position and answers."
                         ))
 (mapc (lambda (mode-hook)
           (add-hook mode-hook (lambda ()
-                                (local-set-key (kbd "<tab>" 'smart-tab))
-          )))
+                                (local-set-key (kbd "<tab>") 'smart-tab))
+          ))
       smart-tab-hooks)
 
 (provide 'cofi-tab)

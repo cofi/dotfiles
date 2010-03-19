@@ -1,4 +1,4 @@
-(global-set-key (kbd "C-c f") 'auto-fill-mode)
+(global-set-key (kbd "C-x f") 'auto-fill-mode)
 
 ;; use C-Tab instead of M-Tab
 (define-key function-key-map [(control tab)] [?\M-\t])

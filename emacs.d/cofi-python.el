@@ -24,20 +24,8 @@
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pylint-init)))
 
-(defun python-outline-level ()
-  (let (buffer-invisibility-spec)
-    (save-excursion
-      (skip-chars-forward "\t ")
-      (current-column))))
-
-;; Outlining
-(add-hook 'python-mode-hook
-          (lambda ()
-            (progn
-              (set-variable 'outline-regexp "[^ \t]\\|[ \t]*\\(def\\|class\\) ")
-              (setq outline-level 'python-outline-level)
-              (local-set-key (kbd "C-x SPC") 'outline-toggle-children)
-              (hide-body))))
+;; Folding
+(add-hook 'python-mode-hook 'hs-minor-mode)
 
 ;; Modes
 (add-hook 'python-mode-hook

@@ -34,7 +34,7 @@
 (add-hook 'python-mode-hook
           (lambda ()
             (progn
-              (set-variable 'outline-regexp "def\\|class ")
+              (set-variable 'outline-regexp "[^ \t]\\|[ \t]*\\(def\\|class\\) ")
               (setq outline-level 'python-outline-level)
               (local-set-key (kbd "C-x SPC") 'outline-toggle-children)
               (hide-body))))

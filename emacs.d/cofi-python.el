@@ -33,8 +33,7 @@
             (progn
               (require 'virtualenv)
               (show-paren-mode 1)
-              (auto-fill-mode 1)
-              (outline-minor-mode 1))))
+              (auto-fill-mode 1))))
 
 ;; Keybindings
 (add-hook 'python-mode-hook

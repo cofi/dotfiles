@@ -49,6 +49,7 @@
                ido
                magit
                redo
+               sml-modeline
                uniquify
                w3m-load
            ))
@@ -86,13 +87,16 @@
 ;; Auto minor modes
 (mapc (lambda (mode)
         (funcall mode t))
-      '(autopair-global-mode            ; Yeah, gimme teh matching pairs
+      '(
+        autopair-global-mode            ; Yeah, gimme teh matching pairs
+        global-hl-line-mode
         global-linum-mode               ; show line numbers
         ido-mode
         show-paren-mode                 ; show matching paren
+        sml-modeline-mode
         transient-mark-mode
-        global-hl-line-mode
-        winner-mode))
+        winner-mode
+        ))
 
 (fringe-mode 'left-only)
 

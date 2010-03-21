@@ -45,4 +45,11 @@
               (local-set-key (kbd "M-n") 'python-describe-symbol)
               (local-set-key (kbd "C-c SPC") 'python-switch-to-python))))
 
+;; Triple strings for autopair
+(add-hook 'python-mode-hook
+          #'(lambda ()
+              (setq autopair-handle-action-fns
+                    (list #'autopair-default-handle-action
+                          #'autopair-python-triple-quote-action))))
+
 (provide 'cofi-python)

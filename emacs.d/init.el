@@ -94,6 +94,8 @@
         global-hl-line-mode
         winner-mode))
 
+(fringe-mode 'left-only)
+
 (setq uniquify-buffer-name-style 'reverse)
 (setq uniquify-separator "/")
 (setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified

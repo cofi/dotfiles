@@ -3,11 +3,9 @@
 
 (setq viper-shift-width 4)
 (setq viper-re-search t)
+(setq viper-ex-style-editing nil)
 
-;; vimpulse settings
 (when (load "vimpulse" t)
-    (setq viper-ex-style-editing -1)
-    (setq vimpulse-experimental -1)
 )
 
 (when (load "goto-last-change" t)

@@ -26,6 +26,7 @@
             "cofi-color"
             "cofi-column"
             "cofi-eldoc"
+            "cofi-haskell"
             "cofi-lisp"
             "cofi-python"
             "cofi-recentf"

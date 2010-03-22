@@ -27,6 +27,7 @@
             "cofi-column"
             "cofi-eldoc"
             "cofi-haskell"
+            "cofi-ido"
             "cofi-lisp"
             "cofi-markers"
             "cofi-python"
@@ -48,7 +49,6 @@
 
 (require-all '(
                autopair
-               ido
                magit
                redo
                sml-modeline
@@ -68,7 +68,6 @@
  '(column-number-mode t)
  '(comint-prompt-read-only t)
  '(comment-style (quote align))
- '(ido-everywhere t)
  '(inhibit-startup-screen t))
 
 ;; Use UTF-8 dammit
@@ -94,7 +93,6 @@
         global-font-lock-mode
         global-hl-line-mode
         global-linum-mode               ; show line numbers
-        ido-mode
         show-paren-mode                 ; show matching paren
         sml-modeline-mode
         transient-mark-mode
@@ -102,6 +100,7 @@
         ))
 
 (fringe-mode 'left-only)
+(setq display-time-24hr-format t)
 (display-time)
 (display-battery-mode)
 

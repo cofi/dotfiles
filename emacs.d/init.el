@@ -81,6 +81,10 @@
 (setq-default ispell-program-name "aspell")
 (setq-default ispell-default-dictionary "en_US")
 
+(when (require 'auto-dictionary nil 'noerror)
+  (add-hook 'flyspell-mode (lambda ()
+                             (auto-dictionary-mode t))))
+
 ;; tab settings
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
 (setq-default tab-width 4)

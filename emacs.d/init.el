@@ -28,6 +28,7 @@
             "cofi-eldoc"
             "cofi-haskell"
             "cofi-lisp"
+            "cofi-markers"
             "cofi-python"
             "cofi-recentf"
             "cofi-smex"

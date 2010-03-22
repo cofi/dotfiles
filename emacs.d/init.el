@@ -90,6 +90,7 @@
         (funcall mode t))
       '(
         autopair-global-mode            ; Yeah, gimme teh matching pairs
+        global-font-lock-mode
         global-hl-line-mode
         global-linum-mode               ; show line numbers
         ido-mode
@@ -100,6 +101,8 @@
         ))
 
 (fringe-mode 'left-only)
+(display-time)
+(display-battery-mode)
 
 (setq uniquify-buffer-name-style 'reverse)
 (setq uniquify-separator "/")

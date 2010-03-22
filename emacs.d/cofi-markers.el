@@ -1,7 +1,8 @@
 (defconst marker-regexp "\\<\\(HACK\\|FIXME\\|TODO\\|XXX+\\|BUG\\):"
   "Regexp that matches the markers.")
 (when (require 'fringe-helper nil 'noerror)
-  (defvar marker-overlays '())
+  (defvar marker-fringe-overlays nil)
+  (make-variable-buffer-local 'marker-fringe-overlays)
 
   (defun annotate-markers ()
     "Put fringe marker on marker lines in the current buffer"
@@ -13,13 +14,13 @@
                                     (point)
                                     'left-fringe
                                     'font-lock-warning-face)
-              marker-overlays)
+              marker-fringe-overlays)
         )))
 
   (defun clean-marker-annotations ()
     "Remove the overlay annotations."
     (interactive)
-    (mapc 'fringe-helper-remove marker-overlays))
+    (mapc 'fringe-helper-remove marker-fringe-overlays))
 
   (defun refresh-marker-annotations ()
     "Refresh the marker annotations."
@@ -27,6 +28,28 @@
     (progn
       (clean-marker-annotations)
       (annotate-markers)))
+
+  ;; fringe markers for flymake
+  (when (require 'flymake nil 'noerror)
+
+    (defvar flymake-fringe-overlays nil)
+    (make-variable-buffer-local 'flymake-fringe-overlays)
+
+    (defadvice flymake-make-overlay (after add-to-fringe first
+                                           (beg end tooltip-text face mouse-face)
+                                           activate compile)
+      (push (fringe-helper-insert-region
+             beg end
+             (fringe-lib-load (if (eq face 'flymake-errline)
+                                  fringe-lib-exclamation-mark
+                                fringe-lib-question-mark))
+             'left-fringe 'font-lock-warning-face)
+            flymake-fringe-overlays))
+
+    (defadvice flymake-delete-own-overlays (after remove-from-fringe activate
+                                                  compile)
+      (mapc 'fringe-helper-remove flymake-fringe-overlays)
+      (setq flymake-fringe-overlays nil)))
   )
 
 (defun marker-fontlock ()

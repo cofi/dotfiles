@@ -82,7 +82,7 @@
 (setq-default ispell-default-dictionary "en_US")
 
 (when (require 'auto-dictionary nil 'noerror)
-  (add-hook 'flyspell-mode (lambda ()
+  (add-hook 'flyspell-mode-hook (lambda ()
                              (auto-dictionary-mode t))))
 
 ;; tab settings

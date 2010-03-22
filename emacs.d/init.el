@@ -103,6 +103,9 @@
         winner-mode
         ))
 
+(when (require 'highlight-parentheses nil 'noerror)
+  (highlight-parentheses-mode t))
+
 (fringe-mode 'left-only)
 (setq display-time-24hr-format t)
 (display-time)

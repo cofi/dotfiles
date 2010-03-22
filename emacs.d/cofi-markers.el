@@ -1,9 +1,12 @@
+(defconst marker-regexp "\\<\\(HACK\\|FIXME\\|TODO\\|XXX+\\|BUG\\):"
+  "Regexp that matches the markers.")
+
 (defun annotate-markers ()
   "Put fringe marker on marker lines in the current buffer"
   (interactive)
   (save-excursion
     (goto-char (point-min))
-    (while (re-search-forward "\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" nil t)
+    (while (re-search-forward marker-regexp nil t)
       (let ((overlay (make-overlay (- (point) 5) (point))))
         (overlay-put overlay 'before-string (propertize "A"
                                                         'display '(left-fringe right-triangle)))))))
@@ -13,10 +16,12 @@
 (defun highlight-markers ()
   "Adds fontlocks for markers."
   (font-lock-add-keywords nil
-                          '(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):"
-                             1 font-lock-warning-face prepend))))
+                          '((marker-regexp 1 font-lock-warning-face prepend))))
 
-;; TODO: add function to display all markers in buffer in another one
+(defun list-markers ()
+  "List all markers in current buffer."
+  (interactive)
+  (occur marker-regexp 0))
 
 (add-hook 'find-file-hook 'highlight-markers)
 (add-hook 'find-file-hook 'annotate-markers)

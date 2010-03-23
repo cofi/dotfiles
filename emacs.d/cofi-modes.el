@@ -1,23 +1,8 @@
-(when (require 'autopair nil 'noerror)
-        autopair-global-mode
-)
-
-(defun require-and-exec (feature fun)
-  "Require the feature and call fun if it was successfull loaded."
-  (if (require feature nil 'noerror)
-      (when fun
-        (funcall fun))
-    (message (format "%s not loaded" feature))))
-
-(defun require-pair (pair)
-  "Unpack a pair and call `require-and-exec' on it."
-  (require-and-exec
-   (car pair)
-   (cadr pair)))
+(load "cofi-util")
 
 (mapc 'require-pair
       '(
-        (autopair . (lambda ()(autopair-global-mode t)))
+        (autopair . (lambda () (autopair-global-mode t)))
         (sml-modeline . (lambda () (sml-modeline-mode t)))
         (highlight-parentheses . (lambda () (highlight-parentheses-mode t)))
         )

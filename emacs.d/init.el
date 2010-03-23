@@ -16,10 +16,7 @@
                 "~/.emacs.d"
                 ))
 
-(defun load-all (libs)
-  (mapc #'load libs))
-
-(load-all '(
+(mapc #'load '(
             "cofi-ack"
             "cofi-bindings"
             "cofi-buffer"
@@ -48,10 +45,8 @@
     (mapc #'require packages))
 
 (require-all '(
-               autopair
                magit
                redo
-               sml-modeline
                uniquify
                w3m-load
            ))
@@ -88,28 +83,6 @@
 ;; tab settings
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
 (setq-default tab-width 4)
-
-;; Auto minor modes
-(mapc (lambda (mode)
-        (funcall mode t))
-      '(
-        autopair-global-mode            ; Yeah, gimme teh matching pairs
-        global-font-lock-mode
-        global-hl-line-mode
-        global-linum-mode               ; show line numbers
-        show-paren-mode                 ; show matching paren
-        sml-modeline-mode
-        transient-mark-mode
-        winner-mode
-        ))
-
-(when (require 'highlight-parentheses nil 'noerror)
-  (highlight-parentheses-mode t))
-
-(fringe-mode 'left-only)
-(setq display-time-24hr-format t)
-(display-time)
-(display-battery-mode)
 
 (setq uniquify-buffer-name-style 'reverse)
 (setq uniquify-separator "/")

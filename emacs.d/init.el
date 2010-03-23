@@ -27,6 +27,7 @@
             "cofi-ido"
             "cofi-lisp"
             "cofi-markers"
+            "cofi-modes"
             "cofi-python"
             "cofi-recentf"
             "cofi-smex"

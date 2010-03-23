@@ -1,10 +1,10 @@
 (load "cofi-util")
 
 (mapc 'require-pair
-      '(
-        (autopair . (lambda () (autopair-global-mode t)))
-        (sml-modeline . (lambda () (sml-modeline-mode t)))
-        (highlight-parentheses . (lambda () (highlight-parentheses-mode t)))
+      (list
+        (list 'autopair (lambda () (autopair-global-mode t)))
+        (list 'sml-modeline (lambda () (sml-modeline-mode t)))
+        (list 'highlight-parentheses (lambda () (highlight-parentheses-mode t)))
         )
       )
 

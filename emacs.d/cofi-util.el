@@ -2,7 +2,7 @@
   "Require the feature and call fun if it was successfull loaded."
   (if (require feature nil 'noerror)
       (when fun
-        (fun))
+        (funcall fun))
     (message (format "%s not loaded" feature))))
 
 (defun require-pair (pair)

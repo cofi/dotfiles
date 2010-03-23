@@ -101,7 +101,6 @@
 (setq auto-save-default nil)
 
 (defalias 'yes-or-no-p 'y-or-n-p)       ; don't make me type
-(defalias 'at 'ansi-term)
 (defalias 'eb 'eval-buffer)
 (defalias 'er 'eval-region)
 

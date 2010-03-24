@@ -1,0 +1,17 @@
+command! -nargs=* d tabopen https://duckduckgo.com/?q=<args>&v=
+command! -nargs=* g tabopen http://www.google.de/search?q=<args>
+command! py tabopen http://python.org
+command! -nargs=1 pydoc tabopen http://docs.python.org/<args>
+command! -nargs=1 pylib tabopen http://docs.python.org/library/<args>.html
+command! ril sidebar Read It Later
+command! -nargs=* s tabopen https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=<args>
+command! webreg tabopen https://www.dekanat.informatik.tu-darmstadt.de/webreg/index.php?&page=login
+command! -nargs=* wpd tabopen http://de.wikipedia.org/wiki/<args>
+command! -nargs=* wpds tabopen http://de.wikipedia.org/Special:Search?search=<args>&go=Go&fulltext=search
+command! -nargs=1 wpe tabopen http://en.wikipedia.org/wiki/<args>
+command! -nargs=* wpes tabopen http://en.wikipedia.org/Special:Search?search=<args>&go=Go&fulltext=search
+set guioptions=N
+set runtimepath=/home/cofi/.vimperator
+source! /home/cofi/.vimperatorrc.local
+
+" vim: set ft=vimperator:

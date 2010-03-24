@@ -23,6 +23,7 @@
             "cofi-color"
             "cofi-column"
             "cofi-eldoc"
+            "cofi-flymake"
             "cofi-haskell"
             "cofi-ido"
             "cofi-lisp"

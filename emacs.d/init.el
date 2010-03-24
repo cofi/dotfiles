@@ -33,6 +33,7 @@
             "cofi-smex"
             "cofi-snippets"
             "cofi-tab"
+            "cofi-util"
             "cofi-vim"
             "cofi-windowing"
             "private"
@@ -48,7 +49,6 @@
 (require-all '(
                magit
                redo
-               uniquify
                w3m-load
            ))
 
@@ -77,18 +77,19 @@
 (setq-default ispell-program-name "aspell")
 (setq-default ispell-default-dictionary "en_US")
 
-(when (require 'auto-dictionary nil 'noerror)
+(require-and-exec 'auto-dictionary (lambda ()
   (add-hook 'flyspell-mode-hook (lambda ()
-                             (auto-dictionary-mode t))))
+                                  (auto-dictionary-mode t)))))
 
 ;; tab settings
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
 (setq-default tab-width 4)
 
-(setq uniquify-buffer-name-style 'reverse)
-(setq uniquify-separator "/")
-(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
-(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special
+(require-and-exec 'uniquify (lambda ()
+                              (setq uniquify-buffer-name-style 'reverse
+                                    uniquify-separator "/"
+                                    uniquify-after-kill-buffer-p t
+                                    uniquify-ignore-buffers-re "^\\*")))
 
 (setq-default abbrev-mode t)
 (setq abbrev-file-name "~/.emacs.d/abbrevs")

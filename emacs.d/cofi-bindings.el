@@ -21,6 +21,7 @@
                                  try-expand-dabbrev-from-kill
                                  )))
 
+(load "cofi-util")
 (require-and-exec 'multi-term
                   (global-set-key (kbd "<f1>") 'multi-term))
 

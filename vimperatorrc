@@ -13,6 +13,10 @@ command! -nargs=* wpes tabopen http://en.wikipedia.org/Special:Search?search=<ar
 set guioptions=N
 set runtimepath=/home/cofi/.vimperator
 source! /home/cofi/.vimperatorrc.local
-colorscheme evening-tmp
+colorscheme cofi
+
+let mapleader=","
+map <leader>n :bnext<CR>
+map <leader>p :bprev<CR>
 
 " vim: set ft=vimperator:

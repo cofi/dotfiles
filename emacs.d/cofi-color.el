@@ -1,5 +1,4 @@
 (when (load "color-theme" t)
-    (color-theme-initialize)
 
     (defun color-theme-cofi ()
       (interactive)

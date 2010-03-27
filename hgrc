@@ -20,3 +20,5 @@ ps = push
 ad = add
 adr = addremove
 df = diff
+pl = pl
+ft = fetch

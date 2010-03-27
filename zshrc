@@ -2,7 +2,15 @@ export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
 export PATH=$PATH:$HOME/.bin:$HOME/.bin_local
 export PYTHONPATH=$HOME/lib/python
- 
+
+function load_config() {
+    if [[ -f $1 ]] {
+        source $1
+    }
+}
+
+load_config $LOCALDIR/pre
+
 # load extra modules
 autoload -U zmv
 autoload -Uz vcs_info
@@ -65,13 +73,6 @@ setopt auto_pushd pushd_ignore_dups
 setopt chase_dots chase_links
 setopt auto_cd
 
-# load config files
-function load_config() {
-    if [[ -f $1 ]] {
-        source $1
-    }
-}
-
 export PROMPT="%F{green}%n@%m %~ %#> %F{white}"
 
 if [[ -d $ZSHDIR ]] {
@@ -87,9 +88,11 @@ if [[ -d $ZSHDIR ]] {
     if [[ $TERM != "linux" ]] {
         load_config $ZSHDIR/prompt
     }
-    load_config $LOCALDIR/zshrc
     load_config $ZSHDIR/style
 }
+
+load_config $LOCALDIR/post
+
 unfunction load_config
 
 HISTFILE=~/.zshhistory
@@ -103,4 +106,3 @@ export PAGER=vimpager
 if [[ -z "$SSH_CONNECTION" ]] {
 	source ~/.keychain/$HOST-sh
 }
-fortune -a

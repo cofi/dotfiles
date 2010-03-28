@@ -37,7 +37,7 @@
 (defcustom virtualenv-use-ipython t
   "Use IPython interpreter when available in a virtual environment")
 
-(defcustom virtualenv-root-dir (concat (getenv "HOME") "/.virtualenvs")
+(defcustom virtualenv-root-dir (concat (getenv "HOME") "/.virtualenvs/")
   "Default location for user's virtual environments")
 
 (defcustom virtualenv-ipython-flags '("-cl")

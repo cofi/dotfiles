@@ -22,6 +22,7 @@
             "cofi-buffer"
             "cofi-color"
             "cofi-column"
+            "cofi-desktop"
             "cofi-eldoc"
             "cofi-flymake"
             "cofi-haskell"

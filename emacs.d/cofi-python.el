@@ -35,6 +35,11 @@
               (show-paren-mode 1)
               (auto-fill-mode 1))))
 
+(defun workon-postactivate (virtualenv)
+  (require 'virtualenv)
+  (virtualenv-activate-environment virtualenv)
+  (desktop-change-dir virtualenv))
+
 ;; Keybindings
 (add-hook 'python-mode-hook
           (lambda ()

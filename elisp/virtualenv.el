@@ -43,7 +43,7 @@
 (defcustom virtualenv-ipython-flags '("-cl")
   "Extra flags to pass to IPython interpreters")
 
-(defcustom virtualenv-python-flags '("")
+(defcustom virtualenv-python-flags '("-i")
   "Extra flags to pass to Python interpreters")
 
 (defvar virtualenv-active nil

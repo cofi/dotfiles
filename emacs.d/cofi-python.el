@@ -43,7 +43,7 @@
               (local-set-key (kbd "RET") 'newline-and-indent)
               (local-set-key (kbd "C-x n") 'flymake-goto-next-error)
               (local-set-key (kbd "M-n") 'python-describe-symbol)
-              (local-set-key (kbd "C-c SPC") 'python-switch-to-python))))
+              (local-set-key (kbd "C-c SPC") 'python-shell))))
 
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook
@@ -53,3 +53,4 @@
                           #'autopair-python-triple-quote-action))))
 
 (provide 'cofi-python)
+

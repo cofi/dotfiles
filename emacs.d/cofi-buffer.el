@@ -24,6 +24,21 @@
                     (name . "\\*.*\\*"))
                    ))))
 
+    (require-and-exec 'ibuffer-git
+                      (lambda ()
+                        (setq ibuffer-formats
+                              '(
+                                (mark modified read-only git-status-mini " "
+                                      (name 18 18 :left :elide)
+                                      " "
+                                      (size 9 -1 :right)
+                                      " "
+                                      (mode 16 16 :left :elide)
+                                      " "
+                                      (git-status 8 8 :left)
+                                      " " filename-and-process)
+                                ))))
+
     (add-hook 'ibuffer-mode-hook
               (lambda ()
                 (ibuffer-switch-to-saved-filter-groups "default")))

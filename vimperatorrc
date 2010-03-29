@@ -10,6 +10,10 @@ command! -nargs=* wpd tabopen http://de.wikipedia.org/wiki/<args>
 command! -nargs=* wpds tabopen http://de.wikipedia.org/Special:Search?search=<args>&go=Go&fulltext=search
 command! -nargs=1 wpe tabopen http://en.wikipedia.org/wiki/<args>
 command! -nargs=* wpes tabopen http://en.wikipedia.org/Special:Search?search=<args>&go=Go&fulltext=search
+command! -nargs=* dict tabopen http://www.dict.cc/?s=<args>
+command! -nargs=* beo tabopen http://dict.tu-chemnitz.de/dings.cgi?lang=de&service=deen&query=<args>
+command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=<args>&relink=on
+
 set guioptions=N
 set runtimepath=/home/cofi/.vimperator
 source! /home/cofi/.vimperatorrc.local

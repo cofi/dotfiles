@@ -36,6 +36,7 @@
             "cofi-snippets"
             "cofi-tab"
             "cofi-util"
+            "cofi-vc"
             "cofi-vim"
             "cofi-windowing"
             "private"

@@ -1,9 +1,6 @@
 (require-and-exec 'ibuffer (lambda ()
   (progn
     (require-and-exec 'ibuf-ext nil)
-    ;; ignore emacs buffers
-    (add-to-list 'ibuffer-never-show-predicates "\\*.*\\*")
-
     (setq ibuffer-show-empty-filter-groups nil)
 
     (setq ibuffer-saved-filter-groups
@@ -11,6 +8,7 @@
                    ("Programming"
                     (or
                      (mode . python-mode)
+                     (name . "\\*Python.*\\*")
                      ))
                    ("Config"
                     (filename . ".emacs.d/"))
@@ -18,6 +16,12 @@
                     (mode . dired-mode))
                    ("Org"
                     (mode . org-mode))
+                   ("Terminals"
+                    (mode . term-mode))
+                   ("Shells"
+                    (mode . shell-mode))
+                   ("Emacs"
+                    (name . "\\*.*\\*"))
                    ))))
 
     (add-hook 'ibuffer-mode-hook

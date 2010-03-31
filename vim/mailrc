@@ -5,10 +5,10 @@ nmap <buffer> <Leader>sc :w<CR>:!aspell -e -c "%"<CR>:e<CR>
 
 iabbr mfg Mit freundlichen Grüßen,
 iabbr vg Viele Grüße,
-iabbr sghd Sehr geehrte Damen und Herren,
+iabbr sgdh Sehr geehrte Damen und Herren,
 iabbr sgf Sehr geehrte Frau
 iabbr sgh Sehr geehrter Herr
 
 iabbr s Sincerely,
 iabbr r Regards,
-iabbr dsor Dear Sir or Madam,
+iabbr dsom Dear Sir or Madam,

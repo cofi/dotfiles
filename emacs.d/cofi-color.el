@@ -1,5 +1,4 @@
-(when (load "color-theme" t)
-
+(require-and-exec 'color-theme 
     (defun color-theme-cofi ()
       (interactive)
       (color-theme-install
@@ -194,8 +193,6 @@
          (woman-bold-face ((t (:bold t :foreground "blue" :weight bold))))
          (woman-italic-face ((t (:italic t :foreground "red" :underline t :slant italic))))
          (woman-unknown-face ((t (:foreground "brown"))))
-         (zmacs-region ((t (:background "lightgoldenrod2")))))))
-
-    (color-theme-cofi))
+         (zmacs-region ((t (:background "lightgoldenrod2"))))))))
 
 (provide 'cofi-color)

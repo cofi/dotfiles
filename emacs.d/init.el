@@ -123,3 +123,4 @@
 (setq next-line-add-newlines t)
 
 (mouse-avoidance-mode 'cat-and-mouse)
+(color-theme-cofi)

@@ -7,3 +7,4 @@ emacs.d/ac-comphist.dat
 emacs.d/auto-save-list/
 emacs.d/private.el
 emacs.d/.emacs.desktop*
+vim/vim/.netrwhist

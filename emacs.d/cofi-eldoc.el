@@ -1,10 +1,7 @@
-(load "cofi-util")
-(require-and-exec'eldoc (lambda ()
-                          (progn
-                            (eldoc-add-command 'autopair-insert-opening)
-
-                            (add-hook 'python-mode-hook (lambda ()
-                                                          (eldoc-mode t)))
-                            )))
+(when (require 'eldoc nil 'noerror)
+  (add-hook 'python-mode-hook (lambda ()
+                                (eldoc-mode t)))
+  (eldoc-add-command 'autopair-insert-opening)
+  )
 
 (provide 'cofi-eldoc)

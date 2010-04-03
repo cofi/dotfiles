@@ -1,12 +1,11 @@
-(load "cofi-util")
+(require-and-exec 'autopair
+                  (lambda () (autopair-global-mode t)))
 
-(mapc 'require-pair
-      (list
-        (list 'autopair (lambda () (autopair-global-mode t)))
-        (list 'sml-modeline (lambda () (sml-modeline-mode t)))
-        (list 'highlight-parentheses (lambda () (highlight-parentheses-mode t)))
-        )
-      )
+(require-and-exec 'sml-modeline
+                  (lambda () (sml-modeline-mode t)))
+
+(require-and-exec 'highlight-parentheses
+                  (lambda () (highlight-parentheses-mode t)))
 
 (setq display-time-24hr-format t)
 ;; dirty hack to suppress threshold showing

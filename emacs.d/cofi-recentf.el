@@ -1,7 +1,4 @@
-(load "cofi-util")
 (require-and-exec 'recentf
-  (lambda ()
-    (progn
       (setq recentf-auto-cleanup 'never)
       (recentf-mode t)
       (defun recentf-ido-find-file ()
@@ -23,4 +20,4 @@
             (find-file (cdr (assoc filename
                                    file-assoc-list))))))
       (global-set-key (kbd "C-c r") 'recentf-ido-find-file)
-)))
+)

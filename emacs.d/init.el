@@ -16,6 +16,8 @@
                 "~/.emacs.d"
                 ))
 
+(require 'cofi-util)
+
 (mapc #'load '(
             "cofi-ack"
             "cofi-bindings"
@@ -35,7 +37,6 @@
             "cofi-smex"
             "cofi-snippets"
             "cofi-tab"
-            "cofi-util"
             "cofi-vc"
             "cofi-vim"
             "cofi-windowing"

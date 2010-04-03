@@ -5,7 +5,7 @@
 (setq viper-re-search t)
 (setq viper-ex-style-editing nil)
 
-(when (load "vimpulse" t)
+(require-and-exec 'vimpulse
   (define-key viper-vi-global-user-map (kbd "r") 'redo)
   (define-key viper-vi-global-user-map (kbd "C-r") 'isearch-backward-regexp)
   (define-key viper-vi-global-user-map (kbd "C-s") 'isearch-forward-regexp)
@@ -17,8 +17,8 @@
   (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
 )
 
-(when (load "goto-last-change" t)
+(require-and-exec 'goto-last-change
   (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change)
-  )
+)
 
 (provide 'cofi-vim)

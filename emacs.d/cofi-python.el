@@ -12,7 +12,7 @@
 ;;   (setq ropemacs-enable-autoimport t))
 
 
-(when (load "flymake" t)
+(require-and-exec 'flymake
   (defun flymake-pylint-init ()
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))

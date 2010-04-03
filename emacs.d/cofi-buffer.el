@@ -1,49 +1,47 @@
-(require-and-exec 'ibuffer (lambda ()
-  (progn
-    (require-and-exec 'ibuf-ext nil)
-    (setq ibuffer-show-empty-filter-groups nil)
+(require-and-exec 'ibuffer
+                  (require-and-exec 'ibuf-ext nil)
+                  (setq ibuffer-show-empty-filter-groups nil)
 
-    (setq ibuffer-saved-filter-groups
-          (quote (("default"      
-                   ("Programming"
-                    (or
-                     (mode . python-mode)
-                     (name . "\\*Python.*\\*")
-                     ))
-                   ("Config"
-                    (filename . ".emacs.d/"))
-                   ("Dired"
-                    (mode . dired-mode))
-                   ("Org"
-                    (mode . org-mode))
-                   ("Terminals"
-                    (mode . term-mode))
-                   ("Shells"
-                    (mode . shell-mode))
-                   ("Emacs"
-                    (name . "\\*.*\\*"))
-                   ))))
+                  (setq ibuffer-saved-filter-groups
+                        (quote (("default"      
+                                 ("Programming"
+                                  (or
+                                   (mode . python-mode)
+                                   (name . "\\*Python.*\\*")
+                                   ))
+                                 ("Config"
+                                  (filename . ".emacs.d/"))
+                                 ("Dired"
+                                  (mode . dired-mode))
+                                 ("Org"
+                                  (mode . org-mode))
+                                 ("Terminals"
+                                  (mode . term-mode))
+                                 ("Shells"
+                                  (mode . shell-mode))
+                                 ("Emacs"
+                                  (name . "\\*.*\\*"))
+                                 ))))
 
-    (require-and-exec 'ibuffer-git
-                      (lambda ()
-                        (setq ibuffer-formats
-                              '(
-                                (mark modified read-only git-status-mini " "
-                                      (name 18 18 :left :elide)
-                                      " "
-                                      (size 9 -1 :right)
-                                      " "
-                                      (mode 16 16 :left :elide)
-                                      " "
-                                      (git-status 8 8 :left)
-                                      " " filename-and-process)
-                                ))))
+                  (require-and-exec 'ibuffer-git
+                                    (setq ibuffer-formats
+                                          '(
+                                            (mark modified read-only git-status-mini " "
+                                                  (name 18 18 :left :elide)
+                                                  " "
+                                                  (size 9 -1 :right)
+                                                  " "
+                                                  (mode 16 16 :left :elide)
+                                                  " "
+                                                  (git-status 8 8 :left)
+                                                  " " filename-and-process)
+                                            )))
 
-    (add-hook 'ibuffer-mode-hook
-              (lambda ()
-                (ibuffer-switch-to-saved-filter-groups "default")))
+                  (add-hook 'ibuffer-mode-hook
+                            (lambda ()
+                              (ibuffer-switch-to-saved-filter-groups "default")))
 
-    (global-set-key (kbd "C-x C-b") 'ibuffer)
-    )))
+                  (global-set-key (kbd "C-x C-b") 'ibuffer)
+                  )
 
 (provide 'cofi-buffer)

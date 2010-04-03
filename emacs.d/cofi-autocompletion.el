@@ -1,4 +1,4 @@
-(when (load "auto-complete" t)
+(require-and-exec 'auto-complete 
     (require 'auto-complete-config)
 
     (define-key ac-complete-mode-map (kbd "C-l") 'ac-expand-common)

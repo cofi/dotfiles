@@ -1,4 +1,4 @@
-(when (require 'ido nil 'noerror)
+(require-and-exec 'ido
   (setq ido-enable-regexp t)
   (setq ido-enable-dot-prefix t)
   (setq ido-enable-flex-matching t)

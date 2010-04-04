@@ -1,5 +1,5 @@
 (require-and-exec 'smex
-      (lambda () (smex-initialize))
+      (smex-initialize)
       (global-set-key (kbd "M-a") 'smex)
       (global-set-key (kbd "M-x") 'smex)
 )

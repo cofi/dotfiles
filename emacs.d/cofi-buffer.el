@@ -1,5 +1,5 @@
 (require-and-exec 'ibuffer
-                  (require-and-exec 'ibuf-ext nil)
+                  (require-and-exec 'ibuf-ext)
                   (setq ibuffer-show-empty-filter-groups nil)
 
                   (setq ibuffer-saved-filter-groups

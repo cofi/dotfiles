@@ -17,6 +17,7 @@
                 ))
 
 (require 'cofi-util)
+(require 'cofi-vim)
 
 (mapc #'load '(
             "cofi-ack"
@@ -38,7 +39,6 @@
             "cofi-snippets"
             "cofi-tab"
             "cofi-vc"
-            "cofi-vim"
             "cofi-windowing"
             "private"
             ))

@@ -1,0 +1,4 @@
+#contributor : Shane Celis
+#name : label
+# --
+\label{${1:label}}$0

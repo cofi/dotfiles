@@ -1,0 +1,4 @@
+#contributor : Shane Celis (shane (at) gnufoo (dot) org)
+#name : eqref
+# --
+Equation~\ref{$1}$0

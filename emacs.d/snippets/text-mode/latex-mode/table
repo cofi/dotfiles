@@ -1,0 +1,17 @@
+#contributor : Shane Celis (shane (at) gnufoo (dot) org)
+#name : table
+# --
+\begin{table}
+  \begin{center}
+    \begin{tabular}{ ${1:| l | r |} }
+      \hline
+      ${2:Name & Value \\}
+      \hline
+      $0
+      \hline
+    \end{tabular}
+  \end{center}
+  \caption{${3:caption}}
+  \label{${4:label}}
+\end{table}
+

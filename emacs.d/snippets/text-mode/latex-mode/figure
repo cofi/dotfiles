@@ -1,0 +1,11 @@
+#contributor : Shane Celis (shane (at) gnufoo (dot) org)
+#name : figure
+# --
+\begin{figure}
+  \begin{center} 
+    \input{${1:input}} 
+%    \includegraphics{${1}} 
+  \end{center} 
+  \caption{${2:caption}}
+  \label{$1}
+\end{figure}

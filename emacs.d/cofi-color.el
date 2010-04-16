@@ -14,18 +14,16 @@
           (list-matching-lines-face . bold)
           (view-highlight-face . highlight)
           (viper-insert-state-cursor-color . "OrangeRed2")
-          (viper-replace-overlay-cursor-color . "Red")
-          (widget-mouse-face . highlight))
+          (viper-replace-overlay-cursor-color . "Red"))
+
          (default ((t (:background "grey13" :foreground "grey100" :slant normal :weight normal :width normal))))
-         (bbdb-company ((t (:italic t))))
-         (bbdb-field-name ((t (:bold t))))
-         (bbdb-field-value ((t (nil))))
-         (bbdb-name ((t (:underline t))))
-         (bold ((t (:bold t :weight bold))))
-         (bold-italic ((t (:italic t :bold t :slant italic :weight bold))))
-         (italic ((t (:italic t :slant italic))))
+         (italic ((t (:italic t))))
+         (underline ((t (:underline t))))
+         (bold ((t (:bold t))))
+         (bold-italic ((t (:italic t :bold t))))
+
          (border ((t (:background "black"))))
-         (calendar-today-face ((t (:underline t))))
+
          (change-log-acknowledgement-face ((t (:foreground "Firebrick"))))
          (change-log-conditionals-face ((t (:foreground "DarkGoldenrod"))))
          (change-log-date-face ((t (:foreground "RosyBrown"))))
@@ -34,15 +32,17 @@
          (change-log-function-face ((t (:foreground "DarkGoldenrod"))))
          (change-log-list-face ((t (:foreground "Purple"))))
          (change-log-name-face ((t (:foreground "CadetBlue"))))
+
          (comint-highlight-input ((t (:bold t :weight bold))))
          (comint-highlight-prompt ((t (:foreground "dark blue"))))
+
          (cursor ((t (:background "OrangeRed2"))))
+
          (custom-button-face ((t (:background "lightgrey" :foreground "black" :box (:line-width 2 :style released-button)))))
          (custom-button-pressed-face ((t (:background "lightgrey" :foreground "black" :box (:line-width 2 :style pressed-button)))))
          (custom-changed-face ((t (:background "blue" :foreground "white"))))
          (custom-comment-face ((t (:background "gray85"))))
          (custom-comment-tag-face ((t (:foreground "blue4"))))
-         (custom-documentation-face ((t (nil))))
          (custom-face-tag-face ((t (:bold t :family "helv" :weight bold :height 1.2))))
          (custom-group-tag-face ((t (:bold t :foreground "blue" :weight bold :height 1.2))))
          (custom-group-tag-face-1 ((t (:bold t :family "helv" :foreground "red" :weight bold :height 1.2))))
@@ -54,7 +54,7 @@
          (custom-state-face ((t (:foreground "dark green"))))
          (custom-variable-button-face ((t (:bold t :underline t :weight bold))))
          (custom-variable-tag-face ((t (:bold t :family "helv" :foreground "blue" :weight bold :height 1.2))))
-         (diary-face ((t (:foreground "red"))))
+
          (diff-added-face ((t (:foreground "green"))))
          (diff-changed-face ((t (:foreground "blue"))))
          (diff-removed-face ((t (:foreground "red"))))
@@ -75,6 +75,7 @@
          (dired-face-setuid ((t (nil))))
          (dired-face-socket ((t (nil))))
          (dired-face-symlink ((t (:foreground "Purple"))))
+
          (ediff-current-diff-face-A ((t (:background "pale green" :foreground "firebrick"))))
          (ediff-current-diff-face-Ancestor ((t (:background "VioletRed" :foreground "Black"))))
          (ediff-current-diff-face-B ((t (:background "Yellow" :foreground "DarkOrchid"))))
@@ -91,8 +92,7 @@
          (ediff-odd-diff-face-Ancestor ((t (:background "light grey" :foreground "Black"))))
          (ediff-odd-diff-face-B ((t (:background "light grey" :foreground "Black"))))
          (ediff-odd-diff-face-C ((t (:background "Grey" :foreground "White"))))
-         (fixed ((t (:bold t :weight bold))))
-         (fixed-pitch ((t (:family "courier"))))
+
          (flyspell-duplicate-face ((t (:bold t :foreground "Gold3" :underline t :weight bold))))
          (flyspell-incorrect-face ((t (:bold t :foreground "OrangeRed" :underline t :weight bold))))
 
@@ -111,71 +111,76 @@
          (font-lock-warning-face ((t (:bold t :foreground "Red" :weight bold))))
 
          (fringe ((t (:background "grey13"))))
-         (header-line ((t (:box (:line-width -1 :style released-button) :background "grey90" :foreground "grey20" :box nil))))
-         (hi-black-b ((t (:bold t :weight bold))))
-         (hi-black-hb ((t (:bold t :family "helv" :weight bold :height 1.67))))
-         (hi-blue ((t (:background "light blue"))))
-         (hi-blue-b ((t (:bold t :foreground "blue" :weight bold))))
-         (hi-green ((t (:background "green"))))
-         (hi-green-b ((t (:bold t :foreground "green" :weight bold))))
-         (hi-pink ((t (:background "pink"))))
-         (hi-red-b ((t (:bold t :foreground "red" :weight bold))))
-         (hi-yellow ((t (:background "yellow"))))
-         (highlight ((t (:background "darkseagreen2"))))
+
          (highlight-changes-delete-face ((t (:foreground "red" :underline t))))
          (highlight-changes-face ((t (:foreground "red"))))
-         (hl-line ((default (:background "grey20")) (nil nil)))
+
+         (calendar-today-face ((t (:underline t))))
          (holiday-face ((t (:background "pink"))))
+
          (info-header-node ((t (:italic t :bold t :weight bold :slant italic :foreground "brown"))))
          (info-header-xref ((t (:bold t :weight bold :foreground "magenta4"))))
          (info-menu-5 ((t (:foreground "red1"))))
          (info-menu-header ((t (:bold t :family "helv" :weight bold))))
          (info-node ((t (:italic t :bold t :foreground "brown" :slant italic :weight bold))))
          (info-xref ((t (:bold t :foreground "magenta4" :weight bold))))
+
          (isearch ((t (:background "magenta4" :foreground "lightskyblue1"))))
          (isearch-lazy-highlight-face ((t (:background "paleturquoise"))))
+
          (log-view-file-face ((t (:bold t :background "grey70" :weight bold))))
          (log-view-message-face ((t (:background "grey85"))))
+
          (makefile-space-face ((t (:background "hotpink"))))
-         (menu ((t (nil))))
+
          (modeline ((t (:background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
          (modeline-buffer-id ((t (:bold t :background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
          (modeline-mousable ((t (:background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
          (modeline-mousable-minor-mode ((t (:background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
-         (mouse ((t (:background "black"))))
+
          (primary-selection ((t (:background "lightgoldenrod2"))))
+
          (reb-match-0 ((t (:background "lightblue"))))
          (reb-match-1 ((t (:background "aquamarine"))))
          (reb-match-2 ((t (:background "springgreen"))))
          (reb-match-3 ((t (:background "yellow"))))
+
          (region ((t (:background "gray33"))))
-         (scroll-bar ((t (:background "grey75"))))
+         (hl-line ((default (:background "grey20")) (nil nil)))
+
          (secondary-selection ((t (:background "yellow"))))
          (sh-heredoc-face ((t (:foreground "tan"))))
+
          (show-paren-match-face ((t (:background "yellow green"))))
          (show-paren-mismatch-face ((t (:background "purple" :foreground "white"))))
          (show-tabs-space-face ((t (:foreground "yellow"))))
          (show-tabs-tab-face ((t (:foreground "red"))))
+
          (smerge-base-face ((t (:foreground "red"))))
          (smerge-markers-face ((t (:background "grey85"))))
          (smerge-mine-face ((t (:foreground "blue"))))
          (smerge-other-face ((t (:foreground "darkgreen"))))
+
          (speedbar-button-face ((t (:foreground "green4"))))
          (speedbar-directory-face ((t (:foreground "blue4"))))
          (speedbar-file-face ((t (:foreground "cyan4"))))
          (speedbar-highlight-face ((t (:background "green"))))
          (speedbar-selected-face ((t (:foreground "red" :underline t))))
          (speedbar-tag-face ((t (:foreground "brown"))))
+
          (strokes-char-face ((t (:background "lightgray"))))
+
          (tex-math-face ((t (:foreground "RosyBrown"))))
          (texinfo-heading-face ((t (:foreground "Blue"))))
+
          (tooltip ((t (:background "Wheat" :foreground "black"))))
          (trailing-whitespace ((t (:background "red"))))
-         (underline ((t (:underline t))))
          (variable-pitch ((t (:family "helv"))))
          (linum ((t (:inherit (shadow default) :background "slate gray" :foreground "khaki1"))))
          (vcursor ((t (:background "grey20" :foreground "blue" :underline t))))
+
          (minibuffer-prompt ((t (:foreground "orange"))))
+
          (viper-minibuffer-insert-face ((t (:background "white" :foreground "Black"))))
          (viper-minibuffer-vi-face ((t (:background "grey" :foreground "DarkGreen"))))
          (viper-minibuffer-insert ((((class color)) nil)))
@@ -183,16 +188,7 @@
          (viper-minbuffer-vi ((((class color)) nil)))
          (viper-search-face ((t (:background "khaki" :foreground "Black"))))
          (viper-replace-overlay-face ((t (:background "darkseagreen2" :foreground "Black"))))
-         (widget-button-face ((t (:bold t :weight bold))))
-         (widget-button-pressed-face ((t (:foreground "red"))))
-         (widget-documentation-face ((t (:foreground "dark green"))))
-         (widget-field-face ((t (:background "gray85"))))
-         (widget-inactive-face ((t (:foreground "dim gray"))))
-         (widget-single-line-field-face ((t (:background "gray85"))))
-         (woman-addition-face ((t (:foreground "orange"))))
-         (woman-bold-face ((t (:bold t :foreground "blue" :weight bold))))
-         (woman-italic-face ((t (:italic t :foreground "red" :underline t :slant italic))))
-         (woman-unknown-face ((t (:foreground "brown"))))
+
          (zmacs-region ((t (:background "lightgoldenrod2"))))))))
 
 (provide 'cofi-color)

@@ -8,6 +8,7 @@
     (setq-default ac-auto-start 2)
 
     (add-to-list 'ac-dictionary-directories "~/.emacs.d/completion-dicts")
+    (add-to-list 'ac-modes 'rst-mode)
 
     (defun ac-common-setup ()
       (append ac-sources '(

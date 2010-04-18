@@ -126,3 +126,7 @@
 
 (mouse-avoidance-mode 'cat-and-mouse)
 (color-theme-cofi)
+
+(require-and-exec 'keychain-environment
+                  (eval-after-load "keychain-environment"
+                    '(refresh-keychain-environment)))

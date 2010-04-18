@@ -21,8 +21,5 @@
                                  try-expand-dabbrev-from-kill
                                  )))
 
-(require-and-exec 'multi-term
-                  (global-set-key (kbd "<f1>") 'multi-term))
-
 ;; go away mail
 (global-unset-key (kbd "C-x m"))

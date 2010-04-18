@@ -38,6 +38,7 @@
             "cofi-smex"
             "cofi-snippets"
             "cofi-tab"
+            "cofi-term"
             "cofi-vc"
             "cofi-windowing"
             "private"
@@ -89,11 +90,11 @@
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
 (setq-default tab-width 4)
 
-(require-and-exec 'uniquify (lambda ()
-                              (setq uniquify-buffer-name-style 'reverse
-                                    uniquify-separator "/"
-                                    uniquify-after-kill-buffer-p t
-                                    uniquify-ignore-buffers-re "^\\*")))
+(require-and-exec 'uniquify 
+                  (setq uniquify-buffer-name-style 'reverse
+                        uniquify-separator "/"
+                        uniquify-after-kill-buffer-p t
+                        uniquify-ignore-buffers-re "^\\*"))
 
 (setq-default abbrev-mode t)
 (setq abbrev-file-name "~/.emacs.d/abbrevs")

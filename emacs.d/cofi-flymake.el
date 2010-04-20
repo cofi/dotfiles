@@ -11,7 +11,7 @@
     (flymake-goto-prev-error)
     (flymake-display-err-menu-for-current-line))
 
-  (global-set-key (kbd "C-N") 'flymake-show-next-error)
-  (global-set-key (kbd "C-P") 'flymake-show-prev-error))
+  (global-set-key (kbd "<f5>") 'flymake-show-prev-error))
+  (global-set-key (kbd "<f6>") 'flymake-show-next-error)
 
 (provide 'cofi-flymake)

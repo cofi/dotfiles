@@ -25,6 +25,7 @@ ad = add
 adr = addremove
 df = diff
 pl = pl
+pr = pull --rebase
 ft = fetch
 l1 = log --limit 1
 l5 = log --limit 5

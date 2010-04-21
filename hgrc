@@ -5,6 +5,8 @@ username = Michael Markert <markert.michael@gmail.com>
 extdiff=
 pager=
 fetch=
+rebase=
+transplant=
 
 [merge-tools]
 kdiff3.executable = /usr/bin/kdiff3

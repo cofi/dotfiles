@@ -17,6 +17,7 @@ cmd.kdiff = kompare
 
 [pager]
 attend = diff, log, df
+ignore = l1, l5
 
 [alias]
 ps = push
@@ -25,3 +26,5 @@ adr = addremove
 df = diff
 pl = pl
 ft = fetch
+l1 = log --limit 1
+l5 = log --limit 5

@@ -33,10 +33,10 @@
 
 (add-hook 'after-make-frame-functions 'fullscreen)
 
-(global-set-key (kbd "C-M-j") (lambda () (interactive) (swap-with 'down)))
-(global-set-key (kbd "C-M-k") (lambda () (interactive) (swap-with 'up)))
-(global-set-key (kbd "C-M-h") (lambda () (interactive) (swap-with 'left)))
-(global-set-key (kbd "C-M-l") (lambda () (interactive) (swap-with 'right)))
+(global-set-key (kbd "C-S-j") (lambda () (interactive) (swap-with 'down)))
+(global-set-key (kbd "C-S-k") (lambda () (interactive) (swap-with 'up)))
+(global-set-key (kbd "C-S-h") (lambda () (interactive) (swap-with 'left)))
+(global-set-key (kbd "C-S-l") (lambda () (interactive) (swap-with 'right)))
 
 (global-set-key (kbd "M-j") 'windmove-down)
 (global-set-key (kbd "M-k") 'windmove-up)

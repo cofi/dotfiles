@@ -128,5 +128,6 @@
 (color-theme-cofi)
 
 (require-and-exec 'keychain-environment
-                  (eval-after-load "keychain-environment"
-                    '(refresh-keychain-environment)))
+                  (add-hook 'after-make-frame-functions
+                            'refresh-keychain-environment))
+

@@ -9,6 +9,8 @@
   (define-key viper-vi-global-user-map (kbd "r") 'redo)
   (define-key viper-vi-global-user-map (kbd "C-r") 'isearch-backward-regexp)
   (define-key viper-vi-global-user-map (kbd "C-s") 'isearch-forward-regexp)
+  (define-key viper-vi-global-user-map (kbd "_") 'viper-bol-and-skip-white)
+  (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
 
   (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
   (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)

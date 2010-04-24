@@ -8,8 +8,11 @@
     (setq-default ac-auto-start 2)
 
     (add-to-list 'ac-dictionary-directories "~/.emacs.d/completion-dicts")
-    (append ac-modes '(rst-mode
-                       LaTeX-mode))
+
+    (mapc (lambda (mode)
+            (funcall 'add-to-list 'ac-modes mode))
+          '(rst-mode
+            latex-mode))
 
     (defun ac-common-setup ()
       (append ac-sources '(

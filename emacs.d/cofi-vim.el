@@ -11,6 +11,7 @@
   (define-key viper-vi-global-user-map (kbd "C-s") 'isearch-forward-regexp)
   (define-key viper-vi-global-user-map (kbd "_") 'viper-bol-and-skip-white)
   (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
+  (define-key vimpulse-visual-basic-map (kbd "g q") 'fill-region)
 
   (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
   (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)

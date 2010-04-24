@@ -7,7 +7,12 @@
                                  ("Programming"
                                   (or
                                    (mode . python-mode)
-                                   (name . "\\*Python.*\\*")
+                                   (mode . haskell-mode)
+                                   ))
+                                 ("Writing"
+                                   (or
+                                   (mode . latex-mode)
+                                   (mode . rst-mode)
                                    ))
                                  ("Config"
                                   (filename . ".emacs.d/"))
@@ -19,6 +24,13 @@
                                   (mode . term-mode))
                                  ("Shells"
                                   (mode . shell-mode))
+                                 ("Interpreter"
+                                  (or
+                                   (name . "\\*Python.*\\*")
+                                   (name . "\\*haskell.*\\*")
+                                   ))
+                                 ("Magit"
+                                  (name . "\\*magit-.*\\*"))
                                  ("Emacs"
                                   (name . "\\*.*\\*"))
                                  ))))

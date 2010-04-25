@@ -1,15 +1,11 @@
-(defun add-to-path* (paths)
-  "Expand every path and adds it and its subdirs to load-path."
-  (mapc (lambda (x)
-        (progn (add-to-list 'load-path x)
-               (cd x)
-               (normal-top-level-add-subdirs-to-load-path)))
-       paths))
-
-(add-to-path* '(
-                "~/.elisp"
-                "~/.emacs.d"
-                ))
+(mapc (lambda (dir)
+             (add-to-list 'load-path dir)
+             )
+      '("~/.elisp"
+        "~/.elisp/auto-complete"
+        "~/.elisp/haskell-mode"
+        "~/.elisp/magit"
+        "~/.emacs.d" ))
 
 (defvar hostname (substring (shell-command-to-string "hostname") 0 -1))
 

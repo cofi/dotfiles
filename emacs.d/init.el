@@ -1,8 +1,3 @@
-;; Clean GUI
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-
 (defun add-to-path* (paths)
   "Expand every path and adds it and its subdirs to load-path."
   (mapc (lambda (x)
@@ -15,6 +10,8 @@
                 "~/.elisp"
                 "~/.emacs.d"
                 ))
+
+(defvar hostname (substring (shell-command-to-string "hostname") 0 -1))
 
 (require 'cofi-util)
 (require 'cofi-vim)
@@ -29,16 +26,14 @@
             "cofi-eldoc"
             "cofi-flymake"
             "cofi-haskell"
-            "cofi-ido"
             "cofi-lisp"
             "cofi-markers"
-            "cofi-modes"
             "cofi-python"
             "cofi-recentf"
-            "cofi-smex"
             "cofi-snippets"
             "cofi-tab"
             "cofi-term"
+            "cofi-ui"
             "cofi-vc"
             "cofi-windowing"
             "private"
@@ -47,11 +42,7 @@
 ;; Ensure that the rest (e.g. yasnippet) has been initialized
 (load "cofi-autocompletion")
 
-(defun require-all (packages)
-    "Require all items in list."
-    (mapc #'require packages))
-
-(require-all '(
+(mapc #'require '(
                magit
                redo
                w3m-load
@@ -82,19 +73,13 @@
 (setq-default ispell-program-name "aspell")
 (setq-default ispell-default-dictionary "en_US")
 
-(require-and-exec 'auto-dictionary (lambda ()
+(require-and-exec 'auto-dictionary
   (add-hook 'flyspell-mode-hook (lambda ()
-                                  (auto-dictionary-mode t)))))
+                                  (auto-dictionary-mode t))))
 
 ;; tab settings
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
 (setq-default tab-width 4)
-
-(require-and-exec 'uniquify 
-                  (setq uniquify-buffer-name-style 'reverse
-                        uniquify-separator "/"
-                        uniquify-after-kill-buffer-p t
-                        uniquify-ignore-buffers-re "^\\*"))
 
 (setq-default abbrev-mode t)
 (setq abbrev-file-name "~/.emacs.d/abbrevs")
@@ -106,28 +91,11 @@
 (setq backup-directory-alist '(("" . "~/.emacs-backups")))
 (setq auto-save-default nil)
 
-(defalias 'yes-or-no-p 'y-or-n-p)       ; don't make me type
-(defalias 'eb 'eval-buffer)
-(defalias 'er 'eval-region)
-
-(defalias 'bl 'bookmark-bmenu-list)
-(defalias 'bj 'bookmark-jump)
-(defalias 'bs 'bookmark-set)
-(defalias 'sb 'bookmark-save)
-
-(defalias 'sl 'sort-lines)
-(defalias 'dtw 'delete-trailing-whitespace)
-
-(put 'narrow-to-defun 'disabled nil)
-(put 'narrow-to-region 'disabled nil)
-(put 'narrow-to-page 'disabled nil)
-
-(setq next-line-add-newlines t)
-
-(mouse-avoidance-mode 'cat-and-mouse)
-(color-theme-cofi)
-
 (require-and-exec 'keychain-environment
                   (add-hook 'after-make-frame-functions
                             (lambda (frame)
                               (funcall 'refresh-keychain-environment))))
+
+(require-and-exec 'autopair
+                  (autopair-global-mode t))
+(transient-mark-mode t)

@@ -21,7 +21,9 @@
                                  try-expand-dabbrev-from-kill
                                  )))
 
-(define-key diff-mode-map (kbd "q") 'kill-this-buffer)
+(add-hook 'diff-mode
+          (lambda ()
+            (local-set-key (kbd "q") 'kill-this-buffer)))
 
 ;; go away mail
 (global-unset-key (kbd "C-x m"))

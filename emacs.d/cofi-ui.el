@@ -30,8 +30,12 @@
       (global-set-key (kbd "M-x") 'smex))
 
 (setq display-time-24hr-format t
+      display-time-string-forms '(" " day "." month " " 24-hours ":" minutes)
       display-time-mail-file 'none
       display-time-default-load-average nil)
+
+(setq frame-title-format "emacs %b - <%f>"
+      icon-title-format "emacs %b")
 
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))

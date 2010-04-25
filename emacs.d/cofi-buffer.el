@@ -11,7 +11,7 @@
                                    ))
                                  ("Writing"
                                    (or
-                                   (mode . latex-mode)
+                                   (mode . TeX-mode)
                                    (mode . rst-mode)
                                    ))
                                  ("Config"

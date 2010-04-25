@@ -29,6 +29,7 @@
             "cofi-snippets"
             "cofi-tab"
             "cofi-term"
+            "cofi-tex"
             "cofi-ui"
             "cofi-vc"
             "cofi-windowing"

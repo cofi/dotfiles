@@ -125,7 +125,7 @@
          (isearch-lazy-highlight-face ((t (:background "paleturquoise"))))
 
          (log-view-file-face ((t (:bold t :background "grey70" :weight bold))))
-         (log-view-message-face ((t (:background "grey85"))))
+         (log-view-message-face ((t (:foreground "Sienna"))))
 
          (makefile-space-face ((t (:background "hotpink"))))
 

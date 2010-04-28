@@ -15,10 +15,6 @@
   (define-key vimpulse-visual-basic-map (kbd "g q") 'fill-region)
   (define-key viper-insert-global-user-map (kbd "j j") 'viper-exit-insert-state)
 
-  ;; Autopair is messing around
-  (define-key viper-vi-global-user-map (kbd "(") 'backward-sentence)
-  (define-key viper-vi-global-user-map (kbd ")") 'forward-sentence)
-
   (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
   (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)
 

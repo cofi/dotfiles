@@ -11,8 +11,9 @@
                                    ))
                                  ("Writing"
                                    (or
-                                   (mode . TeX-mode)
-                                   (mode . rst-mode)
+                                    (mode . tex-mode)
+                                    (mode . latex-mode)
+                                    (mode . rst-mode)
                                    ))
                                  ("Config"
                                   (filename . ".emacs.d/"))
@@ -30,7 +31,10 @@
                                    (name . "\\*haskell.*\\*")
                                    ))
                                  ("Magit"
-                                  (name . "\\*magit-.*\\*"))
+                                  (or 
+                                   (mode . magit-mode)
+                                   (name . "\\*magit-.*\\*")
+                                  ))
                                  ("Emacs"
                                   (name . "\\*.*\\*"))
                                  ))))

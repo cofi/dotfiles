@@ -27,17 +27,15 @@
             "cofi-python"
             "cofi-recentf"
             "cofi-snippets"
-            "cofi-tab"
             "cofi-term"
             "cofi-tex"
             "cofi-ui"
             "cofi-vc"
             "cofi-windowing"
             "private"
+            "cofi-autocompletion"
+            "cofi-tab"
             ))
-
-;; Ensure that the rest (e.g. yasnippet) has been initialized
-(load "cofi-autocompletion")
 
 (mapc #'require '(
                auto-dictionary

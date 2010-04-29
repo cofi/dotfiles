@@ -1,22 +1,35 @@
 ;;;
 ;; Smart Tab
 ;; Taken from http://www.emacswiki.org/cgi-bin/wiki/TabCompletion
-(defvar smart-tab-completion-functions
-  '((emacs-lisp-mode lisp-complete-symbol)
-    (lisp-mode lisp-complete-symbol)
-;;     (lisp-mode slime-complete-symbol)
-;;    (python-mode rope-code-assist)
-    (text-mode dabbrev-completion))
-  "List of major modes in which to use a mode specific completion
-function.")
- 
+
+(defvar tab-base-completers
+ '(try-expand-dabbrev-visible
+   try-expand-dabbrev
+   try-expand-dabbrev-all-buffers
+   )
+ "List of functions which are used by hippie-expand in all cases.")
+(setq lisp-completers '(try-expand-list
+                        try-complete-lisp-symbol-partially
+                        try-complete-lisp-symbol))
+
+(defvar tab-mode-completers
+  (list
+   (list 'emacs-lisp-mode (append tab-base-completers lisp-completers))
+    (list 'lisp-mode (append tab-base-completers lisp-completers))
+    )
+  "List of major modes in which to use additional mode specific completion
+functions.")
+
+
 (defun get-completion-function()
   "Get a completion function according to current major mode."
-  (let ((completion-function
-         (second (assq major-mode smart-tab-completion-functions))))
-    (if (null completion-function)
-        'dabbrev-completion
-        completion-function)))
+  (let ((mode-functions
+         (second (assq major-mode tab-mode-completers))))
+
+    (if (null mode-functions)
+        (make-hippie-expand-function tab-base-completers t)
+      (make-hippie-expand-function mode-functions t)
+      )))
  
 (defun smart-tab (prefix)
   "Needs `transient-mark-mode' to be on. This smart tab is
@@ -29,9 +42,7 @@ expands it. Else calls `smart-indent'."
   (if (minibufferp)
       (minibuffer-complete)
     (if (smart-tab-must-expand prefix)
-        (let ((dabbrev-case-fold-search t)
-              (dabbrev-case-replace nil))
-          (funcall (get-completion-function)))
+          (funcall (get-completion-function) prefix)
       (smart-indent))))
  
 (defun smart-tab-must-expand (&optional prefix)
@@ -49,15 +60,16 @@ Otherwise, analyses point position and answers."
                      (region-end))
     (indent-for-tab-command)))
 
-(setq smart-tab-hooks '(
-                        python-mode-hook
-                        emacs-lisp-mode
-                        lisp-mode-hook
-                        ))
 (mapc (lambda (mode-hook)
-          (add-hook mode-hook (lambda ()
-                                (local-set-key (kbd "<tab>") 'smart-tab))
-          ))
-      smart-tab-hooks)
+        (add-hook mode-hook (lambda ()
+                              (local-set-key (kbd "<tab>") 'smart-tab))
+                  ))
+      '(
+        latex-mode-hook
+        tex-mode-hook
+        python-mode-hook
+        emacs-lisp-mode-hook
+        lisp-mode-hook
+        ))
 
 (provide 'cofi-tab)

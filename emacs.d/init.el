@@ -40,6 +40,7 @@
 (load "cofi-autocompletion")
 
 (mapc #'require '(
+               auto-dictionary
                magit
                redo
                w3m-load
@@ -69,10 +70,6 @@
 ;; Spelling
 (setq-default ispell-program-name "aspell")
 (setq-default ispell-default-dictionary "en_US")
-
-(require-and-exec 'auto-dictionary
-  (add-hook 'flyspell-mode-hook (lambda ()
-                                  (auto-dictionary-mode t))))
 
 ;; tab settings
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!

@@ -85,6 +85,8 @@
 (setq backup-directory-alist '(("" . "~/.emacs-backups")))
 (setq auto-save-default nil)
 
+(setq dired-dwim-target t)
+
 (require-and-exec 'keychain-environment
                   (add-hook 'after-make-frame-functions
                             (lambda (frame)

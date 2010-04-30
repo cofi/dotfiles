@@ -1,4 +1,5 @@
 (setq viper-mode t)
+(setq viper-toggle-key (kbd "<pause>"))
 (require 'viper)
 
 (setq viper-shift-width 4)

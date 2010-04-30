@@ -14,7 +14,7 @@
   (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
   (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$"))
   (define-key vimpulse-visual-basic-map (kbd "g q") 'fill-region)
-  (define-key viper-insert-global-user-map (kbd "j j") 'viper-exit-insert-state)
+  (define-key viper-insert-global-user-map (kbd "C-<return>") 'viper-exit-insert-state)
 
   (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
   (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)

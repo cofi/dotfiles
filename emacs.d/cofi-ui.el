@@ -14,14 +14,26 @@
                         uniquify-after-kill-buffer-p t
                         uniquify-ignore-buffers-re "^\\*"))
 
+(mapc (lambda (ext)
+        (add-to-list 'completion-ignored-extensions ext))
+      '(
+        ".pdf" ".dvi" ".djvu" ".ps"
+        ".mov" ".mp4" ".ogv"
+        ".mp3" ".ogg"
+        ".doc" ".ods" ".odt" ".pps" ".ppt"
+        ))
+
 (require-and-exec 'ido
                   (setq ido-enable-regexp t
                         ido-enable-dot-prefix t
                         ido-enable-flex-matching t
-                        ido-show-dot-for-dired t
                         ido-use-url-at-point t
                         ido-use-filename-at-point t
                         ido-everywhere t)
+                  (setq ido-ignore-buffers '("\\` "
+                                             "\\`\\*.*\\*"
+                                             ))
+                  (setq ido-ignore-extensions t)
                   (ido-mode t))
 
 (require-and-exec 'smex

@@ -1,3 +1,9 @@
+(require-and-exec 'second-sel
+                  (setq secondary-selection-ring-max 1000)
+                  )
+(setq kill-ring-max 1000)
+(require 'browse-kill-ring+)
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)

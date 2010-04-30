@@ -93,3 +93,5 @@
 (require-and-exec 'autopair
                   (autopair-global-mode t))
 (transient-mark-mode t)
+
+(color-theme-cofi)

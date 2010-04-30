@@ -63,6 +63,5 @@
 (put 'narrow-to-page 'disabled nil)
 
 (mouse-avoidance-mode 'cat-and-mouse)
-(color-theme-cofi)
 
 (provide 'cofi-ui)

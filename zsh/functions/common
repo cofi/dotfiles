@@ -24,7 +24,7 @@ trans() {
 unpack() {
     if [[ -f $1 ]] {
         case $1 in
-            *.tar.bz2)  bzip2 -v -d         $1 ;;
+            *.tar.bz2)  tar -xvjf           $1 ;;
             *.tar.gz)   tar -xvzf           $1 ;;
             *.rar)      unrar e             $1 ;;
             *.deb)      ar -x               $1 ;;
@@ -35,6 +35,7 @@ unpack() {
             *.tgz)      gunzip -d           $1 ;;
             *.tbz2)     tar -jxvf           $1 ;;
             *.zip)      unzip               $1 ;;
+            *.tar.lzma) lzma -dk $1 --to-stdout | tar -xvf - ;;
             *.lzma)     lzma -dk            $1 ;;
             *.7z)       lzma -dk -S .7z     $1 ;;
             *)          echo "'$1' Error. Please go away" ;;

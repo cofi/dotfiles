@@ -66,7 +66,7 @@ setopt        local_options
 setopt prompt_subst
 setopt prompt_percent
 
-setopt vi
+setopt emacs
 
 ### cd options
 setopt auto_pushd pushd_ignore_dups

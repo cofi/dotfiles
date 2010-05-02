@@ -1,3 +1,5 @@
+-*- mode: sh -*-
+
 export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
 export PATH=$PATH:$HOME/.bin

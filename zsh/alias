@@ -1,3 +1,5 @@
+-*- mode: sh -*-
+
 alias ..='cls ..'
 alias ...='cls ../..'
 alias ..2="cls ../../"

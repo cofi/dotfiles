@@ -1,3 +1,5 @@
+-*- mode: sh -*-
+
 if [ $terminfo[colors] -ge 8 ]; then
     colors 
     for color in RED GREEN YELLOW BLUE MAGENTA CYAN WHITE; do

@@ -1,3 +1,5 @@
+-*- mode: sh -*-
+
 emulate -L zsh
 trans() {
     case "$1" in

@@ -1,3 +1,5 @@
+-*- mode: sh -*-
+
 #term-specific bindings
 case "$TERM" in
     linux)

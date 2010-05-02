@@ -1,4 +1,4 @@
--*- mode: sh -*-
+# -*- mode: sh -*-
 
 if [ $terminfo[colors] -ge 8 ]; then
     colors 

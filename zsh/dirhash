@@ -1,4 +1,4 @@
--*- mode: sh -*-
+# -*- mode: sh -*-
 
 function add_hash() {
     test -d "$1" && hash -d $2="$1"

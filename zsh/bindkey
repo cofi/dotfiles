@@ -1,4 +1,4 @@
--*- mode: sh -*-
+# -*- mode: sh -*-
 
 #term-specific bindings
 case "$TERM" in

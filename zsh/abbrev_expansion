@@ -1,4 +1,4 @@
--*- mode: sh -*-
+# -*- mode: sh -*-
 
 # power completion / abbreviation expansion / buffer expansion
 # see http://zshwiki.org/home/examples/zleiab for details

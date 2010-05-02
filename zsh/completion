@@ -1,4 +1,4 @@
--*- mode: sh -*-
+# -*- mode: sh -*-
 
 autoload -Uz compinit
 compinit

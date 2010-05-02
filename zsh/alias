@@ -26,11 +26,15 @@ alias mkdir='nocorrect mkdir'   # no spelling correction on mkdir
 alias mv='nocorrect mv'         # no spelling correction on mv
 alias rm='nocorrect rm'         # no spelling correction on rm
 
+alias rmr='nocorrect rm -r'
+
+alias p-='popd'
+alias pd='pushd'
+
 #Globbing sucks with git's revision modifiers
 alias git='noglob git'
 alias g='git'
 
-alias -s {txt,tex,py}=vim
 alias -s {ps,pdf}=silent_okular
 
 #color grep

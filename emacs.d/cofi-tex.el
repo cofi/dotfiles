@@ -1,16 +1,11 @@
-(defun cofi-tex-latex-hook ()
-  ;; deactivate auto-complete, flyspell seems to mess with it when first active
-  (auto-complete-mode -1)
+(add-hook 'TeX-mode-hook (lambda ()
+                           (setq fill-column 80)
+                           (auto-fill-mode 1)))
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
-  (auto-fill-mode 1)
-  (flyspell-mode 1)
+(add-hook 'TeX-language-de-hook (lambda ()
+                                  (ispell-change-dictionary "de_DE-neu")))
 
-  ;; reactivate modes
-  (auto-complete-mode 1)
-  )
-
-(add-hook 'tex-mode-hook 'cofi-tex-latex-hook)
-(add-hook 'latex-mode-hook 'cofi-tex-latex-hook)
 
 (setq TeX-auto-save t
       TeX-parse-self t)

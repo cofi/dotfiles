@@ -39,9 +39,26 @@
                         ido-use-url-at-point t
                         ido-use-filename-at-point t
                         ido-everywhere t)
-                  (setq ido-ignore-buffers '("\\` "
-                                             "\\`\\*.*\\*"
-                                             ))
+                  (setq ido-ignore-buffers (append
+                                          ido-ignore-buffers
+                                          '(
+                                            "\\` "
+                                            "\\`\\*.*\\*"
+                                            "_region_"
+                                            )))
+                  (setq ido-ignore-directories (append
+                                                ido-ignore-directories
+                                                '(
+                                                  "^auto/$"
+                                                  "\\.prv/"
+                                                  "_region_"
+                                                  )))
+                  (setq ido-ignore-files (append
+                                          ido-ignore-files
+                                          '(
+                                            "^auto/$"
+                                            "_region_"
+                                            )))
                   (setq ido-ignore-extensions t)
                   (ido-mode t))
 

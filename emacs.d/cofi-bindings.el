@@ -28,5 +28,17 @@
           (lambda ()
             (local-set-key (kbd "q") 'kill-this-buffer)))
 
+(global-set-key (kbd "C-c r") 'revert-buffer)
+
+(require-and-exec 'cofi-func
+                  (global-set-key (kbd "C-c C-e") 'eval-and-replace)
+                  (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
+                  )
+
 ;; go away mail
 (global-unset-key (kbd "C-x m"))
+
+(require-and-exec 'idomenu
+                  (global-set-key (kbd "C-x m") 'idomenu))
+
+(provide 'cofi-bindings)

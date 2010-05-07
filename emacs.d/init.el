@@ -25,7 +25,6 @@
             "cofi-lisp"
             "cofi-markers"
             "cofi-python"
-            "cofi-recentf"
             "cofi-snippets"
             "cofi-term"
             "cofi-tex"

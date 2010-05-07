@@ -7,6 +7,11 @@
 (require-and-exec 'magit
                   (global-set-key (kbd "C-c i") 'magit-status))
 
+(require-and-exec 'recentf
+      (setq recentf-auto-cleanup 'never)
+      (recentf-mode t)
+)
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)

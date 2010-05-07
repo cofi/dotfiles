@@ -1,5 +1,3 @@
-(global-set-key (kbd "C-x f") 'auto-fill-mode)
-
 ;; use C-Tab instead of M-Tab
 (define-key function-key-map (kbd "C-<tab>") [?\M-\t])
 
@@ -20,6 +18,11 @@
                                  try-expand-dabbrev-visible
                                  try-expand-dabbrev-from-kill
                                  )))
+
+(global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
+(global-set-key (kbd "C-c y") 'bury-buffer)
+
+(global-set-key (kbd "C-M-h") 'backward-kill-word)
 
 (add-hook 'diff-mode
           (lambda ()

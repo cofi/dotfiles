@@ -19,5 +19,5 @@
           (when filename
             (find-file (cdr (assoc filename
                                    file-assoc-list))))))
-      (global-set-key (kbd "C-c r") 'recentf-ido-find-file)
+      (global-set-key (kbd "C-c f") 'recentf-ido-find-file)
 )

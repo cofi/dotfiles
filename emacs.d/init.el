@@ -39,7 +39,6 @@
 
 (mapc #'require '(
                auto-dictionary
-               magit
                redo
                w3m-load
            ))

@@ -4,6 +4,9 @@
 (setq kill-ring-max 1000)
 (require 'browse-kill-ring+)
 
+(require-and-exec 'magit
+                  (global-set-key (kbd "C-c i") 'magit-status))
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)

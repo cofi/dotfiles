@@ -28,4 +28,16 @@
       (find-file (cdr (assoc filename
                              file-assoc-list))))))
 
+(defun ac-flyspell-prog-mode ()
+  "Activate Flyspell prog mode and call ac workaround."
+  (interactive)
+  (flyspell-prog-mode)
+  (ac-flyspell-workaround))
+
+(defun ac-flyspell-mode ()
+  "Activate Flyspell mode and call ac workaround."
+  (interactive)
+  (flyspell-mode 1)
+  (ac-flyspell-workaround))
+
 (provide 'cofi-func)

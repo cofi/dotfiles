@@ -1,3 +1,7 @@
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
 (require-and-exec 'second-sel
                   (setq secondary-selection-ring-max 1000)
                   )
@@ -7,14 +11,14 @@
 (require-and-exec 'magit
                   (global-set-key (kbd "C-c i") 'magit-status))
 
+(global-unset-key (kbd "C-x m"))
+(require-and-exec 'idomenu
+                  (global-set-key (kbd "C-x m") 'idomenu))
+
 (require-and-exec 'recentf
       (setq recentf-auto-cleanup 'never)
       (recentf-mode t)
 )
-
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
 
 (require-and-exec 'sml-modeline
                   (sml-modeline-mode t))
@@ -22,7 +26,7 @@
 (require-and-exec 'highlight-parentheses
                   (highlight-parentheses-mode t))
 
-(require-and-exec 'uniquify 
+(require-and-exec 'uniquify
                   (setq uniquify-buffer-name-style 'reverse
                         uniquify-separator "/"
                         uniquify-after-kill-buffer-p t
@@ -37,6 +41,7 @@
         ".doc" ".ods" ".odt" ".pps" ".ppt"
         ))
 
+;; IDO
 (require-and-exec 'ido
                   (setq ido-enable-regexp t
                         ido-enable-dot-prefix t
@@ -65,6 +70,10 @@
                                             "_region_"
                                             )))
                   (setq ido-ignore-extensions t)
+                  (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
+                  (global-set-key (kbd "C-x M-b") 'ido-switch-buffer-other-window)
+                  (global-set-key (kbd "C-x C-d") 'ido-display-buffer)
+
                   (ido-mode t))
 
 (require-and-exec 'smex
@@ -89,7 +98,7 @@
 (global-linum-mode t)
 (show-paren-mode t)
 
-(defalias 'yes-or-no-p 'y-or-n-p)       ; don't make me type
+(defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'eb 'eval-buffer)
 (defalias 'er 'eval-region)
 
@@ -98,13 +107,27 @@
 (defalias 'bs 'bookmark-set)
 (defalias 'sb 'bookmark-save)
 
-(defalias 'sl 'sort-lines)
-(defalias 'dtw 'delete-trailing-whitespace)
+(mouse-avoidance-mode 'cat-and-mouse)
 
+(global-set-key (kbd "C-c y") 'bury-buffer)
+(global-set-key (kbd "C-M-h") 'backward-kill-word)
+
+(add-hook 'diff-mode
+          (lambda ()
+            (local-set-key (kbd "q") 'kill-this-buffer)))
+
+(global-set-key (kbd "C-c r") 'revert-buffer)
+
+(require-and-exec 'cofi-func
+                  (global-set-key (kbd "C-x e") 'eval-and-replace)
+                  (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
+                  )
+
+(define-key function-key-map (kbd "C-<tab>") [?\M-\t])
+
+;; enable functions
 (put 'narrow-to-defun 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
-
-(mouse-avoidance-mode 'cat-and-mouse)
 
 (provide 'cofi-ui)

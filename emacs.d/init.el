@@ -14,7 +14,6 @@
 
 (mapc #'load '(
             "cofi-ack"
-            "cofi-bindings"
             "cofi-buffer"
             "cofi-color"
             "cofi-column"

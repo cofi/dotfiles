@@ -31,7 +31,10 @@
                            nil
                          'fullboth)))
 
-(add-hook 'after-make-frame-functions 'fullscreen)
+(setq default-frame-alist (append '(
+                      (width . 90)
+                      (height . 50)
+                      ) default-frame-alist))
 
 (global-set-key (kbd "C-S-j") (lambda () (interactive) (swap-with 'down)))
 (global-set-key (kbd "C-S-k") (lambda () (interactive) (swap-with 'up)))
@@ -42,11 +45,6 @@
 (global-set-key (kbd "M-k") 'windmove-up)
 (global-set-key (kbd "M-h") 'windmove-left)
 (global-set-key (kbd "M-l") 'windmove-right)
-
-(global-set-key (kbd "M-1") 'delete-other-windows)
-(global-set-key (kbd "M-2") 'split-window-horizontally)
-(global-set-key (kbd "M-3") 'split-window-vertically)
-(global-set-key (kbd "M-4") 'delete-window)
 (global-set-key (kbd "M-o") 'other-window)
 
 (global-set-key (kbd "<f11>") 'smart-split)

@@ -1,5 +1,6 @@
 (require-and-exec 'auto-complete 
     (require 'auto-complete-config)
+    (require 'auto-complete-latex)
 
     (setq ac-fuzzy-enable t)
     (setq-default ac-auto-start 2)

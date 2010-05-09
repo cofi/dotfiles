@@ -73,6 +73,7 @@
                   (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
                   (global-set-key (kbd "C-x M-b") 'ido-switch-buffer-other-window)
                   (global-set-key (kbd "C-x C-d") 'ido-display-buffer)
+                  (global-set-key (kbd "C-x M-d") 'dired-other-window)
 
                   (ido-mode t))
 

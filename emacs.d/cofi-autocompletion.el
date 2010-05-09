@@ -1,46 +1,59 @@
 (require-and-exec 'auto-complete 
     (require 'auto-complete-config)
 
+    (setq ac-fuzzy-enable t)
+    (setq-default ac-auto-start 2)
     (define-key ac-complete-mode-map (kbd "C-l") 'ac-expand-common)
     (define-key ac-complete-mode-map (kbd "C-j") 'ac-next)
     (define-key ac-complete-mode-map (kbd "C-k") 'ac-previous)
     (define-key ac-complete-mode-map (kbd "ESC") 'keyboard-quit)
-    (setq-default ac-auto-start 2)
 
     (add-to-list 'ac-dictionary-directories "~/.emacs.d/completion-dicts")
 
     (mapc (lambda (mode)
             (funcall 'add-to-list 'ac-modes mode))
-          '(rst-mode
-            latex-mode))
+          '(
+            rst-mode
+            latex-mode
+            text-mode
+            ))
+    (defconst cofi-ac-default-sources
+      '(
+        ac-source-yasnippet
+        ac-source-abbrev
+        ac-source-dictionary
+        ac-source-words-in-same-mode-buffers
+        ac-source-words-in-buffer
+        ))
 
     (defun ac-common-setup ()
-      (append ac-sources '(
-                            ac-source-words-in-buffer
-                            ac-source-yasnippet
-                            )))
+      (mapc (lambda (source)
+              (add-to-list 'ac-sources source))
+            cofi-ac-default-sources))
 
     (defun ac-lisp-mode-setup ()
-      (append '(
-                ac-source-symbols
-                ac-source-functions
-                ac-source-variables
-                ac-source-features
-                )
-              'ac-sources))
+      (mapc (lambda (source)
+              (add-to-list 'ac-sources source))
+            '(
+              ac-source-symbols
+              ac-source-functions
+              ac-source-variables
+              ac-source-features
+              )))
 
     (add-hook 'emacs-lisp-mode-hook 'ac-lisp-mode-setup)
     (add-hook 'lisp-mode-hook 'ac-lisp-mode-setup)
 
     (defun ac-python-mode-setup ()
-      (append '(
-                ac-source-ropemacs
-                )
-              'ac-sources))
+      (mapc (lambda (source)
+              (add-to-list 'ac-sources source))
+            '(
+              ac-source-ropemacs
+              )))
 
     (add-hook 'python-mode-hook 'ac-python-mode-setup)
-
-    (ac-config-default)
-)
+    (add-hook 'auto-complete-mode-hook 'ac-common-setup)
+    (global-auto-complete-mode t)
+    )
 
 (provide 'cofi-autocompletion)

@@ -5,7 +5,7 @@
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
 (add-hook 'TeX-language-de-hook (lambda ()
-                                  (ispell-change-dictionary "de_DE-neu")))
+                                  (ispell-change-dictionary "de_DE")))
 
 (setq TeX-output-view-style '(
                               ("^pdf$" "." "okular %o")

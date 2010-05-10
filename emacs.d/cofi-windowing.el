@@ -24,12 +24,18 @@
           (smart-split-helper w2))))
   (smart-split-helper nil))
 
-(defun fullscreen (&optional f)
+(defun fullscreen-toggle (&optional f)
+  "Toggle given or current frame."
   (interactive)
   (set-frame-parameter f 'fullscreen
                        (if (frame-parameter f 'fullscreen)
                            nil
                          'fullboth)))
+
+(defun maximize (&optional f)
+  "Maximize given or current frame. Needs at least Emacs 23.2"
+  (interactive)
+  (set-frame-parameter f 'fullscreen 'maximized))
 
 (setq default-frame-alist (append '(
                       (width . 90)
@@ -47,7 +53,7 @@
 (global-set-key (kbd "M-l") 'windmove-right)
 (global-set-key (kbd "M-o") 'other-window)
 
-(global-set-key (kbd "<f11>") 'smart-split)
-(global-set-key (kbd "<f12>") 'fullscreen)
+(global-set-key (kbd "<f11>") 'maximize)
+(global-set-key (kbd "<f12>") 'fullscreen-toggle)
 
 (provide 'cofi-windowing)

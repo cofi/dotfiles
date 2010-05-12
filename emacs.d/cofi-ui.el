@@ -2,6 +2,15 @@
 (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+(require-and-exec 'diminish
+                  (eval-after-load "abbrev"
+                    '(diminish 'abbrev-mode "Ab"))
+                  (eval-after-load "yasnippet"
+                    '(diminish 'yas/minor-mode " Y"))
+                  (eval-after-load "autopair"
+                    '(diminish 'autopair-mode " p"))
+                  )
+
 (require-and-exec 'second-sel
                   (setq secondary-selection-ring-max 1000)
                   )

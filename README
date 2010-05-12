@@ -1,0 +1,13 @@
+External dependencies:
+  Emacs:
+    mandative:
+      `private.el` in loadpath (just remove line 14)
+  Zsh:
+    optional:
+      `$LOCALDIR/pre` - will be loaded before most of zsh config.
+      `$LOCALDIR/post` - will be loaded after zsh config.
+
+make [refresh] : Update byte-compiled Emacs files.
+make compile   : Compile all Emacs files.
+make deploy    : Deploy all files (using symbolic links).
+make all       : compile and deploy.

@@ -40,4 +40,22 @@
   (flyspell-mode 1)
   (ac-flyspell-workaround))
 
+(defun increment-number-at-point (&optional amount)
+  "Increment the number under point by `amount'"
+  (interactive "p")
+  (let ((num (number-at-point)))
+    (when (numberp num)
+      (let ((newnum (+ num amount))
+         (p (point)))
+    (save-excursion
+      (skip-chars-backward "-.0123456789")
+      (delete-region (point) (+ (point) (length (number-to-string num))))
+      (insert (number-to-string newnum)))
+    (goto-char p)))))
+
+(defun decrement-number-at-point (&optional amount)
+  (interactive "p")
+  "Decrement the number under point by `amount'"
+  (increment-number-at-point (- (abs amount))))
+
 (provide 'cofi-func)

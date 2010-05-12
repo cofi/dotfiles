@@ -131,6 +131,8 @@
 (require-and-exec 'cofi-func
                   (global-set-key (kbd "C-x e") 'eval-and-replace)
                   (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
+                  (global-set-key (kbd "<up>") 'increment-number-at-point)
+                  (global-set-key (kbd "<down>") 'decrement-number-at-point)
                   )
 
 (define-key function-key-map (kbd "C-<tab>") [?\M-\t])

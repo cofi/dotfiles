@@ -11,6 +11,7 @@
 
 (require 'cofi-util)
 (require 'cofi-vim)
+(require 'private)
 
 (mapc #'load '(
             "cofi-ack"
@@ -30,7 +31,6 @@
             "cofi-ui"
             "cofi-vc"
             "cofi-windowing"
-            "private"
             "cofi-autocompletion"
             "cofi-tab"
             ))
@@ -38,7 +38,6 @@
 (mapc #'require '(
                auto-dictionary
                redo
-               w3m-load
            ))
 
 (setq-default woman-use-own-frame nil

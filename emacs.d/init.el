@@ -11,7 +11,7 @@
 
 (require 'cofi-util)
 (require 'cofi-vim)
-(require 'private)
+(load "private" 'noerror)
 
 (mapc #'load '(
             "cofi-ack"

@@ -1,7 +1,7 @@
 External dependencies:
   Emacs:
-    mandative:
-      `private.el` in loadpath (just remove line 14)
+    optional:
+      `private.el` in loadpath
   Zsh:
     optional:
       `$LOCALDIR/pre` - will be loaded before most of zsh config.

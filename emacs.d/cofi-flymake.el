@@ -1,4 +1,8 @@
 (require-and-exec 'flymake
+  ;; check only after save 
+  (setq flymake-no-changes-timeout 9999
+        flymake-start-syntax-check-on-newline nil)
+
   (defun flymake-show-next-error ()
     "Shows next flymake error."
     (interactive)

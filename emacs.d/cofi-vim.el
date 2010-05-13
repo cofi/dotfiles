@@ -21,6 +21,8 @@
   (define-key viper-vi-basic-map (kbd "C-w o") 'other-window)
   (define-key viper-vi-basic-map (kbd "C-w 1") 'delete-other-windows)
   (define-key viper-vi-basic-map (kbd "C-w d") 'delete-window)
+  (define-key viper-vi-basic-map (kbd "C-w <return>") 'enlarge-window)
+  (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
 
   (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
   (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)

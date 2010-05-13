@@ -23,6 +23,7 @@
             "cofi-flymake"
             "cofi-haskell"
             "cofi-lisp"
+            "cofi-mail"
             "cofi-markers"
             "cofi-python"
             "cofi-snippets"

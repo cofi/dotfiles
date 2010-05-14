@@ -42,7 +42,7 @@
                         uniquify-ignore-buffers-re "^\\*"))
 
 (mapc (lambda (ext)
-        (add-to-list 'completion-ignored-extensions ext))
+        (push ext completion-ignored-extensions))
       '(
         ".pdf" ".dvi" ".djvu" ".ps"
         ".mov" ".mp4" ".ogv"

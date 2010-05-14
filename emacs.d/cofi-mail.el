@@ -9,6 +9,6 @@
   )
 
 ;; serve sup
-(add-to-list 'auto-mode-alist '("\.compose-mode$" . cofi-do-mail))
+(push '("\.compose-mode$" . cofi-do-mail) auto-mode-alist)
 
 (provide 'cofi-mail)

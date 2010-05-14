@@ -9,10 +9,10 @@
     (define-key ac-complete-mode-map (kbd "C-k") 'ac-previous)
     (define-key ac-complete-mode-map (kbd "ESC") 'keyboard-quit)
 
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/completion-dicts")
+    (push "~/.emacs.d/completion-dicts" ac-dictionary-directories)
 
     (mapc (lambda (mode)
-            (funcall 'add-to-list 'ac-modes mode))
+            (push mode ac-modes))
           '(
             rst-mode
             latex-mode
@@ -29,12 +29,13 @@
 
     (defun ac-common-setup ()
       (mapc (lambda (source)
-              (add-to-list 'ac-sources source))
+              (push source ac-sources))
             cofi-ac-default-sources))
 
     (defun ac-lisp-mode-setup ()
+      (ac-common-setup)
       (mapc (lambda (source)
-              (add-to-list 'ac-sources source))
+              (push source ac-sources))
             '(
               ac-source-symbols
               ac-source-functions
@@ -46,8 +47,9 @@
     (add-hook 'lisp-mode-hook 'ac-lisp-mode-setup)
 
     (defun ac-python-mode-setup ()
+      (ac-common-setup)
       (mapc (lambda (source)
-              (add-to-list 'ac-sources source))
+              (push source ac-sources))
             '(
               ac-source-ropemacs
               )))

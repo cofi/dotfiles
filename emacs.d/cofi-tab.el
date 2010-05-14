@@ -60,16 +60,4 @@ Otherwise, analyses point position and answers."
                      (region-end))
     (indent-for-tab-command)))
 
-(mapc (lambda (mode-hook)
-        (add-hook mode-hook (lambda ()
-                              (local-set-key (kbd "<tab>") 'smart-tab))
-                  ))
-      '(
-        latex-mode-hook
-        tex-mode-hook
-        python-mode-hook
-        emacs-lisp-mode-hook
-        lisp-mode-hook
-        ))
-
 (provide 'cofi-tab)

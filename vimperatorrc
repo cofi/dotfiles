@@ -18,6 +18,7 @@ set guioptions=NT
 set runtimepath=/home/cofi/.vimperator
 source! /home/cofi/.vimperatorrc.local
 colorscheme cofi
+set editor "emacsclient -c"
 
 let mapleader=","
 map <leader>n :bnext<CR>

@@ -121,6 +121,7 @@
 
 (global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
+(global-set-key (kbd "C-<backspace>") 'fixup-whitespace)
 
 (add-hook 'diff-mode
           (lambda ()

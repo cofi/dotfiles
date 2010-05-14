@@ -83,6 +83,10 @@
 
 (setq dired-dwim-target t)
 
+(setq default-major-mode (lambda ()
+                           (text-mode)
+                           (set-viper-state-in-major-mode)))
+
 (require-and-exec 'keychain-environment
                   (add-hook 'after-make-frame-functions
                             (lambda (frame)

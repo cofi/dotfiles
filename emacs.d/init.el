@@ -25,6 +25,7 @@
             "cofi-lisp"
             "cofi-mail"
             "cofi-markers"
+            "cofi-project"
             "cofi-python"
             "cofi-snippets"
             "cofi-term"

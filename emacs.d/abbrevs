@@ -55,15 +55,7 @@
 
 (define-abbrev-table 'special-mode-abbrev-table '(    ))
 
-(define-abbrev-table 'text-mode-abbrev-table '(    ("dsom" "Dear Sir or Madam," nil 1)
-    ("mfg" "Mit freundlichen Grüßen," nil 1)
-    ("r" "Regards," nil 1)
-    ("s" "Sincerely," nil 1)
-    ("sgdh" "Sehr geehrte Damen und Herren," nil 1)
-    ("sgf" "Sehr geehrte Frau" nil 1)
-    ("sgh" "Sehr geehrter Herr" nil 1)
-    ("vg" "Viele Grüße," nil 1)
-    ))
+(define-abbrev-table 'text-mode-abbrev-table '(      ))
 
 (define-abbrev-table 'vc-dir-mode-abbrev-table '(    ))
 

@@ -1,4 +1,0 @@
-#contributor : Shane Celis (shane (at) gnufoo (dot) org)
-#name : beg - begin a one line tag
-# --
-\\${1:section}{$2}$0

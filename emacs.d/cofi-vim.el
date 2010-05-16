@@ -38,8 +38,9 @@
   (define-key viper-vi-basic-map (kbd "N") 'isearch-repeat-backward)
   (define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
   (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
-
   (push '("nohighlight" (isearch-done)) ex-token-alist)
+
+  (define-key viper-insert-basic-map (kbd "C-d") nil) ; conflicts with yasnippet
   )
 
 (provide 'cofi-vim)

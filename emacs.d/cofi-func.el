@@ -17,9 +17,8 @@
                           x))
                   recentf-list))
          (filename-list
-          (remove ".ido.last"
-                  (remove-duplicates (mapcar #'car file-assoc-list)
-                                     :test #'string=)))
+          (remove-duplicates (mapcar #'car file-assoc-list)
+                             :test #'string=))
          (filename (ido-completing-read "Choose recent file: "
                                         filename-list
                                         nil

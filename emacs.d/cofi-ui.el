@@ -25,9 +25,15 @@
                   (global-set-key (kbd "C-x m") 'idomenu))
 
 (require-and-exec 'recentf
-      (setq recentf-auto-cleanup 'never)
-      (recentf-mode t)
-)
+                  (setq recentf-auto-cleanup 'never)
+                  (recentf-mode t)
+                  (setq recentf-exclude '(
+                                          "\.recentf"
+                                          "\.ido\.last"
+                                          "coficore-sh"
+                                          "hithhiker-sh"
+                                          ))
+                  )
 
 (require-and-exec 'sml-modeline
                   (sml-modeline-mode t))

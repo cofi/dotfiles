@@ -39,7 +39,7 @@
                   (sml-modeline-mode t))
 
 (require-and-exec 'highlight-parentheses
-                  (highlight-parentheses-mode t))
+                  (add-hook 'find-file-hook 'highlight-parentheses-mode))
 
 (require-and-exec 'uniquify
                   (setq uniquify-buffer-name-style 'reverse

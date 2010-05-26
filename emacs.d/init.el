@@ -83,9 +83,7 @@
 (setq auto-save-default nil)
 
 (setq dired-dwim-target t)
-(eval-after-load "dired"
-  (add-hook 'dired-mode-hook 'auto-revert-mode)
-  )
+(add-hook 'dired-mode-hook 'auto-revert-mode)
 
 (setq default-major-mode (lambda ()
                            (text-mode)

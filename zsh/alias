@@ -33,11 +33,11 @@ alias rmr='nocorrect rm -r'
 alias p-='popd'
 alias pd='pushd'
 
+alias open='kde-open 2&> /dev/null'
+
 #Globbing sucks with git's revision modifiers
 alias git='noglob git'
 alias g='git'
-
-alias -s {ps,pdf}=silent_okular
 
 #color grep
 alias grep='grep --color=auto'

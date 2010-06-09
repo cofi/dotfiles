@@ -132,10 +132,6 @@ dcp() {
     }
 }
 
-silent_okular() {
-    okular $1 2&> /dev/null &
-}
-
 wiki() {
     # see https://dgl.cx/2008/11/wpdns-pres/
     dig +short txt $1.wp.dg.cx

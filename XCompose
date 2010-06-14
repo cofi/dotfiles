@@ -46,7 +46,7 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 
 <Multi_key> <m> <A>     : "∀" U2200 # FOR ALL
 <Multi_key> <m> <E>     : "∃" U2203 # THERE EXISTS
-<Multi_key> <m> <n>     : "¬"  U00AC # NOT
+<Multi_key> <m> <exclam> : "¬"  U00AC # NOT
 <Multi_key> <m> <a>     : "∧" U2227 # AND
 <Multi_key> <m> <o>     : "∨" U2228 # OR
 <Multi_key> <m> <x> : "⊕" U2295 # XOR

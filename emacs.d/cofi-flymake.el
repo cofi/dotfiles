@@ -3,19 +3,17 @@
   (setq flymake-no-changes-timeout 9999
         flymake-start-syntax-check-on-newline nil)
 
-  (defun flymake-show-next-error ()
-    "Shows next flymake error."
-    (interactive)
-    (flymake-goto-next-error)
-    (flymake-display-err-menu-for-current-line))
+  (defun my-flymake-show-help ()
+    "Display flymake message at point.
+Useful in a tty without mouse-over.
+Intended to be run from a local `post-command-hook'."
+    (when (get-char-property (point) 'flymake-overlay)
+      (let ((help (get-char-property (point) 'help-echo)))
+        (if help (message "%s" help)))))
 
-  (defun flymake-show-prev-error ()
-    "Shows previous flymake error."
-    (interactive)
-    (flymake-goto-prev-error)
-    (flymake-display-err-menu-for-current-line))
-
-  (global-set-key (kbd "<f5>") 'flymake-show-prev-error)
-  (global-set-key (kbd "<f6>") 'flymake-show-next-error))
+  (add-hook 'flymake-mode-hook
+            '(lambda ()
+               (add-hook 'post-command-hook 'my-flymake-show-help nil t)))
+  )
 
 (provide 'cofi-flymake)

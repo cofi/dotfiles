@@ -54,6 +54,9 @@
   (global-set-key (kbd "C-c p d") 'project-dired)
   (global-set-key (kbd "C-c p t") 'project-tags)
 
-  (load "projects" 'noerror)
+  (when (boundp 'cofi-project-files)
+    (mapc (lambda (filename)
+            (load filename 'noerror))
+            cofi-project-files))
   )
 (provide 'cofi-project)

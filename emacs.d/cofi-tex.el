@@ -7,11 +7,6 @@
 (add-hook 'TeX-language-de-hook (lambda ()
                                   (ispell-change-dictionary "de_DE")))
 
-(setq TeX-output-view-style '(
-                              ("^pdf$" "." "okular %o")
-                              ("^dvi$" "." "okular %o")
-                              ))
-
 (setq TeX-auto-save t
       TeX-parse-self t)
 

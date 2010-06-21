@@ -69,4 +69,18 @@
        (progn (goto-char min) (line-beginning-position))
        (progn (goto-char max) (line-end-position))))))
 
+;; Relying on cofi-dir-alias-pairs (list of pairs: ("alias" . "dir")
+;; and cofi-dir-aliases (list of aliases)
+(defun cofi-cd-alias (alias)
+  "Change directory to aliased one."
+  (interactive (list (ido-completing-read "Alias: " cofi-dir-aliases nil t)))
+  (let ((dir (cdr (assoc alias cofi-dir-alias-pairs))))
+    (cd dir)))
+
+(defun cofi-dired-alias (alias)
+  "Open dired on aliased directory."
+  (interactive (list (ido-completing-read "Alias: " cofi-dir-aliases nil t)))
+  (let ((dir (cdr (assoc alias cofi-dir-alias-pairs))))
+    (dired dir)))
+
 (provide 'cofi-func)

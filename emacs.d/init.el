@@ -15,6 +15,7 @@
 
 (mapc #'load '(
             "cofi-ack"
+            "cofi-artist"
             "cofi-buffer"
             "cofi-color"
             "cofi-column"

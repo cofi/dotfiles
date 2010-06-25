@@ -78,12 +78,6 @@
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
 (setq-default tab-width 4)
 
-(setq default-abbrev-mode t)
-(setq abbrev-file-name "~/.emacs.d/abbrevs")
-(setq save-abbrevs t)
-(quietly-read-abbrev-file)
-(quietly-read-abbrev-file "~/.emacs.d/private_abbrevs")
-
 (setq dabbrev-case-replace nil)
 
 (setq backup-directory-alist '(("" . "~/.emacs-backups")))

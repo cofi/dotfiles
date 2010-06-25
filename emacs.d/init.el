@@ -1,3 +1,7 @@
+(defconst startup-time
+  (current-time)
+  "Time Emacs started.")
+
 (mapc (lambda (dir)
              (add-to-list 'load-path dir)
              )
@@ -102,3 +106,6 @@
 (transient-mark-mode t)
 
 (color-theme-cofi)
+
+(message "Time needed to load: %d seconds."
+         (time-to-seconds (time-since startup-time)))

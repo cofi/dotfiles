@@ -108,6 +108,8 @@
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))
 
+(setq dired-recursive-copies 'always)
+
 (display-time-mode t)
 (global-font-lock-mode t)
 (global-hl-line-mode t)
@@ -148,5 +150,6 @@
 (put 'narrow-to-defun 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)
 
 (provide 'cofi-ui)

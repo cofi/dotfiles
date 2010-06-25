@@ -47,13 +47,4 @@
 (global-set-key (kbd "C-S-h") (lambda () (interactive) (swap-with 'left)))
 (global-set-key (kbd "C-S-l") (lambda () (interactive) (swap-with 'right)))
 
-(global-set-key (kbd "M-j") 'windmove-down)
-(global-set-key (kbd "M-k") 'windmove-up)
-(global-set-key (kbd "M-h") 'windmove-left)
-(global-set-key (kbd "M-l") 'windmove-right)
-(global-set-key (kbd "M-o") 'other-window)
-
-(global-set-key (kbd "<f11>") 'maximize)
-(global-set-key (kbd "<f12>") 'fullscreen-toggle)
-
 (provide 'cofi-windowing)

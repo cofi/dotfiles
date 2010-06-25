@@ -21,6 +21,8 @@
     (define-key viper-vi-basic-map (kbd "C-w o") 'other-window)
     (define-key viper-vi-basic-map (kbd "C-w 1") 'delete-other-windows)
     (define-key viper-vi-basic-map (kbd "C-w d") 'delete-window)
+    (define-key viper-vi-basic-map (kbd "C-w m") 'maximize)
+    (define-key viper-vi-basic-map (kbd "C-w f") 'fullscreen-toggle)
     (define-key viper-vi-basic-map (kbd "C-w <return>") 'enlarge-window)
     (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
     )

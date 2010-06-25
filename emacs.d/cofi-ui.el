@@ -3,8 +3,6 @@
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 (require-and-exec 'diminish
-                  (eval-after-load "abbrev"
-                    '(diminish 'abbrev-mode "Ab"))
                   (eval-after-load "yasnippet"
                     '(diminish 'yas/minor-mode " Y"))
                   (eval-after-load "autopair"
@@ -36,6 +34,7 @@
                   )
 
 (require-and-exec 'sml-modeline
+                  (setq sml-modeline-len  8)
                   (sml-modeline-mode t))
 
 (require-and-exec 'highlight-parentheses
@@ -105,6 +104,7 @@
 (setq frame-title-format "emacs %b - <%f>"
       icon-title-format "emacs %b")
 
+(setq battery-mode-line-format " [%L %p%%]")
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))
 

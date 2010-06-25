@@ -28,6 +28,7 @@
             "cofi-markers"
             "cofi-project"
             "cofi-python"
+            "cofi-org"
             "cofi-snippets"
             "cofi-term"
             "cofi-tex"

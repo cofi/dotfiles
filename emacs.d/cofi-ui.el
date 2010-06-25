@@ -135,7 +135,7 @@
           (lambda ()
             (local-set-key (kbd "q") 'kill-this-buffer)))
 
-(global-set-key (kbd "C-c r") 'revert-buffer)
+(global-set-key (kbd "C-c b") 'revert-buffer)
 
 (require-and-exec 'cofi-func
   (global-set-key (kbd "C-x f") 'recentf-ido-find-file)

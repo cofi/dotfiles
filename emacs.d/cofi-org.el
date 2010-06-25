@@ -17,6 +17,7 @@
             (ac-flyspell-mode)))
 
 ;; Remember
+(org-remember-insinuate)
 (setq remember-data-file (concat org-directory "remember.org"))
 (global-set-key (kbd "C-c r") 'org-remember)
 

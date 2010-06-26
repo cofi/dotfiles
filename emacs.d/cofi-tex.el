@@ -4,6 +4,13 @@
 (add-hook 'TeX-mode-hook 'ac-flyspell-prog-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
+(require-and-exec 'cdlatex
+                  (remove-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+                  (define-key cdlatex-mode-map "\t" nil)
+                  (define-key cdlatex-mode-map (kbd "C-<tab>") 'cdlatex-tab)
+                  (add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t)))
+                  (add-hook 'LaTeX-mode-hook 'cdlatex-mode))
+
 (add-hook 'TeX-language-de-hook (lambda ()
                                   (ispell-change-dictionary "de_DE")))
 (setq TeX-output-view-style '(

@@ -7,14 +7,19 @@
       (if (file-directory-p "~/Org")
           "~/Org/"
         "~/"))
-(setq org-hide-leading-stars t)
 
 (add-hook 'org-mode-hook
           (lambda ()
             (turn-on-iimage-mode)
             (local-set-key (kbd "M-n") 'outline-next-visible-heading)
             (local-set-key (kbd "M-p") 'outline-previous-visible-heading)
-            (ac-flyspell-mode)))
+            (ac-flyspell-mode)
+            (org-indent-mode)))
+
+;; Agenda
+(setq org-agenda-include-diary t)
+(setq org-agenda-skip-unavailable-files t)
+(setq org-agenda-files cofi-agenda-files)
 
 ;; Remember
 (org-remember-insinuate)

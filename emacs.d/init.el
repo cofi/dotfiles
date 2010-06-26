@@ -21,6 +21,7 @@
             "cofi-ack"
             "cofi-artist"
             "cofi-buffer"
+            "cofi-calendar"
             "cofi-color"
             "cofi-column"
             "cofi-desktop"

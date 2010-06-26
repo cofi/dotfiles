@@ -144,6 +144,10 @@
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
   )
 
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
+
 (define-key function-key-map (kbd "C-<tab>") [?\M-\t])
 
 ;; enable functions

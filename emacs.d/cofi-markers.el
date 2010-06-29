@@ -28,6 +28,8 @@
                     (progn
                       (clean-marker-annotations)
                       (annotate-markers)))
+                  
+                  (add-hook 'after-save-hook 'refresh-marker-annotations)
 
                   ;; fringe markers for flymake
                   (require-and-exec 'flymake

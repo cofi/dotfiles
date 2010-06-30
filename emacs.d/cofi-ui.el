@@ -149,6 +149,8 @@
 (define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
 
 (define-key function-key-map (kbd "C-<tab>") [?\M-\t])
+(global-set-key (kbd "<f12>") (lambda ()
+                                (interactive) (switch-to-buffer "*scratch*")))
 
 ;; enable functions
 (put 'narrow-to-defun 'disabled nil)

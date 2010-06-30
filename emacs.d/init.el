@@ -35,7 +35,6 @@
             "cofi-python"
             "cofi-org"
             "cofi-snippets"
-            "cofi-term"
             "cofi-tex"
             "cofi-ui"
             "cofi-vc"

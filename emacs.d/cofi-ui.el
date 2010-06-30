@@ -46,6 +46,13 @@
                         uniquify-after-kill-buffer-p t
                         uniquify-ignore-buffers-re "^\\*"))
 
+(require-and-exec 'multi-term
+                  (global-set-key (kbd "<f1>") 'multi-term)
+                  (global-set-key (kbd "M-<f1>") 'multi-term-next)
+                  )
+
+(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
+
 (mapc (lambda (ext)
         (push ext completion-ignored-extensions))
       '(

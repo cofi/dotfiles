@@ -139,8 +139,8 @@
 
 (require-and-exec 'cofi-func
   (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
-  (global-set-key (kbd "<up>") 'increment-number-at-point)
-  (global-set-key (kbd "<down>") 'decrement-number-at-point)
+  (global-set-key (kbd "C-+") 'increment-number-at-point)
+  (global-set-key (kbd "C--") 'decrement-number-at-point)
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
   )
 

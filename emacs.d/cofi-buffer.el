@@ -36,6 +36,9 @@
                    (mode . magit-mode)
                    (name . "\\*magit-.*\\*")
                    ))
+                 ("VC"
+                   (name . "\\*vc.*\\*")
+                   ))
                  ("Emacs"
                   (name . "\\*.*\\*"))
                  ))))

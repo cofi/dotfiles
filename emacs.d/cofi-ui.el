@@ -165,4 +165,8 @@
 (put 'narrow-to-page 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 
+;; external programs
+(global-set-key (kbd "C-c f") 'browse-url-firefox)
+(setq browse-url-firefox-new-window-is-tab t)
+
 (provide 'cofi-ui)

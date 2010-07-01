@@ -22,6 +22,7 @@
       org-agenda-files cofi-agenda-files
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
+      org-agenda-start-on-weekday nil
       )
 
 ;; ToDo

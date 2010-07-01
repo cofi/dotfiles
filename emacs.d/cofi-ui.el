@@ -159,6 +159,12 @@
 (global-set-key (kbd "<f12>") (lambda ()
                                 (interactive) (switch-to-buffer "*scratch*")))
 
+(global-set-key (kbd "C-c d") (make-hippie-expand-function
+                               '(
+                                 try-complete-file-name-partially
+                                 try-complete-file-name
+                                 )))
+
 ;; enable functions
 (put 'narrow-to-defun 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

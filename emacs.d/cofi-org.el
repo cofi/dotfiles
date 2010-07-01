@@ -17,13 +17,50 @@
             (org-indent-mode)))
 
 ;; Agenda
-(setq org-agenda-include-diary t)
-(setq org-agenda-skip-unavailable-files t)
-(setq org-agenda-files cofi-agenda-files)
+(setq org-agenda-include-diary t
+      org-agenda-skip-unavailable-files t
+      org-agenda-files cofi-agenda-files
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-scheduled-if-done t
+      )
+
+;; ToDo
+(setq org-todo-keywords '((sequence
+                          "TODO"
+                          "STARTED"
+                          "WAITING"
+                          "DEFERRED"
+                          "|"           ; Separator, no more action necessary
+                          "DELEGATED"
+                          "CANCELLED"
+                          "DONE"
+                          )))
+(eval-after-load "org"
+  '(progn
+     (define-prefix-command 'org-todo-state-map)
+
+     (define-key org-mode-map (kbd "C-c s") 'org-todo-state-map)
+     (define-key org-todo-state-map "x"
+       (lambda () (interactive) (org-todo "CANCELLED")))
+     (define-key org-todo-state-map "d"
+       (lambda () (interactive) (org-todo "DONE")))
+     (define-key org-todo-state-map "f"
+       (lambda () (interactive) (org-todo "DEFERRED")))
+     (define-key org-todo-state-map "l"
+       (lambda () (interactive) (org-todo "DELEGATED")))
+     (define-key org-todo-state-map "s"
+       (lambda () (interactive) (org-todo "STARTED")))
+     (define-key org-todo-state-map "w"
+       (lambda () (interactive) (org-todo "WAITING")))
+     ))
+
+;; Tbl
+(eval-after-load "org-table"
+  '(define-key orgtbl-mode-map (kbd "C-c t") 'orgtbl-insert-radio-table))
 
 ;; Remember
 (org-remember-insinuate)
-(setq remember-data-file (concat org-directory "remember.org"))
+(setq org-default-notes-file (concat org-directory "remember.org"))
 (global-set-key (kbd "C-c r") 'org-remember)
 
 ;; Exporting
@@ -47,9 +84,11 @@
 
 (setq org-export-latex-listings t)
 
-(require-and-exec 'org-publish
-                  (add-to-list 'org-export-latex-packages-alist '("" "listings"))
-                  (add-to-list 'org-export-latex-packages-alist '("" "xcolor"))
-                  )
+(eval-after-load "org-publish"
+  '(progn
+     (add-to-list 'org-export-latex-packages-alist '("" "listings"))
+     (add-to-list 'org-export-latex-packages-alist '("" "xcolor"))
+     )
+  )
 
 (provide 'cofi-org)

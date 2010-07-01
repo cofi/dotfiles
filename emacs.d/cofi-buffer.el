@@ -41,8 +41,7 @@
                    ))
                  ("Emacs"
                   (name . "\\*.*\\*"))
-                 ))))
-
+                 )))
 
   (require-and-exec 'ibuffer-git
     (setq ibuffer-formats

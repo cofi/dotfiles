@@ -67,8 +67,8 @@
                   (setq ido-enable-regexp t
                         ido-enable-dot-prefix t
                         ido-enable-flex-matching t
-                        ido-use-url-at-point t
-                        ido-use-filename-at-point t
+                        ido-use-url-at-point nil
+                        ido-use-filename-at-point nil
                         ido-everywhere t)
                   (setq ido-ignore-buffers (append
                                           ido-ignore-buffers

@@ -1,5 +1,5 @@
 (setq initial-scratch-message
-      "Have a lot of fun!")
+      ";; Have a lot of fun!")
 (defconst startup-time
   (current-time)
   "Time Emacs started.")

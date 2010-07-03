@@ -74,7 +74,7 @@
 
 ;; Spelling
 (setq-default ispell-program-name "aspell")
-(setq-default ispell-default-dictionary "en_US")
+(setq-default ispell-dictionary "de_DE")
 
 ;; tab settings
 (setq-default indent-tabs-mode nil)     ; no nasty tabs i say!

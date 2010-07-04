@@ -6,4 +6,4 @@ NEW=$2
 
 SUFFIX=${OLD##*.}
 
-mv ${OLD} ${NEW}${SUFFIX}
+mv ${OLD} ${NEW}.${SUFFIX}

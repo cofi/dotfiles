@@ -17,6 +17,9 @@ alias ta='tmux attach'
 alias v='vim'
 alias sv='sudo vim'
 
+alias ec='emacsclient'
+alias ecc='emacsclient -c'
+
 alias ipy='ipython'
 alias bpy='bpython'
 alias py='python'

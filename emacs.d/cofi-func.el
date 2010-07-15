@@ -31,12 +31,14 @@
   "Activate Flyspell prog mode and call ac workaround."
   (interactive)
   (flyspell-prog-mode)
+  (auto-complete-mode 1)
   (ac-flyspell-workaround))
 
 (defun ac-flyspell-mode ()
   "Activate Flyspell mode and call ac workaround."
   (interactive)
   (flyspell-mode 1)
+  (auto-complete-mode 1)
   (ac-flyspell-workaround))
 
 (defun increment-number-at-point (&optional amount)

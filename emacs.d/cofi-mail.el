@@ -9,7 +9,7 @@
   (mail-text))
 
 ;; serve sup
-(push '("\.compose-mode$" . cofi-do-mail) auto-mode-alist)
-(push '("\.reply-mode$" . cofi-do-mail) auto-mode-alist)
+(push '("\\(compose\\|forward\\|reply\\|resume\\)-mode$" . cofi-do-mail)
+      auto-mode-alist)
 
 (provide 'cofi-mail)

@@ -13,6 +13,10 @@
             (turn-on-iimage-mode)
             (local-set-key (kbd "M-n") 'outline-next-visible-heading)
             (local-set-key (kbd "M-p") 'outline-previous-visible-heading)
+            (local-set-key (kbd "C-M-<return>") (lambda ()
+                                                  (interactive)
+                                                  (end-of-line)
+                                                  (org-meta-return)))
             (ac-flyspell-mode)
             (org-indent-mode)))
 

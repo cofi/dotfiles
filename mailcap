@@ -1,1 +1,2 @@
-text/html; /usr/bin/elinks '%s'
+text/html; /usr/bin/w3m '%s'
+image/jpeg; /usr/bin/gwenview '%s'

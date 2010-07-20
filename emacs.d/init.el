@@ -1,5 +1,6 @@
 (setq initial-scratch-message
-      ";; Have a lot of fun!")
+      ";; Have a lot of fun!\n")
+
 (defconst startup-time
   (current-time)
   "Time Emacs started.")
@@ -7,11 +8,13 @@
 (mapc (lambda (dir)
              (add-to-list 'load-path dir)
              )
-      '("~/.elisp"
+      '(
+        "~/.elisp"
         "~/.elisp/auto-complete"
         "~/.elisp/haskell-mode"
         "~/.elisp/magit"
-        "~/.emacs.d" ))
+        "~/.emacs.d"
+        ))
 
 (defvar hostname (substring (shell-command-to-string "hostname") 0 -1))
 

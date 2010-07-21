@@ -1,5 +1,5 @@
 command! -nargs=* d tabopen https://duckduckgo.com/?q=<args>&v=
-command! -nargs=* g tabopen http://www.google.de/search?q=<args>
+command! -nargs=* g tabopen https://encrypted.google.com/search?q=<args>
 command! py tabopen http://python.org
 command! -nargs=1 pydoc tabopen http://docs.python.org/<args>
 command! -nargs=1 pylib tabopen http://docs.python.org/library/<args>.html

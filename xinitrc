@@ -4,7 +4,7 @@ xrdb -merge .Xresources
 
 urxvtd -q -f -o & 
 
-[ -e ~/bin_local/xinit] && ~/.bin_local/xinit
+[ -e ~/bin_local/xinit.local.sh ] && ~/.bin_local/xinit.local.sh
 
 export GTK_IM_MODULE=xim
 export QT_IM_MODULE=xim

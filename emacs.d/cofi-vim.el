@@ -8,8 +8,7 @@
   (require-and-exec 'goto-last-change
      (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))
 
-  (define-key viper-insert-global-user-map (kbd "C-<return>")
-                                           'viper-exit-insert-state)
+  (define-key viper-insert-global-user-map (kbd "jk") 'viper-exit-insert-state)
   (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
 
   (require-and-exec 'vimpulse

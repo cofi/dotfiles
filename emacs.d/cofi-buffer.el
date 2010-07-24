@@ -22,6 +22,13 @@
                   (mode . dired-mode))
                  ("Org"
                   (mode . org-mode))
+                 ("Wanderlust"
+                  (or
+                   (mode . wl-folder-mode)
+                   (mode . wl-summary-mode)
+                   (name . "SMTP")
+                   )
+                  )
                  ("Terminals"
                   (mode . term-mode))
                  ("Shells"

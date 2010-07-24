@@ -167,6 +167,10 @@
                                  try-complete-file-name
                                  )))
 
+(autoload 'ack-same "full-ack" nil t)
+(autoload 'ack "full-ack" nil t)
+(setq ack-prompt-for-directory 'unless-guessed)
+
 ;; enable functions
 (put 'narrow-to-defun 'disabled nil)
 (put 'narrow-to-region 'disabled nil)

@@ -23,7 +23,6 @@
 (load "private" 'noerror)
 
 (mapc #'load '(
-            "cofi-ack"
             "cofi-artist"
             "cofi-buffer"
             "cofi-calendar"

@@ -80,4 +80,6 @@
 (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
 (global-set-key (kbd "C-c c") 'calendar)
 
+(setq diary-file "~/Documents/diary")
+
 (provide 'cofi-calendar)

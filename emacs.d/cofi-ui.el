@@ -18,9 +18,8 @@
 (require-and-exec 'magit
                   (global-set-key (kbd "C-c i") 'magit-status))
 
-(global-unset-key (kbd "C-x m"))
 (require-and-exec 'idomenu
-                  (global-set-key (kbd "C-x m") 'idomenu))
+                  (global-set-key (kbd "C-c m") 'idomenu))
 
 (require-and-exec 'recentf
                   (setq recentf-auto-cleanup 'never)

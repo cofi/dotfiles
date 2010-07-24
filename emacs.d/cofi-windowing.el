@@ -37,11 +37,6 @@
   (interactive)
   (set-frame-parameter f 'fullscreen 'maximized))
 
-(setq default-frame-alist (append '(
-                      (width . 90)
-                      (height . 50)
-                      ) default-frame-alist))
-
 (global-set-key (kbd "C-S-j") (lambda () (interactive) (swap-with 'down)))
 (global-set-key (kbd "C-S-k") (lambda () (interactive) (swap-with 'up)))
 (global-set-key (kbd "C-S-h") (lambda () (interactive) (swap-with 'left)))

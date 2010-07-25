@@ -69,6 +69,20 @@
 (eval-after-load "org-table"
   '(define-key orgtbl-mode-map (kbd "C-c t") 'orgtbl-insert-radio-table))
 
+;; Appt
+(setq
+  appt-message-warning-time 15 ;; warn 15 min in advance
+  appt-display-mode-line t
+  appt-display-format 'window)
+(appt-activate 1)
+
+(setq appt-disp-window-function
+      (lambda (min-to-app new-time msg)
+        (send-notification msg
+                           (format "Appointment in %s minutes" min-to-app))
+        ))
+(add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
+
 ;; Remember
 (org-remember-insinuate)
 (setq org-default-notes-file (concat org-directory "remember.org"))

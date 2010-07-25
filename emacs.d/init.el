@@ -97,7 +97,8 @@
 (require-and-exec 'keychain-environment
                   (add-hook 'after-make-frame-functions
                             (lambda (frame)
-                              (funcall 'refresh-keychain-environment))))
+                              (funcall 'refresh-keychain-environment)))
+                  (add-hook 'after-init-hook 'refresh-keychain-environment))
 
 (require-and-exec 'autopair
                   (autopair-global-mode t))

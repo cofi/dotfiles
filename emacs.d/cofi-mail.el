@@ -13,12 +13,6 @@
 (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
 (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
 
-(defun cofi-wl-frame ()
-  "Start wl and set frame title."
-  (set-frame-size (selected-frame) 150 100)
-  (setq frame-title-format "Wanderlust Mail")
-  (wl))
-
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"
   (interactive)

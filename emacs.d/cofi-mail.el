@@ -13,6 +13,11 @@
 (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
 (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
 
+(autoload 'trivial-cite "tc" t t)
+(add-hook 'mail-citation-hook 'trivial-cite)
+
+(setq tc-make-attribution (function tc-simple-attribution-kai))
+
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"
   (interactive)

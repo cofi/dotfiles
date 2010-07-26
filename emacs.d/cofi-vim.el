@@ -25,6 +25,9 @@
     (define-key viper-vi-basic-map (kbd "C-w f") 'fullscreen-toggle)
     (define-key viper-vi-basic-map (kbd "C-w <return>") 'enlarge-window)
     (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
+    (define-key viper-vi-basic-map (kbd ",") (make-sparse-keymap))
+    (define-key viper-vi-basic-map (kbd ",e") 'ido-find-file)
+    (define-key viper-vi-basic-map (kbd ",d") 'dired-jump)
     )
 
   ;; fix viper binding shortcomings

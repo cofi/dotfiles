@@ -9,4 +9,11 @@
     (global-set-key (kbd "M-RET") 'yas/expand)
     )
 
+(eval-after-load "org"
+  (add-hook 'org-mode-hook
+              (lambda ()
+                 (setq yas/fallback-behavior
+                       '(apply org-cycle))
+                 (local-set-key [tab] 'yas/expand))))
+
 (provide 'cofi-snippets)

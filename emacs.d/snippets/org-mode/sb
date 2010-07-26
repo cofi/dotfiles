@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# key: sb
+#name : #+srcname:..#+begin_src...#+end_src
+# expand-env: ((yas/indent-line 'fixed) (yas/wrap-around-region 'nil))
+# --
+#+srcname: ${1:name}
+#+begin_src ${2:language} $3
+  $0
+#+end_src

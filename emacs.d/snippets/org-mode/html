@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# key: html
+#name : HTML
+#contributor : Rick Moynihan <rick@sourcesmouth.co.uk>
+# --
+#+BEGIN_HTML
+${0}
+#+END_HTML

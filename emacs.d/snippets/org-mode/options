@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# key: options
+#name : OPTIONS
+#contributor : Rick Moynihan <rick@sourcesmouth.co.uk>
+# --
+#+OPTIONS: ${0}
+

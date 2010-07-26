@@ -27,6 +27,8 @@
     (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
     (define-key viper-vi-basic-map (kbd ",") (make-sparse-keymap))
     (define-key viper-vi-basic-map (kbd ",e") 'ido-find-file)
+    (define-key viper-vi-basic-map (kbd ",w") 'save-buffer)
+    (define-key viper-vi-basic-map (kbd ",W") 'save-some-buffers)
     (define-key viper-vi-basic-map (kbd ",d") 'dired-jump)
     )
 

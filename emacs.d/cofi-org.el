@@ -22,9 +22,10 @@
 
 (eval-after-load 'viper
   '(add-hook 'org-mode-hook
-            (define-key viper-insert-local-user-map (kbd "M-h") 'org-metaleft)
-            (define-key viper-insert-local-user-map (kbd "M-l") 'org-metaright)
-            ))
+             (lambda ()
+               (define-key viper-insert-local-user-map (kbd "M-h") 'org-metaleft)
+               (define-key viper-insert-local-user-map (kbd "M-l") 'org-metaright)
+               )))
 
 ;; Agenda
 (setq org-agenda-include-diary t

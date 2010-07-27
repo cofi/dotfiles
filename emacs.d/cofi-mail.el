@@ -1,11 +1,3 @@
-(defun cofi-do-mail ()
-  (interactive)
-  (set-buffer-modified-p nil)
-  (setq make-backup-files nil)
-  (turn-on-auto-fill)
-  (setq fill-column 72)
-  (ac-flyspell-mode))
-
 (when (file-exists-p "/usr/local/share/emacs/site-lisp/wl/")
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/wl/"))
 

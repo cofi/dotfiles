@@ -40,4 +40,32 @@
 (add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
 (add-hook 'wl-mail-send-pre-hook 'mail-subject-check)
 
+;; from http://box.matto.nl/wanderlustgpg.html
+(require-and-exec 'mailcrypt
+   (add-hook 'wl-summary-mode-hook 'mc-install-read-mode)
+   (add-hook 'wl-mail-setup-hook 'mc-install-write-mode)
+
+   (defun mc-wl-verify-signature ()
+     (interactive)
+     (save-window-excursion
+       (wl-summary-jump-to-current-message)
+       (mc-verify)))
+
+   (defun mc-wl-decrypt-message ()
+     (interactive)
+     (save-window-excursion
+       (wl-summary-jump-to-current-message)
+       (let ((inhibit-read-only t))
+         (mc-decrypt))))
+
+   (setq mc-modes-alist
+         (append
+          (quote
+           ((wl-draft-mode (encrypt . mc-encrypt-message)
+                           (sign . mc-sign-message))
+            (wl-summary-mode (decrypt . mc-wl-decrypt-message)
+                             (verify . mc-wl-verify-signature))))
+          mc-modes-alist))
+   )
+
 (provide 'cofi-mail)

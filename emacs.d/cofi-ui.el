@@ -56,6 +56,7 @@
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (eldoc-add-command 'autopair-insert-opening)
+  (diminish 'eldoc-mode " ED")
   )
 
 (mapc (lambda (ext)

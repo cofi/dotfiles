@@ -107,4 +107,5 @@ export PAGER=vimpager
 
 if [[ -z "$SSH_CONNECTION" ]] {
 	source ~/.keychain/$HOST-sh
+    source ~/.keychain/$HOST-sh-gpg
 }

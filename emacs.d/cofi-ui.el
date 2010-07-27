@@ -50,6 +50,9 @@
                   (global-set-key (kbd "M-<f1>") 'multi-term-next)
                   )
 
+(require-and-exec 'shell-command
+                  (shell-command-completion-mode))
+
 (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
 (require-and-exec 'eldoc

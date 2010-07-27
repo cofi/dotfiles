@@ -29,7 +29,6 @@
             "cofi-color"
             "cofi-column"
             "cofi-desktop"
-            "cofi-eldoc"
             "cofi-flymake"
             "cofi-haskell"
             "cofi-lisp"

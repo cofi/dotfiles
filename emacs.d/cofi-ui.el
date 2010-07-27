@@ -52,6 +52,12 @@
 
 (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
+(require-and-exec 'eldoc
+  (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (eldoc-add-command 'autopair-insert-opening)
+  )
+
 (mapc (lambda (ext)
         (push ext completion-ignored-extensions))
       '(

@@ -37,6 +37,16 @@
   (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
   (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$")) ; oh why are you compatible to THAT?!
 
+  (eval-after-load "org"
+    '(progn
+       (define-key viper-vi-global-user-map (kbd "C-c /") 'org-sparse-tree)
+       (add-hook 'org-mode-hook
+                 (lambda ()
+                   (define-key viper-insert-local-user-map (kbd "M-h") 'org-metaleft)
+                   (define-key viper-insert-local-user-map (kbd "M-l") 'org-metaright)
+                   ))
+       ))
+
   (define-key viper-vi-global-user-map (kbd "C-r") 'isearch-backward-regexp)
   (define-key viper-vi-global-user-map (kbd "C-s") 'isearch-forward-regexp)
   (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)

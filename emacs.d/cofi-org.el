@@ -20,13 +20,6 @@
             (ac-flyspell-mode)
             (org-indent-mode)))
 
-(eval-after-load 'viper
-  '(add-hook 'org-mode-hook
-             (lambda ()
-               (define-key viper-insert-local-user-map (kbd "M-h") 'org-metaleft)
-               (define-key viper-insert-local-user-map (kbd "M-l") 'org-metaright)
-               )))
-
 ;; Agenda
 (setq org-agenda-include-diary t
       org-agenda-skip-unavailable-files t

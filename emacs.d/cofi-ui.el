@@ -177,13 +177,19 @@
 (autoload 'ack "full-ack" nil t)
 (setq ack-prompt-for-directory 'unless-guessed)
 
+(autoload 'dedicated-mode "dedicated" nil t)
+
+(autoload 'home-end-home "home-end" nil t)
+(autoload 'home-end-end "home-end" nil t)
+
+(global-set-key (kbd "<home>") 'home-end-home)
+(global-set-key (kbd "<end>") 'home-end-end)
+
 ;; enable functions
 (put 'narrow-to-defun 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
-
-(autoload 'dedicated-mode "dedicated" nil t)
 
 ;; external programs
 (global-set-key (kbd "C-c f") 'browse-url-firefox)

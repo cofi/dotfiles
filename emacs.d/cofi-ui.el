@@ -177,6 +177,8 @@
 (put 'narrow-to-page 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 
+(autoload 'dedicated-mode "dedicated" nil t)
+
 ;; external programs
 (global-set-key (kbd "C-c f") 'browse-url-firefox)
 (setq browse-url-firefox-new-window-is-tab t)

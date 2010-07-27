@@ -32,32 +32,43 @@
 (add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
 (add-hook 'wl-mail-send-pre-hook 'mail-subject-check)
 
+(require-and-exec 'pgg
+                  (setq pgg-default-scheme 'gpg
+                        pgg-scheme 'gpg
+                        pgg-query-keyserver t
+                        pgg-default-keyserver-address "subkeys.pgp.net"
+                        pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
+                        pgg-gpg-use-agent t
+                        pgg-encrypt-for-me t
+                        )
+                  )
+
 ;; from http://box.matto.nl/wanderlustgpg.html
-(require-and-exec 'mailcrypt
-   (add-hook 'wl-summary-mode-hook 'mc-install-read-mode)
-   (add-hook 'wl-mail-setup-hook 'mc-install-write-mode)
+;; (require-and-exec 'mailcrypt
+;;    (add-hook 'wl-summary-mode-hook 'mc-install-read-mode)
+;;    (add-hook 'wl-mail-setup-hook 'mc-install-write-mode)
 
-   (defun mc-wl-verify-signature ()
-     (interactive)
-     (save-window-excursion
-       (wl-summary-jump-to-current-message)
-       (mc-verify)))
+;;    (defun mc-wl-verify-signature ()
+;;      (interactive)
+;;      (save-window-excursion
+;;        (wl-summary-jump-to-current-message)
+;;        (mc-verify)))
 
-   (defun mc-wl-decrypt-message ()
-     (interactive)
-     (save-window-excursion
-       (wl-summary-jump-to-current-message)
-       (let ((inhibit-read-only t))
-         (mc-decrypt))))
+;;    (defun mc-wl-decrypt-message ()
+;;      (interactive)
+;;      (save-window-excursion
+;;        (wl-summary-jump-to-current-message)
+;;        (let ((inhibit-read-only t))
+;;          (mc-decrypt))))
 
-   (setq mc-modes-alist
-         (append
-          (quote
-           ((wl-draft-mode (encrypt . mc-encrypt-message)
-                           (sign . mc-sign-message))
-            (wl-summary-mode (decrypt . mc-wl-decrypt-message)
-                             (verify . mc-wl-verify-signature))))
-          mc-modes-alist))
-   )
+;;    (setq mc-modes-alist
+;;          (append
+;;           (quote
+;;            ((wl-draft-mode (encrypt . mc-encrypt-message)
+;;                            (sign . mc-sign-message))
+;;             (wl-summary-mode (decrypt . mc-wl-decrypt-message)
+;;                              (verify . mc-wl-verify-signature))))
+;;           mc-modes-alist))
+;;    )
 
 (provide 'cofi-mail)

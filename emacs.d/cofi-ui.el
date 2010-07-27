@@ -53,6 +53,11 @@
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))
 
+(require-and-exec 'framepop
+                  (setq framepop-enable-keybinding (kbd "<f12>"))
+                  (framepop-enable)
+                  )
+
 (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
 (require-and-exec 'eldoc

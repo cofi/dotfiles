@@ -64,6 +64,7 @@
  '(column-number-mode t)
  '(comint-prompt-read-only t)
  '(comment-style (quote align))
+ '(framepop-enable-keybinding "<f11>")
  '(inhibit-startup-screen t))
 
 ;; Use UTF-8 dammit

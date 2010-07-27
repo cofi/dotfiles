@@ -54,9 +54,7 @@
                   (shell-command-completion-mode))
 
 (require-and-exec 'framepop
-                  (setq framepop-enable-keybinding (kbd "<f11>"))
-                  (framepop-enable)
-                  )
+                  (framepop-enable))
 
 (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 

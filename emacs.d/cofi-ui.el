@@ -54,7 +54,7 @@
                   (shell-command-completion-mode))
 
 (require-and-exec 'framepop
-                  (setq framepop-enable-keybinding (kbd "<f12>"))
+                  (setq framepop-enable-keybinding (kbd "<f11>"))
                   (framepop-enable)
                   )
 

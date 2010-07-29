@@ -6,9 +6,6 @@
   (setq fill-column 72)
   (ac-flyspell-mode))
 
-(when (file-exists-p "/usr/local/share/emacs/site-lisp/wl/")
-    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/wl/"))
-
 (autoload 'wl "wl" "Wanderlust" t)
 (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
 (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)

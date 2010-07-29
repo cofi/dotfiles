@@ -14,6 +14,11 @@
         "~/.elisp/haskell-mode"
         "~/.elisp/magit"
         "~/.emacs.d"
+        "/usr/local/share/emacs/site-lisp/semi/"
+        "/usr/local/share/emacs/site-lisp/flim/"
+        "/usr/local/share/emacs/site-lisp/apel/"
+        "/usr/local/share/emacs/23.2/site-lisp/emu/"
+        "/usr/local/share/emacs/site-lisp/wl/"
         ))
 
 (defvar hostname (substring (shell-command-to-string "hostname") 0 -1))

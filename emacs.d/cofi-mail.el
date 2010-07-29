@@ -37,15 +37,17 @@
 (add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
 (add-hook 'wl-mail-send-pre-hook 'mail-subject-check)
 
-;; Those are SEMI-PGG Settings they differ from Emacs own PGG
-;; and sadly there is no gpg-agent support ...
-(setq pgg-default-scheme 'gpg
-      pgg-scheme 'gpg
-      pgg-query-keyserver t
-      pgg-default-keyserver-address "subkeys.pgp.net"
-      pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
-      pgg-encrypt-for-me t
-      pgg-decrypt-automatically t
-      )
+;; SEMI-PGG files are safe to delete, Hello GPG_AGENT 
+(require-and-exec 'pgg
+                  (setq pgg-default-scheme 'gpg
+                        pgg-scheme 'gpg
+                        pgg-query-keyserver t
+                        pgg-default-keyserver-address "subkeys.pgp.net"
+                        pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
+                        pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
+                        pgg-encrypt-for-me t
+                        pgg-gpg-use-agent t
+                        )
+                  )
 
 (provide 'cofi-mail)

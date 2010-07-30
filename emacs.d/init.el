@@ -30,6 +30,7 @@
 (mapc #'load '(
             "cofi-artist"
             "cofi-buffer"
+            "cofi-bbdb"
             "cofi-calendar"
             "cofi-color"
             "cofi-column"

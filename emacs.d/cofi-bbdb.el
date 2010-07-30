@@ -42,7 +42,6 @@
           (interactive)
           (bbdb-wl-exit))
         (setq wl-summary-from-function 'bbdb-wl-from-func)
-        (define-key wl-draft-mode-map (kbd "") 'bbdb-complete-name)
         )
     )
 

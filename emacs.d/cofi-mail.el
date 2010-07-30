@@ -27,9 +27,6 @@
           (y-or-n-p "Subject missing. Send? "))
       (error "Abort.")))
 
-(add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
-(add-hook 'wl-mail-send-pre-hook 'mail-subject-check)
-
 ;; SEMI-PGG files are safe to delete, Hello GPG_AGENT 
 (require-and-exec 'pgg
                   (setq pgg-default-scheme 'gpg
@@ -55,6 +52,9 @@
 
 (eval-after-load "wl"
   '(progn
+     (add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
+     (add-hook 'wl-mail-send-pre-hook 'mail-subject-check)
+     
      (add-hook 'wl-biff-notify-hook
                (lambda ()
                  (send-notification "New Mail!" "Wanderlust")))

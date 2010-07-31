@@ -1,0 +1,3 @@
+[submodule "elisp/vendor/magit"]
+	path = elisp/vendor/magit
+	url = git://github.com/philjackson/magit.git

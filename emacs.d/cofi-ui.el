@@ -15,8 +15,9 @@
 (setq kill-ring-max 1000)
 (require 'browse-kill-ring+)
 
-(require-and-exec 'magit
-                  (global-set-key (kbd "C-c i") 'magit-status))
+(add-to-list 'load-path "~/.elisp/vendor/magit")
+(autoload 'magit-status "magit" nil t)
+(global-set-key (kbd "C-c i") 'magit-status)
 
 (require-and-exec 'idomenu
                   (global-set-key (kbd "C-c m") 'idomenu))

@@ -10,3 +10,6 @@
 [submodule "elisp/vendor/auto-complete"]
 	path = elisp/vendor/auto-complete
 	url = git://github.com/m2ym/auto-complete.git
+[submodule "elisp/vendor/org-mode"]
+	path = elisp/vendor/org-mode
+	url = git://repo.or.cz/org-mode.git

@@ -1,3 +1,4 @@
+(add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c l") 'org-store-link)
 

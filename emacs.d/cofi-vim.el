@@ -14,8 +14,6 @@
     (when (fboundp 'redo)
       (define-key viper-vi-global-user-map (kbd "r") 'redo))
 
-    (define-key vimpulse-visual-basic-map (kbd "g q") 'fill-region)
-    (define-key viper-vi-basic-map (kbd "g q") 'fill-paragraph)
     (define-key viper-vi-basic-map (kbd "C-w s") 'split-window-vertically)
     (define-key viper-vi-basic-map (kbd "C-w v") 'split-window-horizontally)
     (define-key viper-vi-basic-map (kbd "C-w o") 'other-window)

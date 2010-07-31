@@ -11,8 +11,6 @@
       '(
         "~/.elisp"
         "~/.elisp/auto-complete"
-        "~/.elisp/haskell-mode"
-        "~/.elisp/magit"
         "~/.emacs.d"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"

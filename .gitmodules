@@ -4,3 +4,6 @@
 [submodule "elisp/vendor/yasnippet"]
 	path = elisp/vendor/yasnippet
 	url = git://github.com/emacsmirror/yasnippet.git
+[submodule "elisp/vendor/haskell-mode"]
+	path = elisp/vendor/haskell-mode
+	url = git://github.com/jwiegley/haskell-mode.git

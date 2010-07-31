@@ -51,6 +51,12 @@
 (require-and-exec 'multi-term
                   (global-set-key (kbd "<f1>") 'multi-term)
                   (global-set-key (kbd "M-<f1>") 'multi-term-next)
+                  ;; Super-<f1> for small terminal window (vertical split, above)
+                  (global-set-key (kbd "s-<f1>") (lambda ()
+                                                   (interactive)
+                                                   (split-window nil 10)
+                                                   (multi-term)
+                                                   ))
                   )
 
 (require-and-exec 'shell-command

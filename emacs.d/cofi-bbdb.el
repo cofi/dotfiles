@@ -1,5 +1,8 @@
 (require-and-exec 'bbdb
     (bbdb-initialize)
+    (setq bbdb-file-coding-system 'utf-8)
+    (add-hook 'bbdb-load-hook
+              (lambda () (setq bbdb-file-coding-system 'utf-8)))
 
     (setq bbdb-offer-save 1
           bbdb-use-pop-up t
@@ -22,12 +25,26 @@
             )
           bbdb-auto-notes-alist
           '(
+            ("Organization" (".*" Organization 0))
             ("X-ML-Name" (".*$" ML 0))
             ("X-Mailinglist" (".*$" ML 0))
             ("X-Ml-Name" (".*$" ML 0)))
           )
 
     (add-hook 'bbdb-notice-hook 'bbdb-auto-notes-hook)
+
+    (setq bbdb-display-layout 'multi-line)
+    (setq bbdb-pop-up-display-layout 'one-line)
+    (setq bbdb-display-layout-alist
+          '((one-line          (order     . (net AKA notes phones))
+                               (name-end  . 24)
+                               (toggle    . t)
+                               (omit      . (mail-alias gnus-private
+                                             creation-date timestamp)))
+            (multi-line        (indention . 14)
+                               (toggle    . t)
+                               (omit      . (AKA creation-date timestamp)))
+            (pop-up-multi-line (indention . 14))))
 
     (require-and-exec 'bbdb-wl
         (require 'mime-bbdb)

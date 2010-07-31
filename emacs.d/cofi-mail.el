@@ -168,8 +168,8 @@
          (wl-summary-message-number)
          (intern (downcase field)))))
 
-    (add-to-list 'mairix-display-functions '(wl . mairix-wl-display))
-    (add-to-list 'mairix-get-mail-header-functions '(wl . mairix-wl-fetch-field))
+    (add-to-list 'mairix-display-functions '(wl mairix-wl-display))
+    (add-to-list 'mairix-get-mail-header-functions '(wl mairix-wl-fetch-field))
 
     (eval-after-load "wl"
       '(progn

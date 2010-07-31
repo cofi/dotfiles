@@ -79,9 +79,17 @@
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
 ;; Remember
-(org-remember-insinuate)
 (setq org-default-notes-file (concat org-directory "remember.org"))
-(global-set-key (kbd "C-c r") 'org-remember)
+(global-set-key (kbd "C-c r") 'org-capture)
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline (format "%s/todo.org" org-directory) "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("x" "Note with Clipboard" entry (file (format "%s/notes.org" org-directory))
+         "* %?\n  %i\n  %x")
+        ("n" "Note" entry (file (format "%s/notes.org" org-directory))
+         "* %?\n  %i\n  %a")
+        ))
 
 ;; Exporting
 (setq org-emphasis-alist

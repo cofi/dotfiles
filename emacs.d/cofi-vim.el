@@ -23,17 +23,28 @@
     (define-key viper-vi-basic-map (kbd "C-w f") 'fullscreen-toggle)
     (define-key viper-vi-basic-map (kbd "C-w <return>") 'enlarge-window)
     (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
-    (define-key viper-vi-basic-map (kbd ",") (make-sparse-keymap))
-    (define-key viper-vi-basic-map (kbd ",e") 'ido-find-file)
-    (define-key viper-vi-basic-map (kbd ",w") 'save-buffer)
-    (define-key viper-vi-basic-map (kbd ",W") 'save-some-buffers)
-    (define-key viper-vi-basic-map (kbd ",d") 'dired-jump)
     )
 
   ;; fix viper binding shortcomings
   (define-key viper-vi-global-user-map (kbd "_") 'viper-bol-and-skip-white)
   (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
   (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$")) ; oh why are you compatible to THAT?!
+
+  (defconst vim-mapleader "," "Normal mode mapping prefix")
+  (defvar vim-mapleader-map (make-sparse-keymap) "Mapleader keymap")
+  (define-key viper-vi-global-user-map vim-mapleader vim-mapleader-map)
+  
+  (defun vim-mapleader-add (keyseq fun)
+    (interactive "sKeysequence: \naFunction:")
+    (define-key vim-mapleader-map keyseq fun))
+
+  (vim-mapleader-add "e" 'ido-find-file)
+  (vim-mapleader-add "w" 'save-buffer)
+  (vim-mapleader-add "W" 'save-some-buffers)
+  (vim-mapleader-add "d" 'dired-jump)
+  (vim-mapleader-add "k" 'kill-this-buffer)
+  (vim-mapleader-add "C" 'cofi-cd-alias)
+  (vim-mapleader-add "D" 'cofi-dired-alias)
 
   (eval-after-load "org"
     '(progn

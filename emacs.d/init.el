@@ -10,7 +10,6 @@
              )
       '(
         "~/.elisp"
-        "~/.elisp/auto-complete"
         "~/.emacs.d"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"

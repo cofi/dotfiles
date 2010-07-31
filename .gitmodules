@@ -7,3 +7,6 @@
 [submodule "elisp/vendor/haskell-mode"]
 	path = elisp/vendor/haskell-mode
 	url = git://github.com/jwiegley/haskell-mode.git
+[submodule "elisp/vendor/auto-complete"]
+	path = elisp/vendor/auto-complete
+	url = git://github.com/m2ym/auto-complete.git

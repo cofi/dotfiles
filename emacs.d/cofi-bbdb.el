@@ -34,6 +34,7 @@
         (bbdb-wl-setup)
         (setq bbdb-wl-ignore-folder-regexp "^@"
               bbdb-wl-folder-regexp "^.inbox$\\|^Gmail/gesendet$"
+              wl-summary-get-petname-function 'bbdb-wl-get-petname
               )
         (defadvice wl-folder-suspend (after wl-bbdb-suspend activate compile)
           (interactive)
@@ -41,7 +42,6 @@
         (defadvice wl-exit (after wl-bbdb-suspend activate compile)
           (interactive)
           (bbdb-wl-exit))
-        (setq wl-summary-from-function 'bbdb-wl-from-func)
         )
     )
 

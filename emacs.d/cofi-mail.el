@@ -129,5 +129,64 @@
      ;; Switch reply keys
      (define-key wl-summary-mode-map (kbd "A") 'wl-summary-reply)
      (define-key wl-summary-mode-map (kbd "a") 'wl-summary-reply-with-citation)
+     (define-key wl-summary-mode-map (kbd "D") 'wl-thread-delete)
      ))
+
+(require-and-exec 'mairix
+    (setq mairix-file-path "~/Mail/"
+          mairix-search-file "mairix"
+          mairix-mail-program 'wl
+          mairix-wl-search-folder-prefix ".")
+
+    ;; From http://www.emacswiki.org/emacs/hgw-init-wl.el
+    (defun mairix-wl-display (folder)
+      "Display FOLDER using Wanderlust."
+      ;; If Wanderlust is running (Folder buffer exists)...
+      (if (get-buffer wl-folder-buffer-name)
+          ;; Check if we are in the summary buffer, close it and
+          ;; goto the Folder buffer
+          (if (string= (buffer-name) wl-summary-buffer-name)
+              (progn
+                (wl-summary-exit t)
+                (set-buffer (get-buffer wl-folder-buffer-name))))
+        ;; Otherwise Wanderlust is not running so start it
+        (wl))
+      ;; From the Folder buffer goto FOLDER first stripping off mairix-file-path
+      ;; to leave the wl folder name
+      (when (string-match
+             (concat (regexp-quote (expand-file-name mairix-file-path)) "\\(.*\\)")
+             folder)
+        (wl-folder-goto-folder-subr
+         (concat mairix-wl-search-folder-prefix (match-string 1 folder)))))
+
+
+    (defun mairix-wl-fetch-field (field)
+      "Get mail header FIELD for current message using Wanderlust."
+      (when wl-summary-buffer-elmo-folder
+        (elmo-message-field
+         wl-summary-buffer-elmo-folder
+         (wl-summary-message-number)
+         (intern (downcase field)))))
+
+    (add-to-list 'mairix-display-functions '(wl . mairix-wl-display))
+    (add-to-list 'mairix-get-mail-header-functions '(wl . mairix-wl-fetch-field))
+
+    (eval-after-load "wl"
+      '(progn
+         (define-key wl-folder-mode-map (kbd "C-/") 'mairix-search)
+         (define-key wl-summary-mode-map (kbd "C-/") 'mairix-search)))
+
+    (global-set-key (kbd "<f9>")
+                    (let ((mairix-map (make-sparse-keymap)))
+                      (define-key mairix-map "/" 'mairix-search)
+                      (define-key mairix-map "s" 'mairix-save-search)
+                      (define-key mairix-map "i" 'mairix-use-saved-search)
+                      (define-key mairix-map "e" 'mairix-edit-saved-searches)
+                      (define-key mairix-map "w" 'mairix-widget-search)
+                      (define-key mairix-map "u" 'mairix-update-database)
+                      (define-key mairix-map "f" 'mairix-search-from-this-article)
+                      (define-key mairix-map "t" 'mairix-search-thread-this-article)
+                      (define-key mairix-map "b" 'mairix-widget-search-based-on-article)
+                      mairix-map))
+    )
 (provide 'cofi-mail)

@@ -1,11 +1,4 @@
-(autoload 'wl "wl" "Wanderlust" t)
-(autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
-(autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
-(autoload 'wl-user-agent-compose "wl-draft" "Compose mail with Wanderlust" t)
-
-(autoload 'trivial-cite "tc" t t)
 (add-hook 'mail-citation-hook 'trivial-cite)
-
 (setq tc-make-attribution (function tc-simple-attribution-kai))
 
 (defun mail-attachment-check ()
@@ -28,17 +21,15 @@
       (error "Abort.")))
 
 ;; SEMI-PGG files are safe to delete, Hello GPG_AGENT 
-(require-and-exec 'pgg
-                  (setq pgg-default-scheme 'gpg
-                        pgg-scheme 'gpg
-                        pgg-query-keyserver t
-                        pgg-default-keyserver-address "subkeys.pgp.net"
-                        pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
-                        pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
-                        pgg-encrypt-for-me t
-                        pgg-gpg-use-agent t
-                        )
-                  )
+(setq pgg-default-scheme 'gpg
+      pgg-scheme 'gpg
+      pgg-query-keyserver t
+      pgg-default-keyserver-address "subkeys.pgp.net"
+      pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
+      pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
+      pgg-encrypt-for-me t
+      pgg-gpg-use-agent t
+      )
 
 (if (boundp 'mail-user-agent)
     (setq mail-user-agent 'wl-user-agent))
@@ -189,14 +180,5 @@
                       (define-key mairix-map "b" 'mairix-widget-search-based-on-article)
                       mairix-map))
     )
-
-(autoload 'boxquote-region "boxquote" "Boxquote the current region" t)
-(autoload 'boxquote-paragraph "boxquote" "Boxquote the current paragraph" t)
-(autoload 'boxquote-defun "boxquote" "Boxquote the current defun" t)
-(autoload 'boxquote-shell-command "boxquote" "Insert & boxquote output of shell command" t)
-(autoload 'boxquote-insert-file "boxquote" "Insert & boxquote a file" t)
-(autoload 'boxquote-insert-buffer "boxquote" "Insert & boxquote a buffer" t)
-(autoload 'boxquote-unbox "boxquote" "Remove boxquote that surrounds point" t)
-
 
 (provide 'cofi-mail)

@@ -7,6 +7,10 @@
                     '(diminish 'yas/minor-mode " Y"))
                   (eval-after-load "autopair"
                     '(diminish 'autopair-mode " p"))
+                  (eval-after-load "eldoc"
+                    '(diminish 'eldoc-mode " ED"))
+                  (eval-after-load "highlight-parentheses"
+                    '(diminish 'highlight-parentheses-mode))
                   )
 
 (require-and-exec 'second-sel
@@ -15,8 +19,6 @@
 (setq kill-ring-max 1000)
 (require 'browse-kill-ring+)
 
-(add-to-list 'load-path "~/.elisp/vendor/magit")
-(autoload 'magit-status "magit" nil t)
 (global-set-key (kbd "C-c i") 'magit-status)
 
 (require-and-exec 'idomenu
@@ -63,7 +65,6 @@
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (eldoc-add-command 'autopair-insert-opening)
-  (diminish 'eldoc-mode " ED")
   )
 
 (mapc (lambda (ext)
@@ -180,15 +181,9 @@
                                  try-complete-file-name-partially
                                  try-complete-file-name
                                  )))
+(global-set-key (kbd "M-/") 'hippie-expand)
 
-(autoload 'ack-same "full-ack" nil t)
-(autoload 'ack "full-ack" nil t)
 (setq ack-prompt-for-directory 'unless-guessed)
-
-(autoload 'dedicated-mode "dedicated" nil t)
-
-(autoload 'home-end-home "home-end" nil t)
-(autoload 'home-end-end "home-end" nil t)
 
 (global-set-key (kbd "<home>") 'home-end-home)
 (global-set-key (kbd "<end>") 'home-end-end)

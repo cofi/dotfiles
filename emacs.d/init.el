@@ -11,6 +11,7 @@
       '(
         "~/.elisp"
         "~/.emacs.d"
+        "~/.elisp/vendor/magit"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"
@@ -49,10 +50,7 @@
             "cofi-tab"
             ))
 
-(mapc #'require '(
-               auto-dictionary
-               redo
-           ))
+(require 'redo)
 
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t)
@@ -106,6 +104,46 @@
 (require-and-exec 'autopair
                   (autopair-global-mode t))
 (transient-mark-mode t)
+
+;; Autoloads  ------------------------------
+(autoload 'ack "full-ack" "Run ack." t)
+(autoload 'ack-same "full-ack" "Run ack only in buffers matching the current major mode." t)
+
+(autoload 'adict-change-dictionary "auto-dictionary"
+  "Set buffer language to LANG and stop detecting it automatically." t)
+(autoload 'adict-guess-dictionary "auto-dictionary"
+  "Automatically change ispell dictionary based on buffer language." t)
+(autoload 'auto-dictionary-mode "auto-dictionary"
+  "A minor mode that automatically sets `ispell-dictionary`." t)
+
+(autoload 'boxquote-defun "boxquote" "Boxquote the current defun" t)
+(autoload 'boxquote-insert-buffer "boxquote" "Insert & boxquote a buffer" t)
+(autoload 'boxquote-insert-file "boxquote" "Insert & boxquote a file" t)
+(autoload 'boxquote-paragraph "boxquote" "Boxquote the current paragraph" t)
+(autoload 'boxquote-region "boxquote" "Boxquote the current region" t)
+(autoload 'boxquote-shell-command "boxquote"
+  "Insert & boxquote output of shell command" t)
+(autoload 'boxquote-unbox "boxquote" "Remove boxquote that surrounds point" t)
+
+(autoload 'dedicated-mode "dedicated" "Dedicate currect buffer." t)
+
+(autoload 'dired-jump "dired" "Jump to current buffer's file in dired" t)
+
+(autoload 'home-end-end "home-end" "Go to end of line/window/buffer." t)
+(autoload 'home-end-home "home-end" "Go to beginning of line/window/buffer." t)
+
+(autoload 'magit-status "magit" nil t)
+
+(autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
+
+(autoload 'trivial-cite "tc"
+  "A simple citation function for use in news/mailreaders." t)
+  
+(autoload 'wl "wl" "Wanderlust" t)
+(autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
+(autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
+(autoload 'wl-user-agent-compose "wl-draft" "Compose mail with Wanderlust" t)
+;; -----------------------------------------
 
 (color-theme-cofi)
 

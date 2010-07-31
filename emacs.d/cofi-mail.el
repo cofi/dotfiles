@@ -189,4 +189,14 @@
                       (define-key mairix-map "b" 'mairix-widget-search-based-on-article)
                       mairix-map))
     )
+
+(autoload 'boxquote-region "boxquote" "Boxquote the current region" t)
+(autoload 'boxquote-paragraph "boxquote" "Boxquote the current paragraph" t)
+(autoload 'boxquote-defun "boxquote" "Boxquote the current defun" t)
+(autoload 'boxquote-shell-command "boxquote" "Insert & boxquote output of shell command" t)
+(autoload 'boxquote-insert-file "boxquote" "Insert & boxquote a file" t)
+(autoload 'boxquote-insert-buffer "boxquote" "Insert & boxquote a buffer" t)
+(autoload 'boxquote-unbox "boxquote" "Remove boxquote that surrounds point" t)
+
+
 (provide 'cofi-mail)

@@ -134,6 +134,8 @@
 
 (autoload 'magit-status "magit" nil t)
 
+(autoload 'markdown-mode "markdown" "Mode for markdown files" t)
+
 (autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
 
 (autoload 'trivial-cite "tc"

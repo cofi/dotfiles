@@ -46,6 +46,10 @@
   (vim-mapleader-add "C" 'cofi-cd-alias)
   (vim-mapleader-add "D" 'cofi-dired-alias)
 
+  (require-and-exec 'sackspace
+    (define-key viper-insert-global-user-map (kbd "<backspace>") 'sack/backspace)
+    (define-key viper-insert-global-user-map (kbd "C-<backspace>") 'sack/hyper-sack))
+
   (eval-after-load "org"
     '(progn
        (define-key viper-vi-global-user-map (kbd "C-c /") 'org-sparse-tree)

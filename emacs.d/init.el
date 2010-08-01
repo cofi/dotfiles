@@ -12,6 +12,7 @@
         "~/.elisp"
         "~/.emacs.d"
         "~/.elisp/vendor/magit"
+        "~/.elisp/vendor/sackspace"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"

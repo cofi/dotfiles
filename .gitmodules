@@ -13,3 +13,6 @@
 [submodule "elisp/vendor/org-mode"]
 	path = elisp/vendor/org-mode
 	url = git://repo.or.cz/org-mode.git
+[submodule "elisp/vendor/sackspace"]
+	path = elisp/vendor/sackspace
+	url = git://github.com/cofi/sackspace.el

@@ -1,3 +1,4 @@
+;; -*- mode: emacs-lisp; mode: rainbow -*-
 (require-and-exec 'color-theme 
     (defun color-theme-cofi ()
       (interactive)

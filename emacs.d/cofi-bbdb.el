@@ -21,7 +21,7 @@
           bbdb/mail-auto-create-p 'bbdb-ignore-some-messages-hook
           bbdb-ignore-some-messages-alist
           '(
-            ( "From" . "info\\|no.?reply\\|DAEMON\\|daemon\\|promotion\\|service\\|newsletter\\|mailman")
+            ( "From" . "info\\|no.?reply\\|no.?mail\\|DAEMON\\|daemon\\|promotion\\|service\\|newsletter\\|mailman")
             )
           bbdb-auto-notes-alist
           '(

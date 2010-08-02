@@ -32,8 +32,12 @@
 
   (defconst vim-mapleader "," "Normal mode mapping prefix")
   (defvar vim-mapleader-map (make-sparse-keymap) "Mapleader keymap")
+  ;; <leader> key in normal-mode
   (define-key viper-vi-global-user-map vim-mapleader vim-mapleader-map)
-  
+  ;; C-<leader> key in insert-mode
+  (define-key viper-insert-global-user-map (read-kbd-macro
+                                            (format "C-%s" vim-mapleader))
+                                           vim-mapleader-map)
   (defun vim-mapleader-add (keyseq fun)
     (interactive "sKeysequence: \naFunction:")
     (define-key vim-mapleader-map keyseq fun))
@@ -56,10 +60,10 @@
        (define-key viper-vi-global-user-map (kbd "C-c /") 'org-sparse-tree)
        (add-hook 'org-mode-hook
                  (lambda ()
-                   (define-key viper-insert-local-user-map (kbd "M-h") 'org-metaleft)
-                   (define-key viper-insert-local-user-map (kbd "M-l") 'org-metaright)
-                   ))
-       ))
+                   (viper-add-local-keys 'vi-state '(("RET" . org-open-at-point)))
+                   (viper-add-local-keys 'insert-state '(("\M-l" . org-metaright)
+                                                         ("\M-h" . org-metaleft)
+                                                         ))))))
 
   (define-key viper-vi-global-user-map (kbd "C-r") 'isearch-backward-regexp)
   (define-key viper-vi-global-user-map (kbd "C-s") 'isearch-forward-regexp)

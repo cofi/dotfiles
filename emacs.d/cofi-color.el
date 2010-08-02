@@ -67,11 +67,11 @@
          (diff-index-face ((t (:bold t :weight bold :background "gray70"))))
          (diff-nonexistent-face ((t (:bold t :weight bold :background "gray70"))))
 
-         (magit-diff-file-header ((t (:inherit diff-file-header-face))))
-         (magit-diff-hunk-header ((t (:inherit diff-hunk-header-face))))
-         (magit-diff-none ((t (:inherit diff-context-face))))
-         (magit-diff-add ((t (:inherit diff-added-face))))
-         (magit-diff-del ((t (:inherit diff-removed-face))))
+         (magit-diff-file-header ((t (:foreground "gold" :background nil))))
+         (magit-diff-hunk-header ((t (:foreground "gold"))))
+         (magit-diff-none ((t (:foreground "gray"))))
+         (magit-diff-add ((t (:foreground "green"))))
+         (magit-diff-del ((t (:foreground "red"))))
 
          (dired-boring ((t (:foreground "rosy brown"))))
          (dired-directory ((t (:foreground "blue"))))

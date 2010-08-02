@@ -84,6 +84,13 @@
 
 ;; IDO
 (require-and-exec 'ido
+                  (add-hook 'ido-setup-hook (lambda ()
+                    ;; first won't work because of viper binding
+                    (define-key ido-completion-map (kbd "C-h") 'ido-prev-match)
+                    (define-key ido-completion-map (kbd "C-l") 'ido-next-match)
+                    (define-key ido-file-dir-completion-map (kbd "<up>")
+                                                            'ido-up-directory)))
+
                   (setq ido-enable-regexp t
                         ido-enable-dot-prefix t
                         ido-enable-flex-matching t

@@ -47,6 +47,7 @@
   (vim-mapleader-add "D" 'cofi-dired-alias)
 
   (require-and-exec 'sackspace
+    ;; this interferes with ido's backspace (wtf?)
     (define-key viper-insert-global-user-map (kbd "<backspace>") 'sack/backspace)
     (define-key viper-insert-global-user-map (kbd "C-<backspace>") 'sack/hyper-sack))
 

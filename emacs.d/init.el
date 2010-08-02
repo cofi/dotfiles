@@ -134,7 +134,8 @@
 
 (autoload 'magit-status "magit" nil t)
 
-(autoload 'markdown-mode "markdown" "Mode for markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(autoload 'markdown-mode "markdown-mode" "Mode for markdown files" t)
 
 (autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
 

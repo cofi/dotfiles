@@ -18,6 +18,7 @@
             rst-mode
             latex-mode
             text-mode
+            org-mode
             ))
     (defconst cofi-ac-default-sources
       '(

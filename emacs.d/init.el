@@ -47,8 +47,7 @@
             "cofi-vc"
             "cofi-org"
             "cofi-windowing"
-            "cofi-autocompletion"
-            "cofi-tab"
+            "cofi-completion"
             ))
 
 (require 'redo)

@@ -60,4 +60,52 @@
     (global-auto-complete-mode t)
     )
 
-(provide 'cofi-autocompletion)
+;; Manual completion -------------------------------------------------
+(defvar cofi/base-completers
+ '(try-expand-dabbrev-visible
+   try-expand-dabbrev
+   try-expand-dabbrev-all-buffers
+   )
+ "List of functions which are used by hippie-expand in all cases.")
+
+(defvar cofi/uncommon-completers
+  '(
+    try-complete-file-name-partially
+    try-complete-file-name
+    )
+ "List of uncommon completers")
+
+(defconst cofi/lisp-completers
+  '(try-expand-list
+    try-complete-lisp-symbol-partially
+    try-complete-lisp-symbol))
+
+(defvar cofi/mode-completers
+  (list
+   (list 'emacs-lisp-mode (append cofi/base-completers cofi/lisp-completers))
+   (list 'lisp-mode (append cofi/base-completers cofi/lisp-completers))
+   )
+  "List of major modes in which to use additional mode specific completion
+functions.")
+
+(defun cofi/completion-functions ()
+  "Get a completion function according to current major mode."
+    (or (second (assq major-mode cofi/mode-completers))
+        cofi/base-completers))
+
+(defun cofi/complete (prefix)
+  "Do hippie-completion based on current major-mode."
+  (interactive "P")
+  (funcall (make-hippie-expand-function (cofi/completion-functions) t) prefix))
+
+(defun  cofi/uncommon-complete (prefix)
+  "Do hippie-expand with uncommon completers"
+  (interactive "P")
+  (let ((hippie-expand-try-functions-list cofi/uncommon-completers)
+        (hippie-expand-verbose t))
+    (hippie-expand prefix)))
+
+(global-set-key (kbd "M-/") 'cofi/complete)
+(global-set-key (kbd "C-M-/") 'cofi/uncommon-complete)
+
+(provide 'cofi-completion)

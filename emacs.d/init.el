@@ -50,8 +50,6 @@
             "cofi-completion"
             ))
 
-(require 'redo)
-
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t)
 

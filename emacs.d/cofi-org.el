@@ -1,5 +1,7 @@
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
 (global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "<f5>") 'org-agenda-list)
+(global-set-key (kbd "<f6>") (lambda () (interactive) (org-todo-list 0)))
 (global-set-key (kbd "C-c l") 'org-store-link)
 
 (setq org-startup-folded nil)

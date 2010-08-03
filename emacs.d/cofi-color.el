@@ -67,6 +67,9 @@
          (diff-index-face ((t (:bold t :weight bold :background "gray70"))))
          (diff-nonexistent-face ((t (:bold t :weight bold :background "gray70"))))
 
+         (ibuffer-git-add-face ((t (:foreground "green"))))
+         (ibuffer-git-del-face ((t (:foreground "red"))))
+
          (magit-diff-file-header ((t (:foreground "gold" :background nil))))
          (magit-diff-hunk-header ((t (:foreground "gold"))))
          (magit-diff-none ((t (:foreground "gray"))))

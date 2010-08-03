@@ -5,50 +5,48 @@
 
   (setq ibuffer-saved-filter-groups
         (quote (("default"      
-                 ("Programming"
-                  (or
-                   (mode . python-mode)
-                   (mode . haskell-mode)
-                   ))
-                 ("Writing"
-                  (or
-                   (mode . tex-mode)
-                   (mode . latex-mode)
-                   (mode . rst-mode)
-                   ))
-                 ("Config"
-                  (filename . ".emacs.d/"))
-                 ("Dired"
-                  (mode . dired-mode))
-                 ("Org"
-                  (mode . org-mode))
-                 ("Wanderlust"
-                  (or
-                   (mode . wl-folder-mode)
-                   (mode . wl-summary-mode)
-                   (name . "SMTP")
-                   )
-                  )
-                 ("Terminals"
-                  (mode . term-mode))
-                 ("Shells"
-                  (mode . shell-mode))
-                 ("Interpreter"
-                  (or
-                   (name . "\\*Python.*\\*")
-                   (name . "\\*haskell.*\\*")
-                   ))
-                 ("Magit"
-                  (or 
-                   (mode . magit-mode)
-                   (name . "\\*magit-.*\\*")
-                   ))
-                 ("VC"
-                   (name . "\\*vc.*\\*")
-                   ))
-                 ("Emacs"
-                  (name . "\\*.*\\*"))
-                 )))
+                 ("Config" (filename . ".emacs.d/"))
+
+                 ("Programming" (or
+                                 (mode . python-mode)
+                                 (mode . haskell-mode)
+                                 (name . "\\*Python.*\\*")
+                                 (name . "\\*haskell.*\\*")
+                                 (mode . emacs-lisp-mode)
+                                 (mode . sh-mode)
+                                 ))
+
+                 ("Writing" (or
+                             (mode . tex-mode)
+                             (mode . latex-mode)
+                             (mode . rst-mode)
+                             ))
+
+                 ("Org" (mode . org-mode))
+                 
+                 ("Dired" (mode . dired-mode))
+
+                 ("Wanderlust" (or
+                                (mode . wl-folder-mode)
+                                (mode . wl-summary-mode)
+                                (name . "SMTP")
+                                (mode . bbdb-mode)
+                                (name . "bbdb$")
+                                ))
+
+                 ("Terminals" (mode . term-mode))
+
+                 ("Shells" (mode . shell-mode))
+
+                 ("Magit" (or 
+                           (mode . magit-mode)
+                           (name . "\\*magit-.*\\*")
+                           ))
+
+                 ("VC" (name . "\\*vc.*\\*"))
+
+                 ("Emacs" (name . "^\\*.*\\*$"))
+                 ))))
 
   (require-and-exec 'ibuffer-git
     (setq ibuffer-formats

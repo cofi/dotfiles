@@ -1,17 +1,3 @@
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-
-(autoload 'python-mode "python" "Python editing mode." t)
-
-;; (when (locate-library "pymacs")
-;;   (autoload 'pymacs-apply "pymacs")
-;;   (autoload 'pymacs-call "pymacs")
-;;   (autoload 'pymacs-eval "pymacs" nil t)
-;;   (autoload 'pymacs-exec "pymacs" nil t)
-;;   (autoload 'pymacs-load "pymacs" nil t)
-;;   (pymacs-load "ropemacs" "rope-")
-;;   (setq ropemacs-enable-autoimport t))
-
-
 (require-and-exec 'flymake
   (defun flymake-pylint-init ()
     (let* ((temp-file (flymake-init-create-temp-buffer-copy
@@ -30,24 +16,17 @@
 ;; Modes
 (add-hook 'python-mode-hook
           (lambda ()
-              (require 'virtualenv)
               (show-paren-mode 1)
               (auto-fill-mode 1)
               (setq tab-width 4)
               (setq mode-name "py")))
 
-(defun workon-postactivate (virtualenv)
-  (require 'virtualenv)
-  (virtualenv-activate-environment virtualenv)
-  (desktop-change-dir virtualenv))
-
 ;; Keybindings
 (add-hook 'python-mode-hook
           (lambda ()
-              (local-set-key (kbd "M-s") 'flymake-mode)
-              (local-set-key (kbd "RET") 'newline-and-indent)
-              (local-set-key (kbd "C-x n") 'flymake-goto-next-error)
-              (local-set-key (kbd "M-n") 'python-describe-symbol)
+              (local-set-key (kbd "M-n") 'flymake-goto-next-error)
+              (local-set-key (kbd "M-p") 'flymake-goto-prev-error)
+              (local-set-key (kbd "C-c C-SPC") 'flymake-mode)
               (local-set-key (kbd "C-c SPC") 'python-shell)))
 
 ;; Triple strings for autopair

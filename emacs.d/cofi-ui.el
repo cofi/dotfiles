@@ -18,28 +18,32 @@
       ido-enable-flex-matching t
       ido-use-url-at-point nil
       ido-use-filename-at-point nil
-      ido-everywhere t)
-(setq ido-ignore-buffers (append
-                          ido-ignore-buffers
-                          '(
-                            "\\` "
-                            "\\`\\*.*\\*"
-                            "_region_"
-                            )))
-(setq ido-ignore-directories (append
-                              ido-ignore-directories
-                              '(
-                                "^auto/$"
-                                "\\.prv/"
-                                "_region_"
-                                )))
-(setq ido-ignore-files (append
-                        ido-ignore-files
-                        '(
-                          "^auto/$"
-                          "_region_"
-                          )))
-(setq ido-ignore-extensions t)
+      ido-everywhere t
+      ido-ignore-extensions t
+      )
+
+(eval-after-load "ido"
+  '(progn
+     (setq ido-ignore-buffers (append
+                               ido-ignore-buffers
+                               '(
+                                 "\\` "
+                                 "\\`\\*.*\\*"
+                                 "_region_"
+                                 )))
+     (setq ido-ignore-directories (append
+                                   ido-ignore-directories
+                                   '(
+                                     "^auto/$"
+                                     "\\.prv/"
+                                     "_region_"
+                                     )))
+     (setq ido-ignore-files (append
+                             ido-ignore-files
+                             '(
+                               "^auto/$"
+                               "_region_"
+                               )))))
 (ido-mode t)
 ;; ==================================================
 

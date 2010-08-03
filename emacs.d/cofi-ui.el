@@ -132,6 +132,9 @@
 (setq ack-prompt-for-directory 'unless-guessed)
 
 (mouse-avoidance-mode 'cat-and-mouse)
+
+(setq vc-handled-backends '(SVN Hg)
+      vc-follow-symlinks t)
 ;; ==================================================
 
 ;; Default modes ========================================

@@ -32,7 +32,6 @@
             "cofi-bbdb"
             "cofi-calendar"
             "cofi-color"
-            "cofi-column"
             "cofi-desktop"
             "cofi-flymake"
             "cofi-haskell"
@@ -133,6 +132,8 @@
 (autoload 'home-end-end "home-end" "Go to end of line/window/buffer." t)
 (autoload 'home-end-home "home-end" "Go to beginning of line/window/buffer." t)
 
+(autoload 'idomenu "idomenu" "Switch to a buffer-local tag from Imenu via Ido." t)
+
 (autoload 'magit-status "magit" nil t)
 
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
@@ -141,6 +142,8 @@
 (autoload 'try-pysmell-complete "pysmell" "PySmell-Hippie-Completer" t)
 
 (autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
+
+(autoload 'smex "smex" "A better M-x" t)
 
 (autoload 'trivial-cite "tc"
   "A simple citation function for use in news/mailreaders." t)

@@ -1,7 +1,49 @@
+;; Clean UI ========================================
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+;; ==================================================
 
+;; IDO ========================================
+(add-hook 'ido-setup-hook
+          (lambda ()
+            ;; first won't work because of viper binding
+            (define-key ido-completion-map (kbd "C-h") 'ido-prev-match)
+            (define-key ido-completion-map (kbd "C-l") 'ido-next-match)
+            (define-key ido-file-dir-completion-map (kbd "<up>")
+              'ido-up-directory)))
+
+(setq ido-enable-regexp t
+      ido-enable-dot-prefix t
+      ido-enable-flex-matching t
+      ido-use-url-at-point nil
+      ido-use-filename-at-point nil
+      ido-everywhere t)
+(setq ido-ignore-buffers (append
+                          ido-ignore-buffers
+                          '(
+                            "\\` "
+                            "\\`\\*.*\\*"
+                            "_region_"
+                            )))
+(setq ido-ignore-directories (append
+                              ido-ignore-directories
+                              '(
+                                "^auto/$"
+                                "\\.prv/"
+                                "_region_"
+                                )))
+(setq ido-ignore-files (append
+                        ido-ignore-files
+                        '(
+                          "^auto/$"
+                          "_region_"
+                          )))
+(setq ido-ignore-extensions t)
+(ido-mode t)
+;; ==================================================
+
+;; other packages ========================================
 (require-and-exec 'diminish
                   (eval-after-load "yasnippet"
                     '(diminish 'yas/minor-mode " Y"))
@@ -18,11 +60,6 @@
                   )
 (setq kill-ring-max 1000)
 (require 'browse-kill-ring+)
-
-(global-set-key (kbd "C-c i") 'magit-status)
-
-(require-and-exec 'idomenu
-                  (global-set-key (kbd "C-c m") 'idomenu))
 
 (require-and-exec 'recentf
                   (setq recentf-auto-cleanup 'never)
@@ -65,14 +102,13 @@
 (require-and-exec 'framepop
                   (framepop-enable))
 
-(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
-
 (require-and-exec 'eldoc
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (eldoc-add-command 'autopair-insert-opening)
-  )
+  (eldoc-add-command 'autopair-insert-opening))
+;; ==================================================
 
+;; Settings ========================================
 (mapc (lambda (ext)
         (push ext completion-ignored-extensions))
       '(
@@ -82,56 +118,8 @@
         ".doc" ".ods" ".odt" ".pps" ".ppt"
         ))
 
-;; IDO
-(require-and-exec 'ido
-                  (add-hook 'ido-setup-hook (lambda ()
-                    ;; first won't work because of viper binding
-                    (define-key ido-completion-map (kbd "C-h") 'ido-prev-match)
-                    (define-key ido-completion-map (kbd "C-l") 'ido-next-match)
-                    (define-key ido-file-dir-completion-map (kbd "<up>")
-                                                            'ido-up-directory)))
-
-                  (setq ido-enable-regexp t
-                        ido-enable-dot-prefix t
-                        ido-enable-flex-matching t
-                        ido-use-url-at-point nil
-                        ido-use-filename-at-point nil
-                        ido-everywhere t)
-                  (setq ido-ignore-buffers (append
-                                          ido-ignore-buffers
-                                          '(
-                                            "\\` "
-                                            "\\`\\*.*\\*"
-                                            "_region_"
-                                            )))
-                  (setq ido-ignore-directories (append
-                                                ido-ignore-directories
-                                                '(
-                                                  "^auto/$"
-                                                  "\\.prv/"
-                                                  "_region_"
-                                                  )))
-                  (setq ido-ignore-files (append
-                                          ido-ignore-files
-                                          '(
-                                            "^auto/$"
-                                            "_region_"
-                                            )))
-                  (setq ido-ignore-extensions t)
-                  (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
-                  (global-set-key (kbd "C-x M-b") 'ido-switch-buffer-other-window)
-                  (global-set-key (kbd "C-x C-d") 'ido-display-buffer)
-                  (global-set-key (kbd "C-x M-d") 'dired-other-window)
-
-                  (ido-mode t))
-
-(require-and-exec 'smex
-      (smex-initialize)
-      (global-set-key (kbd "M-a") 'smex)
-      (global-set-key (kbd "M-x") 'smex))
-
 (setq display-time-24hr-format t
-      display-time-string-forms '(" " day "." month " " 24-hours ":" minutes)
+      display-time-string-forms '(day "." month " " 24-hours ":" minutes)
       display-time-mail-file 'none
       display-time-default-load-average nil)
 
@@ -139,17 +127,26 @@
       icon-title-format "emacs %b")
 
 (setq battery-mode-line-format " [%L %p%%]")
-(when (string= hostname "hitchhiker")
-    (display-battery-mode t))
 
 (setq dired-recursive-copies 'always)
+(setq ack-prompt-for-directory 'unless-guessed)
 
+(mouse-avoidance-mode 'cat-and-mouse)
+;; ==================================================
+
+;; Default modes ========================================
 (display-time-mode t)
 (global-font-lock-mode t)
 (global-hl-line-mode t)
 (global-linum-mode t)
 (show-paren-mode t)
+(when (string= hostname "hitchhiker")
+    (display-battery-mode t))
 
+(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
+;; ==================================================
+
+;; Alias ========================================
 (defalias 'yes-or-no-p 'y-or-n-p)
 (defalias 'eb 'eval-buffer)
 (defalias 'er 'eval-region)
@@ -158,15 +155,24 @@
 (defalias 'bj 'bookmark-jump)
 (defalias 'bs 'bookmark-set)
 (defalias 'sb 'bookmark-save)
+;; ==================================================
 
-(mouse-avoidance-mode 'cat-and-mouse)
-
+;; KeyBindings ========================================
 (global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
+(global-set-key (kbd "C-c m") 'idomenu)
 
-(add-hook 'diff-mode
-          (lambda ()
-            (local-set-key (kbd "q") 'kill-this-buffer)))
+(global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
+(global-set-key (kbd "C-x M-b") 'ido-switch-buffer-other-window)
+(global-set-key (kbd "C-x C-d") 'ido-display-buffer)
+(global-set-key (kbd "C-x M-d") 'dired-other-window)
+
+(global-set-key (kbd "C-c i") 'magit-status)
+
+(eval-after-load "smex" '(smex-initialize))
+(global-set-key (kbd "M-x") 'smex)
+
+(eval-after-load "diff" '(define-key diff-mode-map (kbd "q") 'kill-this-buffer))
 
 (global-set-key (kbd "C-c b") 'revert-buffer)
 
@@ -181,7 +187,9 @@
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
 
-(define-key function-key-map (kbd "C-<tab>") [?\M-\t])
+;; M-TAB is shadowed
+(define-key function-key-map (kbd "C-TAB") (kbd "M-TAB"))
+
 (global-set-key (kbd "<f12>") (lambda ()
                                 (interactive) (switch-to-buffer "*scratch*")))
 
@@ -190,21 +198,33 @@
                                  try-complete-file-name-partially
                                  try-complete-file-name
                                  )))
-(global-set-key (kbd "M-/") 'hippie-expand)
 
-(setq ack-prompt-for-directory 'unless-guessed)
+(when (locate-library "home-end")
+  (global-set-key (kbd "<home>") 'home-end-home)
+  (global-set-key (kbd "<end>") 'home-end-end))
+;; ==================================================
 
-(global-set-key (kbd "<home>") 'home-end-home)
-(global-set-key (kbd "<end>") 'home-end-end)
+;; Colums ========================================
+(require-and-exec 'column-marker
+    (defun highlight-80 ()
+      (interactive)
+      (column-marker-1 80))
 
-;; enable functions
+    (add-hook 'python-mode-hook 'highlight-80))
+
+(setq-default fill-column 80)
+;; ==================================================
+
+;; enable functions ========================================
 (put 'narrow-to-defun 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
+;; ==================================================
 
-;; external programs
+;; external programs ========================================
 (global-set-key (kbd "C-c f") 'browse-url-firefox)
 (setq browse-url-firefox-new-window-is-tab t)
+;; ==================================================
 
 (provide 'cofi-ui)

@@ -123,6 +123,9 @@
   "Insert & boxquote output of shell command" t)
 (autoload 'boxquote-unbox "boxquote" "Remove boxquote that surrounds point" t)
 
+(autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
+(autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
+
 (autoload 'dedicated-mode "dedicated" "Dedicate currect buffer." t)
 
 (autoload 'dired-jump "dired" "Jump to current buffer's file in dired" t)

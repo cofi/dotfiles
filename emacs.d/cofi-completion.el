@@ -79,12 +79,20 @@
 (defconst cofi/lisp-completers
   '(try-expand-list
     try-complete-lisp-symbol-partially
-    try-complete-lisp-symbol))
+    try-complete-lisp-symbol)
+  "List of completers used for Lisp.")
+
+(defconst cofi/python-completers
+  (if (locate-library "pysmell")
+      '(try-pysmell-complete)
+    '())
+  "List of completers used for Python.")
 
 (defvar cofi/mode-completers
   (list
    (list 'emacs-lisp-mode (append cofi/base-completers cofi/lisp-completers))
    (list 'lisp-mode (append cofi/base-completers cofi/lisp-completers))
+   (list 'python-mode (append cofi/python-completers cofi/base-completers))
    )
   "List of major modes in which to use additional mode specific completion
 functions.")

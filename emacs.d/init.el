@@ -137,6 +137,8 @@
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (autoload 'markdown-mode "markdown-mode" "Mode for markdown files" t)
 
+(autoload 'try-pysmell-complete "pysmell" "PySmell-Hippie-Completer" t)
+
 (autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
 
 (autoload 'trivial-cite "tc"

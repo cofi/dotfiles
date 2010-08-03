@@ -33,6 +33,7 @@
               (require 'virtualenv)
               (show-paren-mode 1)
               (auto-fill-mode 1)
+              (setq tab-width 4)
               (setq mode-name "py")))
 
 (defun workon-postactivate (virtualenv)

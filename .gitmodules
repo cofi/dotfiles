@@ -16,3 +16,6 @@
 [submodule "elisp/vendor/sackspace"]
 	path = elisp/vendor/sackspace
 	url = git://github.com/cofi/sackspace.el
+[submodule "elisp/vendor/keychain-environment"]
+	path = elisp/vendor/keychain-environment
+	url = git://github.com/cofi/keychain-environment.el.git

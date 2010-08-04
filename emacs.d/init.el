@@ -13,6 +13,7 @@
         "~/.emacs.d"
         "~/.elisp/vendor/magit"
         "~/.elisp/vendor/sackspace"
+        "~/.elisp/vendor/keychain-environment"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"

@@ -154,8 +154,13 @@
 (setq default-buffer-file-coding-system 'utf-8)
 
 ;; Spelling
-(setq-default ispell-program-name "aspell"
-              ispell-dictionary "de_DE")
+(setq speck-engine 'Hunspell
+      speck-hunspell-library-directory "/usr/share/hunspell/"
+      speck-hunspell-coding-system 'utf-8)
+
+(setq speck-hunspell-dictionary-alist '(("de" . "de_DE")
+                                        ("en" . "en_US"))
+      speck-hunspell-default-dictionary-name "de")
 
 ;; tab settings
 (setq-default indent-tabs-mode nil     ; no nasty tabs i say!

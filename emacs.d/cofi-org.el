@@ -19,9 +19,8 @@
             (local-set-key (kbd "C-M-<return>") (lambda ()
                                                   (interactive)
                                                   (end-of-line)
-                                                  (org-meta-return)))
-            (ac-flyspell-mode)
-            (org-indent-mode)))
+                                                  (org-meta-return)))))
+(add-hook 'org-mode-hook 'speck-mode)
 
 ;; Agenda
 (setq org-agenda-include-diary t

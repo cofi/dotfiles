@@ -1,7 +1,7 @@
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq fill-column 80)
                            (auto-fill-mode 1)))
-(add-hook 'TeX-mode-hook 'ac-flyspell-prog-mode)
+(add-hook 'TeX-mode-hook 'speck-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
 (eval-after-load "cdlatex"
@@ -15,8 +15,8 @@
   (add-hook 'LaTeX-mode-hook 'cdlatex-mode)
 )
 
-(add-hook 'TeX-language-de-hook (lambda ()
-                                  (ispell-change-dictionary "de_DE")))
+;; (add-hook 'TeX-language-de-hook (lambda ()
+;;                                   (ispell-change-dictionary "de_DE")))
 (setq TeX-output-view-style '(
                               ("^pdf$" "." "okular %o")
                               ("^dvi$" "." "okular %o")

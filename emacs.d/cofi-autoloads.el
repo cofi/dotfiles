@@ -40,6 +40,9 @@
 
 (autoload 'smex "smex" "A better M-x" t)
 
+(autoload 'speck-mode "speck" "Auto spellchecking mode." t)
+(autoload 'speck-buffer "speck" "Toggle `speck-mode' for current buffer." t)
+
 (autoload 'trivial-cite "tc"
   "A simple citation function for use in news/mailreaders." t)
 

@@ -110,6 +110,12 @@
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (eldoc-add-command 'autopair-insert-opening))
+
+(require-and-exec 'keychain-environment
+                  (add-hook 'after-make-frame-functions
+                            (lambda (frame)
+                              (funcall 'refresh-keychain-environment)))
+                  (add-hook 'after-init-hook 'refresh-keychain-environment))
 ;; ==================================================
 
 ;; Settings ========================================
@@ -139,9 +145,41 @@
 
 (setq vc-handled-backends '(SVN Hg)
       vc-follow-symlinks t)
+
+;; Use UTF-8 dammit
+(prefer-coding-system       'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
+;; Spelling
+(setq-default ispell-program-name "aspell"
+              ispell-dictionary "de_DE")
+
+;; tab settings
+(setq-default indent-tabs-mode nil     ; no nasty tabs i say!
+              tab-width 4)
+
+(setq dabbrev-case-replace nil)
+
+(setq backup-directory-alist '(("" . "~/.emacs-backups")))
+(setq auto-save-default nil)
+
+(setq-default woman-use-own-frame nil
+              woman-use-topic-at-point t)
+
+(setq-default major-mode 'text-mode)
+(setq dired-dwim-target t)
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
+(setq autopair-autowrap t)
 ;; ==================================================
 
 ;; Default modes ========================================
+(require-and-exec 'autopair
+                  (autopair-global-mode 1))
+(transient-mark-mode t)
 (display-time-mode t)
 (global-font-lock-mode t)
 (global-hl-line-mode t)

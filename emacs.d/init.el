@@ -6,8 +6,7 @@
   "Time Emacs started.")
 
 (mapc (lambda (dir)
-             (add-to-list 'load-path dir)
-             )
+             (add-to-list 'load-path dir))
       '(
         "~/.elisp"
         "~/.emacs.d"
@@ -48,15 +47,15 @@
             "cofi-completion"
             ))
 
-(setq-default woman-use-own-frame nil
-              woman-use-topic-at-point t)
-
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
- '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "xdg-open") (output-pdf "xdg-open") (output-dvi "xdg-open") (output-html "xdg-open"))))
+ '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "xdg-open")
+                                      (output-pdf "xdg-open")
+                                      (output-dvi "xdg-open")
+                                      (output-html "xdg-open"))))
  '(coding-category-utf-8 nil t)
  '(column-number-mode t)
  '(comint-prompt-read-only t)
@@ -64,46 +63,9 @@
  '(framepop-enable-keybinding "<f11>")
  '(inhibit-startup-screen t))
 
-;; Use UTF-8 dammit
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
-
-;; Spelling
-(setq-default ispell-program-name "aspell")
-(setq-default ispell-dictionary "de_DE")
-
-;; tab settings
-(setq-default indent-tabs-mode nil)     ; no nasty tabs i say!
-(setq-default tab-width 4)
-
-(setq dabbrev-case-replace nil)
-
-(setq backup-directory-alist '(("" . "~/.emacs-backups")))
-(setq auto-save-default nil)
-
-(setq dired-dwim-target t)
-(add-hook 'dired-mode-hook 'auto-revert-mode)
-
-(setq default-major-mode (lambda ()
-                           (text-mode)
-                           (set-viper-state-in-major-mode)))
-
-(require-and-exec 'keychain-environment
-                  (add-hook 'after-make-frame-functions
-                            (lambda (frame)
-                              (funcall 'refresh-keychain-environment)))
-                  (add-hook 'after-init-hook 'refresh-keychain-environment))
-
-(require-and-exec 'autopair
-                  (autopair-global-mode t))
-(transient-mark-mode t)
-
 ;; Autoloads  ------------------------------
 (autoload 'ack "full-ack" "Run ack." t)
-(autoload 'ack-same "full-ack" "Run ack only in buffers matching the current major mode." t)
+(autoload 'ack-same "full-ack" "Run ack in files matching the current major mode." t)
 
 (autoload 'adict-change-dictionary "auto-dictionary"
   "Set buffer language to LANG and stop detecting it automatically." t)

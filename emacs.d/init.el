@@ -13,6 +13,7 @@
         "~/.elisp/vendor/magit"
         "~/.elisp/vendor/sackspace"
         "~/.elisp/vendor/keychain-environment"
+        "~/.elisp/vendor/gist"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"
@@ -108,11 +109,20 @@
 
 (autoload 'trivial-cite "tc"
   "A simple citation function for use in news/mailreaders." t)
-  
+
 (autoload 'wl "wl" "Wanderlust" t)
 (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
 (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
 (autoload 'wl-user-agent-compose "wl-draft" "Compose mail with Wanderlust" t)
+
+(autoload 'gist-region-or-buffer "gist" "Post either the current region, or if
+mark is not set, the current buffer as a new paste." t)
+(autoload 'gist-region-or-buffer-private "gist" "Post either the current region,
+or if mark is not set, the current buffer as a new private paste." t)
+(autoload 'gist-list "gist" "Displays a list of all of the current user's
+gists." t)
+(autoload 'gist-fetch "gist" "Fetches a Gist and inserts it into a new buffer"
+  t)
 ;; -----------------------------------------
 
 (color-theme-cofi)

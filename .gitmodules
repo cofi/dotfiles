@@ -19,3 +19,6 @@
 [submodule "elisp/vendor/keychain-environment"]
 	path = elisp/vendor/keychain-environment
 	url = git://github.com/cofi/keychain-environment.el.git
+[submodule "elisp/vendor/gist"]
+	path = elisp/vendor/gist
+	url = git://github.com/defunkt/gist.el.git

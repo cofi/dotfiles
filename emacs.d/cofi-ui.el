@@ -2,6 +2,7 @@
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(when (boundp 'blink-cursor-mode) (blink-cursor-mode -1))
 ;; ==================================================
 
 ;; IDO ========================================
@@ -177,6 +178,7 @@
 (setq-default major-mode 'text-mode)
 (setq dired-dwim-target t)
 (add-hook 'dired-mode-hook 'auto-revert-mode)
+(setq-default cursor-type 'bar)
 
 (setq autopair-autowrap t)
 ;; ==================================================

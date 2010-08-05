@@ -100,5 +100,25 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state")
                           (define-key map (kbd "M-h") 'org-metaleft)
                           map))
                  ))))
+
+  (setq cofi/default-cursor-color "OliveDrab4")
+  (setq cofi/viper-insert-cursor-color "dark red")
+  (setq cof/viper-replace-cursor-color "red")
+  (setq cofi/viper-emacs-cursor-color "sienna")
+
+  (defun cofi/viper-bar ()
+    "Change cursor color according to viper-state."
+    (cond
+     ((eq viper-current-state 'insert-state)
+      (set-cursor-color cofi/viper-insert-cursor-color))
+     ((eq viper-current-state 'emacs-state)
+      (set-cursor-color cofi/viper-emacs-cursor-color))
+     ((eq viper-current-state 'replace-state)
+      (set-cursor-color cofi/viper-replace-cursor-color))
+     (t 
+      (set-cursor-color cofi/default-cursor-color)
+      )))
+  
+  (add-hook 'post-command-hook 'cofi/viper-bar)
 )
 (provide 'cofi-vim)

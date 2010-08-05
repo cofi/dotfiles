@@ -154,11 +154,13 @@
 ;; Spelling
 (setq speck-engine 'Hunspell
       speck-hunspell-library-directory "/usr/share/hunspell/"
-      speck-hunspell-coding-system 'utf-8
-      speck-hunspell-language-options nil)
+      speck-hunspell-language-options nil ; defaults can bite
+      )
 
 (setq speck-hunspell-dictionary-alist '(("de" . "de_DE")
                                         ("en" . "en_US")))
+;; Let speck highlight doublets
+(setq speck-doublet t)
 
 ;; tab settings
 (setq-default indent-tabs-mode nil     ; no nasty tabs i say!

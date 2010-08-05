@@ -156,11 +156,11 @@
 ;; Spelling
 (setq speck-engine 'Hunspell
       speck-hunspell-library-directory "/usr/share/hunspell/"
-      speck-hunspell-coding-system 'utf-8)
+      speck-hunspell-coding-system 'utf-8
+      speck-hunspell-language-options nil)
 
 (setq speck-hunspell-dictionary-alist '(("de" . "de_DE")
-                                        ("en" . "en_US"))
-      speck-hunspell-default-dictionary-name "de")
+                                        ("en" . "en_US")))
 
 ;; tab settings
 (setq-default indent-tabs-mode nil     ; no nasty tabs i say!

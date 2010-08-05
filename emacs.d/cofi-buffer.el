@@ -22,6 +22,11 @@
                              (mode . rst-mode)
                              ))
 
+                 ("Org-Agenda"
+                  (or
+                   (filename . "Org/")
+                   (mode . org-agenda-mode)
+                  ))
                  ("Org" (mode . org-mode))
                  
                  ("Dired" (mode . dired-mode))

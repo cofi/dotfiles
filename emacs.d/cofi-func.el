@@ -41,6 +41,22 @@
   (auto-complete-mode 1)
   (ac-flyspell-workaround))
 
+(defun speck-prog-mode (&optional arg)
+  "Turn speck mode on and make it aware of syntax."
+  (interactive "P")
+  (set (make-local-variable 'speck-syntactic) t)
+  (speck-mode arg))
+
+(defun turn-on-speck ()
+  "Turn speck mode on."
+  (interactive)
+  (speck-mode 1))
+
+(defun turn-on-speck-prog ()
+  "Turn programming speck mode on."
+  (interactive)
+  (speck-prog-mode 1))
+
 (defun increment-number-at-point (&optional amount)
   "Increment the number under point by `amount'"
   (interactive "p")

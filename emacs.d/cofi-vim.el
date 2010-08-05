@@ -89,12 +89,16 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state")
        (define-key viper-vi-global-user-map (kbd "C-c /") 'org-sparse-tree)
        (add-hook 'org-mode-hook
                  (lambda ()
-                   (viper-add-local-keys 'vi-state '(([return] . org-open-at-point)))
-                   (viper-add-local-keys 'insert-state '(("\M-l" . org-metaright)
-                                                         ("\M-h" . org-metaleft)
-                                                         ([return] . org-meta-return)
-                                                         ))))))
-
-  )
-
+                   (setq
+                    viper-vi-local-user-map
+                        (let ((map (make-sparse-keymap)))
+                          (define-key map (kbd "RET") 'org-open-at-point)
+                          map)
+                    viper-insert-local-user-map
+                        (let ((map (make-sparse-keymap)))
+                          (define-key map (kbd "M-l") 'org-metaright)
+                          (define-key map (kbd "M-h") 'org-metaleft)
+                          map))
+                 ))))
+)
 (provide 'cofi-vim)

@@ -187,13 +187,10 @@
 
          (minibuffer-prompt ((t (:foreground "orange"))))
 
-         (viper-minibuffer-insert-face ((t (:background "white" :foreground "black"))))
-         (viper-minibuffer-vi-face ((t (:background "gray" :foreground nil))))
-         (viper-minibuffer-insert ((((class color)) nil)))
-         (viper-minbuffer-emacs ((((class color)) nil)))
-         (viper-minbuffer-vi ((((class color)) nil)))
+         (viper-minibuffer-insert ((t (:background "white" :foreground "black"))))
+         (viper-minibuffer-emacs ((t (:background "gray13" :foreground "white"))))
+         (viper-minibuffer-vi ((t (:background "gray" :foreground nil))))
          (viper-search-face ((t (:background "khaki" :foreground "Black"))))
-         (viper-replace-overlay-face ((t (:background "dark sea green" :foreground "Black"))))
 
          (zmacs-region ((t (:background "lightgoldenrod2"))))
          

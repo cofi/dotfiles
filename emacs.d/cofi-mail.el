@@ -102,7 +102,7 @@
                  (setq make-backup-files nil)
                  (setq fill-column 72)
                  (turn-on-auto-fill)
-                 (ac-flyspell-mode)
+                 (turn-on-speck)
                  ))
 
      ;; Invert behaviour of with and without argument replies.

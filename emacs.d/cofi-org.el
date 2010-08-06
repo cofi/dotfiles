@@ -6,10 +6,10 @@
 
 (setq org-startup-folded nil)
 
-(setq org-directory
-      (if (file-directory-p "~/Org")
-          "~/Org/"
-        "~/"))
+(if (file-directory-p "~/Org")
+    (setq org-directory "~/Org"
+          org-agenda-files "~/Org/agenda")
+  (setq org-directory "~/"))
 
 (add-hook 'org-mode-hook
           (lambda ()
@@ -20,12 +20,11 @@
                                                   (interactive)
                                                   (end-of-line)
                                                   (org-meta-return)))))
-(add-hook 'org-mode-hook 'speck-mode)
+(add-hook 'org-mode-hook 'turn-on-speck)
 
 ;; Agenda
 (setq org-agenda-include-diary t
       org-agenda-skip-unavailable-files t
-      org-agenda-files cofi-agenda-files
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
       org-agenda-start-on-weekday nil

@@ -102,7 +102,9 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state")
                           (define-key map (kbd "M-l") 'org-metaright)
                           (define-key map (kbd "M-h") 'org-metaleft)
                           map))
-                 ))))
+                   ;; some times local-maps don't get reloaded, this forces it
+                   (viper-change-state-to-vi)))
+       ))
 
   (setq cofi/default-cursor-color "OliveDrab4")
   (setq cofi/viper-insert-cursor-color "dark red")

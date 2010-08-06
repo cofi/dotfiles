@@ -17,17 +17,20 @@
   (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
   ;; ============================================================
 
-  ;; fix viper/vimpulse binding shortcomings ==========
+  ;; Keybindings ==========
+  (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$")) ; oh why are you compatible to THAT?!
   (define-key viper-vi-global-user-map (kbd "_") 'viper-bol-and-skip-white)
   (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
-  (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$")) ; oh why are you compatible to THAT?!
-  (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
   (when (fboundp 'redo)
     (define-key viper-vi-global-user-map (kbd "r") 'redo))
+
+  (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
   (require-and-exec 'goto-last-change
      (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))
   (define-key viper-vi-global-user-map (kbd "SPC") 'viper-scroll-up)
   (define-key viper-vi-global-user-map (kbd "S-SPC") 'viper-scroll-down)
+  (define-key viper-vi-global-user-map (kbd "+") 'cofi/inc-at-pt)
+  (define-key viper-vi-global-user-map (kbd "-") 'cofi/dec-at-pt)
   ;; ==================================================
 
   ;; Mapleader ========================================

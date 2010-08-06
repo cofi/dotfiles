@@ -57,23 +57,25 @@
   (interactive)
   (speck-prog-mode 1))
 
-(defun increment-number-at-point (&optional amount)
-  "Increment the number under point by `amount'"
+(defun cofi/inc-at-pt (amount)
+  "Increment the number at point by `amount'"
   (interactive "p")
-  (let ((num (number-at-point)))
-    (when (numberp num)
-      (let ((newnum (+ num amount))
-         (p (point)))
-    (save-excursion
-      (skip-chars-backward "-.0123456789")
-      (delete-region (point) (+ (point) (length (number-to-string num))))
-      (insert (number-to-string newnum)))
-    (goto-char p)))))
+  (let* ((old-pos (point))
+         (number-str "-.0123456789")
+         (end (progn (skip-chars-forward number-str)
+                     (point)))
+         (start (progn (skip-chars-backward number-str)
+                     (point)))
+         (number (string-to-int (buffer-substring-no-properties start end))))
+    (when (numberp number)
+      (delete-region start end)
+      (insert (number-to-string (+ number amount)))
+      (goto-char old-pos))))
 
-(defun decrement-number-at-point (&optional amount)
+(defun cofi/dec-at-pt (amount)
+  "Decrement the number at point by `amount'"
   (interactive "p")
-  "Decrement the number under point by `amount'"
-  (increment-number-at-point (- (abs amount))))
+  (cofi/inc-at-pt (- (abs amount))))
 
 (defun comment-or-uncomment-current-line-or-region ()
   "Comments or uncomments current current line or whole lines in region."

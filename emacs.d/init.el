@@ -49,6 +49,16 @@
             "cofi-completion"
             ))
 
+;; from http://edward.oconnor.cx/2010/08/standalone-gnus
+(add-to-list 'command-switch-alist
+             '("wl" . (lambda (&rest ignore)
+                        ;; no line numbers with mail
+                        (global-linum-mode -1)
+                        ;; Start wanderlust when Emacs starts
+                        (add-hook 'emacs-startup-hook 'wl t)
+                        ;; Exit Emacs after quitting Gnus
+                        (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
+
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.

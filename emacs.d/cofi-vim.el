@@ -60,8 +60,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state")
 
   ;; Vim-like backspace (backspace=indent,eol,start) ==========
   (require-and-exec 'sackspace
-    (define-key viper-insert-global-user-map (kbd "<backspace>") 'sack/backspace)
-    (define-key viper-insert-global-user-map (kbd "C-<backspace>") 'sack/hyper-sack))
+                    (sack/install-in-viper))
   ;; ==================================================
 
   ;; Search keybindings ========================================

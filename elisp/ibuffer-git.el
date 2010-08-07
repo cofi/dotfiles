@@ -32,6 +32,8 @@
 ;;; Code:
 
 (require 'ibuffer)
+(eval-when-compile
+  (require 'cl))
 
 (defgroup ibuffer-git nil
   "Git integration for Ibuffer"

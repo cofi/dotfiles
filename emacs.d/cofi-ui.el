@@ -19,6 +19,7 @@
       ido-use-filename-at-point nil
       ido-everywhere t
       ido-ignore-extensions t
+      ido-max-directory-size 300000
       )
 
 (eval-after-load "ido"

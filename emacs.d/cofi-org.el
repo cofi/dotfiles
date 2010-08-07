@@ -1,4 +1,5 @@
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
+(require 'org-install)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "<f5>") 'org-agenda-list)
 (global-set-key (kbd "<f6>") (lambda () (interactive) (org-todo-list 0)))

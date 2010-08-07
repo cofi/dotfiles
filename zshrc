@@ -102,7 +102,6 @@ HISTSIZE=5000
 SAVEHIST=8000
 
 export EDITOR=vim
-export LESS=vimpager
 export PAGER=vimpager
 
 if [[ -z "$SSH_CONNECTION" ]] {

@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2006, 2007, 2008, 2009, 2010 Martin Rudalics
 
-;; Time-stamp: "2010-05-25 14:09:47 martin"
+;; Time-stamp: "2010-08-07 21:34:37 cofi"
 ;; Author: Martin Rudalics <rudalics@gmx.at>
 ;; Keywords: spell checking
 
@@ -910,36 +910,36 @@ the Hunspell executable resides."
   :group 'speck-hunspell)
 
 (defun speck-hunspell-dictionary-alist ()
-  "Return alist of language codes and names of installed Hunspell dictionaries."
-  (cond
-   ((and speck-hunspell-library-directory
+   "Return alist of language codes and names of installed Hunspell dictionaries."
+   (cond
+    ((and speck-hunspell-library-directory
 	 (file-exists-p speck-hunspell-library-directory)
 	 (let ((names (directory-files
 		       speck-hunspell-library-directory nil "\\.dic$"))
 	       alist aname)
 	   (dolist (name names)
-	     (setq aname (downcase (file-name-sans-extension name)))
+	     (setq aname (file-name-sans-extension name))
 	     (setq alist
 		   (cons (or (rassoc aname speck-iso-639-1-alist)
-			     (cons (substring aname 0 2) aname))
+			     (cons (substring (downcase aname) 0 2) aname))
 			 alist)))
 	   (nreverse alist))))
-   ((and (speck-hunspell-binary-directory)
+    ((and (speck-hunspell-binary-directory)
 	 (file-exists-p (speck-hunspell-binary-directory)))
-    (let ((files (directory-files (speck-hunspell-binary-directory) t))
+     (let ((files (directory-files (speck-hunspell-binary-directory) t))
 	  alist aname)
-      (dolist (file files)
+       (dolist (file files)
 	(when (and (not (string-equal file "."))
 		   (not (string-equal file ".."))
 		   (file-directory-p file))
 	  (let ((names (directory-files file nil "\\.dic")))
 	    (dolist (name names)
-	      (setq aname (downcase (file-name-sans-extension name)))
+	      (setq aname (file-name-sans-extension name))
 	      (setq alist
 		    (cons (or (rassoc aname speck-iso-639-1-alist)
-			      (cons (substring aname 0 2) aname))
+			      (cons (substring (downcase aname) 0 2) aname))
 			  alist))))))
-      (nreverse alist)))))
+       (nreverse alist)))))
 
 (defcustom speck-hunspell-dictionary-alist (speck-hunspell-dictionary-alist)
   "List associating a language code with Hunspell dictionary names.
@@ -994,12 +994,12 @@ you have installed several dictionaries)."
   :group 'speck-hunspell)
 
 (defcustom speck-hunspell-language-options
-  '(("da" utf-8 nil t)
-    ("de" iso-8859-1 nil t)
-    ("en" iso-8859-1 nil nil)
-    ("fr" iso-8859-1 nil nil)
-    ("it" iso-8859-1 nil nil)
-    ("ru" koi8-r nil nil))
+  '(("da" nil nil t)
+    ("de" nil nil t)
+    ("en" nil nil nil)
+    ("fr" nil nil nil)
+    ("it" nil nil nil)
+    ("ru" nil nil nil))
     "Hunspell language options.
 Its value should be a list of five entries for each language.
 
@@ -1079,7 +1079,8 @@ customizing `speck-hunspell-language-options'."
 	 (dictionary-name
 	  (cdr (assoc code-name speck-hunspell-dictionary-alist)))
 	 (options (assoc code-name speck-hunspell-language-options))
-	 (coding-system (nth 1 options))
+	 (coding-system (or speck-hunspell-coding-system
+                        (nth 1 options)))
 	 (minimum-word-length
 	  ;; A value specified in `speck-hunspell-minimum-word-length' overrides
 	  ;; anything else.

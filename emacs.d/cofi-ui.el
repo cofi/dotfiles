@@ -155,12 +155,8 @@
 
 ;; Spelling
 (setq speck-engine 'Hunspell
-      speck-hunspell-library-directory "/usr/share/hunspell/"
-      speck-hunspell-language-options nil ; defaults can bite
-      )
+      speck-hunspell-library-directory "/usr/share/hunspell/")
 
-(setq speck-hunspell-dictionary-alist '(("de" . "de_DE")
-                                        ("en" . "en_US")))
 ;; Let speck highlight doublets
 (setq speck-doublet t)
 

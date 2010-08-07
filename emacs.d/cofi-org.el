@@ -8,7 +8,7 @@
 (setq org-startup-folded nil)
 
 (if (file-directory-p "~/Org")
-    (setq org-directory "~/Org"
+    (setq org-directory "~/Org/"
           org-agenda-files "~/Org/agenda")
   (setq org-directory "~/"))
 
@@ -79,9 +79,64 @@
         ))
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
-;; Remember
+;; Capture ==============================
 (setq org-default-notes-file (concat org-directory "remember.org"))
 (global-set-key (kbd "C-c r") 'org-capture)
+
+;; Adapted from http://emacs-fu.blogspot.com/2009/04/remember.html
+(defun cofi/capture-frame ()
+  (modify-frame-parameters nil
+                           '( (name . "Capture Frame")
+                              (width . 80)
+                              (height . 15)
+                              (vertical-scroll-bars . nil)
+                              (menu-bar-lines . nil)
+                              (tool-bar-lines . nil)))
+  (if (fboundp 'x-focus-frame)
+      (x-focus-frame nil))
+  (org-capture)
+  (linum-mode -1)
+  (delete-other-windows))
+
+(defun cofi/capture-frame-finalize ()
+  "Special treatment for capture frames when finalizing."
+  (interactive)
+  (let ((capture-frame? (string= (frame-parameter nil 'name) "Capture Frame")))
+    (if capture-frame?
+        (make-frame-invisible))
+    (org-capture-finalize)
+    (if capture-frame?
+        (delete-frame))))
+
+(defun cofi/capture-frame-kill ()
+  "Special treatment for capture frames when killing."
+  (interactive)
+  (let ((capture-frame? (string= (frame-parameter nil 'name) "Capture Frame")))
+    (if capture-frame?
+        (make-frame-invisible))
+    (org-capture-kill)
+    (if capture-frame?
+        (delete-frame))))
+
+(defun cofi/capture-frame-refile ()
+  "Special treatment for capture frames when killing."
+  (interactive)
+  (let ((capture-frame? (string= (frame-parameter nil 'name) "Capture Frame")))
+    (if capture-frame?
+        (make-frame-invisible))
+    (org-capture-refile)
+    (if capture-frame?
+        (delete-frame))))
+
+(add-hook 'org-capture-mode-hook
+          (lambda ()
+            (define-key org-capture-mode-map (kbd "C-c C-c")
+                        (function cofi/capture-frame-finalize))
+            (define-key org-capture-mode-map (kbd "C-c C-k")
+                        (function cofi/capture-frame-kill))
+            (define-key org-capture-mode-map (kbd "C-c C-w")
+                        (function coif/capture-frame-refile)
+              )))
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline (format "%s/todo.org" org-directory) "Tasks")
@@ -91,6 +146,7 @@
         ("n" "Note" entry (file (format "%s/notes.org" org-directory))
          "* %?\n  %i\n  %a")
         ))
+;; ==================================================
 
 ;; Exporting
 (setq org-emphasis-alist

@@ -103,7 +103,7 @@ will not be passed to `start-kbd-macro'."
       (if last-kbd-macro
           (call-last-kbd-macro arg)
         (if (= arg 1)
-            (start-kbd-macro)   
+            (start-kbd-macro nil)
           (start-kbd-macro arg))))))
 
 ;; Relying on cofi-dir-alias-pairs (list of pairs: ("alias" . "dir")

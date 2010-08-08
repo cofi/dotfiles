@@ -2,7 +2,9 @@
   "Return a comment-padded fortune cookie."
   (interactive)
   (let ((cookie (shell-command-to-string "fortune -a")))
-     (replace-regexp-in-string "^" ";; " cookie)))
+    (concat
+     (replace-regexp-in-string "^" ";; " cookie)
+     "\n")))
 
 (setq initial-scratch-message (cofi/fortune2scratch))
 

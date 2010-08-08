@@ -102,6 +102,8 @@
                  (setq make-backup-files nil)
                  (setq fill-column 72)
                  (turn-on-auto-fill)
+                 (auto-complete-mode)
+                 (yas/minor-mode)
                  (turn-on-speck)
                  ))
 

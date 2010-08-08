@@ -2,7 +2,7 @@
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(when (boundp 'blink-cursor-mode) (blink-cursor-mode -1))
+(when (fboundp 'blink-cursor-mode) (blink-cursor-mode -1))
 ;; ==================================================
 
 ;; IDO ========================================
@@ -187,12 +187,10 @@
 (display-time-mode t)
 (global-font-lock-mode t)
 (global-hl-line-mode t)
-(global-linum-mode t)
+(add-hook 'find-file-hook (lambda () (linum-mode 1))) ;start linum only for real files
 (show-paren-mode t)
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))
-
-(add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 ;; ==================================================
 
 ;; Alias ========================================

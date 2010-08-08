@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: Michael Markert <markert.michael@googlemail.com>
+# name: define map
+# key: defmap
+# --
+(let ((map (make-sparse-keymap)))
+  $0
+  (${1:$$(yas/choose-value '("define-key" "global-set-key" "local-set-key"))} (kbd "$2") map))

@@ -1,9 +1,10 @@
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
 (require 'org-install)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "<f5>") 'org-agenda-list)
-(global-set-key (kbd "<f6>") (lambda () (interactive) (org-todo-list 0)))
-(global-set-key (kbd "C-c l") 'org-store-link)
+(let ((map (make-sparse-keymap)))
+  (define-key map (kbd "a") 'org-agenda-list)
+  (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
+  (define-key map (kbd "l") 'org-store-link)
+  (global-set-key (kbd "<f5>") map))
 
 (setq org-startup-folded nil)
 

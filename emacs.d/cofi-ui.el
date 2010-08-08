@@ -172,6 +172,11 @@
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t)
 
+;; mixedCase to small_words_with_underscores (visually)
+(setq glasses-separate-parentheses-p nil
+      glasses-uncapitalize-p t
+      glasses-uncapitalize-regexp "[A-Z]")
+
 (setq-default major-mode 'text-mode)
 (setq dired-dwim-target t)
 (add-hook 'dired-mode-hook 'auto-revert-mode)

@@ -1,5 +1,10 @@
-(setq initial-scratch-message
-      ";; Have a lot of fun!\n")
+(defun cofi/fortune2scratch ()
+  "Return a comment-padded fortune cookie."
+  (interactive)
+  (let ((cookie (shell-command-to-string "fortune -a")))
+     (replace-regexp-in-string "^" ";; " cookie)))
+
+(setq initial-scratch-message (cofi/fortune2scratch))
 
 (defconst startup-time
   (current-time)

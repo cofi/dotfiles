@@ -89,6 +89,23 @@
        (progn (goto-char min) (line-beginning-position))
        (progn (goto-char max) (line-end-position))))))
 
+(defun cofi/macro-dwim (arg)
+  "Start, end, execute or clear macro.
+Call with 0 to clear last macro. If there is no last macro define a new one, if\
+currently defining macro end and it and if there is a last macro call that.
+Note if `arg' is 1 (that is called without prefix or numeric-argument 1), that
+will not be passed to `start-kbd-macro'."
+  (interactive "p")
+  (if (= arg 0)
+      (setq last-kbd-macro nil)
+    (if defining-kbd-macro
+        (end-kbd-macro arg)
+      (if last-kbd-macro
+          (call-last-kbd-macro arg)
+        (if (= arg 1)
+            (start-kbd-macro)   
+          (start-kbd-macro arg))))))
+
 ;; Relying on cofi-dir-alias-pairs (list of pairs: ("alias" . "dir")
 ;; and cofi-dir-aliases (list of aliases)
 (defun cofi-cd-alias (alias)

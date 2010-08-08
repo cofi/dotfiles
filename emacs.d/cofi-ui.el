@@ -228,6 +228,7 @@
 (require-and-exec 'cofi-func
   (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
+  (global-set-key (kbd "<f4>") 'cofi/macro-dwim)
   )
 
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)

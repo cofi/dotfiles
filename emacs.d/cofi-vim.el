@@ -53,7 +53,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state")
   (vim-mapleader-add "W" 'save-some-buffers)
   (vim-mapleader-add "d" 'dired-jump)
   (vim-mapleader-add "k" 'kill-buffer-and-window)
-  (vim-mapleader-add "K" 'kill-buffer)
+  (vim-mapleader-add "K" 'kill-this-buffer)
   (vim-mapleader-add "C" 'cofi-cd-alias)
   (vim-mapleader-add "D" 'cofi-dired-alias)
   ;; ==================================================

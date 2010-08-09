@@ -233,6 +233,7 @@
   (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
   (global-set-key (kbd "<f4>") 'cofi/macro-dwim)
+  (global-set-key (kbd "S-<f4>") (lambda () (interactive (cofi/macro-dwim 0))))
   )
 
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
@@ -244,12 +245,6 @@
 
 (global-set-key (kbd "<f12>") (lambda ()
                                 (interactive) (switch-to-buffer "*scratch*")))
-
-(global-set-key (kbd "C-c d") (make-hippie-expand-function
-                               '(
-                                 try-complete-file-name-partially
-                                 try-complete-file-name
-                                 )))
 
 (when (locate-library "home-end")
   (global-set-key (kbd "<home>") 'home-end-home)

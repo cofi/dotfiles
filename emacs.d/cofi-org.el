@@ -5,6 +5,7 @@
           org-agenda-files "~/Org/agenda")
   (setq org-directory "~/"))
 
+(autoload 'org-agenda-files "org")
 (defun cofi/visit-org-agenda-files (fname)
   "Visit agenda files.
 Note: This assumes all files are in the org-directory."

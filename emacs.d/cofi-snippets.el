@@ -2,6 +2,7 @@
 (require-and-exec 'yasnippet
     (yas/initialize)
     (yas/load-directory "~/.emacs.d/snippets")
+    (yas/load-directory "~/dev/snippets")
     (yas/load-directory "~/.elisp/vendor/yasnippet/snippets")
     (setq yas/prompt-functions '(yas/ido-prompt
                                  yas/completing-prompt))

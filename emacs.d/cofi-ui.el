@@ -104,8 +104,8 @@
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))
 
-(require-and-exec 'framepop
-                  (framepop-enable))
+(setq framepop-enable-keybinding "<f11>")
+(require-and-exec 'framepop (framepop-enable))
 
 (require-and-exec 'eldoc
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
@@ -146,6 +146,12 @@
 
 (setq vc-handled-backends '(SVN Hg)
       vc-follow-symlinks t)
+
+(setq comint-prompt-read-only t)
+
+(setq comment-style 'align)
+
+(setq inhibit-startup-screen t)
 
 ;; Use UTF-8 dammit
 (prefer-coding-system       'utf-8)
@@ -193,6 +199,7 @@
 (display-time-mode t)
 (global-font-lock-mode t)
 (global-hl-line-mode t)
+(column-number-mode 1)
 (add-hook 'find-file-hook (lambda () (linum-mode 1))) ;start linum only for real files
 (show-paren-mode t)
 (when (string= hostname "hitchhiker")

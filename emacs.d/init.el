@@ -74,13 +74,7 @@
  '(TeX-view-program-selection (quote (((output-dvi style-pstricks) "xdg-open")
                                       (output-pdf "xdg-open")
                                       (output-dvi "xdg-open")
-                                      (output-html "xdg-open"))))
- '(coding-category-utf-8 nil t)
- '(column-number-mode t)
- '(comint-prompt-read-only t)
- '(comment-style (quote align))
- '(framepop-enable-keybinding "<f11>")
- '(inhibit-startup-screen t))
+                                      (output-html "xdg-open")))))
 
 (color-theme-cofi)
 

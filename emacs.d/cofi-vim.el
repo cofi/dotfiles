@@ -6,15 +6,18 @@
   (setq viper-ex-style-editing nil)
 
   ;; Window keybindings ========================================
-  (define-key viper-vi-basic-map (kbd "C-w s") 'split-window-vertically)
-  (define-key viper-vi-basic-map (kbd "C-w v") 'split-window-horizontally)
-  (define-key viper-vi-basic-map (kbd "C-w o") 'other-window)
-  (define-key viper-vi-basic-map (kbd "C-w 1") 'delete-other-windows)
-  (define-key viper-vi-basic-map (kbd "C-w d") 'delete-window)
-  (define-key viper-vi-basic-map (kbd "C-w m") 'maximize)
-  (define-key viper-vi-basic-map (kbd "C-w f") 'fullscreen-toggle)
-  (define-key viper-vi-basic-map (kbd "C-w <return>") 'enlarge-window)
-  (define-key viper-vi-basic-map (kbd "C-w =") 'enlarge-window-horizontally)
+  ;; kill vimpulse bindings (new defined in windowing)
+  (define-key viper-vi-basic-map "\C-w" nil)
+  (define-key viper-vi-basic-map "\C-w\C-w" nil)
+  (define-key viper-vi-basic-map "\C-ww" nil)
+  (define-key viper-vi-basic-map "\C-wo" nil)
+  (define-key viper-vi-basic-map "\C-wc" nil)
+  (define-key viper-vi-basic-map "\C-ws" nil)
+  (define-key viper-vi-basic-map "\C-wv" nil)
+  (define-key viper-vi-basic-map "\C-wh" nil)
+  (define-key viper-vi-basic-map "\C-wj" nil)
+  (define-key viper-vi-basic-map "\C-wk" nil)
+  (define-key viper-vi-basic-map "\C-wl" nil)
   ;; ============================================================
 
   ;; Keybindings ==========

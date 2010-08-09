@@ -1,6 +1,13 @@
-(defun swap-with (dir)
-  (interactive)
-  (let ((other-window (windmove-find-other-window dir)))
+(autoload 'windmove-find-other-window "windmove")
+(defun swap-window (direction)
+  "Swap current window with the one in `direction'."
+  (interactive (list (ido-completing-read "Swap with window: "
+                                          (mapcar 'symbol-name
+                                                  '(left right down up)))))
+  (let* ((dir (if (symbolp direction)
+                  direction
+                (intern direction)))
+        (other-window (windmove-find-other-window dir)))
     (when other-window
       (let* ((this-window (selected-window))
              (this-buffer (window-buffer this-window))
@@ -11,6 +18,11 @@
         (set-window-buffer other-window this-buffer)
         (set-window-start this-window other-start)
         (set-window-start other-window this-start)))))
+
+(defun swap-with-left () (interactive) (swap-window 'left))
+(defun swap-with-down () (interactive) (swap-window 'down))
+(defun swap-with-up () (interactive) (swap-window 'up))
+(defun swap-with-right () (interactive) (swap-window 'right))
 
 (defun smart-split ()
   "Split the frame into 80-column sub-windows, and make sure no window has
@@ -24,22 +36,52 @@
           (smart-split-helper w2))))
   (smart-split-helper nil))
 
-(defun fullscreen-toggle (&optional f)
+(defun frame/fullscreen-toggle (&optional f)
   "Toggle given or current frame."
   (interactive)
-  (set-frame-parameter f 'fullscreen
-                       (if (frame-parameter f 'fullscreen)
-                           nil
-                         'fullboth)))
+  (set-frame-parameter f 'fullscreen (if (frame-parameter f 'fullscreen)
+                                         nil
+                                       'fullboth)))
 
-(defun maximize (&optional f)
+(defun frame/maximize (&optional f)
   "Maximize given or current frame. Needs at least Emacs 23.2"
   (interactive)
   (set-frame-parameter f 'fullscreen 'maximized))
 
-(global-set-key (kbd "C-S-j") (lambda () (interactive) (swap-with 'down)))
-(global-set-key (kbd "C-S-k") (lambda () (interactive) (swap-with 'up)))
-(global-set-key (kbd "C-S-h") (lambda () (interactive) (swap-with 'left)))
-(global-set-key (kbd "C-S-l") (lambda () (interactive) (swap-with 'right)))
+(defun frame/normal ()
+  "Return to normal frame size."
+  (interactive)
+  (let ((frame (selected-frame)))
+    (set-frame-size frame 90 60)
+    (set-frame-parameter frame 'fullscreen nil)))
+
+  ;; Windowing
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-w") 'vimpulse-cycle-windows)
+    (define-key map (kbd "w") 'vimpulse-cycle-windows)
+    (define-key map (kbd "s") 'split-window-vertically)
+    (define-key map (kbd "v") 'split-window-horizontally)
+    (define-key map (kbd "o") 'other-window)
+    (define-key map (kbd "1") 'delete-other-windows)
+    (define-key map (kbd "d") 'delete-window)
+    (define-key map (kbd "m") 'frame/maximize)
+    (define-key map (kbd "n") 'frame/normal)
+    (define-key map (kbd "f") 'frame/fullscreen-toggle)
+    (define-key map (kbd "RET") 'enlarge-window)
+    (define-key map (kbd "+") 'enlarge-window-horizontally)
+    (define-key map (kbd "=") 'balance-windows)
+    (define-key map (kbd "/") 'smart-split)
+
+    (define-key map (kbd "h") 'windmove-left)
+    (define-key map (kbd "j") 'windmove-down)
+    (define-key map (kbd "k") 'windmove-up)
+    (define-key map (kbd "l") 'windmove-right)
+
+    (define-key map (kbd "H") 'swap-with-left)
+    (define-key map (kbd "J") 'swap-with-down)
+    (define-key map (kbd "K") 'swap-with-up)
+    (define-key map (kbd "L") 'swap-with-right)
+    (define-key map (kbd "SPC") 'swap-window)
+    (global-set-key (kbd "C-w") map))
 
 (provide 'cofi-windowing)

@@ -1,17 +1,23 @@
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
 (require 'org-install)
-(let ((map (make-sparse-keymap)))
-  (define-key map (kbd "a") 'org-agenda-list)
-  (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
-  (define-key map (kbd "l") 'org-store-link)
-  (global-set-key (kbd "<f5>") map))
-
-(setq org-startup-folded nil)
-
 (if (file-directory-p "~/Org")
     (setq org-directory "~/Org/"
           org-agenda-files "~/Org/agenda")
   (setq org-directory "~/"))
+
+(defun cofi/visit-org-agenda-files (fname)
+  "Visit agenda files.
+Note: This assumes all files are in the org-directory."
+  (interactive (list (ido-completing-read "Visit file: "
+                                    (mapcar 'file-name-nondirectory (org-agenda-files)))))
+  (find-file (concat org-directory fname)))
+
+(let ((map (make-sparse-keymap)))
+  (define-key map (kbd "a") 'org-agenda-list)
+  (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
+  (define-key map (kbd "l") 'org-store-link)
+  (define-key map (kbd "v") 'cofi/visit-org-agenda-files)
+  (global-set-key (kbd "<f5>") map))
 
 (add-hook 'org-mode-hook
           (lambda ()

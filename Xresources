@@ -72,7 +72,7 @@ URxvt.scrollTtyKeypress: True
 *color7:         #DDDDDD
 *color15:        #FFFFFF
 
-Emacs.font:     inconsolata-10
+Emacs.font:     inconsolata-8
 Emacs.geometry: 90x60
 Xft.hinting:    1
 

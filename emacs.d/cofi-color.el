@@ -1,5 +1,5 @@
 ;; -*- mode: emacs-lisp; mode: rainbow -*-
-(require-and-exec 'color-theme 
+(require-and-exec 'color-theme
     (defun color-theme-cofi ()
       (interactive)
       (color-theme-install
@@ -17,7 +17,7 @@
           )
 
          (default ((t (:background "gray13" :foreground "gray100"))))
-         (italic ((t (:italic t))))
+         (italic ((t (:italic t :family "Dejavu Sans Mono" :height 80))))
          (underline ((t (:underline t))))
          (bold ((t (:bold t))))
          (bold-italic ((t (:italic t :bold t))))
@@ -37,23 +37,6 @@
          (comint-highlight-prompt ((t (:foreground "dark blue"))))
 
          (cursor ((t (:background "OrangeRed2"))))
-
-         (custom-button-face ((t (:background "lightgrey" :foreground "black" :box (:line-width 2 :style released-button)))))
-         (custom-button-pressed-face ((t (:background "lightgrey" :foreground "black" :box (:line-width 2 :style pressed-button)))))
-         (custom-changed-face ((t (:background "blue" :foreground "white"))))
-         (custom-comment-face ((t (:background "gray85"))))
-         (custom-comment-tag-face ((t (:foreground "blue4"))))
-         (custom-face-tag-face ((t (:bold t :family "helv" :weight bold :height 1.2))))
-         (custom-group-tag-face ((t (:bold t :foreground "blue" :weight bold :height 1.2))))
-         (custom-group-tag-face-1 ((t (:bold t :family "helv" :foreground "red" :weight bold :height 1.2))))
-         (custom-invalid-face ((t (:background "red" :foreground "yellow"))))
-         (custom-modified-face ((t (:background "blue" :foreground "white"))))
-         (custom-rogue-face ((t (:background "black" :foreground "pink"))))
-         (custom-saved-face ((t (:underline t))))
-         (custom-set-face ((t (:background "white" :foreground "blue"))))
-         (custom-state-face ((t (:foreground "dark green"))))
-         (custom-variable-button-face ((t (:bold t :underline t :weight bold))))
-         (custom-variable-tag-face ((t (:bold t :family "helv" :foreground "blue" :weight bold :height 1.2))))
 
          (diff-added-face ((t (:foreground "green"))))
          (diff-changed-face ((t (:foreground "blue"))))
@@ -98,24 +81,21 @@
          (ediff-odd-diff-face-B ((t (:background "light grey" :foreground "Black"))))
          (ediff-odd-diff-face-C ((t (:background "Gray" :foreground "White"))))
 
-         (flyspell-duplicate-face ((t (:bold t :foreground "gold3" :underline t :weight bold))))
-         (flyspell-incorrect-face ((t (:bold t :foreground "orange red" :underline t :weight bold))))
-
-         (font-lock-builtin-face ((t (:foreground "orchid"))))
-         (font-lock-comment-face ((t (:italic t :foreground "burlywood"))))
-         (font-lock-constant-face ((t (:bold t :foreground "firebrick" :weight bold))))
+         (font-lock-builtin-face ((t (:foreground "LightSalmon4"))))
+         (font-lock-comment-face ((t (:inherit italic :foreground "burlywood"))))
+         (font-lock-constant-face ((t (:foreground "firebrick"))))
          (font-lock-doc-face ((t (:foreground "yellow"))))
          (font-lock-doc-string-face ((t (:foreground "yellow"))))
-         (font-lock-function-name-face ((t (:foreground "cornsilk"))))
-         (font-lock-keyword-face ((t (:bold t :foreground "medium orchid" :weight bold))))
+         (font-lock-function-name-face ((t (:foreground "steel blue"))))
+         (font-lock-keyword-face ((t (:foreground "tomato2"))))
          (font-lock-preprocessor-face ((t (:foreground "cadet blue"))))
          (font-lock-reference-face ((t (:foreground "violet red"))))
-         (font-lock-string-face ((t (:foreground "sienna"))))
+         (font-lock-string-face ((t (:foreground "sienna1"))))
          (font-lock-type-face ((t (:italic t :foreground "forest green"))))
-         (font-lock-variable-name-face ((t (:foreground "dark goldenrod"))))
+         (font-lock-variable-name-face ((t (:foreground "gold"))))
          (font-lock-warning-face ((t (:bold t :foreground "red" :weight bold))))
 
-         (fringe ((t (:background "gray13"))))
+         (fringe ((t (:background "gray17"))))
 
          (highlight-changes-delete-face ((t (:foreground "red" :underline t))))
          (highlight-changes-face ((t (:foreground "red"))))
@@ -138,10 +118,9 @@
 
          (makefile-space-face ((t (:background "hot pink"))))
 
-         (modeline ((t (:background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
-         (modeline-buffer-id ((t (:bold t :background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
-         (modeline-mousable ((t (:background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
-         (modeline-mousable-minor-mode ((t (:background "SlateGray4" :foreground "black" :box (:line-width -1 :style released-button)))))
+         (mode-line ((t (:background "SlateGray4" :foreground "black"))))
+         (mode-line-buffer-id ((t (:bold t :background "SlateGray4" :foreground "black"))))
+         (modeline-mousable ((t (:background "SlateGray4" :foreground "black"))))
 
          (primary-selection ((t (:background "lightgoldenrod2"))))
 
@@ -156,8 +135,8 @@
          (secondary-selection ((t (:background "yellow"))))
          (sh-heredoc-face ((t (:foreground "tan"))))
 
-         (show-paren-match-face ((t (:background "yellow green"))))
-         (show-paren-mismatch-face ((t (:background "purple" :foreground "white"))))
+         (show-paren-match-face ((t (:background "forest green"))))
+         (show-paren-mismatch-face ((t (:background "red" :foreground "white"))))
          (show-tabs-space-face ((t (:foreground "yellow"))))
          (show-tabs-tab-face ((t (:foreground "red"))))
 
@@ -178,7 +157,7 @@
          (tex-math-face ((t (:foreground "rosy brown"))))
          (texinfo-heading-face ((t (:foreground "blue"))))
 
-         (tooltip ((t (:background "Wheat" :foreground "black"))))
+         (tooltip ((t (:background "white" :foreground "black"))))
          (trailing-whitespace ((t (:background "red"))))
          (variable-pitch ((t (:family "helv"))))
          (linum ((t (:inherit (shadow default) :background "slate gray" :foreground "khaki1"))))
@@ -192,13 +171,13 @@
          (viper-search-face ((t (:background "khaki" :foreground "Black"))))
 
          (zmacs-region ((t (:background "lightgoldenrod2"))))
-         
+
          (org-hide ((t (:foreground "gray13"))))
-         (org-level-1 ((t (:bold t :foreground "firebrick"))))
-         (org-level-2 ((t (:bold t :foreground "brown"))))
-         (org-level-3 ((t (:bold t :foreground "orange red"))))
-         (org-level-4 ((t (:bold t :foreground "dark orange"))))
-         (org-level-5 ((t (:bold t :foreground "orange3"))))
+         (org-level-1 ((t (:bold t :foreground "chocolate4"))))
+         (org-level-2 ((t (:bold t :foreground "chocolate3"))))
+         (org-level-3 ((t (:bold t :foreground "chocolate2"))))
+         (org-level-4 ((t (:bold t :foreground "orange3"))))
+         (org-level-5 ((t (:bold t :foreground "dark orange"))))
          (org-level-6 ((t (:bold t :foreground "dark khaki"))))
          (org-level-7 ((t (:bold t :foreground "khaki"))))
          (org-level-8 ((t (:bold t :foreground "khaki1"))))
@@ -207,8 +186,8 @@
          (org-link ((t (:underline t :foreground "steel blue"))))
          (org-footnote ((t (:foreground "dark violet"))))
          (org-special-keyword ((t (:bold t :foreground "medium orchid"))))
-         (org-todo ((t (:foreground "dark red"))))
-         (org-done ((t (:bold t :foreground "OliveDrab4"))))
+         (org-todo ((t (:blod t :foreground "firebrick"))))
+         (org-done ((t (:foreground "OliveDrab4" :strike-through t))))
          (org-agenda-done ((t (:foreground "OliveDrab4"))))
          (org-agenda-structure ((t (:foreground "cornsilk4"))))
          (org-meta-line ((t (:foreground "tan4"))))

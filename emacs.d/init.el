@@ -28,7 +28,7 @@
         "/usr/local/share/emacs/site-lisp/wl/"
         ))
 
-(defvar hostname (substring (shell-command-to-string "hostname") 0 -1))
+(defvar hostname (car (split-string system-name "\\." t)))
 
 (require 'cofi-util)
 (require 'cofi-vim)

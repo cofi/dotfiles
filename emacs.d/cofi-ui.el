@@ -115,8 +115,8 @@
 (require-and-exec 'keychain-environment
                   (add-hook 'after-make-frame-functions
                             (lambda (frame)
-                              (funcall 'refresh-keychain-environment)))
-                  (add-hook 'after-init-hook 'refresh-keychain-environment))
+                              (funcall 'keychain/refresh)))
+                  (add-hook 'after-init-hook 'keychain/refresh))
 ;; ==================================================
 
 ;; Settings ========================================

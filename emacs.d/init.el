@@ -21,6 +21,7 @@
         "~/.elisp/vendor/sackspace"
         "~/.elisp/vendor/keychain-environment"
         "~/.elisp/vendor/gist"
+        "~/.elisp/vendor/rainbow"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"

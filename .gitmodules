@@ -22,3 +22,6 @@
 [submodule "elisp/vendor/gist"]
 	path = elisp/vendor/gist
 	url = git://github.com/defunkt/gist.el.git
+[submodule "elisp/vendor/rainbow"]
+	path = elisp/vendor/rainbow
+	url = git://git.naquadah.org/rainbow.git

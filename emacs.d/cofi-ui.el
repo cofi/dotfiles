@@ -240,7 +240,14 @@
   (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
   (global-set-key (kbd "<f4>") 'cofi/macro-dwim)
-  (global-set-key (kbd "S-<f4>") (lambda () (interactive (cofi/macro-dwim 0))))
+  (global-set-key (kbd "S-<f4>") 'cofi/reset-macro)
+
+  (add-hook 'artist-mode-init-hook
+            (lambda ()
+              (define-key artist-mode-map (kbd "C-c C-a C-o")
+                'artist-ido-select-operation)
+              (define-key artist-mode-map (kbd "C-c C-a C-c")
+                'artist-ido-select-settings)))
   )
 
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)

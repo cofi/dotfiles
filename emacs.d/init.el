@@ -36,7 +36,6 @@
 
 (mapc #'load '(
             "cofi-autoloads"
-            "cofi-artist"
             "cofi-buffer"
             "cofi-bbdb"
             "cofi-calendar"

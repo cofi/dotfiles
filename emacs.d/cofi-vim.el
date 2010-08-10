@@ -38,12 +38,16 @@
 
   ;; Mapleader ========================================
   (defconst vim-mapleader "," "Mapping prefix
-Vanilla in vi-state; Prefixed witf `C-' in insert-state")
+Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   (defvar vim-mapleader-map (make-sparse-keymap) "Mapleader keymap")
   ;; <leader> key in normal-mode
   (define-key viper-vi-global-user-map vim-mapleader vim-mapleader-map)
   ;; C-<leader> key in insert-mode
   (define-key viper-insert-global-user-map (read-kbd-macro
+                                            (format "C-%s" vim-mapleader))
+                                           vim-mapleader-map)
+  ;; C-<leader> key in emacs-mode
+  (define-key viper-emacs-global-user-map (read-kbd-macro
                                             (format "C-%s" vim-mapleader))
                                            vim-mapleader-map)
   (defun vim-mapleader-add (keyseq fun)

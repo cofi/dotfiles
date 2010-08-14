@@ -18,10 +18,8 @@
       ido-enable-flex-matching t
       ido-use-url-at-point nil
       ido-use-filename-at-point nil
-      ido-everywhere t
       ido-ignore-extensions t
-      ido-max-directory-size 300000
-      )
+      ido-max-directory-size 300000)
 
 (eval-after-load "ido"
   '(progn
@@ -45,7 +43,8 @@
                                "^auto/$"
                                "_region_"
                                )))))
-(ido-mode t)
+(ido-mode 'files)
+(ido-everywhere 1)
 ;; ==================================================
 
 ;; other packages ========================================
@@ -60,20 +59,16 @@
                     '(diminish 'highlight-parentheses-mode))
                   )
 
-(require-and-exec 'second-sel
-                  (setq secondary-selection-ring-max 1000)
-                  )
-(setq kill-ring-max 1000)
-(require 'browse-kill-ring+)
-
+(setq recentf-auto-cleanup 'never)
+(setq recentf-max-saved-items 500)
 (require-and-exec 'recentf
-                  (setq recentf-auto-cleanup 'never)
-                  (recentf-mode t)
+                  (recentf-mode 1)
                   (setq recentf-exclude '(
-                                          "\.recentf"
-                                          "\.ido\.last"
-                                          "coficore-sh"
-                                          "hithhiker-sh"
+                                          "\\.recentf"
+                                          "\\.ido\\.last"
+                                          "Documents/bbdb"
+                                          "Documents/diary"
+                                          "\\.keychain/.*?-sh\\(-gpg\\)?"
                                           ))
                   )
 
@@ -164,6 +159,8 @@
 (setq speck-engine 'Hunspell
       speck-hunspell-library-directory "/usr/share/hunspell/")
 
+(setq speck-hunspell-dictionary-alist '( ("de" . "de_DE")
+                                         ("en" . "en_US")))
 ;; Let speck highlight doublets
 (setq speck-doublet t)
 
@@ -177,7 +174,8 @@
 (setq auto-save-default nil)
 
 (setq-default woman-use-own-frame nil
-              woman-use-topic-at-point t)
+              woman-use-topic-at-point t
+              woman-cache-filename "~/.wmncach.el")
 
 ;; mixedCase to small_words_with_underscores (visually)
 (setq glasses-separate-parentheses-p nil
@@ -211,10 +209,15 @@
 (defalias 'eb 'eval-buffer)
 (defalias 'er 'eval-region)
 
-(defalias 'bl 'bookmark-bmenu-list)
-(defalias 'bj 'bookmark-jump)
-(defalias 'bs 'bookmark-set)
-(defalias 'sb 'bookmark-save)
+(defalias 'cofi/file 'ido-find-file)
+(defalias 'cofi/buffer-alternate 'ido-switch-buffer)
+
+(if (fboundp 'anything-buffers+)
+    (progn
+      (defalias 'cofi/buffer 'anything-buffers+)
+      (defalias 'cofi/file-alternate 'cofi/anything-files))
+  (defalias 'cofi/buffer 'ido-switch-buffer)
+  (defalias 'cofi/file-alternate 'ido-find-file))
 ;; ==================================================
 
 ;; KeyBindings ========================================
@@ -229,15 +232,16 @@
 
 (global-set-key (kbd "C-c i") 'magit-status)
 
-(eval-after-load "smex" '(smex-initialize))
-(global-set-key (kbd "M-x") 'smex)
-
 (eval-after-load "diff" '(define-key diff-mode-map (kbd "q") 'kill-this-buffer))
 
 (global-set-key (kbd "C-c b") 'revert-buffer)
 
+(global-set-key (kbd "C-x f") 'cofi/file)
+(global-set-key (kbd "C-x C-f") 'cofi/file-alternate)
+(global-set-key (kbd "C-x b") 'cofi/buffer)
+(global-set-key (kbd "C-x B") 'cofi/buffer-alternate)
+
 (require-and-exec 'cofi-func
-  (global-set-key (kbd "C-x f") 'recentf-ido-find-file)
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
   (global-set-key (kbd "<f4>") 'cofi/macro-dwim)
   (global-set-key (kbd "S-<f4>") 'cofi/reset-macro)

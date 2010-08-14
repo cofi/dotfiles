@@ -1,3 +1,4 @@
+(setq viper-toggle-key [pause])
 (require-and-exec 'vimpulse
   (setq viper-shift-width 4)
   (setq viper-re-search t)
@@ -54,14 +55,16 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
     (interactive "kKeysequence: \naFunction:")
     (define-key vim-mapleader-map keyseq fun))
 
-  (vim-mapleader-add "e" 'ido-find-file)
-  (vim-mapleader-add "b" 'ido-switch-buffer)
+  (vim-mapleader-add "e" 'cofi/file)
+  (vim-mapleader-add "E" 'cofi/file-alternate)
+  (vim-mapleader-add "b" 'cofi/buffer)
+  (vim-mapleader-add "B" 'cofi/buffer-alternate)
   (vim-mapleader-add "w" 'save-buffer)
   (vim-mapleader-add "W" 'save-some-buffers)
-  (vim-mapleader-add "d" 'dired-jump)
   (vim-mapleader-add "k" 'kill-buffer-and-window)
   (vim-mapleader-add "K" 'kill-this-buffer)
   (vim-mapleader-add "C" 'cofi-cd-alias)
+  (vim-mapleader-add "d" 'dired-jump)
   (vim-mapleader-add "D" 'cofi-dired-alias)
   ;; ==================================================
 

@@ -25,3 +25,6 @@
 [submodule "elisp/vendor/rainbow"]
 	path = elisp/vendor/rainbow
 	url = git://git.naquadah.org/rainbow.git
+[submodule "elisp/vendor/scratch"]
+	path = elisp/vendor/scratch
+	url = git://github.com/ieure/scratch-el.git

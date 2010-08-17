@@ -261,8 +261,8 @@
 ;; M-TAB is shadowed
 (define-key function-key-map (kbd "C-TAB") (kbd "M-TAB"))
 
-(global-set-key (kbd "<f12>") (lambda ()
-                                (interactive) (switch-to-buffer "*scratch*")))
+(require-and-exec 'scratch
+                  (global-set-key (kbd "<f12>") 'scratch))
 
 (when (locate-library "home-end")
   (global-set-key (kbd "<home>") 'home-end-home)

@@ -21,78 +21,21 @@ trans() {
     esac
 }
 
-unpack() {
-    if [[ -f $1 ]] {
-        case $1 in
-            *.tar.bz2)  tar -xvjf           $1 ;;
-            *.tar.gz)   tar -xvzf           $1 ;;
-            *.rar)      unrar e             $1 ;;
-            *.deb)      ar -x               $1 ;;
-            *.bz2)      bzip2 -d            $1 ;;
-            *.lzh)      lha x               $1 ;;
-            *.gz)       gunzip -d           $1 ;;
-            *.tar)      tar -xvf            $1 ;;
-            *.tgz)      gunzip -d           $1 ;;
-            *.tbz2)     tar -jxvf           $1 ;;
-            *.zip)      unzip               $1 ;;
-            *.tar.lzma) lzma -dk $1 --stdout | tar -xvf - ;;
-            *.lzma)     lzma -dk            $1 ;;
-            *.7z)       lzma -dk -S .7z     $1 ;;
-            *)          echo "'$1' Error. Please go away" ;;
-        esac
-    } else {
-        echo "'$1' is not a valid file"
-    }
-}
-
-pack() {
-    if [[ -n $2 ]] {
-        case $2 in
-            tgz | tar.gz)   tar -zcf$1.$2  $1 ;;
-            tbz2 | tar.bz2) tar -jcf$1.$2  $1 ;;
-            tar)            tar -cf$1.$2   $1 ;;
-            gz | gzip)      gzip            $1 ;;
-            bz2 | bzip2)    bzip2           $1 ;;
-            zip)            zip -r $1.$2    $1 ;;
-            7z)             lzma -zk -S .7z $1 ;; 
-            lzma)           lzma -zk        $1 ;; 
-            *)
-                    echo "Usage:"
-                    echo "pack FILE COMPRESSION"
-                    echo "Supported compressions: tar(gz,bz2), gz, bz2, zip, 7z, lzma"
-                    ;;
-        esac
-    } else {
-        echo "Usage:"
-        echo "pack FILE COMPRESSION"
-        echo "Supported compressions: tar(gz,bz2), gz, bz2, zip, 7z, lzma"
-    }
-}
-
-archive() {
-    if [[ -d $1 ]] {
-        pack $1 tar
-        lzma -z $1.tar
-    } else {
-        echo "Directory expected."
-    }
-
-}
-
 lsarchive() {
-    if [[ -f $1 ]] {
-        case $1 in
-            *.tar.gz)      gunzip -c $1 | tar -tf - -- ;;
-            *.tar)         tar -tf $1 ;;
-            *.tgz)         tar -ztf $1 ;;
-            *.zip)         unzip -l $1 ;;
-            *.bz2)         bzless $1 ;;
-            *.rar)         rar l $1 ;;
-            *.deb)         dpkg-deb --fsys-tarfile $1 | tar -tf - -- ;;
+    if [[ -f "$1" ]] {
+        case "$1" in
+            *.tar*|*.tbz|*.tgz)
+                tar -atf "$1" ;;
+            *.zip)
+                unzip -l "$1" ;;
+            *.rar)
+                unrar l "$1" ;;
+            *.deb)
+                dpkg-deb -c "$1" ;;
             *)
-                           echo "Usage:"
-                           echo "lsarchive ARCHIVE [tar(gz|bz2), zip, rar, deb])"
-                           ;;
+                echo "Usage:"
+                echo "lsarchive ARCHIVE [tar(possibly compressed), zip, rar, deb]"
+                ;;
         esac
     } else {
         echo "'$1' is not a valid archive"

@@ -1,0 +1,34 @@
+#!/bin/zsh
+
+file=$(readlink -f $1)
+directory=$2
+
+if [ -n "$directory" ] ; then
+    mkdir -p "$directory"
+    cd "$directory"
+fi
+
+if [ -f "$file" ]; then
+    case "$file" in
+        *.tar*|*.tbz|*.tgz)
+            tar -xvaf               "$file" ;;
+        *.bz2)
+            bunzip2                 "$file" ;;
+        *.gz)
+            gunzip                  "$file" ;;
+        *.zip)
+            unzip                   "$file" ;;
+        *.rar)
+            unrar x                 "$file" ;;
+        *.deb)
+            dpkg-deb -X             "$file" ;;
+        *.lzma)
+            unlzma -k               "$file" ;;
+        *.xz)
+            unxz -k                 "$file" ;;
+        *)
+            echo "'$file' Error. Please go away" ;;
+    esac
+else
+    echo "'$1' is not a valid file"
+fi

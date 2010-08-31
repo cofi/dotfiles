@@ -1,6 +1,5 @@
 (defun cofi/fortune2scratch ()
   "Return a comment-padded fortune cookie."
-  (interactive)
   (let ((cookie (shell-command-to-string "fortune -a")))
     (concat
      (replace-regexp-in-string "^" ";; " cookie)
@@ -22,6 +21,7 @@
         "~/.elisp/vendor/keychain-environment"
         "~/.elisp/vendor/gist"
         "~/.elisp/vendor/rainbow"
+        "~/.elisp/vendor/scratch"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"

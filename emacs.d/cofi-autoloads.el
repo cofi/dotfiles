@@ -60,4 +60,6 @@ gists." t)
 (autoload 'gist-fetch "gist" "Fetches a Gist and inserts it into a new buffer"
   t)
 
+(autoload 'offlineimap "offlineimap" nil t)
+
 (provide 'cofi-autoloads)

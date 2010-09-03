@@ -22,6 +22,7 @@
         "~/.elisp/vendor/gist"
         "~/.elisp/vendor/rainbow"
         "~/.elisp/vendor/scratch"
+        "~/.elisp/vendor/offlineimap"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"

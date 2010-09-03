@@ -28,3 +28,6 @@
 [submodule "elisp/vendor/scratch"]
 	path = elisp/vendor/scratch
 	url = git://github.com/ieure/scratch-el.git
+[submodule "elisp/vendor/offlineimap"]
+	path = elisp/vendor/offlineimap
+	url = git://git.naquadah.org/offlineimap-el.git

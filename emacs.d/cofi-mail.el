@@ -41,6 +41,15 @@
       'wl-draft-kill
       'mail-send-hook))
 
+(defun cofi/write-mail ()
+  (interactive)
+  (setq make-backup-files nil)
+  (setq fill-column 72)
+  (turn-on-auto-fill)
+  (auto-complete-mode)
+  (yas/minor-mode)
+  (turn-on-speck))
+
 (eval-after-load "wl"
   '(progn
      (add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
@@ -97,15 +106,7 @@
      ;; Proportion of the summary and message windows
      (setq wl-message-window-size '(3 . 7))
 
-     (add-hook 'wl-mail-setup-hook
-               (lambda ()
-                 (setq make-backup-files nil)
-                 (setq fill-column 72)
-                 (turn-on-auto-fill)
-                 (auto-complete-mode)
-                 (yas/minor-mode)
-                 (turn-on-speck)
-                 ))
+     (add-hook 'wl-mail-setup-hook 'cofi/write-mail)
 
      ;; Invert behaviour of with and without argument replies.
      (setq wl-draft-reply-without-argument-list
@@ -123,6 +124,8 @@
      (define-key wl-summary-mode-map (kbd "A") 'wl-summary-reply)
      (define-key wl-summary-mode-map (kbd "a") 'wl-summary-reply-with-citation)
      (define-key wl-summary-mode-map (kbd "D") 'wl-thread-delete)
+     (define-key wl-summary-mode-map (kbd "<f12>") 'offlineimap)
+     (define-key wl-folder-mode-map (kbd "<f12>") 'offlineimap)
      ))
 
 (require-and-exec 'mairix

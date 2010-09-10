@@ -31,3 +31,6 @@
 [submodule "elisp/vendor/offlineimap"]
 	path = elisp/vendor/offlineimap
 	url = git://git.naquadah.org/offlineimap-el.git
+[submodule "elisp/vendor/google-weather-el"]
+	path = elisp/vendor/google-weather-el
+	url = git://git.naquadah.org/google-weather-el.git

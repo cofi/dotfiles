@@ -6,4 +6,4 @@ emacs.d/auto-save-list/
 emacs.d/private.el
 emacs.d/.emacs.desktop*
 vim/vim/.netrwhist
- 
+emacs.d/url/

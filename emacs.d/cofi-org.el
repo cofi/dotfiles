@@ -1,5 +1,10 @@
+(add-to-list 'load-path "~/.elisp/vendor/google-weather-el")
+(require 'org-google-weather)
+(setq org-google-weather-icon-directory "/usr/share/icons/oxygen/16x16/status/")
+
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
 (require 'org-install)
+
 (if (file-directory-p "~/Org")
     (setq org-directory "~/Org/"
           org-agenda-files "~/Org/agenda")

@@ -24,7 +24,7 @@
 (setq pgg-default-scheme 'gpg
       pgg-scheme 'gpg
       pgg-query-keyserver t
-      pgg-default-keyserver-address "subkeys.pgp.net"
+      pgg-default-keyserver-address "pgp.mit.edu"
       pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
       pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
       pgg-encrypt-for-me t

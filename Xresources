@@ -60,8 +60,8 @@ URxvt.scrollTtyKeypress: True
 *color3:         #DAA520
 *color11:        #FFC125
 !blue
-*color4:         #003399
-*color12:        #3300FF
+*color4:         #7A7AB0
+*color12:        #4186BE
 !magenta
 *color5:         #8B7B8B
 *color13:        #D8BFD8

@@ -3,15 +3,15 @@
 ##
 # vcs_info
 #
-FMT_BRANCH="[${PR_RED}%b%u%c${PR_RESET}]" # e.g. master!?
+FMT_BRANCH="[${PR_BLUE}%b${PR_RESET}-%u%c]" # e.g. master!?
 FMT_ACTION="(${PR_CYAN}%a${PR_RESET})"   # e.g. (rebase-i)
 FMT_PATH=" ${PR_MAGENTA}%r/%S${PR_RESET}" # e.g. repo/subdir
 
 zstyle ':vcs_info:*' enable git hg svn
 zstyle ':vcs_info:*:prompt:*' max-exports 3
 zstyle ':vcs_info:*:prompt:*' check-for-changes true
-zstyle ':vcs_info:*:prompt:*' unstagedstr '?'  # display ? if there are unstaged changes
-zstyle ':vcs_info:*:prompt:*' stagedstr '!'    # display ! if there are staged changes
+zstyle ':vcs_info:*:prompt:*' unstagedstr "${PR_RED}?${PR_RESET}"  # display ? if there are unstaged changes
+zstyle ':vcs_info:*:prompt:*' stagedstr "${PR_GREEN}!${PR_RESET}"    # display ! if there are staged changes
 zstyle ':vcs_info:*:prompt:*' actionformats "%s" "${FMT_PATH}" "${FMT_BRANCH}${FMT_ACTION}"
 zstyle ':vcs_info:*:prompt:*' formats       "%s" "${FMT_PATH}" "${FMT_BRANCH}" 
 zstyle ':vcs_info:*:prompt:*' nvcsformats   "" "" ""

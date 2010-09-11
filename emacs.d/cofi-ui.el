@@ -258,6 +258,9 @@
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
 
+(global-set-key (kbd "M-r") 'query-replace-regexp)
+(global-set-key (kbd "M-R") 'query-replace)
+
 ;; M-TAB is shadowed
 (define-key function-key-map (kbd "C-TAB") (kbd "M-TAB"))
 

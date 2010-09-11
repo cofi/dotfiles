@@ -132,6 +132,28 @@
 (setq frame-title-format "emacs %b - <%f>"
       icon-title-format "emacs %b")
 
+(setq global-mode-string '("" display-time-string
+                           battery-mode-line-string
+                           appt-mode-string))
+
+(setq-default mode-line-format '("%e" mode-line-mule-info
+                                 mode-line-client mode-line-modified
+                                 mode-line-remote mode-line-frame-identification
+                                 mode-line-buffer-identification
+                                 mode-line-position
+                                 (vc-mode vc-mode)
+                                 (global-mode-string
+                                  ("" global-mode-string
+                                   #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display"))))
+                                 mode-line-modes
+                                 (which-func-mode
+                                  ("" which-func-format
+                                   #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display"))))
+                                 viper-mode-string
+                                 #("-%-" 0 3
+                                   (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display")))
+              )
+
 (setq battery-mode-line-format " [%L %p%%]")
 
 (setq dired-recursive-copies 'always)

@@ -122,6 +122,8 @@
          (mode-line-inactive ((t (:background "gray20" :foreground "OliveDrab3"))))
          (mode-line-buffer-id ((t (:bold t :foreground "gold"))))
 
+         (which-func ((t (:foreground "gold"))))
+
          (primary-selection ((t (:background "lightgoldenrod2"))))
 
          (reb-match-0 ((t (:background "light blue"))))

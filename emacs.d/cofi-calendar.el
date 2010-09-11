@@ -1,6 +1,5 @@
 (setq calendar-date-style 'european)
 (setq calendar-week-start-day 1)
-(setq mark-diary-entries-in-calendar t)
 (setq mark-holidays-in-calendar t)
 
 (setq european-calendar-style t)
@@ -78,8 +77,5 @@
                                 solar-holidays))
 
 (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
-(global-set-key (kbd "C-c c") 'calendar)
-
-(setq diary-file "~/Documents/diary")
 
 (provide 'cofi-calendar)

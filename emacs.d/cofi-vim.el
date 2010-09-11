@@ -89,6 +89,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   (define-key viper-emacs-global-user-map (kbd "C-\\") 'viper-escape-to-vi)
   
   (push 'magit-mode viper-emacs-state-mode-list)
+  (push 'magit-key-mode viper-emacs-state-mode-list)
   ;; ==================================================
 
   ;; Conflicts ========================================

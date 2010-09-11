@@ -118,9 +118,9 @@
 
          (makefile-space-face ((t (:background "hot pink"))))
 
-         (mode-line ((t (:background "SlateGray4" :foreground "black"))))
-         (mode-line-buffer-id ((t (:bold t :background "SlateGray4" :foreground "black"))))
-         (modeline-mousable ((t (:background "SlateGray4" :foreground "black"))))
+         (mode-line ((t (:background "gray10" :foreground "olive drab"))))
+         (mode-line-inactive ((t (:background "gray20" :foreground "OliveDrab3"))))
+         (mode-line-buffer-id ((t (:bold t :foreground "gold"))))
 
          (primary-selection ((t (:background "lightgoldenrod2"))))
 

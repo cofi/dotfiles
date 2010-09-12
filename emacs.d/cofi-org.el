@@ -3,6 +3,7 @@
 (setq org-google-weather-icon-directory "/usr/share/icons/oxygen/16x16/status/")
 
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
+(add-to-list 'load-path "~/.elisp/vendor/org-mode/contrib/lisp")
 (require 'org-install)
 
 (if (file-directory-p "~/Org")
@@ -57,39 +58,35 @@ Note: This assumes all files are in the org-directory."
                           )))
 (eval-after-load "org"
   '(progn
-     (define-prefix-command 'org-todo-state-map)
+     (let* ((map (make-sparse-keymap))
+            (binder (lambda (key state)
+                      (define-key map (read-kbd-macro key)
+                        (lambda () (interactive) (org-todo state))))))
 
-     (define-key org-mode-map (kbd "C-c s") 'org-todo-state-map)
-     (define-key org-todo-state-map "x"
-       (lambda () (interactive) (org-todo "CANCELLED")))
-     (define-key org-todo-state-map "d"
-       (lambda () (interactive) (org-todo "DONE")))
-     (define-key org-todo-state-map "f"
-       (lambda () (interactive) (org-todo "DEFERRED")))
-     (define-key org-todo-state-map "l"
-       (lambda () (interactive) (org-todo "DELEGATED")))
-     (define-key org-todo-state-map "s"
-       (lambda () (interactive) (org-todo "STARTED")))
-     (define-key org-todo-state-map "w"
-       (lambda () (interactive) (org-todo "WAITING")))
-     ))
+       (funcall binder "x" "CANCELLED")
+       (funcall binder "d" "DONE")
+       (funcall binder "f" "DEFERRED")
+       (funcall binder "l" "DELEGATED")
+       (funcall binder "s" "STARTED")
+       (funcall binder "w" "WAITING")
+       (define-key org-mode-map (kbd "C-c s") map)
+       (define-key org-mode-map (kbd "<f5> s") map))))
+
+(setq org-hide-leading-stars t)
 
 ;; Tbl
 (eval-after-load "org-table"
   '(define-key orgtbl-mode-map (kbd "C-c t") 'orgtbl-insert-radio-table))
 
 ;; Appt
-(setq
-  appt-message-warning-time 15 ;; warn 15 min in advance
-  appt-display-mode-line t
-  appt-display-format 'window)
+(setq appt-message-warning-time 15 ;; warn 15 min in advance
+      appt-display-mode-line t
+      appt-display-format 'window)
 (appt-activate 1)
 
 (setq appt-disp-window-function
       (lambda (min-to-app new-time msg)
-        (send-notification msg
-                           (format "Appointment in %s minutes" min-to-app))
-        ))
+        (send-notification msg (format "Appointment in %s minutes" min-to-app))))
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
 ;; Capture ==============================
@@ -111,35 +108,29 @@ Note: This assumes all files are in the org-directory."
   (linum-mode -1)
   (delete-other-windows))
 
-(defun cofi/capture-frame-finalize ()
-  "Special treatment for capture frames when finalizing."
-  (interactive)
+(defun cofi/capture-wrap (fun)
+  "Wraps the call to `fun' with actions needed if frame is a capture frame."
   (let ((capture-frame? (string= (frame-parameter nil 'name) "Capture Frame")))
     (if capture-frame?
         (make-frame-invisible))
-    (org-capture-finalize)
+    (funcall fun)
     (if capture-frame?
         (delete-frame))))
+
+(defun cofi/capture-frame-finalize ()
+  "Special treatment for capture frames when finalizing."
+  (interactive)
+    (cofi/capture-wrap (function org-capture-finalize)))
 
 (defun cofi/capture-frame-kill ()
   "Special treatment for capture frames when killing."
   (interactive)
-  (let ((capture-frame? (string= (frame-parameter nil 'name) "Capture Frame")))
-    (if capture-frame?
-        (make-frame-invisible))
-    (org-capture-kill)
-    (if capture-frame?
-        (delete-frame))))
+    (cofi/capture-wrap (function org-capture-kill)))
 
 (defun cofi/capture-frame-refile ()
   "Special treatment for capture frames when killing."
   (interactive)
-  (let ((capture-frame? (string= (frame-parameter nil 'name) "Capture Frame")))
-    (if capture-frame?
-        (make-frame-invisible))
-    (org-capture-refile)
-    (if capture-frame?
-        (delete-frame))))
+    (cofi/capture-wrap (function org-capture-refile)))
 
 (add-hook 'org-capture-mode-hook
           (lambda ()
@@ -148,7 +139,7 @@ Note: This assumes all files are in the org-directory."
             (define-key org-capture-mode-map (kbd "C-c C-k")
                         (function cofi/capture-frame-kill))
             (define-key org-capture-mode-map (kbd "C-c C-w")
-                        (function coif/capture-frame-refile)
+                        (function cofi/capture-frame-refile)
               )))
 
 (setq org-capture-templates
@@ -182,11 +173,6 @@ Note: This assumes all files are in the org-directory."
 
 (setq org-export-latex-listings t)
 
-(eval-after-load "org-publish"
-  '(progn
-     (add-to-list 'org-export-latex-packages-alist '("" "listings"))
-     (add-to-list 'org-export-latex-packages-alist '("" "xcolor"))
-     )
-  )
+(require 'org-protocol)
 
 (provide 'cofi-org)

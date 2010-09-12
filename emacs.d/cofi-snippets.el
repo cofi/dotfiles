@@ -17,5 +17,7 @@
                  (setq yas/fallback-behavior
                        '(apply org-cycle))
                  (local-set-key [tab] 'yas/expand))))
+(eval-after-load "magit"
+  (add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t))))
 
 (provide 'cofi-snippets)

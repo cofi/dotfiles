@@ -6,4 +6,6 @@ NEW=$2
 
 SUFFIX=${OLD##*.}
 
-mv ${OLD} ${NEW}.${SUFFIX}
+DIR=$(dirname $OLD)
+
+mv ${OLD} $DIR/${NEW}.${SUFFIX}

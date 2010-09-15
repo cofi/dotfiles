@@ -23,5 +23,7 @@ set editor="emacsclient -c"
 let mapleader=","
 map <leader>n :bnext<CR>
 map <leader>p :bprev<CR>
+map <C-right> :bnext<CR>
+map <C-left> :bprev<CR>
 
 " vim: set ft=vimperator:

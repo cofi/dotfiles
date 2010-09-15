@@ -66,6 +66,8 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   (vim-mapleader-add "C" 'cofi-cd-alias)
   (vim-mapleader-add "d" 'dired-jump)
   (vim-mapleader-add "D" 'cofi-dired-alias)
+
+  (vim-mapleader-add ";" 'cofi/end-prog-line)
   ;; ==================================================
 
   ;; Vim-like backspace (backspace=indent,eol,start) ==========

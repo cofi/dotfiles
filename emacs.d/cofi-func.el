@@ -168,4 +168,18 @@ will not be passed to `start-kbd-macro'."
                 "")))
     (shell-command (format command-string opts from to fname))))
 
+(defun cofi/end-prog-line ()
+  "End the physical line with modes statement end char."
+  (interactive)
+  (let* ((modes '((c-mode    . ";")
+                  (cpp-mode  . ";")
+                  (java-mode . ";")
+                  (js-mode   . ";")))
+         (char (or (cdr (assq major-mode modes))
+                   ""))
+         (p (point)))
+    (move-end-of-line nil)
+    (insert char)
+    (goto-char p)))
+
 (provide 'cofi-func)

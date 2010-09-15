@@ -19,5 +19,7 @@
                  (local-set-key [tab] 'yas/expand))))
 (eval-after-load "magit"
   (add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t))))
+(eval-after-load "calc"
+  (add-hook 'calc-mode-hook (lambda () (setq yas/dont-activate t))))
 
 (provide 'cofi-snippets)

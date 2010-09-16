@@ -29,7 +29,7 @@ Note: This assumes all files are in the org-directory."
 
 (add-hook 'org-mode-hook
           (lambda ()
-            (turn-on-iimage-mode)
+            (org-display-inline-images t)
             (local-set-key (kbd "M-n") 'outline-next-visible-heading)
             (local-set-key (kbd "M-p") 'outline-previous-visible-heading)
             (local-set-key (kbd "C-M-<return>") (lambda ()

@@ -67,6 +67,13 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   (vim-mapleader-add "d" 'dired-jump)
   (vim-mapleader-add "D" 'cofi-dired-alias)
 
+  (vim-mapleader-add "n" 'split-window-horizontally)
+  (vim-mapleader-add "c" 'delete-window)
+  (vim-mapleader-add "N" 'make-frame-command)
+  (vim-mapleader-add "C" 'delete-frame)
+
+  (vim-mapleader-add "g" 'magit-status)
+
   (vim-mapleader-add ";" 'cofi/end-prog-line)
   ;; ==================================================
 

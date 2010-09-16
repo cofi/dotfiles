@@ -92,7 +92,9 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   
   (push 'magit-mode viper-emacs-state-mode-list)
   (push 'magit-key-mode viper-emacs-state-mode-list)
-  ;; ==================================================
+  (remove 'dired-mode viper-vi-state-mode-list)
+  (push 'dired-mode viper-emacs-state-mode-list)
+  ;; =========================================== =======
 
   ;; Conflicts ========================================
   (define-key viper-insert-basic-map (kbd "C-d") nil) ; conflicts with yasnippet

@@ -64,6 +64,20 @@
          (dired-marked ((t (:foreground "red" :weight bold))))
          (dired-symlink ((t (:foreground "purple"))))
 
+         (diredp-flag-mark-line ((t (:background "cornsilk2" :foreground "blue violet"))))
+         (diredp-read-priv ((t (:background nil :foreground "green"))))
+         (diredp-write-priv ((t (:background nil :foreground "firebrick"))))
+         (diredp-exec-priv ((t (:background nil :foreground "light grey"))))
+         (diredp-no-priv ((t (:background nil :foreground "white"))))
+         (diredp-dir-priv ((t (:foreground "sky blue"))))
+
+         (diredp-file-name ((t (:foreground "slate blue"))))
+         (diredp-file-suffix ((t (:foreground "light grey"))))
+         (diredp-compressed-file-suffix ((t (:foreground "gold"))))
+         (diredp-inode+size ((t (:foreground "cyan"))))
+         (diredp-date-time )
+         (diredp-dir-heading ((t (:background nil :foreground "deep sky blue"))))
+
          (ediff-current-diff-face-A ((t (:background "pale green" :foreground "firebrick"))))
          (ediff-current-diff-face-Ancestor ((t (:background "VioletRed" :foreground "Black"))))
          (ediff-current-diff-face-B ((t (:background "Yellow" :foreground "DarkOrchid"))))

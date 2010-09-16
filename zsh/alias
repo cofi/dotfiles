@@ -53,6 +53,7 @@ alias ls='ls -Fh --color=auto'
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -Al'
+alias lsa='lsarchive'
 
 alias lad='ls -d .*(/)'                 # only show dot-directories
 alias ldf='ls -a .*(.)'                 # only show dot-files

@@ -35,7 +35,7 @@ output=${output:-$1}
 
 complete=
 # tar files if necessary
-if [[ ${#@} -gt 1 ]]; then
+if [[ ${#@} -gt 1 || -d "$@" ]]; then
     case "$format" in
         zip) ;;
         gz)

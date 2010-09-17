@@ -102,6 +102,8 @@
 (setq framepop-enable-keybinding "<f11>")
 (require-and-exec 'framepop (framepop-enable))
 
+(require-and-exec 'dired+)
+
 (require-and-exec 'eldoc
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)

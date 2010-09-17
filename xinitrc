@@ -1,5 +1,5 @@
 #! /bin/sh
-setxkbmap -model evdev -layout us -option compose:ralt,caps:escape
+setxkbmap -model evdev -layout us -option compose:ralt,ctrl:nocaps
 xrdb -merge .Xresources
 
 urxvtd -q -f -o & 

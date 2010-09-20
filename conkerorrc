@@ -1,0 +1,87 @@
+// -*- mode: js -*-
+
+require("global-overlay-keymap.js");
+
+define_key_alias("C-m", "return");
+
+define_key(default_global_keymap, "h", "cmd_scrollLeft");
+define_key(default_global_keymap, "j", "cmd_scrollLineDown");
+define_key(default_global_keymap, "k", "cmd_scrollLineUp");
+define_key(default_global_keymap, "l", "cmd_scrollRight");
+undefine_key(content_buffer_normal_keymap, "l");
+
+define_key(default_global_keymap, "b", "switch-to-buffer");
+undefine_key(content_buffer_normal_keymap, "b");
+
+define_key(default_global_keymap, "d", "kill-current-buffer");
+undefine_key(content_buffer_normal_keymap, "d");
+
+define_key(content_buffer_normal_keymap, "a", "bookmark");
+
+define_key(default_global_keymap, "/", "isearch-forward");
+define_key(default_global_keymap, "?", "isearch-backward");
+define_key(default_global_keymap, "n", "isearch-continue-forward");
+undefine_key(content_buffer_normal_keymap, "n");
+define_key(default_global_keymap, "p", "isearch-continue-backward");
+
+define_key(content_buffer_normal_keymap, "back_space", "back");
+define_key(content_buffer_normal_keymap, "S-back_space", "forward");
+
+define_key(content_buffer_normal_keymap, "S-space", "cmd_scrollPageUp")
+
+define_key(default_global_keymap, "C-tab", "buffer-next");
+define_key(default_global_keymap, "S-C-tab", "buffer-previous");
+
+define_key(content_buffer_normal_keymap, "F", "follow-new-buffer-background");
+
+undefine_key(content_buffer_normal_keymap, "g");
+//TODO: add g overlay keymap
+define_key(default_global_keymap, "G", "cmd_scrollBottom");
+undefine_key(content_buffer_normal_keymap, "G");
+
+define_key(default_global_keymap, "t", "find-url-new-buffer");
+undefine_key(content_buffer_normal_keymap, "t");
+define_key(default_global_keymap, "o", "find-url");
+
+define_webjump("s", "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=%s");
+define_webjump("pyd", "http://docs.python.org/%s");
+define_webjump("pyl", "http://docs.python.org/library/%s");
+define_webjump("pep", "http://python.org/dev/peps/pep-%s/");
+define_webjump("wpd", "http://de.wikipedia.org/wiki/%s")
+define_webjump("wpe", "http://en.wikipedia.org/wiki/%s")
+define_webjump("wpds", "http://de.wikipedia.org/Special:Search?search=%s&go=Go&fulltext=search")
+define_webjump("wpes", "http://en.wikipedia.org/Special:Search?search=%s&go=Go&fulltext=search")
+define_webjump("dict", "http://www.dict.cc/?s=%s")
+define_webjump("beo", "http://dict.tu-chemnitz.de/dings.cgi?lang=de&service=deen&query=%s")
+define_webjump("leo", "http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=%s&relink=on")
+define_webjump("d", "https://duckduckgo.com/?q=%s&v=")
+define_webjump("g", "https://encrypted.google.com/search?q=%s")
+
+url_remoting_fn = load_url_in_new_buffer;
+can_kill_last_buffer = false;
+
+editor_shell_command = "emacsclient -c"
+view_source_use_external_editor = true;
+xkcd_add_title = true;
+
+require("clicks-in-new-buffer.js");
+clicks_in_new_buffer_target = OPEN_NEW_BUFFER_BACKGROUND;
+
+url_completion_use_webjumps = true;
+url_completion_use_bookmarks = true;
+url_completion_use_history = false;
+
+function url_completion_toggle (I) {
+    if (url_completion_use_bookmarks) {
+        url_completion_use_bookmarks = false;
+        url_completion_use_history = true;
+    } else {
+        url_completion_use_bookmarks = true;
+        url_completion_use_history = false;
+    }
+}
+interactive("url-completion-toggle",
+            "Toggle between bookmark and history completion.",
+            url_completion_toggle);
+define_key(content_buffer_normal_keymap, "f12", "url-completion-toggle");
+

@@ -99,9 +99,6 @@
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))
 
-(setq framepop-enable-keybinding "<f11>")
-(require-and-exec 'framepop (framepop-enable))
-
 (require-and-exec 'dired+)
 
 (require-and-exec 'eldoc

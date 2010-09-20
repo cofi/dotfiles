@@ -25,10 +25,14 @@
   (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$")) ; oh why are you compatible to THAT?!
   (define-key viper-vi-global-user-map (kbd "_") 'viper-bol-and-skip-white)
   (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
+  (define-key viper-vi-global-user-map (kbd "C-t") 'transpose-chars)
+  (define-key viper-vi-global-user-map (kbd "C-e") 'viper-goto-eol)
+
   (when (fboundp 'redo)
     (define-key viper-vi-global-user-map (kbd "r") 'redo))
 
   (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
+  (define-key viper-insert-global-user-map (kbd "C-\\") 'viper-intercept-ESC-key)
   (require-and-exec 'goto-last-change
      (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))
   (define-key viper-vi-global-user-map (kbd "SPC") 'viper-scroll-up)
@@ -96,12 +100,10 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   ;; Additional Modes ================================
   (define-key viper-emacs-global-user-map (kbd "C-\\") 'viper-escape-to-vi)
-  
+
   (push 'magit-mode viper-emacs-state-mode-list)
   (push 'magit-key-mode viper-emacs-state-mode-list)
-  (remove 'dired-mode viper-vi-state-mode-list)
-  (push 'dired-mode viper-emacs-state-mode-list)
-  ;; =========================================== =======
+  ;; ===================================================
 
   ;; Conflicts ========================================
   (define-key viper-insert-basic-map (kbd "C-d") nil) ; conflicts with yasnippet

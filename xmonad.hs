@@ -24,6 +24,7 @@ import XMonad.Layout.LayoutCombinators (JumpToLayout(..), (|||))
 import XMonad.Layout.TwoPane (TwoPane(..))
 import XMonad.Layout.ThreeColumns (ThreeCol(..))
 import XMonad.Layout.Named (named)
+import XMonad.Layout.ResizableTile
 
 import XMonad.Prompt
 import XMonad.Prompt.Shell ( shellPrompt )
@@ -58,6 +59,8 @@ main = xmonad $ defaultConfig
  , ("M-b", windowPromptBring promptConfig)
  , ("M-S-b", windowPromptBringCopy promptConfig)
    -- Window/workspace management
+ , ("M-S-h", sendMessage MirrorShrink)
+ , ("M-S-l", sendMessage MirrorExpand)
  , ("M-<Escape>", kill)
  , ("M-u", focusUrgent)
  , ("M-S-t", sinkAll)
@@ -116,8 +119,8 @@ myLayout = smartBorders $ avoidStruts (
   onWorkspace "comm" (unevenTile ||| Grid ||| Full) $
   tiled ||| Mirror tiled ||| twoPane ||| threePane ||| Full)
   where
-    unevenTile = Tall 2 incDelta 0.8
-    tiled = Tall 1 incDelta goldenRatio
+    unevenTile = ResizableTall 2 incDelta 0.8 []
+    tiled = ResizableTall 1 incDelta goldenRatio []
     goldenRatio = toRational (2/(1 + sqrt 5 :: Double))
     incDelta = 0.04
 ----------------------------------------

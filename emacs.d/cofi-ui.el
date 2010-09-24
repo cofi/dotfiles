@@ -201,7 +201,7 @@
 ;; mixedCase to small_words_with_underscores (visually)
 (setq glasses-separate-parentheses-p nil
       glasses-uncapitalize-p t
-      glasses-uncapitalize-regexp "[A-Z]")
+      glasses-uncapitalize-regexp "[a-zA-Z]")
 
 (setq-default major-mode 'text-mode)
 (setq dired-dwim-target t)

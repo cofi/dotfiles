@@ -46,6 +46,7 @@ URxvt.scrollBar_right:  False
 URxvt.scrollTtyOutput:  False
 URxvt.scrollWithBuffer: True
 URxvt.scrollTtyKeypress: True
+URxvt.urgentOnBell: True
 
 !black
 *color0:         #151515

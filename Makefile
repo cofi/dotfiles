@@ -2,7 +2,7 @@
 
 PWD := `pwd`
 LINK_CMD := ln --symbolic --force -T
-NORMAL_FILES := `ls -I README -I newsbeuterconfig -I vimenv_setup -I Makefile`
+NORMAL_FILES := `ls -I xmonad.hs -I README -I newsbeuterconfig -I vimenv_setup -I Makefile`
 
 refresh:
 	 #emacs --batch --no-site-file --eval '(byte-recompile-directory "emacs.d/")'

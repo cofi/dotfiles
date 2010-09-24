@@ -11,6 +11,7 @@ import XMonad.Actions.SinkAll
 import XMonad.Actions.WindowGo
 import XMonad.Actions.SpawnOn
 
+import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
@@ -33,68 +34,73 @@ import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
 
-main = xmonad $ defaultConfig
- {
-   terminal = myTerm
- , focusFollowsMouse = True
- , borderWidth = 1
- , normalBorderColor = "#000000"
- , focusedBorderColor = "#9A0000"
- , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
- , modMask = mod4Mask -- use the Windows button as mod
- , layoutHook = myLayout
- , manageHook = myManageHook
- , startupHook = myStartupHook
- }
- `additionalKeysP`
- [ ("M-<Backspace>", restart "xmonad" True)
- , ("M-S-<Backspace>", spawn quitKDE)
-   -- Prompts/Launcher
- , ("M-p", shellPrompt promptConfig)
- , ("M-S-p", spawn "krunner")
- , ("M-y", spawn launcher)
- , ("M-S-y", spawn termLauncher)
- , ("M-g", windowPromptGoto promptConfig)
- , ("M-z", manPrompt promptConfig)
- , ("M-b", windowPromptBring promptConfig)
- , ("M-S-b", windowPromptBringCopy promptConfig)
-   -- Window/workspace management
- , ("M-S-h", sendMessage MirrorShrink)
- , ("M-S-l", sendMessage MirrorExpand)
- , ("M-<Escape>", kill)
- , ("M-u", focusUrgent)
- , ("M-S-t", sinkAll)
- , ("M-s", sendMessage ToggleStruts)
- , ("M-<Tab>", nextWS)
- , ("M-S-<Tab>", prevWS)
- , ("M-C-<Tab>", toggleWS)
- , ("M-<R>", nextWS)
- , ("M-<L>", prevWS)
- , ("M-c", windows copyToAll)
- , ("M-S-c", killAllOtherCopies)
-   -- Apps
- , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
- , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
- , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
-   -- Layoutjumper
- , ("M-<F2>", sendMessage $ JumpToLayout "Two")
- , ("M-<F3>", sendMessage $ JumpToLayout "Three")
- , ("M-<F12>", sendMessage $ JumpToLayout "Full")
- ]
-   where
-     myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
-     quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
-     myTerm = "urxvtcd"
-     termExec = myTerm ++ " -e"
-     dmenuOptions = buildOptions [ ("-fn", promptFont)
-                                 , ("-nb", promptBG)
-                                 , ("-sb", promptBG)
-                                 , ("-nf", promptNFG)
-                                 , ("-sf", promptSFG)
-                                 ]
-       where buildOptions = concat . map (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
-     launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
-     termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'" ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
+main = do
+  xmproc <- spawnPipe "xmobar"
+  xmonad $ (defaultConfig {
+    terminal = myTerm
+    , focusFollowsMouse = True
+    , borderWidth = 1
+    , normalBorderColor = "#000000"
+    , focusedBorderColor = "#9A0000"
+    , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
+    , modMask = mod4Mask -- use the Windows button as mod
+    , layoutHook = myLayout
+    , logHook = dynamicLogWithPP $ xmobarPP
+                        { ppOutput = hPutStrLn xmproc
+                        , ppTitle = xmobarColor "green" "" . shorten 50
+                        }
+    , manageHook = myManageHook
+    , startupHook = myStartupHook
+    }
+            `additionalKeysP`
+            [ ("M-<Backspace>", restart "xmonad" True)
+            , ("M-S-<Backspace>", spawn quitKDE)
+              -- Prompts/Launcher
+            , ("M-p", shellPrompt promptConfig)
+            , ("M-S-p", spawn "krunner")
+            , ("M-y", spawn launcher)
+            , ("M-S-y", spawn termLauncher)
+            , ("M-g", windowPromptGoto promptConfig)
+            , ("M-z", manPrompt promptConfig)
+            , ("M-b", windowPromptBring promptConfig)
+            , ("M-S-b", windowPromptBringCopy promptConfig)
+              -- Window/workspace management
+            , ("M-S-h", sendMessage MirrorShrink)
+            , ("M-S-l", sendMessage MirrorExpand)
+            , ("M-<Escape>", kill)
+            , ("M-u", focusUrgent)
+            , ("M-S-t", sinkAll)
+            , ("M-s", sendMessage ToggleStruts)
+            , ("M-<Tab>", nextWS)
+            , ("M-S-<Tab>", prevWS)
+            , ("M-C-<Tab>", toggleWS)
+            , ("M-<R>", nextWS)
+            , ("M-<L>", prevWS)
+            , ("M-c", windows copyToAll)
+            , ("M-S-c", killAllOtherCopies)
+              -- Apps
+            , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
+            , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
+            , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
+              -- Layoutjumper
+            , ("M-<F2>", sendMessage $ JumpToLayout "Two")
+            , ("M-<F3>", sendMessage $ JumpToLayout "Three")
+            , ("M-<F12>", sendMessage $ JumpToLayout "Full")
+            ])
+    where
+      myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
+      quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
+      myTerm = "urxvtcd"
+      termExec = myTerm ++ " -e"
+      dmenuOptions = buildOptions [ ("-fn", promptFont)
+                                  , ("-nb", promptBG)
+                                  , ("-sb", promptBG)
+                                  , ("-nf", promptNFG)
+                                  , ("-sf", promptSFG)
+                                  ]
+        where buildOptions = concat . map (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
+      launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
+      termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'" ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
 
 promptFont = "xft:inconsolata:size=14:antialias=true:hinting=true:hintstyle=hintfull"
 promptBG = "#171717"

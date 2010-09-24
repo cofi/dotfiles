@@ -1,0 +1,18 @@
+-- -*- mode: haskell -*-
+Config { font =  "xft:inconsolata:size=10:antialias=true:hinting=true:hintstyle=hintfull"
+       , bgColor = "black"
+       , fgColor = "white smoke"
+       , lowerOnStart = False
+       , position = TopW L 85
+       , commands = [ Run Cpu ["<cpu0>/<cpu1>","-L","3","-H","50","-l","green","--normal","orange","--high","red"]   40
+                    , Run Cpu ["<cpu0>","-L","3","-H","50","-l","green","--normal","orange","--high","red"]  40
+                    , Run BatteryP ["C23A", "C23B"] ["-t", "<left>"] 50
+                    , Run Memory ["-t","Mem: <usedratio>%", "-l", "green", "--normal","orange","--high","red"] 40
+                    , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                    , Run CpuFreq ["-t","Freq: <cpu0> | <cpu1> GHz","-L","0","-H","2","-l","green","-n","orange","-h","red"] 50
+                    , Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %cpu% @ %cpufreq% <fc=#708090>|</fc> %memory% <fc=#708090>|</fc> BAT: %battery% <fc=#708090>|</fc> %date%"
+       }

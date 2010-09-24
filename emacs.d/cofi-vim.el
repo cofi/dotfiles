@@ -67,9 +67,11 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   (vim-mapleader-add "W" 'save-some-buffers)
   (vim-mapleader-add "k" 'kill-buffer-and-window)
   (vim-mapleader-add "K" 'kill-this-buffer)
-  (vim-mapleader-add "C" 'cofi-cd-alias)
+  (vim-mapleader-add "<" 'cofi-cd-alias)
   (vim-mapleader-add "d" 'dired-jump)
   (vim-mapleader-add "D" 'cofi-dired-alias)
+
+  (vim-mapleader-add "m" 'compile)
 
   (vim-mapleader-add "n" 'split-window-horizontally)
   (vim-mapleader-add "c" 'delete-window)

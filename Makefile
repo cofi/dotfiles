@@ -18,3 +18,4 @@ deploy:
 	for file in $(NORMAL_FILES); do $(LINK_CMD) $(PWD)/$$file ~/.$$file; done
 	$(LINK_CMD) $(PWD)/vimenv_setup ~/.vimrc
 	$(LINK_CMD) $(PWD)/newsbeuterconfig ~/.newsbeuter/config
+	$(LINK_CMD) $(PWD)/xmonad.hs ~/.xmonad/xmonad.hs

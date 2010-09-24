@@ -3,6 +3,7 @@ import XMonad hiding ((|||))
 import qualified XMonad.StackSet as W
 
 import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.Run
  
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
@@ -14,6 +15,7 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops
 
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.Grid (Grid(..))
@@ -69,15 +71,15 @@ main = xmonad $ defaultConfig
  , ("M-S-c", killAllOtherCopies)
    -- Apps
  , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
- , ("M-S-f", runOrRaise (termExec ++ "newsbeuter") (title =? "newsbeuter"))
- , ("M-i", runOrRaise (termExec ++ "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
+ , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
+ , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
    -- Layoutjumper
  , ("M-<F2>", sendMessage $ JumpToLayout "Two")
  , ("M-<F3>", sendMessage $ JumpToLayout "Three")
  , ("M-<F12>", sendMessage $ JumpToLayout "Full")
  ]
    where
-     myStartupHook = setWMName "LG3D"
+     myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
      quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
      myTerm = "urxvtcd"
      termExec = myTerm ++ " -e"

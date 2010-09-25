@@ -36,80 +36,82 @@ import Data.List (isPrefixOf)
 
 main = do
   xmproc <- spawnPipe "xmobar"
-  xmonad $ (defaultConfig {
-    terminal = myTerm
-    , focusFollowsMouse = True
-    , borderWidth = 1
-    , normalBorderColor = "#000000"
-    , focusedBorderColor = "#9A0000"
-    , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
-    , modMask = mod4Mask -- use the Windows button as mod
-    , layoutHook = myLayout
-    , logHook = dynamicLogWithPP $ myPP xmproc 
-    , manageHook = myManageHook
-    , startupHook = myStartupHook
-    }
-            `additionalKeysP`
-            [ ("M-<Backspace>", restart "xmonad" True)
-            , ("M-S-<Backspace>", spawn quitKDE)
-              -- Prompts/Launcher
-            , ("M-p", shellPrompt promptConfig)
-            , ("M-S-p", spawn "krunner")
-            , ("M-y", spawn launcher)
-            , ("M-S-y", spawn termLauncher)
-            , ("M-g", windowPromptGoto promptConfig)
-            , ("M-z", manPrompt promptConfig)
-            , ("M-b", windowPromptBring promptConfig)
-            , ("M-S-b", windowPromptBringCopy promptConfig)
-              -- Window/workspace management
-            , ("M-S-h", sendMessage MirrorShrink)
-            , ("M-S-l", sendMessage MirrorExpand)
-            , ("M-<Escape>", kill)
-            , ("M-u", focusUrgent)
-            , ("M-S-t", sinkAll)
-            , ("M-s", sendMessage ToggleStruts)
-            , ("M-<Tab>", nextWS)
-            , ("M-S-<Tab>", prevWS)
-            , ("M-C-<Tab>", toggleWS)
-            , ("M-<R>", nextWS)
-            , ("M-<L>", prevWS)
-            , ("M-c", windows copyToAll)
-            , ("M-S-c", killAllOtherCopies)
-              -- Apps
-            , ("M-e", runOrRaise "emacsclient -c" (fmap ("emacs" `isPrefixOf`) title))
-            , ("M-S-e", spawn "emacsclient -c")
-            , ("M-S-m", runOrRaise "emacs --name 'Wanderlust Mail'" (title =? "Wanderlust Mail"))
-            , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
-            , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
-            , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
-              -- Layoutjumper
-            , ("M-<F2>", sendMessage $ JumpToLayout "Two")
-            , ("M-<F3>", sendMessage $ JumpToLayout "Three")
-            , ("M-<F12>", sendMessage $ JumpToLayout "Full")
-            ])
+  xmonad $ additionalKeysP defaultConfig { terminal = myTerm
+                         , focusFollowsMouse = True
+                         , borderWidth = 1
+                         , normalBorderColor = "#000000"
+                         , focusedBorderColor = "#9A0000"
+                         , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
+                         , modMask = mod4Mask -- use the Windows button as mod
+                         , layoutHook = myLayout
+                         , logHook = dynamicLogWithPP $ myPP xmproc
+                         , manageHook = myManageHook
+                         , startupHook = myStartupHook }
+          myKeys
     where
       myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
-      quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
-      myTerm = "urxvtcd"
-      termExec = myTerm ++ " -e"
-      dmenuOptions = buildOptions [ ("-fn", promptFont)
-                                  , ("-nb", promptBG)
-                                  , ("-sb", promptBG)
-                                  , ("-nf", promptNFG)
-                                  , ("-sf", promptSFG)
-                                  ]
-        where buildOptions = concat . map (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
-      launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
-      termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'" ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
+
+myTerm = "urxvtcd"
+myKeys = [ ("M-<Backspace>", restart "xmonad" True)
+         , ("M-S-<Backspace>", spawn quitKDE)
+           -- Prompts/Launcher
+         , ("M-p", shellPrompt promptConfig)
+         , ("M-S-p", spawn "krunner")
+         , ("M-y", spawn launcher)
+         , ("M-S-y", spawn termLauncher)
+         , ("M-g", windowPromptGoto promptConfig)
+         , ("M-z", manPrompt promptConfig)
+         , ("M-b", windowPromptBring promptConfig)
+         , ("M-S-b", windowPromptBringCopy promptConfig)
+           -- Window/workspace management
+         , ("M-S-h", sendMessage MirrorShrink)
+         , ("M-S-l", sendMessage MirrorExpand)
+         , ("M-<Escape>", kill)
+         , ("M-u", focusUrgent)
+         , ("M-S-t", sinkAll)
+         , ("M-s", sendMessage ToggleStruts)
+         , ("M-<Tab>", nextWS)
+         , ("M-S-<Tab>", prevWS)
+         , ("M-C-<Tab>", toggleWS)
+         , ("M-<R>", nextWS)
+         , ("M-<L>", prevWS)
+         , ("M-c", windows copyToAll)
+         , ("M-S-c", killAllOtherCopies)
+           -- Apps
+         , ("M-e", runOrRaise "emacsclient -c" (fmap ("emacs" `isPrefixOf`) title))
+         , ("M-S-e", spawn "emacsclient -c")
+         , ("M-S-m", runOrRaise "emacs --name 'Wanderlust Mail'" (title =? "Wanderlust Mail"))
+         , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
+         , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
+         , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
+           -- Layoutjumper
+         , ("M-<F2>", sendMessage $ JumpToLayout "Two")
+         , ("M-<F3>", sendMessage $ JumpToLayout "Three")
+         , ("M-<F12>", sendMessage $ JumpToLayout "Full")
+         ]
+
+  where quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
+        termExec = myTerm ++ " -e"
+        dmenuOptions = buildOptions [ ("-fn", promptFont)
+                                    , ("-nb", promptBG)
+                                    , ("-sb", promptBG)
+                                    , ("-nf", promptNFG)
+                                    , ("-sf", promptSFG)
+                                    ]
+          where buildOptions = concat . map (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
+        launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
+        termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
+                       ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
+
 
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 
                     , ppSep     = " :: "
-                    , ppWsSep = " "
+                    , ppWsSep   = " "
                     , ppVisible = xmobarColor "black" "DarkSlateGrey"
-                    , ppLayout = xmobarColor "orange" "black" . wsRename
-                    , ppTitle = xmobarColor "green" "black" . wrap "[" "]" . shorten 90
-                    , ppHidden = xmobarColor "slateblue" "black"
-                    , ppOutput = hPutStrLn h
+                    , ppLayout  = xmobarColor "orange" "black" . wsRename
+                    , ppTitle   = xmobarColor "green" "black" . wrap "[" "]" . shorten 90
+                    , ppHidden  = xmobarColor "slateblue" "black"
+                    , ppOutput  = hPutStrLn h
                     }
   where wsRename x = case x of
           "Mirror ResizableTall"   -> "MTiled"
@@ -145,6 +147,7 @@ myLayout = smartBorders $ avoidStruts (
     incDelta = 0.04
 ----------------------------------------
 
+-- Tie area ----------------------------------------
 myManageHook = (composeAll . concat $
                [ [ className =? f --> doFloat          | f <- floats ]
                 ,[ className =? b --> doShift "browse" | b <- browse ]
@@ -163,7 +166,8 @@ myManageHook = (composeAll . concat $
         browse = []
         code  = []
         comms = ["Kopete"]
-
+----------------------------------------
+----------------------------------------
 --  Local Variables:
 --  compile-command: "xmonad --recompile"
 --  End:

@@ -1,0 +1,11 @@
+#! /bin/sh
+if_running="firefox"
+alternative="conkeror"
+
+pgrep ${if_running} > /dev/null 2>&1
+
+if [ $? == 0 ]; then
+    exec ${if_running} "$@"
+else
+    exec ${alternative} "$@"
+fi

@@ -45,10 +45,7 @@ main = do
     , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
     , modMask = mod4Mask -- use the Windows button as mod
     , layoutHook = myLayout
-    , logHook = dynamicLogWithPP $ xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 50
-                        }
+    , logHook = dynamicLogWithPP $ myPP xmproc 
     , manageHook = myManageHook
     , startupHook = myStartupHook
     }
@@ -104,6 +101,20 @@ main = do
         where buildOptions = concat . map (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
       launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
       termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'" ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
+
+myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 
+                    , ppSep     = " :: "
+                    , ppWsSep = " "
+                    , ppVisible = xmobarColor "black" "DarkSlateGrey"
+                    , ppLayout = xmobarColor "orange" "black" . wsRename
+                    , ppTitle = xmobarColor "green" "black" . wrap "[" "]" . shorten 90
+                    , ppHidden = xmobarColor "slateblue" "black"
+                    , ppOutput = hPutStrLn h
+                    }
+  where wsRename x = case x of
+          "Mirror ResizableTall"   -> "MTiled"
+          "ResizableTall"          -> "Tiled"
+          _                        -> x
 
 promptFont = "xft:inconsolata:size=14:antialias=true:hinting=true:hintstyle=hintfull"
 promptBG = "#171717"

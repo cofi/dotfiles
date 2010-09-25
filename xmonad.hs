@@ -10,6 +10,7 @@ import XMonad.Actions.CycleWS
 import XMonad.Actions.SinkAll
 import XMonad.Actions.WindowGo
 import XMonad.Actions.SpawnOn
+import qualified XMonad.Actions.Search as S
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.UrgencyHook
@@ -33,6 +34,8 @@ import XMonad.Prompt.Man ( manPrompt )
 import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
+import qualified Data.Map as M
+import Data.Maybe (fromMaybe)
 
 main = do
   xmproc <- spawnPipe "xmobar"
@@ -44,7 +47,7 @@ main = do
                          , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
-                         , logHook = dynamicLogWithPP $ myPP xmproc
+                         , logHook = dynamicLogWithPP $ myPP xmproc 
                          , manageHook = myManageHook
                          , startupHook = myStartupHook }
           myKeys
@@ -89,6 +92,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
          , ("M-<F3>", sendMessage $ JumpToLayout "Three")
          , ("M-<F12>", sendMessage $ JumpToLayout "Full")
          ]
+         ++ searchBindings
 
   where quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
         termExec = myTerm ++ " -e"
@@ -167,6 +171,49 @@ myManageHook = (composeAll . concat $
         code  = []
         comms = ["Kopete"]
 ----------------------------------------
+
+-- Search----------------------------------------
+searchBindings = [("M-x " ++ key, S.selectSearch engine) | (key, engine) <- searchList]
+                 ++
+                 [("M-a", S.promptSearch promptConfig multi)]
+    where
+      searchList = [ ("g", google)
+                   , ("m", S.maps)
+                   , ("i", imdb)
+                   , ("w", S.wikipedia)
+                   , ("d", wikiD)
+                   , ("t", dict)
+                   , ("l", leo)
+                   ]
+      -- in xmonad-contrib-0.9.1 `!>' is bugged, the following is a workaround
+      multi = S.SearchEngine "multi" multiDispatcher
+
+      multiDispatcher :: String -> String
+      multiDispatcher s = fun args
+        where pair = break (== ':') s
+              fun  = S.use . fromMaybe (S.SearchEngine "" (\s -> s)) $ M.lookup (fst pair) searchMap
+              args = drop 1 $ snd pair
+      searchMap = M.fromList [ ("wp", S.wikipedia)
+                             , ("wpd", wikiD)
+                             , ("s", scroogle)
+                             , ("g", google)
+                             , ("h", S.hoogle)
+                             , ("m", S.maps)
+                             , ("imdb", imdb)
+                             , ("y", S.youtube)
+                             , ("alpha", S.alpha)
+                             , ("dict", dict)
+                             , ("leo", leo)
+                             , ("maps", S.maps)
+                             ]
+
+      wikiD = S.searchEngine "wpd" "https://secure.wikimedia.org/wikipedia/de/wiki/Special:Search?go=Go&search="
+      scroogle = S.searchEngine "s" "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw="
+      google = S.searchEngine "g" "https://encrypted.google.com/search?q="
+      dict = S.searchEngine "dict" "http://www.dict.cc/?s="
+      leo = S.searchEngine "leo" "http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&relink=on&search="
+      imdb = S.searchEngine "imdb" "http://www.imdb.com/find?s=all&q="
+
 ----------------------------------------
 --  Local Variables:
 --  compile-command: "xmonad --recompile"

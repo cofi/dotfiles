@@ -1,0 +1,2 @@
+#!/bin/sh
+emacsclient -c -e '(cofi/capture-frame)'

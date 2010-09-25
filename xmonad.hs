@@ -79,6 +79,9 @@ main = do
             , ("M-c", windows copyToAll)
             , ("M-S-c", killAllOtherCopies)
               -- Apps
+            , ("M-e", runOrRaise "emacsclient -c" (fmap ("emacs" `isPrefixOf`) title))
+            , ("M-S-e", spawn "emacsclient -c")
+            , ("M-S-m", runOrRaise "emacs --name 'Wanderlust Mail'" (title =? "Wanderlust Mail"))
             , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
             , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
             , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))

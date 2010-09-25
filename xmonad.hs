@@ -44,7 +44,7 @@ main = do
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
                          , focusedBorderColor = "#9A0000"
-                         , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9]
+                         , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9] ++ ["hide"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = dynamicLogWithPP $ myPP xmproc 
@@ -80,6 +80,8 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
          , ("M-<L>", prevWS)
          , ("M-c", windows copyToAll)
          , ("M-S-c", killAllOtherCopies)
+         , ("M-<D>", windows $ W.shift "hide")
+         , ("M-`", windows $ W.greedyView "hide")
            -- Apps
          , ("M-e", runOrRaise "emacsclient -c" (fmap ("emacs" `isPrefixOf`) title))
          , ("M-S-e", spawn "emacsclient -c")
@@ -90,7 +92,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
            -- Layoutjumper
          , ("M-<F2>", sendMessage $ JumpToLayout "Two")
          , ("M-<F3>", sendMessage $ JumpToLayout "Three")
-         , ("M-<F12>", sendMessage $ JumpToLayout "Full")
+         , ("M-<U>", sendMessage $ JumpToLayout "Full")
          ]
          ++ searchBindings
 

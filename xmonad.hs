@@ -44,7 +44,7 @@ main = do
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
                          , focusedBorderColor = "#9A0000"
-                         , workspaces = ["comm", "browse", "code", "mail", "view"] ++ map show [6..9] ++ ["hide"]
+                         , workspaces = ["1:comm", "2:browse", "3:code", "4:mail"] ++ map show [5..9] ++ ["hide"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = dynamicLogWithPP $ myPP xmproc 
@@ -155,16 +155,16 @@ myLayout = smartBorders $ avoidStruts (
 
 -- Tie area ----------------------------------------
 myManageHook = (composeAll . concat $
-               [ [ className =? f --> doFloat          | f <- floats ]
-                ,[ className =? b --> doShift "browse" | b <- browse ]
-                ,[ className =? c --> doShift "code"   | c <- code ]
-                ,[ className =? c --> doShift "comm"   | c <- comms ]
-                ,[ className =? i --> doIgnore         | i <- ignores ]
+               [ [ className =? f --> doFloat            | f <- floats ]
+                ,[ className =? b --> doShift "2:browse" | b <- browse ]
+                ,[ className =? c --> doShift "3:code"   | c <- code ]
+                ,[ className =? c --> doShift "1:comm"   | c <- comms ]
+                ,[ className =? i --> doIgnore           | i <- ignores ]
                 ,[ isFullscreen --> doFullFloat
                  , isDialog     --> doCenterFloat
-                 , title =? "Wanderlust Mail" --> doShift "mail"
-                 , title =? "newsbeuter" --> doShift "comm"
-                 , fmap ("weechat" `isPrefixOf`) title --> doShift "comm"
+                 , title =? "Wanderlust Mail" --> doShift "4:mail"
+                 , title =? "newsbeuter" --> doShift "1:comm"
+                 , fmap ("weechat" `isPrefixOf`) title --> doShift "1:comm"
                  ] ])
                <+> manageDocks
   where ignores = []

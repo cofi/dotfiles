@@ -156,17 +156,19 @@ myLayout = smartBorders $ avoidStruts (
 
 -- Tie area ----------------------------------------
 myManageHook = (composeAll . concat $
-               [ [ className =? f --> doFloat            | f <- floats ]
-                ,[ className =? b --> doShift "2:browse" | b <- browse ]
-                ,[ className =? c --> doShift "3:code"   | c <- code ]
-                ,[ className =? c --> doShift "1:comm"   | c <- comms ]
-                ,[ className =? i --> doIgnore           | i <- ignores ]
-                ,[ isFullscreen --> doFullFloat
+               [ [ isKDETrayWindow --> doIgnore
+                 , isFullscreen --> doFullFloat
                  , isDialog     --> doCenterFloat
                  , title =? "Wanderlust Mail" --> doShift "4:mail"
                  , title =? "newsbeuter" --> doShift "1:comm"
                  , fmap ("weechat" `isPrefixOf`) title --> doShift "1:comm"
-                 ] ])
+                 ]
+                ,[ className =? f --> doFloat            | f <- floats ]
+                ,[ className =? b --> doShift "2:browse" | b <- browse ]
+                ,[ className =? c --> doShift "3:code"   | c <- code ]
+                ,[ className =? c --> doShift "1:comm"   | c <- comms ]
+                ,[ className =? i --> doIgnore           | i <- ignores ]
+                ])
                <+> manageDocks
   where ignores = []
         floats = ["MPlayer", "Smplayer", "Plasma-desktop", "Lancelot"]

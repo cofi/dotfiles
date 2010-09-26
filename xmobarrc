@@ -17,5 +17,8 @@ Config { font =  "xft:Dejavu Sans:size=8:antialias=true:hinting=true:hintstyle=h
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %wlan0wi% | %THM0% | %multicpu% <fc=purle>|</fc> %memory% - %swap% <fc=purple>|</fc> ⚡ %battery% <fc=purple>|</fc> ♩ %volume% <fc=purple>|</fc> <fc=khaki>%date%</fc> | ✉ %mailcount%"
+       , template = "%StdinReader% }{ %wlan0wi% <fc=steelblue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% - %swap% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc> <fc=steelblue>✦</fc> ✉ %mailcount%"
+-- uncolored
+--        , template = "%StdinReader% }{ %wlan0wi% ✦ %THM0% ✦ %multicpu% ✦ %memory% - %swap% ✦ ⚡ %battery% ✦ ♩ %volume% ✦ <fc=khaki>%date%</fc> ✦ ✉ %mailcount%"
+
        }

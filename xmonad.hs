@@ -83,7 +83,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
          , ("M-<D>", windows $ W.shift "hide")
          , ("M-`", windows $ W.greedyView "hide")
            -- Apps
-         , ("M-e", runOrRaise "emacsclient -c" (fmap ("emacs" `isPrefixOf`) title))
+         , ("M-e", raiseMaybe (spawn "emacsclient -c") (fmap ("emacs" `isPrefixOf`) title))
          , ("M-S-e", spawn "emacsclient -c")
          , ("M-S-m", runOrRaise "emacs --name 'Wanderlust Mail'" (title =? "Wanderlust Mail"))
          , ("M-f", runOrRaise "firefox" (className =? "Firefox"))

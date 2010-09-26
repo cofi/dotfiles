@@ -31,4 +31,19 @@
   "Sends notification."
   (funcall 'plasma-send-notification msg title timeout))
 
+(defun x-urgency-hint (frame arg &optional source)
+  (let* ((wm-hints (append (x-window-property 
+			    "WM_HINTS" frame "WM_HINTS" 
+			    (if source
+				source
+			      (string-to-number 
+			       (frame-parameter frame 'outer-window-id)))
+			    nil t) nil))
+	 (flags (car wm-hints)))
+    (setcar wm-hints
+	    (if arg
+		(logior flags #x00000100)
+	      (logand flags #xFFFFFEFF)))
+    (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
+
 (provide 'cofi-util)

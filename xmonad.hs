@@ -86,7 +86,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
            -- Apps
          , ("M-e", raiseMaybe (spawn "emacsclient -c") (fmap ("emacs" `isPrefixOf`) title))
          , ("M-S-e", spawn "emacsclient -c")
-         , ("M-S-m", runOrRaise "emacs --name 'Wanderlust Mail'" (title =? "Wanderlust Mail"))
+         , ("M-S-m", raiseMaybe (spawn "emacs --name 'Wanderlust Mail' -wl") (title =? "Wanderlust Mail"))
          , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
          , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
          , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))

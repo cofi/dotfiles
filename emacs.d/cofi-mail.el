@@ -57,6 +57,7 @@
      
      (add-hook 'wl-biff-notify-hook
                (lambda ()
+                 (x-urgency-hint (selected-frame) t)
                  (send-notification "New Mail!" "Wanderlust")))
 
      (setq wl-message-ignored-field-list '("^.*:")

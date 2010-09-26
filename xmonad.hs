@@ -104,7 +104,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
                                     , ("-nf", promptNFG)
                                     , ("-sf", promptSFG)
                                     ]
-          where buildOptions = concat . map (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
+          where buildOptions = concatMap (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
@@ -145,7 +145,7 @@ threePane = named "Three" $ ThreeCol 1 0.04 0.4
 
 myLayout = smartBorders $ avoidStruts (
   onWorkspace "comm" (unevenTile ||| Grid ||| Full) $
-  onWorkspace "hide" (Grid) $
+  onWorkspace "hide" Grid $
   tiled ||| Mirror tiled ||| twoPane ||| threePane ||| Full)
   where
     unevenTile = ResizableTall 2 incDelta 0.8 []

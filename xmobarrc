@@ -11,9 +11,10 @@ Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=h
                     , Run Memory ["-t","M: <usedratio>%", "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
                     , Run Swap ["-t", "S: <usedratio>%", "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
                     , Run Date "%a %b %d %H:%M" "date" 60
+                    , Run Com "master_volume" [] "volume" 10
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %wlan0wi% | %THM0% | %multicpu% <fc=purle>|</fc> %memory% - %swap% <fc=purple>|</fc> ⚡ %battery% <fc=purple>|</fc> <fc=khaki>%date%</fc>"
+       , template = "%StdinReader% }{ %wlan0wi% | %THM0% | %multicpu% <fc=purle>|</fc> %memory% - %swap% <fc=purple>|</fc> ⚡ %battery% <fc=purple>|</fc> ♩ %volume% <fc=purple>|</fc> <fc=khaki>%date%</fc>"
        }

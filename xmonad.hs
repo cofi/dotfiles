@@ -35,10 +35,9 @@ import XMonad.Prompt.Man ( manPrompt )
 import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
-import qualified Data.Map as M
-import Data.Maybe (fromMaybe)
 
 main = do
+  spawn trayer
   xmproc <- spawnPipe "xmobar"
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig { terminal = myTerm
                          , focusFollowsMouse = True
@@ -50,13 +49,14 @@ main = do
                          , layoutHook = myLayout
                          , logHook = dynamicLogWithPP $ myPP xmproc 
                          , manageHook = myManageHook
-                         , startupHook = myStartupHook }
-          `additionalKeysP` myKeys
+                         , startupHook = myStartupHook
+                         } `additionalKeysP` myKeys
     where
       myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
-
+      trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false " 
+               ++ "--heighttype pixel --height 10  --widthtype percent --width 15 --SetPartialStrut true" 
 myTerm = "urxvtcd"
-myKeys = [ ("M-<Backspace>", restart "xmonad" True)
+myKeys = [ ("M-<Backspace>", spawn respawn)
          , ("M-S-<Backspace>", spawn quitKDE)
            -- Prompts/Launcher
          , ("M-p", shellPrompt promptConfig)
@@ -109,6 +109,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
+        respawn = "for pid in $(pgrep trayer);do kill $pid; done && xmonad --restart"
 
 
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 
@@ -158,8 +159,7 @@ myLayout = smartBorders $ avoidStruts (
 
 -- Tie area ----------------------------------------
 myManageHook = (composeAll . concat $
-               [ [ isKDETrayWindow --> doIgnore
-                 , isFullscreen --> doFullFloat
+               [ [ isFullscreen --> doFullFloat
                  , isDialog     --> doCenterFloat
                  , title =? "Wanderlust Mail" --> doShift "4:mail"
                  , title =? "newsbeuter" --> doShift "1:comm"
@@ -173,7 +173,7 @@ myManageHook = (composeAll . concat $
                 ])
                <+> manageDocks
   where ignores = []
-        floats = ["MPlayer", "Smplayer", "Plasma-desktop", "Lancelot"]
+        floats = ["MPlayer", "Smplayer", "Plasma-desktop", "Lancelot", "Kmix"]
         browse = []
         code  = []
         comms = ["Kopete"]

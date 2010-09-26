@@ -133,8 +133,8 @@
          (makefile-space-face ((t (:background "hot pink"))))
 
          (mode-line ((t (:background "#334B7D" :foreground "#FFFFFF"))))
-         (mode-line-inactive ((t (:background "gray20" :foreground "OliveDrab3"))))
-         (mode-line-buffer-id ((t (:bold t :foreground "gold"))))
+         (mode-line-inactive ((t (:background "#FFFFFF" :foreground "#000000"))))
+         (mode-line-buffer-id ((t (:bold t :foreground "gold" :background "#334B7D"))))
 
          (which-func ((t (:foreground "gold"))))
 

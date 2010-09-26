@@ -40,7 +40,7 @@ import Data.Maybe (fromMaybe)
 
 main = do
   xmproc <- spawnPipe "xmobar"
-  xmonad $ additionalKeysP defaultConfig { terminal = myTerm
+  xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig { terminal = myTerm
                          , focusFollowsMouse = True
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
@@ -51,7 +51,7 @@ main = do
                          , logHook = dynamicLogWithPP $ myPP xmproc 
                          , manageHook = myManageHook
                          , startupHook = myStartupHook }
-          myKeys
+          `additionalKeysP` myKeys
     where
       myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
 
@@ -72,6 +72,7 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
          , ("M-S-l", sendMessage MirrorExpand)
          , ("M-<Escape>", kill)
          , ("M-u", focusUrgent)
+         , ("M-S-u", clearUrgents)
          , ("M-S-t", sinkAll)
          , ("M-<Tab>", nextWS)
          , ("M-S-<Tab>", prevWS)
@@ -113,10 +114,11 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 
                     , ppSep     = " :: "
                     , ppWsSep   = " "
-                    , ppVisible = xmobarColor "black" "DarkSlateGrey"
+                    , ppVisible = xmobarColor "#000000" "DarkSlateGrey"
+                    , ppHidden  = xmobarColor "slateblue" "black"
+                    , ppUrgent  = xmobarColor "#ffd700" "#b2222f" . xmobarStrip
                     , ppLayout  = xmobarColor "orange" "black" . wsRename
                     , ppTitle   = xmobarColor "green" "black" . wrap "[" "]" . shorten 90
-                    , ppHidden  = xmobarColor "slateblue" "black"
                     , ppOutput  = hPutStrLn h
                     }
   where wsRename x = case x of

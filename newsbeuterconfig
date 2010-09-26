@@ -19,6 +19,7 @@ feedlist-format     "%4i %n %11u %t"
 articlelist-format  "%4i %f %D   %?T?|%-17T|  ?%t"
 
 notify-format       "%d new articles (%n unread articles, %f unread feeds)"
+notify-beep yes
 notify-screen yes
 
 macro o open-in-browser ; toggle-article-read "read"

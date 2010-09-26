@@ -11,6 +11,7 @@ import XMonad.Actions.SinkAll
 import XMonad.Actions.WindowGo
 import XMonad.Actions.SpawnOn
 import qualified XMonad.Actions.Search as S
+import XMonad.Actions.Search (SearchEngine(..))
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.UrgencyHook
@@ -72,7 +73,6 @@ myKeys = [ ("M-<Backspace>", restart "xmonad" True)
          , ("M-<Escape>", kill)
          , ("M-u", focusUrgent)
          , ("M-S-t", sinkAll)
-         , ("M-s", sendMessage ToggleStruts)
          , ("M-<Tab>", nextWS)
          , ("M-S-<Tab>", prevWS)
          , ("M-C-<Tab>", toggleWS)
@@ -178,7 +178,7 @@ myManageHook = (composeAll . concat $
 ----------------------------------------
 
 -- Search----------------------------------------
-searchBindings = [("M-x " ++ key, S.selectSearch engine) | (key, engine) <- searchList]
+searchBindings = [("M-s " ++ key, S.selectSearch engine) | (key, engine) <- searchList]
                  ++
                  [("M-a", S.promptSearch promptConfig multi)]
     where
@@ -190,35 +190,44 @@ searchBindings = [("M-x " ++ key, S.selectSearch engine) | (key, engine) <- sear
                    , ("t", dict)
                    , ("l", leo)
                    ]
-      -- in xmonad-contrib-0.9.1 `!>' is bugged, the following is a workaround
-      multi = S.SearchEngine "multi" multiDispatcher
-
-      multiDispatcher :: String -> String
-      multiDispatcher s = fun args
-        where pair = break (== ':') s
-              fun  = S.use . fromMaybe (S.SearchEngine "" (\s -> s)) $ M.lookup (fst pair) searchMap
-              args = drop 1 $ snd pair
-      searchMap = M.fromList [ ("wp", S.wikipedia)
-                             , ("wpd", wikiD)
-                             , ("s", scroogle)
-                             , ("g", google)
-                             , ("h", S.hoogle)
-                             , ("m", S.maps)
-                             , ("imdb", imdb)
-                             , ("y", S.youtube)
-                             , ("alpha", S.alpha)
-                             , ("dict", dict)
-                             , ("leo", leo)
-                             , ("maps", S.maps)
-                             ]
-
+      multi = S.namedEngine "multi" $ foldr1 (!>) [ google
+                                                  , scroogle
+                                                  , wiki
+                                                  , wikiD
+                                                  , define
+                                                  , dict 
+                                                  , leo 
+                                                  , S.maps
+                                                  , images
+                                                  , code
+                                                  , S.youtube
+                                                  , S.hoogle
+                                                  , S.hackage
+                                                  , imdb 
+                                                  , S.alpha
+                                                  , mathworld
+                                                  , S.prefixAware google
+                                                  ]
+      -- new ones
       wikiD = S.searchEngine "wpd" "https://secure.wikimedia.org/wikipedia/de/wiki/Special:Search?go=Go&search="
-      scroogle = S.searchEngine "s" "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw="
-      google = S.searchEngine "g" "https://encrypted.google.com/search?q="
       dict = S.searchEngine "dict" "http://www.dict.cc/?s="
       leo = S.searchEngine "leo" "http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&relink=on&search="
       imdb = S.searchEngine "imdb" "http://www.imdb.com/find?s=all&q="
+      scroogle = S.searchEngine "s" "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw="
+      google = S.searchEngine "g" "https://encrypted.google.com/search?q="
+      define = S.searchEngine "def" "https://encrypted.google.com/search?q=define:"
+      images = S.searchEngine "img" "http://images.google.com/images?q="
+      -- new names
+      mathworld = S.namedEngine "math" S.mathworld
+      code = S.namedEngine "code" S.codesearch
+      wiki = S.namedEngine "wp" S.wikipedia
 
+      (!>) :: SearchEngine -> SearchEngine -> SearchEngine
+      (SearchEngine name1 site1) !> (SearchEngine name2 site2) =
+        SearchEngine (name1 ++ "/" ++ name2) (\s -> if (name1++":") `isPrefixOf` s
+                                                    then site1 $ removeColonPrefix s
+                                                    else site2 s)
+        where removeColonPrefix = drop 1 . dropWhile (/= ':')
 ----------------------------------------
 --  Local Variables:
 --  compile-command: "xmonad --recompile"

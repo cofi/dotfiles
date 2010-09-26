@@ -16,7 +16,7 @@
           (view-highlight-face . highlight)
           )
 
-         (default ((t (:background "gray13" :foreground "gray100"))))
+         (default ((t (:background "#202020" :foreground "#FFFFFF"))))
          (italic ((t (:italic t :family "Dejavu Sans Mono" :height 80))))
          (underline ((t (:underline t))))
          (bold ((t (:bold t))))
@@ -132,7 +132,7 @@
 
          (makefile-space-face ((t (:background "hot pink"))))
 
-         (mode-line ((t (:background "gray10" :foreground "olive drab"))))
+         (mode-line ((t (:background "#334B7D" :foreground "#FFFFFF"))))
          (mode-line-inactive ((t (:background "gray20" :foreground "OliveDrab3"))))
          (mode-line-buffer-id ((t (:bold t :foreground "gold"))))
 
@@ -176,7 +176,7 @@
          (tooltip ((t (:background "white" :foreground "black"))))
          (trailing-whitespace ((t (:background "red"))))
          (variable-pitch ((t (:family "helv"))))
-         (linum ((t (:inherit (shadow default) :background "slate gray" :foreground "khaki1"))))
+         (linum ((t (:background "#2E2E37" :foreground "#D0D0A0"))))
          (vcursor ((t (:background "grey20" :foreground "blue" :underline t))))
 
          (minibuffer-prompt ((t (:foreground "orange"))))

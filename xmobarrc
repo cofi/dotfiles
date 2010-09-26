@@ -1,5 +1,5 @@
 -- -*- mode: haskell -*-
-Config { font =  "xft:Dejavu Sans Mono:size=9:antialias=true:hinting=true:hintstyle=hintfull"
+Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=hintfull"
        , bgColor = "black"
        , fgColor = "white smoke"
        , position = TopW L 85

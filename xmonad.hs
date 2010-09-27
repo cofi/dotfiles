@@ -81,6 +81,7 @@ myKeys = [ ("M-<Backspace>", spawn respawn)
          , ("M-<L>", prevWS)
          , ("M-c", windows copyToAll)
          , ("M-S-c", killAllOtherCopies)
+         , ("M-<U>", withFocused float)
          , ("M-<D>", windows $ W.shift "hide")
          , ("M-`", windows $ W.greedyView "hide")
            -- Apps
@@ -93,7 +94,7 @@ myKeys = [ ("M-<Backspace>", spawn respawn)
            -- Layoutjumper
          , ("M-<F2>", sendMessage $ JumpToLayout "Two")
          , ("M-<F3>", sendMessage $ JumpToLayout "Three")
-         , ("M-<U>", sendMessage $ JumpToLayout "Full")
+         , ("M-<F12>", sendMessage $ JumpToLayout "Full")
          ]
          ++ searchBindings
 

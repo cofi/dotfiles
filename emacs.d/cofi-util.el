@@ -29,7 +29,7 @@
 
 (defun send-notification (msg title &optional timeout)
   "Sends notification."
-  (funcall 'plasma-send-notification msg title timeout))
+  (funcall 'libnotify-send-notification msg title timeout))
 
 (defun x-urgency-hint (frame arg &optional source)
   (let* ((wm-hints (append (x-window-property 

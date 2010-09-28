@@ -117,7 +117,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
-        respawn = "killall trayer && xmonad --restart"
+        respawn = "killall trayer ; xmonad --restart"
 
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 

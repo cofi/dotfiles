@@ -64,6 +64,8 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                    -- Prompts/Launcher
                  , ("M-x", shellPrompt promptConfig)
                  , ("M-S-x", spawn "krunner")
+                 , ("M-p", shellPrompt promptConfig)
+                 , ("M-S-p", spawn "krunner")
                  , ("M-y", spawn launcher)
                  , ("M-S-y", spawn termLauncher)
                  , ("M-g", windowPromptGoto promptConfig)

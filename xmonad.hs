@@ -30,9 +30,9 @@ import XMonad.Layout.Named (named)
 import XMonad.Layout.ResizableTile
 
 import XMonad.Prompt
-import XMonad.Prompt.Shell ( shellPrompt )
-import XMonad.Prompt.DirExec ( dirExecPrompt )
-import XMonad.Prompt.Man ( manPrompt )
+import XMonad.Prompt.Shell (shellPrompt)
+import XMonad.Prompt.DirExec (dirExecPrompt)
+import XMonad.Prompt.Man (manPrompt)
 import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
@@ -57,7 +57,7 @@ main = do
     where
       myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false " 
-               ++ "--heighttype pixel --height 10  --widthtype percent --width 15 --SetPartialStrut true" 
+               ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true" 
 myTerm = "urxvtcd"
 myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-<Backspace>", spawn quitKDE)
@@ -114,7 +114,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
-        respawn = "for pid in $(pgrep trayer);do kill $pid; done && xmonad --restart"
+        respawn = "killall trayer && xmonad --restart"
 
 
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 

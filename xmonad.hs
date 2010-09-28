@@ -62,15 +62,15 @@ myTerm = "urxvtcd"
 myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-<Backspace>", spawn quitKDE)
                    -- Prompts/Launcher
-                 , ("M-p", shellPrompt promptConfig)
-                 , ("M-S-p", spawn "krunner")
+                 , ("M-x", shellPrompt promptConfig)
+                 , ("M-S-x", spawn "krunner")
                  , ("M-y", spawn launcher)
                  , ("M-S-y", spawn termLauncher)
                  , ("M-g", windowPromptGoto promptConfig)
                  , ("M-z", manPrompt promptConfig)
                  , ("M-b", windowPromptBring promptConfig)
                  , ("M-S-b", windowPromptBringCopy promptConfig)
-                 , ("M-x", dirExecPromptNamed promptConfig spawn (homeDir ++ "/.quick") "Quicks: ")
+                 , ("M-q", dirExecPromptNamed promptConfig spawn (withHome ".quick") "Quicks: ")
                    -- Window/workspace management
                  , ("M-S-h", sendMessage MirrorShrink)
                  , ("M-S-l", sendMessage MirrorExpand)
@@ -89,12 +89,12 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-<D>", windows $ W.shift "hide")
                  , ("M-`", windows $ W.greedyView "hide")
                    -- Apps
-                 , ("M-e", raiseMaybe (spawn "emacsclient -c") (fmap ("emacs" `isPrefixOf`) title))
+                 , ("M-e", raiseMaybe (spawn "emacsclient -c") emacsQuery)
                  , ("M-S-e", spawn "emacsclient -c")
-                 , ("M-S-m", raiseMaybe (spawn "emacs --name 'Wanderlust Mail' -wl") (title =? "Wanderlust Mail"))
-                 , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
-                 , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
-                 , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
+                 , ("M-S-m", raiseMaybe (spawn "emacs --name 'Wanderlust Mail' -wl") wanderlustQuery)
+                 , ("M-f", runOrRaise "firefox" firefoxQuery)
+                 , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
+                 , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") weechatQuery)
                    -- Layoutjumper
                  , ("M-<F2>", sendMessage $ JumpToLayout "Two")
                  , ("M-<F3>", sendMessage $ JumpToLayout "Three")
@@ -111,12 +111,13 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                                     , ("-sf", promptSFG)
                                     ]
           where buildOptions = concatMap (\(flag, value) -> " " ++ flag ++ " '" ++ value ++ "'")
+        withHome relativePath = homeDir ++ "/" ++ relativePath
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
         respawn = "killall trayer && xmonad --restart"
 
-
+-- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 
                     , ppSep     = " :: "
                     , ppWsSep   = " "
@@ -132,6 +133,7 @@ myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
           "ResizableTall"          -> "Tiled"
           _                        -> x
 
+-- Prompt ----------------------------------------
 promptFont = "xft:inconsolata:size=14:antialias=true:hinting=true:hintstyle=hintfull"
 promptBG = "#171717"
 promptNFG = "#ff7701"           -- non-selected Foreground
@@ -162,13 +164,21 @@ myLayout = smartBorders $ avoidStruts (
     incDelta = 0.04
 ----------------------------------------
 
+-- Queries ----------------------------------------
+prefixTitle prefix = (fmap (prefix `isPrefixOf`) title)
+weechatQuery = prefixTitle "weechat"
+emacsQuery = prefixTitle "emacs"
+wanderlustQuery = title =? "Wanderlust Mail" 
+newsbeuterQuery = title =? "newsbeuter"
+firefoxQuery = className =? "Firefox"
+
 -- Tie area ----------------------------------------
 myManageHook = (composeAll . concat $
                [ [ isFullscreen --> doFullFloat
                  , isDialog     --> doCenterFloat
-                 , title =? "Wanderlust Mail" --> doShift "4:mail"
-                 , title =? "newsbeuter" --> doShift "1:comm"
-                 , fmap ("weechat" `isPrefixOf`) title --> doShift "1:comm"
+                 , wanderlustQuery --> doShift "4:mail"
+                 , newsbeuterQuery --> doShift "1:comm"
+                 , weechatQuery --> doShift "1:comm"
                  ]
                 ,[ className =? f --> doFloat            | f <- floats ]
                 ,[ className =? b --> doShift "2:browse" | b <- browse ]

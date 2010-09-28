@@ -1,0 +1,24 @@
+#!/bin/bash
+# Bluetooth enable/disable script
+
+FORCE_OFF=$1
+if [ "$FORCE_OFF" = 1 ]; then
+    rfkill block bluetooth
+    [ -f /etc/init.d/bluetooth ] && /etc/init.d/bluetooth start > /dev/null
+else
+    if (! test -x /usr/sbin/rfkill)
+    then
+        logger "Error: Please install package rfkill to enable toggling of wireless devices."
+        exit 0
+    fi
+
+    rfkill list | sed -n -e'/tpacpi_bluetooth_sw/,/^[0-9]/p' | grep -q 'Soft blocked: yes'
+    bluetooth_state=$?
+    if [ "$bluetooth_state" = 0 ]; then
+        rfkill unblock bluetooth
+        [ -f /etc/init.d/bluetooth ] && /etc/init.d/bluetooth start > /dev/null
+    else
+        rfkill block bluetooth
+        [ -f /etc/init.d/bluetooth ] && /etc/init.d/bluetooth stop > /dev/null
+    fi
+fi

@@ -31,14 +31,17 @@ import XMonad.Layout.ResizableTile
 
 import XMonad.Prompt
 import XMonad.Prompt.Shell ( shellPrompt )
+import XMonad.Prompt.DirExec ( dirExecPrompt )
 import XMonad.Prompt.Man ( manPrompt )
 import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
+import System.Directory (getHomeDirectory)
 
 main = do
   spawn trayer
   xmproc <- spawnPipe "xmobar"
+  homeDir <- getHomeDirectory
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig { terminal = myTerm
                          , focusFollowsMouse = True
                          , borderWidth = 1
@@ -50,53 +53,54 @@ main = do
                          , logHook = dynamicLogWithPP $ myPP xmproc 
                          , manageHook = myManageHook
                          , startupHook = myStartupHook
-                         } `additionalKeysP` myKeys
+                         } `additionalKeysP` myKeys homeDir
     where
       myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false " 
                ++ "--heighttype pixel --height 10  --widthtype percent --width 15 --SetPartialStrut true" 
 myTerm = "urxvtcd"
-myKeys = [ ("M-<Backspace>", spawn respawn)
-         , ("M-S-<Backspace>", spawn quitKDE)
-           -- Prompts/Launcher
-         , ("M-p", shellPrompt promptConfig)
-         , ("M-S-p", spawn "krunner")
-         , ("M-y", spawn launcher)
-         , ("M-S-y", spawn termLauncher)
-         , ("M-g", windowPromptGoto promptConfig)
-         , ("M-z", manPrompt promptConfig)
-         , ("M-b", windowPromptBring promptConfig)
-         , ("M-S-b", windowPromptBringCopy promptConfig)
-           -- Window/workspace management
-         , ("M-S-h", sendMessage MirrorShrink)
-         , ("M-S-l", sendMessage MirrorExpand)
-         , ("M-<Escape>", kill)
-         , ("M-u", focusUrgent)
-         , ("M-S-u", clearUrgents)
-         , ("M-S-t", sinkAll)
-         , ("M-<Tab>", nextWS)
-         , ("M-S-<Tab>", prevWS)
-         , ("M-C-<Tab>", toggleWS)
-         , ("M-<R>", nextWS)
-         , ("M-<L>", prevWS)
-         , ("M-c", windows copyToAll)
-         , ("M-S-c", killAllOtherCopies)
-         , ("M-<U>", withFocused float)
-         , ("M-<D>", windows $ W.shift "hide")
-         , ("M-`", windows $ W.greedyView "hide")
-           -- Apps
-         , ("M-e", raiseMaybe (spawn "emacsclient -c") (fmap ("emacs" `isPrefixOf`) title))
-         , ("M-S-e", spawn "emacsclient -c")
-         , ("M-S-m", raiseMaybe (spawn "emacs --name 'Wanderlust Mail' -wl") (title =? "Wanderlust Mail"))
-         , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
-         , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
-         , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
-           -- Layoutjumper
-         , ("M-<F2>", sendMessage $ JumpToLayout "Two")
-         , ("M-<F3>", sendMessage $ JumpToLayout "Three")
-         , ("M-<F12>", sendMessage $ JumpToLayout "Full")
-         ]
-         ++ searchBindings
+myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
+                 , ("M-S-<Backspace>", spawn quitKDE)
+                   -- Prompts/Launcher
+                 , ("M-p", shellPrompt promptConfig)
+                 , ("M-S-p", spawn "krunner")
+                 , ("M-y", spawn launcher)
+                 , ("M-S-y", spawn termLauncher)
+                 , ("M-g", windowPromptGoto promptConfig)
+                 , ("M-z", manPrompt promptConfig)
+                 , ("M-b", windowPromptBring promptConfig)
+                 , ("M-S-b", windowPromptBringCopy promptConfig)
+                 , ("M-x", dirExecPrompt promptConfig spawn $ homeDir ++ "/.quick")
+                   -- Window/workspace management
+                 , ("M-S-h", sendMessage MirrorShrink)
+                 , ("M-S-l", sendMessage MirrorExpand)
+                 , ("M-<Escape>", kill)
+                 , ("M-u", focusUrgent)
+                 , ("M-S-u", clearUrgents)
+                 , ("M-S-t", sinkAll)
+                 , ("M-<Tab>", nextWS)
+                 , ("M-S-<Tab>", prevWS)
+                 , ("M-C-<Tab>", toggleWS)
+                 , ("M-<R>", nextWS)
+                 , ("M-<L>", prevWS)
+                 , ("M-c", windows copyToAll)
+                 , ("M-S-c", killAllOtherCopies)
+                 , ("M-<U>", withFocused float)
+                 , ("M-<D>", windows $ W.shift "hide")
+                 , ("M-`", windows $ W.greedyView "hide")
+                   -- Apps
+                 , ("M-e", raiseMaybe (spawn "emacsclient -c") (fmap ("emacs" `isPrefixOf`) title))
+                 , ("M-S-e", spawn "emacsclient -c")
+                 , ("M-S-m", raiseMaybe (spawn "emacs --name 'Wanderlust Mail' -wl") (title =? "Wanderlust Mail"))
+                 , ("M-f", runOrRaise "firefox" (className =? "Firefox"))
+                 , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") (title =? "newsbeuter"))
+                 , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") (fmap ("weechat" `isPrefixOf`) title))
+                   -- Layoutjumper
+                 , ("M-<F2>", sendMessage $ JumpToLayout "Two")
+                 , ("M-<F3>", sendMessage $ JumpToLayout "Three")
+                 , ("M-<F12>", sendMessage $ JumpToLayout "Full")
+                 ]
+                 ++ searchBindings
 
   where quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
         termExec = myTerm ++ " -e"

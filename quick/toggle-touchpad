@@ -1,0 +1,13 @@
+#! /bin/zsh -f
+
+FORCE_OFF=$1
+
+if [ "$FORCE_OFF" = 1 ]; then
+    synclient TouchpadOff=1
+else
+    if synclient -l | grep 'TouchpadOff.*1$' > /dev/null ; then
+        synclient TouchpadOff=0
+    else
+        synclient TouchpadOff=1
+    fi
+fi

@@ -31,7 +31,7 @@ import XMonad.Layout.ResizableTile
 
 import XMonad.Prompt
 import XMonad.Prompt.Shell (shellPrompt)
-import XMonad.Prompt.DirExec (dirExecPrompt)
+import XMonad.Prompt.DirExec (dirExecPromptNamed)
 import XMonad.Prompt.Man (manPrompt)
 import XMonad.Prompt.Window
 
@@ -70,7 +70,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-z", manPrompt promptConfig)
                  , ("M-b", windowPromptBring promptConfig)
                  , ("M-S-b", windowPromptBringCopy promptConfig)
-                 , ("M-x", dirExecPrompt promptConfig spawn $ homeDir ++ "/.quick")
+                 , ("M-x", dirExecPromptNamed promptConfig spawn (homeDir ++ "/.quick") "Quicks: ")
                    -- Window/workspace management
                  , ("M-S-h", sendMessage MirrorShrink)
                  , ("M-S-l", sendMessage MirrorExpand)

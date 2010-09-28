@@ -1,0 +1,2 @@
+#! /bin/sh
+emacsclient -c -e "(org-agenda-list)"

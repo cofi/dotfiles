@@ -136,7 +136,7 @@ myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
           _                        -> x
 
 -- Prompt ----------------------------------------
-promptFont = "xft:inconsolata:size=14:antialias=true:hinting=true:hintstyle=hintfull"
+promptFont = "xft:inconsolata:size=11:antialias=true:hinting=true:hintstyle=hintfull"
 promptBG = "#171717"
 promptNFG = "#ff7701"           -- non-selected Foreground
 promptSFG = "#00aa4a"           -- selected Foreground

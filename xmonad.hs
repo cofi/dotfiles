@@ -164,7 +164,7 @@ twoPane = named "Two" $ TwoPane 0.04 0.5
 threePane = named "Three" $ ThreeCol 1 0.04 0.4
 
 myLayout = smartBorders $ avoidStruts (
-  onWorkspace "comm" (unevenTile ||| Grid ||| Full) $
+  onWorkspace "1:comm" (unevenTile ||| Grid ||| Full) $
   onWorkspace "hide" Grid $
   tiled ||| Mirror tiled ||| twoPane ||| threePane ||| Full)
   where

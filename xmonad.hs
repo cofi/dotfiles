@@ -80,11 +80,13 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-u", focusUrgent)
                  , ("M-S-u", clearUrgents)
                  , ("M-S-t", sinkAll)
-                 , ("M-<Tab>", nextWS)
-                 , ("M-S-<Tab>", prevWS)
+                 , ("M-<Tab>", nextNonEmpty)
+                 , ("M-S-<Tab>", prevNonEmpty)
                  , ("M-C-<Tab>", toggleWS)
-                 , ("M-<R>", nextWS)
-                 , ("M-<L>", prevWS)
+                 , ("M-<R>", nextEmpty)
+                 , ("M-<L>", prevEmpty)
+                 , ("M-S-<R>", shiftToNext)
+                 , ("M-S-<L>", shiftToPrev)
                  , ("M-c", windows copyToAll)
                  , ("M-S-c", killAllOtherCopies)
                  , ("M-<U>", withFocused float)
@@ -118,6 +120,12 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
         respawn = "killall trayer ; xmonad --restart"
+        nextNonEmpty = moveTo Next NonEmptyWS
+        prevNonEmpty = moveTo Prev NonEmptyWS
+        nextEmpty = moveTo Next EmptyWS
+        prevEmpty = moveTo Prev EmptyWS
+        shiftToNext = shiftTo Next EmptyWS
+        shiftToPrev = shiftTo Prev EmptyWS
 
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 

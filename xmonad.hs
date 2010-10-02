@@ -47,7 +47,7 @@ main = do
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
                          , focusedBorderColor = "#9A0000"
-                         , workspaces = ["1:comm", "2:browse", "3:code", "4:mail"] ++ map show [5..9] ++ ["hide"]
+                         , workspaces = ["1:comm", "2:browse", "3:code", "4:mail"] ++ map show [5..9] ++ ["feeds", "hide"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = dynamicLogWithPP $ myPP xmproc 
@@ -176,16 +176,16 @@ firefoxQuery = className =? "Firefox"
 
 -- Tie area ----------------------------------------
 myManageHook = (composeAll . concat $
-               [ [ isFullscreen --> doFullFloat
-                 , isDialog     --> doCenterFloat
+               [ [ isFullscreen    --> doFullFloat
+                 , isDialog        --> doCenterFloat
+                 , weechatQuery    --> doShift "1:comm"
                  , wanderlustQuery --> doShift "4:mail"
-                 , newsbeuterQuery --> doShift "1:comm"
-                 , weechatQuery --> doShift "1:comm"
+                 , newsbeuterQuery --> doShift "feeds"
                  ]
                 ,[ className =? f --> doFloat            | f <- floats ]
+                ,[ className =? c --> doShift "1:comm"   | c <- comms ]
                 ,[ className =? b --> doShift "2:browse" | b <- browse ]
                 ,[ className =? c --> doShift "3:code"   | c <- code ]
-                ,[ className =? c --> doShift "1:comm"   | c <- comms ]
                 ,[ className =? i --> doIgnore           | i <- ignores ]
                 ])
                <+> manageDocks

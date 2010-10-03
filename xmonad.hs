@@ -60,7 +60,8 @@ main = do
                ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true" 
 myTerm = "urxvtcd"
 myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
-                 , ("M-S-<Backspace>", spawn quitKDE)
+                 , ("M-S-<Backspace>", spawn logout)
+                 , ("M-C-<Backspace>", spawn shutdown)
                    -- Prompts/Launcher
                  , ("M-x", shellPrompt promptConfig)
                  , ("M-S-x", spawn "krunner")
@@ -107,7 +108,8 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  ]
                  ++ searchBindings
 
-  where quitKDE = "dbus-send --print-reply --dest=org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout int32:1 int32:0 int32:1"
+  where shutdown = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 2 0"
+        logout = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 3 0"
         termExec = myTerm ++ " -e"
         dmenuOptions = buildOptions [ ("-fn", promptFont)
                                     , ("-nb", promptBG)
@@ -137,7 +139,7 @@ myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
                     , ppHidden  = xmobarColor "slateblue" "black"
                     , ppUrgent  = xmobarColor "#ffd700" "#b2222f" . xmobarStrip
                     , ppLayout  = xmobarColor "orange" "black" . wsRename
-                    , ppTitle   = xmobarColor "green" "black" . wrap "[" "]" . shorten 90
+                    , ppTitle   = xmobarColor "green" "black" . wrap "[" "]" . shorten 80
                     , ppOutput  = hPutStrLn h
                     }
   where wsRename x = case x of

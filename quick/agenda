@@ -1,2 +1,2 @@
 #! /bin/sh
-emacsclient -c -e "(org-agenda-list)"
+emacsclient -c --alternate-editor="" -e "(org-agenda-list)"

@@ -1,2 +1,2 @@
 #! /bin/sh
-emacsclient -c $@
+emacsclient -c --alternate-editor="" $@

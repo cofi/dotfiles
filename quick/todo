@@ -1,2 +1,2 @@
 #! /bin/sh
-emacsclient -c -e "(org-todo-list 0)"
+emacsclient -c --alternate-editor="" -e "(org-todo-list 0)"

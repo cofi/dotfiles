@@ -41,7 +41,10 @@
 
                  ("Terminals" (mode . term-mode))
 
-                 ("Shells" (mode . shell-mode))
+                 ("Shells" (or
+                            (mode . eshell-mode)
+                            (mode . shell-mode)
+                            ))
 
                  ("Magit" (or 
                            (mode . magit-mode)

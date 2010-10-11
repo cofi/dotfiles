@@ -44,7 +44,6 @@
             "cofi-calendar"
             "cofi-color"
             "cofi-mail"
-            "cofi-markers"
             "cofi-project"
             "cofi-snippets"
             "cofi-ui"
@@ -53,15 +52,9 @@
             "cofi-completion"
             ))
 
-(defun cofi/lang-loads ()
-  (mapc 'load '(
-                "cofi-flymake"
-                "cofi-haskell"
-                "cofi-lisp"
-                "cofi-python"
-                "cofi-tex"
-                )))
-(add-hook 'emacs-startup-hook 'cofi/lang-loads)
+(defun cofi/prog-loads ()
+  (load "cofi-programming"))
+(add-hook 'emacs-startup-hook 'cofi/prog-loads)
 
 ;; from http://edward.oconnor.cx/2010/08/standalone-gnus
 (add-to-list 'command-switch-alist
@@ -70,8 +63,8 @@
                         (global-linum-mode -1)
                         ;; Start wanderlust when Emacs starts
                         (add-hook 'emacs-startup-hook 'wl t)
-                        (remove-hook 'emacs-startup-hook 'cofi/lang-loads)
-                        ;; Exit Emacs after quitting Gnus
+                        (remove-hook 'emacs-startup-hook 'cofi/prog-loads)
+                        ;; Exit Emacs after quitting WL
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
 
 (custom-set-variables

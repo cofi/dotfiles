@@ -46,4 +46,10 @@
 	      (logand flags #xFFFFFEFF)))
     (x-change-window-property "WM_HINTS" wm-hints frame "WM_HINTS" 32 t)))
 
+(defun add-to-hooks (fun hooks)
+  "Add function to hooks"
+  (mapc (lambda (hook)
+          (add-hook hook fun))
+        hooks))
+
 (provide 'cofi-util)

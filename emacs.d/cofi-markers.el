@@ -1,5 +1,12 @@
+(setq fic-highlighted-words '( "HACK" "FIXME" "TODO" "XXX" "BUG"))
+
+(require-and-exec 'fic-mode.el
+   (add-to-hooks 'fic-mode (append prog-mode-hooks
+                                   '(rst-mode-hook tex-mode-hook org-mode-hook))))
+
 (defconst marker-regexp "\\<\\(HACK\\|FIXME\\|TODO\\|XXX+\\|BUG\\):"
   "Regexp that matches the markers.")
+
 (require-and-exec 'fringe-helper
                   (defvar marker-fringe-overlays nil)
                   (make-variable-buffer-local 'marker-fringe-overlays)
@@ -18,7 +25,7 @@
                         )))
 
                   (defun clean-marker-annotations ()
-                    "Remove the overlay annotations."
+                    "Remove the marker annotations."
                     (interactive)
                     (mapc 'fringe-helper-remove marker-fringe-overlays))
 
@@ -55,15 +62,15 @@
                   (add-hook 'find-file-hook 'annotate-markers))
 
 (defun marker-fontlock ()
-  (font-lock-add-keywords nil
-                          (list (list marker-regexp
-                                      1 'font-lock-warning-face 'prepend))))
+  (font-lock-add-keywords nil (list (list marker-regexp 1
+                                            'font-lock-warning-face 'prepend))))
+(when (not (locate-library "fic-mode.el"))
+  (add-hook 'find-file-hook 'marker-fontlock))
 
 (defun list-markers ()
   "List all markers in current buffer."
   (interactive)
   (occur marker-regexp 0))
 
-(add-hook 'find-file-hook 'marker-fontlock)
 
 (provide 'cofi-markers)

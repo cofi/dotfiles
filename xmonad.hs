@@ -69,11 +69,11 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-p", spawn "krunner")
                  , ("M-y", spawn launcher)
                  , ("M-S-y", spawn termLauncher)
-                 , ("M-g", windowPromptGoto windowConfig)
-                 , ("M-b", windowPromptBring windowConfig)
-                 , ("M-S-b", windowPromptBringCopy windowConfig)
+                 , ("M-g", windowPromptGoto acPromptConfig)
+                 , ("M-b", windowPromptBring acPromptConfig)
+                 , ("M-S-b", windowPromptBringCopy acPromptConfig)
                  , ("M-z", manPrompt promptConfig)
-                 , ("M-q", dirExecPromptNamed promptConfig spawn (withHome ".quick") "Quicks: ")
+                 , ("M-q", dirExecPromptNamed acPromptConfig spawn (withHome ".quick") "Quicks: ")
                    -- Window/workspace management
                  , ("M-S-h", sendMessage MirrorShrink)
                  , ("M-S-l", sendMessage MirrorExpand)
@@ -129,7 +129,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
         prevEmpty = moveTo Prev EmptyWS
         shiftToNext = shiftTo Next EmptyWS
         shiftToPrev = shiftTo Prev EmptyWS
-        windowConfig = promptConfig { autoComplete = Just 500000 }
+        acPromptConfig = promptConfig { autoComplete = Just 500000 }
 
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 

@@ -20,6 +20,18 @@
 ;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 ;; MA 02111-1307 USA
 ;;
+;; To use, save fic-mode.el to a directory in your load-path.
+;;
+;; (require 'fic-mode)
+;; (add-hook 'c++-mode-hook 'turn-on-fic-mode)
+;; (add-hook 'emacs-lisp-mode-hook 'turn-on-fic-mode)
+;;
+;; or
+;;
+;; M-x fic-mode
+;;
+;; NOTE: If you manually turn on fic-mode, you you might need to force re-fontification initially
+;;   M-x font-lock-fontify-buffer
 
 (defcustom fic-highlighted-words '("FIXME" "TODO" "BUG" "KLUDGE")
   "Words to highlight"
@@ -70,4 +82,9 @@
         (font-lock-add-keywords nil kwlist)
       (font-lock-remove-keywords nil kwlist))))
 
-(provide fic-mode.el)
+(defun turn-on-fic-mode ()
+  "turn fic-mode on"
+  (interactive)
+  (fic-mode 1))
+
+(provide 'fic-mode)

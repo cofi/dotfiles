@@ -47,7 +47,7 @@ main = do
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
                          , focusedBorderColor = "#9A0000"
-                         , workspaces = ["1:comm", "2:browse", "3:code", "4:mail"] ++ map show [5..9] ++ ["feeds", "hide"]
+                         , workspaces = ["1:comm", "2:browse", "3:code"] ++ map show [4..9] ++ ["mail", "feeds", "hide"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = dynamicLogWithPP $ myPP xmproc 
@@ -191,7 +191,7 @@ myManageHook = (composeAll . concat $
                [ [ isFullscreen    --> doFullFloat
                  , isDialog        --> doCenterFloat
                  , weechatQuery    --> doShift "1:comm"
-                 , wanderlustQuery --> doShift "4:mail"
+                 , wanderlustQuery --> doShift "mail"
                  , newsbeuterQuery --> doShift "feeds"
                  ]
                 ,[ className =? f --> doFloat            | f <- floats ]
@@ -202,7 +202,7 @@ myManageHook = (composeAll . concat $
                 ])
                <+> manageDocks
   where ignores = []
-        floats = ["MPlayer", "Smplayer", "Plasma-desktop", "Lancelot", "Kmix"]
+        floats = ["MPlayer", "Smplayer", "Vlc", "Plasma-desktop", "Lancelot", "Kmix"]
         browse = []
         code  = []
         comms = ["Kopete"]

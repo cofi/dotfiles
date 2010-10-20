@@ -57,7 +57,8 @@
                     '(diminish 'eldoc-mode " ED"))
                   (eval-after-load "highlight-parentheses"
                     '(diminish 'highlight-parentheses-mode))
-                  )
+                  (eval-after-load "undo-tree"
+                    '(diminish 'undo-tree-mode)))
 
 (setq recentf-auto-cleanup 'never)
 (setq recentf-max-saved-items 500)

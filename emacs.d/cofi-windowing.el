@@ -57,11 +57,11 @@
 
   ;; Windowing
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-w") 'vimpulse-cycle-windows)
-    (define-key map (kbd "w") 'vimpulse-cycle-windows)
+    (define-key map (kbd "C-w") 'other-window)
+    (define-key map (kbd "w") 'other-window)
     (define-key map (kbd "s") 'split-window-vertically)
     (define-key map (kbd "v") 'split-window-horizontally)
-    (define-key map (kbd "o") 'other-window)
+    (define-key map (kbd "o") 'delete-other-windows)
     (define-key map (kbd "1") 'delete-other-windows)
     (define-key map (kbd "d") 'delete-window)
     (define-key map (kbd "m") 'frame/maximize)

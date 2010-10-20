@@ -34,3 +34,9 @@
 [submodule "elisp/vendor/google-weather-el"]
 	path = elisp/vendor/google-weather-el
 	url = git://git.naquadah.org/google-weather-el.git
+[submodule "elisp/vendor/vimpulse"]
+	path = elisp/vendor/vimpulse
+	url = git://gitorious.org/vimpulse/vimpulse.git
+[submodule "elisp/vendor/undo-tree"]
+	path = elisp/vendor/undo-tree
+	url = http://www.dr-qubit.org/git/undo-tree.git

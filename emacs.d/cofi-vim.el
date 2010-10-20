@@ -1,3 +1,5 @@
+(add-to-list 'load-path "~/.elisp/vendor/vimpulse")
+(add-to-list 'load-path "~/.elisp/vendor/undo-tree")
 (setq viper-toggle-key [pause])
 (require-and-exec 'vimpulse
   (setq viper-shift-width 4)
@@ -9,16 +11,6 @@
   ;; Window keybindings ========================================
   ;; kill vimpulse bindings (new defined in windowing)
   (define-key viper-vi-basic-map "\C-w" nil)
-  (define-key viper-vi-basic-map "\C-w\C-w" nil)
-  (define-key viper-vi-basic-map "\C-ww" nil)
-  (define-key viper-vi-basic-map "\C-wo" nil)
-  (define-key viper-vi-basic-map "\C-wc" nil)
-  (define-key viper-vi-basic-map "\C-ws" nil)
-  (define-key viper-vi-basic-map "\C-wv" nil)
-  (define-key viper-vi-basic-map "\C-wh" nil)
-  (define-key viper-vi-basic-map "\C-wj" nil)
-  (define-key viper-vi-basic-map "\C-wk" nil)
-  (define-key viper-vi-basic-map "\C-wl" nil)
   ;; ============================================================
 
   ;; Keybindings ==========
@@ -28,13 +20,15 @@
   (define-key viper-vi-global-user-map (kbd "C-t") 'transpose-chars)
   (define-key viper-vi-global-user-map (kbd "C-e") 'viper-goto-eol)
 
-  (when (fboundp 'redo)
-    (define-key viper-vi-global-user-map (kbd "r") 'redo))
-
   (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
   (define-key viper-insert-global-user-map (kbd "C-\\") 'viper-intercept-ESC-key)
-  (require-and-exec 'goto-last-change
-     (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))
+
+  (when (string< vimpulse-version "0.5")
+    (require-and-exec 'goto-last-change
+       (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))
+    (require-and-exec 'undo-tree
+       (define-key viper-vi-basic-map (kbd "C-r") 'undo-tree-redo)))
+
   (define-key viper-vi-global-user-map (kbd "SPC") 'viper-scroll-up)
   (define-key viper-vi-global-user-map (kbd "S-SPC") 'viper-scroll-down)
   (define-key viper-vi-global-user-map (kbd "+") 'cofi/inc-at-pt)
@@ -89,14 +83,14 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   ;; ==================================================
 
   ;; Search keybindings ========================================
-  (define-key viper-vi-global-user-map (kbd "C-r") 'isearch-backward-regexp)
-  (define-key viper-vi-global-user-map (kbd "C-s") 'isearch-forward-regexp)
-  (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
-  (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)
-  (define-key viper-vi-basic-map (kbd "n") 'isearch-repeat-forward)
-  (define-key viper-vi-basic-map (kbd "N") 'isearch-repeat-backward)
-  (define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
-  (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
+  (when (string< vimpulse-version "0.5")
+    (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
+    (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)
+    (define-key viper-vi-basic-map (kbd "n") 'isearch-repeat-forward)
+    (define-key viper-vi-basic-map (kbd "N") 'isearch-repeat-backward)
+    (define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
+    (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
+    )
   (push '("nohighlight" (isearch-done)) ex-token-alist)
   ;; ==================================================
 
@@ -133,7 +127,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   (setq cofi/default-cursor-color "OliveDrab4")
   (setq cofi/viper-insert-cursor-color "dark red")
-  (setq cof/viper-replace-cursor-color "red")
+  (setq cofi/viper-replace-cursor-color "red")
   (setq cofi/viper-emacs-cursor-color "sienna")
 
   (defun cofi/viper-bar ()

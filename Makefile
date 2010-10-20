@@ -2,7 +2,7 @@
 
 PWD := `pwd`
 LINK_CMD := ln --symbolic --force -T
-NORMAL_FILES := `ls -I xmonad.hs -I README -I newsbeuterconfig -I vimenv_setup -I Makefile`
+NORMAL_FILES := `ls -I xmonad.hs -I README -I newsbeuterconfig -I vimenv_setup -I Makefile -I pentadactyl`
 
 refresh:
 	 #emacs --batch --no-site-file --eval '(byte-recompile-directory "emacs.d/")'
@@ -19,3 +19,5 @@ deploy:
 	$(LINK_CMD) $(PWD)/vimenv_setup ~/.vimrc
 	$(LINK_CMD) $(PWD)/newsbeuterconfig ~/.newsbeuter/config
 	$(LINK_CMD) $(PWD)/xmonad.hs ~/.xmonad/xmonad.hs
+	$(LINK_CMD) $(PWD)/pentadactyl/plugins ~/.pentadactyl/plugins
+	$(LINK_CMD) $(PWD)/pentadactyl/colors ~/.pentadactyl/colors

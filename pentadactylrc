@@ -15,8 +15,6 @@ command! -nargs=* beo tabopen http://dict.tu-chemnitz.de/dings.cgi?lang=de&servi
 command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=<args>&relink=on
 
 set guioptions=NT
-set runtimepath=/home/cofi/.vimperator
-source! /home/cofi/.vimperatorrc.local
 colorscheme cofi
 set editor="emacsclient -c"
 
@@ -25,5 +23,3 @@ map <leader>n :bnext<CR>
 map <leader>p :bprev<CR>
 map <C-right> :bnext<CR>
 map <C-left> :bprev<CR>
-
-" vim: set ft=vimperator:

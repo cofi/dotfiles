@@ -1,0 +1,39 @@
+" Vimperator ColorScheme
+" cofi
+" based on evening-tmp, but stripped tabbar settings.
+"
+" put into
+" ~/.vimperator/colors/ directory
+" and
+" :colorscheme cofi
+
+hi StatusLine           color: #333;     background: #ddd;
+
+
+hi Normal               background: white; font-size: 12px;
+hi InfoMsg              color: #ddd;     background: #333;
+hi ModeMsg              color: #ddd;     background: #333;
+hi MoreMsg              color: limegreen;background: #333;
+hi LineNr               color: yellow;   background: #333;
+hi Question             color: limegreen;background: #333;
+hi WarningMsg           color: yellow;   background: #333;
+hi NonText              color: white;    background: #333;
+hi CmdLine              font-family: monospace; padding: 1px;
+
+hi CompItem[selected]   color: #333;     background: Khaki;
+
+hi Title                color: Orchid;
+hi Indicator            color: DodgerBlue;
+hi String               color: Orchid;
+hi Number               color: Orchid;
+hi Object               color: SkyBlue;
+hi Function             color: Khaki;
+hi URL                  color: GreenYellow;
+
+style about:blank html { background-color:#333; }
+
+style -name statusbar chrome://* <<EOM
+#status-bar statusbarpanel { padding: 0 1px !important; }
+statusbarpanel > * { margin: 0 !important; padding:0 !important; }
+EOM
+

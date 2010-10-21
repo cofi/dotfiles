@@ -25,6 +25,7 @@ Note: This assumes all files are in the org-directory."
   (define-key map (kbd "l") 'org-store-link)
   (define-key map (kbd "v") 'cofi/visit-org-agenda-files)
   (define-key map (kbd "c") 'calendar)
+  (define-key map (kbd "f") 'org-footnote-action)
   (global-set-key (kbd "<f5>") map))
 
 (add-hook 'org-mode-hook
@@ -44,6 +45,8 @@ Note: This assumes all files are in the org-directory."
       org-agenda-skip-scheduled-if-done t
       org-agenda-start-on-weekday nil
       )
+
+(setq org-footnote-auto-label 'plain)
 
 ;; ToDo
 (setq org-todo-keywords '((sequence

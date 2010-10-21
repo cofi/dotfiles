@@ -11,6 +11,8 @@
     (global-set-key (kbd "M-RET") 'yas/expand)
     )
 
+(define-key yas/minor-mode-map "\C-c&" nil)
+
 (eval-after-load "org"
   (add-hook 'org-mode-hook
               (lambda ()

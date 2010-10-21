@@ -2,7 +2,7 @@
 XML.ignoreWhitespace = false;
 XML.prettyPrinting   = false;
 var INFO =
-<plugin name="useragent" version="0.1"
+<plugin name="useragent" version="0.2"
         href="http://dactyl.sf.net/pentadactyl/plugins#useragent-plugin"
         summary="User Agent Switcher"
         xmlns={NS}>
@@ -116,9 +116,9 @@ options.add(["useragent", "ua"],
                                     : UserAgent("", value));
             for (let opt in values(opts))
                 if (ua[opt.name])
-                    options.safeSetPref(opt.pref, ua[opt.name], "See the 'useragent' option");
+                    prefs.safeSet(opt.pref, ua[opt.name], "See the 'useragent' option");
                 else
-                    options.safeResetPref(opt.pref, "See the 'useragent' option");
+                    prefs.safeReset(opt.pref, "See the 'useragent' option");
             return value;
         }
     });

@@ -18,7 +18,7 @@ set guioptions=NT
 colorscheme cofi
 set editor="emacsclient -c"
 
-let mapleader=","
+set mapleader=","
 map <leader>n :bnext<CR>
 map <leader>p :bprev<CR>
 map <C-right> :bnext<CR>

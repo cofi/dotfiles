@@ -206,8 +206,8 @@ let prefs = {
 for (let [k, v] in Iterator(prefs))
     prefs[k] = array(v).map(function (v) [v[0], Pref.fromArray(v.map(UTF8))]).toObject();
 
-function getPref(pref)      options.getPref(PrefBase + pref);
-function setPref(pref, val) options.setPref(PrefBase + pref, val);
+function getPref(pref)      modules.prefs.get(PrefBase + pref);
+function setPref(pref, val) modules.prefs.get(PrefBase + pref, val);
 
 prefs.complete = function prefsComplete(group) function (context) {
     context.keys = { text: "text", description: "description" };
@@ -335,7 +335,7 @@ options.add(["script"],
 XML.ignoreWhitespace = false;
 XML.prettyPrinting   = false;
 var INFO =
-<plugin name="noscript" version="0.2"
+<plugin name="noscript" version="0.2.1"
         href="http://dactyl.sf.net/pentadactyl/plugins#noscript-plugin"
         summary="NoScript integration"
         xmlns={NS}>

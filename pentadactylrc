@@ -14,7 +14,7 @@ command! -nargs=* dict tabopen http://www.dict.cc/?s=<args>
 command! -nargs=* beo tabopen http://dict.tu-chemnitz.de/dings.cgi?lang=de&service=deen&query=<args>
 command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=<args>&relink=on
 
-set guioptions=NT
+set guioptions=T
 colorscheme cofi
 set editor="emacsclient -c"
 

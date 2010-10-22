@@ -215,6 +215,8 @@
 ;; Default modes ========================================
 (require-and-exec 'autopair
                   (autopair-global-mode 1))
+(require-and-exec 'pretty-mode
+                  (global-pretty-mode t))
 (transient-mark-mode t)
 (display-time-mode t)
 (global-font-lock-mode t)

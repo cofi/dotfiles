@@ -19,8 +19,27 @@ Note: This assumes all files are in the org-directory."
                                     (mapcar 'file-name-nondirectory (org-agenda-files)))))
   (find-file (concat org-directory fname)))
 
+(autoload 'org-todo "org.el")
+(defmacro cofi/set-todo-state (state)
+  `(lambda () (interactive)
+    (org-todo ,state)))
+
+(defvar cofi/org-state-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "t") (cofi/set-todo-state "TODO"))
+    (define-key map (kbd "s") (cofi/set-todo-state "STARTED"))
+    (define-key map (kbd "w") (cofi/set-todo-state "WAITING"))
+    (define-key map (kbd "f") (cofi/set-todo-state "DEFERRED"))
+    ;; 
+    (define-key map (kbd "l") (cofi/set-todo-state "DELEGATED"))
+    (define-key map (kbd "x") (cofi/set-todo-state "CANCELLED"))
+    (define-key map (kbd "d") (cofi/set-todo-state "DONE"))
+    map))
+(global-set-key (kbd "C-c s") cofi/org-state-map)
+
 (let ((map (make-sparse-keymap)))
   (define-key map (kbd "a") 'org-agenda-list)
+  (define-key map (kbd "s") cofi/org-state-map)
   (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
   (define-key map (kbd "l") 'org-store-link)
   (define-key map (kbd "v") 'cofi/visit-org-agenda-files)
@@ -57,22 +76,6 @@ Note: This assumes all files are in the org-directory."
                           "CANCELLED"
                           "DONE"
                           )))
-(eval-after-load "org"
-  '(progn
-     (let* ((map (make-sparse-keymap))
-            (binder (lambda (key state)
-                      (define-key map (read-kbd-macro key)
-                        (lambda () (interactive) (org-todo state))))))
-
-       (funcall binder "x" "CANCELLED")
-       (funcall binder "d" "DONE")
-       (funcall binder "f" "DEFERRED")
-       (funcall binder "l" "DELEGATED")
-       (funcall binder "s" "STARTED")
-       (funcall binder "w" "WAITING")
-       (define-key org-mode-map (kbd "C-c s") map)
-       (define-key org-mode-map (kbd "<f5> s") map))))
-
 (setq org-hide-leading-stars t)
 
 ;; Tbl

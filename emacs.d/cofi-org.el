@@ -37,8 +37,6 @@ Note: This assumes all files are in the org-directory."
                                                   (interactive)
                                                   (end-of-line)
                                                   (org-meta-return)))))
-(add-hook 'org-mode-hook 'turn-on-speck)
-
 ;; Agenda
 (setq org-agenda-skip-unavailable-files t
       org-agenda-skip-deadline-if-done t

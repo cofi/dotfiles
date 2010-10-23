@@ -40,3 +40,6 @@
 [submodule "elisp/vendor/undo-tree"]
 	path = elisp/vendor/undo-tree
 	url = http://www.dr-qubit.org/git/undo-tree.git
+[submodule "elisp/vendor/mk-project"]
+	path = elisp/vendor/mk-project
+	url = git://github.com/mattkeller/mk-project.git

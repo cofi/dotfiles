@@ -3,7 +3,6 @@ command! -nargs=* g tabopen https://encrypted.google.com/search?q=<args>
 command! py tabopen http://python.org
 command! -nargs=1 pydoc tabopen http://docs.python.org/<args>
 command! -nargs=1 pylib tabopen http://docs.python.org/library/<args>.html
-command! ril sidebar Read It Later
 command! -nargs=* s tabopen https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=<args>
 command! webreg tabopen https://www.dekanat.informatik.tu-darmstadt.de/webreg/index.php?&page=login
 command! -nargs=* wpd tabopen http://de.wikipedia.org/wiki/<args>
@@ -14,12 +13,15 @@ command! -nargs=* dict tabopen http://www.dict.cc/?s=<args>
 command! -nargs=* beo tabopen http://dict.tu-chemnitz.de/dings.cgi?lang=de&service=deen&query=<args>
 command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=<args>&relink=on
 
+command! ril sidebar Read It Later
+
 set guioptions=BC
 colorscheme cofi
 set editor="emacsclient -c"
 
 set mapleader=","
-map <leader>n :bnext<CR>
-map <leader>p :bprev<CR>
-map <C-right> :bnext<CR>
-map <C-left> :bprev<CR>
+map <leader>n -silent :bnext<CR>
+map <leader>p -silent :bprev<CR>
+map <C-right> -silent :bnext<CR>
+map <C-left> -silent :bprev<CR>
+map <f12> -silent :toolbartoggle Navigations-Symbolleiste<CR>

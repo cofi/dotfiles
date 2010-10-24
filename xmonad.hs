@@ -37,13 +37,13 @@ import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
 import System.Directory (getHomeDirectory)
-import Network.BSD (getHostName)
+import System.Posix.Unistd (getSystemID, SystemID(..))
 
 main = do
 --   spawn trayer
   homeDir <- getHomeDirectory
-  hostname <- getHostName
-  xmproc <- spawnPipe $ xmobar hostname
+  systemID <- getSystemID
+  xmproc <- spawnPipe $ xmobar systemID
   xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig { terminal = myTerm
                          , focusFollowsMouse = True
                          , borderWidth = 1
@@ -60,7 +60,7 @@ main = do
       myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false " 
                ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true" 
-      xmobar hostname = case hostname of
+      xmobar systemID = case (nodeName systemID) of
         "hitchhiker" -> "xmobar ~/.xmobar/laptop"
         "coficore"   -> "xmobar ~/.xmobar/desktop"
         _            -> "xmobar ~/.xmobar/default"

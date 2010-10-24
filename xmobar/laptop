@@ -1,0 +1,25 @@
+-- -*- mode: haskell -*-
+Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=hintfull"
+       , bgColor = "black"
+       , fgColor = "white smoke"
+       , position = Static { xpos = 0, ypos = 0, width = 1350, height = 23 }
+       , lowerOnStart = False
+       , commands = [ Run Wireless "wlan0" ["-t", "(<essid> <quality>)", "-L", "30", "-H", "70", "--low", "red", "--normal","orange","--high","green"] 60
+                    , Run Thermal "THM0" ["-t", "<temp>°C", "-L", "40", "-H", "60", "--low", "green", "--normal","orange","--high","red"] 60
+                    , Run MultiCpu ["-t", "<total0> <total1> <total2> <total3>","-L","3","-H","50","--low","green","--normal","orange","--high","red"]   60
+                    , Run Battery ["-t", "<left>", "-L", "40", "-H", "70", "--low", "red", "--normal","orange","--high","green"] 60
+                    , Run Memory ["-t","M: <usedratio>%", "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
+                    , Run Swap ["-t", "S: <usedratio>%", "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
+                    , Run Date "%a %b %d %H:%M" "date" 60
+                    , Run Com "master_volume" [] "volume" 10
+--                     , Run Com "mailcount" [] "mailcount" 60
+                    , Run StdinReader
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %wlan0wi% <fc=steelbue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
+--                     " <fc=steelblue>✦</fc> ✉ %mailcount%"
+-- uncolored
+--        , template = "%StdinReader% }{ %wlan0wi% ✦ %THM0% ✦ %multicpu% ✦ %memory% - %swap% ✦ ⚡ %battery% ✦ ♩ %volume% ✦ <fc=khaki>%date%</fc> ✦ ✉ %mailcount%"
+
+       }

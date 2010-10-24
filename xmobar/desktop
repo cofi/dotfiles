@@ -1,8 +1,8 @@
 -- -*- mode: haskell -*-
-Config { font =  "xft:Dejavu Sans:size=8:antialias=true:hinting=true:hintstyle=hintfull"
+Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=hintfull"
        , bgColor = "black"
        , fgColor = "white smoke"
-       , position = TopW L 85
+       , position = Static { xpos = 0, ypos = 0, width = 1700, height = 23 }
        , lowerOnStart = False
        , commands = [ Run Wireless "wlan0" ["-t", "(<essid> <quality>)", "-L", "30", "-H", "70", "--low", "red", "--normal","orange","--high","green"] 60
                     , Run Thermal "THM0" ["-t", "<temp>°C", "-L", "40", "-H", "60", "--low", "green", "--normal","orange","--high","red"] 60
@@ -12,12 +12,13 @@ Config { font =  "xft:Dejavu Sans:size=8:antialias=true:hinting=true:hintstyle=h
                     , Run Swap ["-t", "S: <usedratio>%", "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
                     , Run Date "%a %b %d %H:%M" "date" 60
                     , Run Com "master_volume" [] "volume" 10
-                    , Run Com "mailcount" [] "mailcount" 60
+--                     , Run Com "mailcount" [] "mailcount" 60
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %wlan0wi% <fc=steelblue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% - %swap% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc> <fc=steelblue>✦</fc> ✉ %mailcount%"
+       , template = "%StdinReader% }{ %wlan0wi% <fc=steelbue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
+--                     " <fc=steelblue>✦</fc> ✉ %mailcount%"
 -- uncolored
 --        , template = "%StdinReader% }{ %wlan0wi% ✦ %THM0% ✦ %multicpu% ✦ %memory% - %swap% ✦ ⚡ %battery% ✦ ♩ %volume% ✦ <fc=khaki>%date%</fc> ✦ ✉ %mailcount%"
 

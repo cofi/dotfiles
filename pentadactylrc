@@ -25,3 +25,4 @@ map <leader>p -silent :bprev<CR>
 map <C-right> -silent :bnext<CR>
 map <C-left> -silent :bprev<CR>
 map <f12> -silent :toolbartoggle Navigations-Symbolleiste<CR>
+map <A-a> -silent :dialog addbookmark<CR>

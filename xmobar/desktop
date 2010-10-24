@@ -2,7 +2,7 @@
 Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=hintfull"
        , bgColor = "black"
        , fgColor = "white smoke"
-       , position = Static { xpos = 0, ypos = 0, width = 1700, height = 23 }
+       , position = TopSize L 85 23
        , lowerOnStart = False
        , commands = [ Run Wireless "wlan0" ["-t", "(<essid> <quality>)", "-L", "30", "-H", "70", "--low", "red", "--normal","orange","--high","green"] 60
                     , Run Thermal "THM0" ["-t", "<temp>°C", "-L", "40", "-H", "60", "--low", "green", "--normal","orange","--high","red"] 60

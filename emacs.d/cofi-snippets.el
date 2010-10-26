@@ -7,7 +7,7 @@
     (setq yas/prompt-functions '(yas/ido-prompt
                                  yas/completing-prompt))
     (setq yas/also-auto-indent-first-line t)
-
+    (setq yas/fallback-behavior 'call-other-command)
     (global-set-key (kbd "M-RET") 'yas/expand)
     )
 
@@ -16,9 +16,8 @@
 (eval-after-load "org"
   (add-hook 'org-mode-hook
               (lambda ()
-                 (setq yas/fallback-behavior
-                       '(apply org-cycle))
-                 (local-set-key [tab] 'yas/expand))))
+                (local-set-key (kbd "TAB") 'yas/expand))))
+
 (eval-after-load "magit"
   (add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t))))
 (eval-after-load "calc"

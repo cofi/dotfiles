@@ -21,7 +21,7 @@
   (define-key viper-vi-global-user-map (kbd "C-e") 'viper-goto-eol)
 
   (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
-  (define-key viper-insert-global-user-map (kbd "C-\\") 'viper-intercept-ESC-key)
+  (define-key viper-insert-global-user-map (kbd "C-c") 'viper-intercept-ESC-key)
 
   (when (string< vimpulse-version "0.5")
     (require-and-exec 'goto-last-change

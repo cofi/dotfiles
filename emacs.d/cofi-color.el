@@ -115,7 +115,7 @@
          (highlight-changes-face ((t (:foreground "red"))))
 
          (calendar-today-face ((t (:underline t))))
-         (holiday-face ((t (:background "pink"))))
+         (holiday-face ((t (:foreground "gray100" :background "firebrick"))))
 
          (info-header-node ((t (:italic t :bold t :weight bold :slant italic :foreground "brown"))))
          (info-header-xref ((t (:bold t :weight bold :foreground "magenta4"))))

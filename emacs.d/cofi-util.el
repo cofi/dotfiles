@@ -10,6 +10,9 @@
         (progn ,@body)
     (message (format "%s not loaded" ,file))))
 
+(defun in-mode? (mode)
+  (eq major-mode mode))
+
 (defun plasma-send-notification (msg title &optional timeout)
   "Send plasma notification."
   (let* ((timeouts (if timeout (format "%d" timeout)

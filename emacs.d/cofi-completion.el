@@ -75,19 +75,13 @@
     '())
   "List of completers used for Python.")
 
-(defvar cofi/mode-completers
-  (list
-   (list 'emacs-lisp-mode (append cofi/base-completers cofi/lisp-completers))
-   (list 'lisp-mode (append cofi/base-completers cofi/lisp-completers))
-   (list 'python-mode (append cofi/python-completers cofi/base-completers))
-   )
-  "List of major modes in which to use additional mode specific completion
-functions.")
-
 (defun cofi/completion-functions ()
   "Get a completion function according to current major mode."
-    (or (second (assq major-mode cofi/mode-completers))
-        cofi/base-completers))
+  (cond
+   ((in-mode? 'emacs-lisp-mode) (append cofi/base-completers cofi/lisp-completers))
+   ((in-mode? 'lisp-mode) (append cofi/base-completers cofi/lisp-completers))
+   ((in-mode? 'python-mode) (append cofi/python-completers cofi/base-completers))
+   (t cofi/base-completers)))
 
 (defun cofi/complete (prefix)
   "Do hippie-completion based on current major-mode."

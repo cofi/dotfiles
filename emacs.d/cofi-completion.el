@@ -20,13 +20,16 @@
             text-mode
             org-mode
             ))
-    (setq-default ac-sources '(
-                               ac-source-words-in-buffer
-                               ac-source-yasnippet
-                               ac-source-dictionary
-                               ac-source-filename
-                               ac-source-abbrev
-                               ))
+
+    (defvar ac-sources '(
+                         ac-source-words-in-buffer
+                         ac-source-words-in-same-mode-buffers
+                         ac-source-yasnippet
+                         ac-source-dictionary
+                         ac-source-filename
+                         ac-source-abbrev
+                         ))
+    (make-variable-buffer-local 'ac-sources)
 
     (defun cofi/ac-elisp-setup ()
       (setq ac-sources '(
@@ -35,6 +38,7 @@
                          ac-source-variables
                          ac-source-features
                          ac-source-words-in-buffer
+                         ac-source-words-in-same-mode-buffers
                          ac-source-yasnippet
                          )))
 

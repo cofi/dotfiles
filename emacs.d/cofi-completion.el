@@ -4,13 +4,13 @@
     (require 'auto-complete-latex)
 
     (setq ac-fuzzy-enable t)
-    (setq-default ac-auto-start 2)
+    (setq-default ac-auto-start 3)
     (define-key ac-complete-mode-map (kbd "C-l") 'ac-expand-common)
     (define-key ac-complete-mode-map (kbd "C-j") 'ac-next)
     (define-key ac-complete-mode-map (kbd "C-k") 'ac-previous)
     (define-key ac-complete-mode-map (kbd "ESC") 'keyboard-quit)
 
-    (push "~/.emacs.d/completion-dicts" ac-dictionary-directories)
+    (setq ac-dictionary-directories '("~/.emacs.d/completion-dicts"))
 
     (mapc (lambda (mode)
             (push mode ac-modes))
@@ -20,44 +20,26 @@
             text-mode
             org-mode
             ))
-    (defconst cofi-ac-default-sources
-      '(
-        ac-source-yasnippet
-        ac-source-abbrev
-        ac-source-dictionary
-        ac-source-words-in-same-mode-buffers
-        ac-source-words-in-buffer
-        ))
+    (setq-default ac-sources '(
+                               ac-source-words-in-buffer
+                               ac-source-yasnippet
+                               ac-source-dictionary
+                               ac-source-filename
+                               ac-source-abbrev
+                               ))
 
-    (defun ac-common-setup ()
-      (mapc (lambda (source)
-              (push source ac-sources))
-            cofi-ac-default-sources))
+    (defun cofi/ac-elisp-setup ()
+      (setq ac-sources '(
+                         ac-source-symbols
+                         ac-source-functions
+                         ac-source-variables
+                         ac-source-features
+                         ac-source-words-in-buffer
+                         ac-source-yasnippet
+                         )))
 
-    (defun ac-lisp-mode-setup ()
-      (ac-common-setup)
-      (mapc (lambda (source)
-              (push source ac-sources))
-            '(
-              ac-source-symbols
-              ac-source-functions
-              ac-source-variables
-              ac-source-features
-              )))
 
-    (add-hook 'emacs-lisp-mode-hook 'ac-lisp-mode-setup)
-    (add-hook 'lisp-mode-hook 'ac-lisp-mode-setup)
-
-    (defun ac-python-mode-setup ()
-      (ac-common-setup)
-      (mapc (lambda (source)
-              (push source ac-sources))
-            '(
-              ac-source-ropemacs
-              )))
-
-    (add-hook 'python-mode-hook 'ac-python-mode-setup)
-    (add-hook 'auto-complete-mode-hook 'ac-common-setup)
+    (add-hook 'emacs-lisp-mode-hook 'cofi/ac-elisp-setup)
     (global-auto-complete-mode t)
     )
 
@@ -77,7 +59,8 @@
  "List of uncommon completers")
 
 (defconst cofi/lisp-completers
-  '(try-expand-list
+  '(
+    try-expand-list
     try-complete-lisp-symbol-partially
     try-complete-lisp-symbol)
   "List of completers used for Lisp.")

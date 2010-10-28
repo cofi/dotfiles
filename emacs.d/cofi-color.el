@@ -188,6 +188,13 @@
 
          (zmacs-region ((t (:background "lightgoldenrod2"))))
 
+         (rst-level-1-face ((t (:bold t :foreground "chocolate4"))))
+         (rst-level-2-face ((t (:bold t :foreground "chocolate3"))))
+         (rst-level-3-face ((t (:bold t :foreground "chocolate2"))))
+         (rst-level-4-face ((t (:bold t :foreground "orange3"))))
+         (rst-level-5-face ((t (:bold t :foreground "dark orange"))))
+         (rst-level-6-face ((t (:bold t :foreground "dark khaki"))))
+
          (org-hide ((t (:foreground "gray13"))))
          (org-level-1 ((t (:bold t :foreground "chocolate4"))))
          (org-level-2 ((t (:bold t :foreground "chocolate3"))))

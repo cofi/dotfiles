@@ -215,6 +215,7 @@
 ;; Default modes ========================================
 (require-and-exec 'autopair
                   (autopair-global-mode 1))
+(add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
 (require-and-exec 'pretty-mode
                   (global-pretty-mode t))
 (transient-mark-mode t)

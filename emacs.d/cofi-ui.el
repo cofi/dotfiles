@@ -215,9 +215,6 @@
 ;; Default modes ========================================
 (require-and-exec 'autopair
                   (autopair-global-mode 1))
-(add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
-(require-and-exec 'pretty-mode
-                  (global-pretty-mode t))
 (transient-mark-mode t)
 (display-time-mode t)
 (global-font-lock-mode t)
@@ -320,5 +317,17 @@
 (global-set-key (kbd "C-c f") 'browse-url-firefox)
 (setq browse-url-firefox-new-window-is-tab t)
 ;; ==================================================
+
+;; prettyfying ==============================
+(add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
+(require-and-exec 'pretty-mode
+                  (global-pretty-mode t)
+                  (mapc (lambda (mode)
+                          (pretty-add-keywords mode '(
+                                                      ("=" . "←")
+                                                      ("==" . "=")
+                                                      )))
+                        '(python-mode c-mode java-mode cpp-mode)))
+;; ========================================
 
 (provide 'cofi-ui)

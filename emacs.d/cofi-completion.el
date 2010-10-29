@@ -3,8 +3,15 @@
     (require 'auto-complete-config)
     (require 'auto-complete-latex)
 
+    (defvar ac-source-pysmell
+      '((candidates
+         . (lambda ()
+             (require 'pysmell)
+             (pysmell-get-all-completions))))
+      "Source for PySmell")
+
     (setq ac-fuzzy-enable t)
-    (setq-default ac-auto-start 3)
+    (setq-default ac-auto-start 2)
     (define-key ac-complete-mode-map (kbd "C-l") 'ac-expand-common)
     (define-key ac-complete-mode-map (kbd "C-j") 'ac-next)
     (define-key ac-complete-mode-map (kbd "C-k") 'ac-previous)
@@ -42,8 +49,17 @@
                          ac-source-yasnippet
                          )))
 
+    (defun cofi/ac-python-setup ()
+      (setq ac-sources '(
+                         ac-source-words-in-buffer
+                         ac-source-words-in-same-mode-buffers
+                         ac-source-yasnippet
+                         ac-source-pysmell
+                         ac-source-dictionary
+                         )))
 
     (add-hook 'emacs-lisp-mode-hook 'cofi/ac-elisp-setup)
+    (add-hook 'python-mode-hook 'cofi/ac-python-setup)
     (global-auto-complete-mode t)
     )
 

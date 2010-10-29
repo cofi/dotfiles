@@ -36,6 +36,7 @@ import XMonad.Prompt.Man (manPrompt)
 import XMonad.Prompt.Window
 
 import Data.List (isPrefixOf)
+import qualified Data.Map as M
 import System.Directory (getHomeDirectory)
 import System.Posix.Unistd (getSystemID, SystemID(..))
 
@@ -159,6 +160,17 @@ promptFont = "xft:inconsolata:size=11:antialias=true:hinting=true:hintstyle=hint
 promptBG = "#171717"
 promptNFG = "#ff7701"           -- non-selected Foreground
 promptSFG = "#00aa4a"           -- selected Foreground
+myPromptKeymap = M.union defaultXPKeymap $ M.fromList
+                 [
+                   ((controlMask, xK_g), quit)
+                 , ((controlMask, xK_m), setSuccess True >> setDone True) 
+                 , ((controlMask, xK_j), setSuccess True >> setDone True) 
+                 , ((controlMask, xK_h), deleteString Prev)
+                 , ((controlMask, xK_f), moveCursor Next)
+                 , ((controlMask, xK_b), moveCursor Prev)
+                 , ((controlMask, xK_p), moveHistory W.focusUp')
+                 , ((controlMask, xK_n), moveHistory W.focusDown')
+                 ]
 promptConfig = defaultXPConfig { font = promptFont
                              , bgColor = promptBG
                              , fgColor = promptNFG
@@ -168,6 +180,7 @@ promptConfig = defaultXPConfig { font = promptFont
                              , height = 16
                              , historySize = 512
                              , historyFilter = deleteConsecutive
+                             , promptKeymap = myPromptKeymap
                              }
 
 -- Layouts ------------------------------------

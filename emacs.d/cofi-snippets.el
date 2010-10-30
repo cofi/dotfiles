@@ -8,15 +8,22 @@
                                  yas/completing-prompt))
     (setq yas/also-auto-indent-first-line t)
     (setq yas/fallback-behavior 'call-other-command)
+    (setq yas/trigger-key (kbd "TAB"))
     (global-set-key (kbd "M-RET") 'yas/expand)
     )
 
 (define-key yas/minor-mode-map "\C-c&" nil)
 
-(eval-after-load "org"
-  (add-hook 'org-mode-hook
-              (lambda ()
-                (local-set-key (kbd "TAB") 'yas/expand))))
+(defun yas/org-very-safe-expand ()
+  (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; yasnippet (using the new org-cycle hooks)
+            (make-variable-buffer-local 'yas/trigger-key)
+            (setq yas/trigger-key [tab])
+            (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
+            (define-key yas/keymap [tab] 'yas/next-field)))
 
 (eval-after-load "magit"
   (add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t))))

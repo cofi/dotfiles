@@ -10,7 +10,7 @@ save-path "~/Feed-Articles"
 show-read-feeds no
 show-read-articles no
 
-browser "firefox %u"
+browser "browser %u"
 
 feedlist-title-format "Your feeds (%u unread, %t total)%?T? - tag `%T'&?"
 articlelist-title-format "Articles in feed %T (%u unread, %t total) - %U"

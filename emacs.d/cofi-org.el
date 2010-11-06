@@ -71,6 +71,8 @@ Note: This assumes all files are in the org-directory."
       org-agenda-start-on-weekday nil
       )
 
+(setq org-google-weather-format "%L: %i %c, %l-%h %s")
+
 (setq org-footnote-auto-label 'plain)
 
 ;; ToDo

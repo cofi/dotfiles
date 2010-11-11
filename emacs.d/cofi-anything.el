@@ -42,6 +42,22 @@
                                                command
                                                )))
 
+(defvar anything-c-source-buffer-not-found
+  (anything-c-define-dummy-source
+   "Create buffer"
+   (lambda () (unless (get-buffer anything-input)
+                (anything-c-dummy-candidate)))
+   '(type . buffer)))
+
+(defun cofi/anything-buffers ()
+  "Enhanced preconfigured `anything' for buffer."
+  (interactive)
+  (anything-other-buffer '(
+                           anything-c-source-buffers+
+                           anything-c-source-buffer-not-found
+                           )
+                           "*anything buffers*"))
+
  (defun cofi/anything-files ()
   "ffap -> recentf -> buffer -> bookmark -> file-cache -> files-in-current-dir -> locate"
   (interactive)

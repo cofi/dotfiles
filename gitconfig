@@ -44,10 +44,8 @@
     br = branch
     co = checkout
     d1 = diff HEAD^1..
-    df = !git --no-pager diff
-    dfc = !git --no-pager diff --cached
-    dp = !git --paginate diff
-    dpc = !git --paginate diff --cached
+    df = diff
+    dfc = diff --cached
     gdf = difftool
     gdfc = difftool --cached
     mg = merge

@@ -57,6 +57,22 @@
                            anything-c-source-buffer-not-found
                            )
                            "*anything buffers*"))
+(require-and-exec 'lacarte
+  (defvar anything-c-source-lacarte
+    '((name . "Lacarte")
+      (init . (lambda ()
+                (setq anything-c-lacarte-current-buffer (current-buffer))))
+      (candidates .
+                  (lambda ()
+                    (with-current-buffer anything-c-lacarte-current-buffer
+                      (delete '(nil) (lacarte-get-overall-menu-item-alist)))))
+      (candidate-number-limit . 9999)
+      (action . (("Open" . (lambda (candidate)
+                             (call-interactively candidate)))))))
+  (defun cofi/anything-lacarte ()
+    (interactive)
+    (anything-other-buffer 'anything-c-source-lacarte "*anything lacarte*"))
+  (global-set-key (kbd "<f10>") 'cofi/anything-lacarte))
 
  (defun cofi/anything-files ()
   "ffap -> recentf -> buffer -> bookmark -> file-cache -> files-in-current-dir -> locate"

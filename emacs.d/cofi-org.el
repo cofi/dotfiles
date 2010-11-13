@@ -100,7 +100,12 @@ Note: This assumes all files are in the org-directory."
 
 (setq appt-disp-window-function
       (lambda (min-to-app new-time msg)
-        (send-notification msg (format "Appointment in %s minutes" min-to-app))))
+        (progn
+          (shell-command (format "appt-file In %s m: %s" min-to-app msg))
+          (send-notification msg (format "Appointment in %s minutes" min-to-app)))))
+(setq appt-delete-window-function
+      (lambda ()
+        (shell-command "appt-file -clear")))
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
 ;; Capture ==============================

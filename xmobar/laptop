@@ -1,5 +1,5 @@
 -- -*- mode: haskell -*-
-Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=hintfull"
+Config { font =  "xft:Dejavu Sans:size=8:antialias=true:hinting=true:hintstyle=hintfull"
        , bgColor = "black"
        , fgColor = "white smoke"
        , position = TopSize L 85 23
@@ -14,10 +14,11 @@ Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=h
                     , Run Com "master_volume" [] "volume" 10
 --                     , Run Com "mailcount" [] "mailcount" 60
                     , Run StdinReader
+                    , Run Com "appt-file" [] "appt" 60
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %wlan0wi% <fc=steelbue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
+       , template = "%StdinReader% }{<fc=yellow>%appt%</fc> %wlan0wi% <fc=steelbue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
 --                     " <fc=steelblue>✦</fc> ✉ %mailcount%"
 -- uncolored
 --        , template = "%StdinReader% }{ %wlan0wi% ✦ %THM0% ✦ %multicpu% ✦ %memory% - %swap% ✦ ⚡ %battery% ✦ ♩ %volume% ✦ <fc=khaki>%date%</fc> ✦ ✉ %mailcount%"

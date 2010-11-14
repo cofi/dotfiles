@@ -189,8 +189,8 @@ nil are ignored."
 `match' and `nosort' act as in `directory-files'."
   (let ((subdirs (directory-files-subdirs-no-dots directory t match nosort))
         (files (directory-files-no-subdirs directory t match nosort)))
-    (append (reduce 'append
-                    (mapcar 'directory-files-deep subdirs))
-            files)))
+    (append files
+            (reduce 'append
+                    (mapcar 'directory-files-deep subdirs)))))
 
 (provide 'cofi-util)

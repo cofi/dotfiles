@@ -16,6 +16,7 @@
 (setq ido-enable-regexp t
       ido-enable-dot-prefix t
       ido-enable-flex-matching t
+      ido-create-new-buffer 'always
       ido-use-url-at-point nil
       ido-use-filename-at-point nil
       ido-ignore-extensions t
@@ -196,7 +197,8 @@
 (setq dabbrev-case-replace nil)
 
 (setq backup-directory-alist '(("" . "~/.emacs-backups")))
-(setq auto-save-default nil)
+(setq auto-save-default nil
+      auto-save-list-file-prefix "~/var/emacs/auto-save-list/save-")
 
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t
@@ -227,6 +229,9 @@
 (show-paren-mode t)
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))
+
+(setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function
+                                        kill-buffer-query-functions))
 ;; ==================================================
 
 ;; Alias ========================================

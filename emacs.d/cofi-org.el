@@ -49,6 +49,15 @@ Note: This assumes all files are in the org-directory."
 (global-set-key (kbd "<f5>") cofi/org-mode-map)
 (global-set-key (kbd "C-c o") cofi/org-mode-map)
 
+(when (fboundp 'anything-other-buffer)
+  (defun cofi/anything-org-files ()
+    (interactive)
+    (anything-other-buffer (make-anything-directory-source "org-files"
+                                                           org-directory 'deep
+                                                           "\.org\\(_archive\\)?")
+                           "*anything org*"))
+  (define-key cofi/org-mode-map (kbd "V") 'cofi/anything-org-files))
+
 (add-hook 'org-mode-hook
           (lambda ()
             (org-display-inline-images t)

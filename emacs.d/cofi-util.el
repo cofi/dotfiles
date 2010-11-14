@@ -136,4 +136,61 @@ nil are ignored."
     )
   )
 
+(defun filter (predicate xs)
+  "Returns elements of `xs' that satisfy `predicate'."
+  (if xs
+      (if (funcall predicate (car xs))
+          (cons (car xs)
+                (filter predicate (cdr xs)))
+        (filter predicate (cdr xs)))
+    '()))
+
+(defun directory-files-no-dots (directory &optional full match nosort)
+  "Returns files in `directory' without `.' and `..'.
+`full', `match' and `nosort' act as in `directory-files'"
+  (filter (lambda (f) (not (string-match (rx (or string-start "/")
+                                         (or "." "..")
+                                         string-end) f)))
+          (directory-files directory full match nosort)))
+
+(defun directory-files-subdirs (directory &optional full match nosort)
+  "Returns subdirectories in `directory'.
+`full', `match' and `nosort' act as in `directory-files'"
+  (let ((dirs (filter 'file-directory-p
+                      (directory-files-no-dots directory t match nosort))))
+  (if full
+      dirs
+    (mapcar 'file-name-nondirectory dirs))))
+
+(defun directory-files-subdirs-no-dots (directory &optional full match nosort)
+  "Returns subdirectories in `directory' without `.' and `..'.
+`full', `match' and `nosort' act as in `directory-files'"
+  (let* ((dirs (filter 'file-directory-p
+                       (directory-files-no-dots directory t match nosort)))
+         (nodots (filter (lambda (d) (not (string-match (rx (or string-start "/")
+                                         (or "." "..")
+                                         string-end) d)))
+                         dirs)))
+  (if full
+      nodots
+    (mapcar 'file-name-nondirectory nodots))))
+
+(defun directory-files-no-subdirs (directory &optional full match nosort)
+  "Returns subdirectories in `directory'.
+`full', `match' and `nosort' act as in `directory-files'"
+  (let ((dirs (filter (lambda (f) (not (file-directory-p f)))
+                      (directory-files-no-dots directory t match nosort))))
+  (if full
+      dirs
+    (mapcar 'file-name-nondirectory dirs))))
+
+(defun directory-files-deep (directory &optional match nosort)
+  "Returns files in `directory' and its subdirectories with full path.
+`match' and `nosort' act as in `directory-files'."
+  (let ((subdirs (directory-files-subdirs-no-dots directory t match nosort))
+        (files (directory-files-no-subdirs directory t match nosort)))
+    (append (reduce 'append
+                    (mapcar 'directory-files-deep subdirs))
+            files)))
+
 (provide 'cofi-util)

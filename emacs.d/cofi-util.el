@@ -193,4 +193,13 @@ nil are ignored."
             (reduce 'append
                     (mapcar 'directory-files-deep subdirs)))))
 
+(defun directory-files-flat (directory &optional match nosort)
+  "Returns files in `directory' and its toplevel subdirs with full path.
+`match' and `nosort' act as in `directory-files'."
+  (let ((subdirs (directory-files-subdirs-no-dots directory t match nosort))
+        (files (directory-files-no-subdirs directory t match nosort)))
+    (append files
+            (reduce 'append
+                    (mapcar 'directory-files-no-subdirs subdirs)))))
+
 (provide 'cofi-util)

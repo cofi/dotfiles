@@ -200,6 +200,7 @@ nil are ignored."
         (files (directory-files-no-subdirs directory t match nosort)))
     (append files
             (reduce 'append
-                    (mapcar 'directory-files-no-subdirs subdirs)))))
+                    (mapcar (lambda (d) (directory-files-no-subdirs d t))
+                            subdirs)))))
 
 (provide 'cofi-util)

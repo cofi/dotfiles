@@ -97,9 +97,9 @@
 
      (setq wl-forward-subject-prefix "Fwd: " )
 
-     ;; new frame for drafts
      (setq wl-draft-use-frame t
            wl-draft-always-delete-myself t
+           wl-auto-save-drafts-interval nil
            )
      (setq wl-generate-mailer-string-function 'wl-generate-user-agent-string-1)
      (define-key wl-draft-mode-map (kbd "C-<tab>") 'bbdb-complete-name)

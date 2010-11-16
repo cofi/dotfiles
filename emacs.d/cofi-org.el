@@ -80,6 +80,21 @@ Note: This assumes all files are in the org-directory."
       org-agenda-start-on-weekday nil
       )
 
+(setq org-agenda-day-face-function
+      (lambda (date)
+        "`org-agenda-date-weekend'-face for entries in `Vacation' and `Holiday' category."
+        (unless (org-agenda-todayp date)
+          (dolist (file (org-agenda-files nil 'ifmode))
+            (let ((face
+                   (dolist (entry (org-agenda-get-day-entries file date))
+                     (let ((category (with-temp-buffer
+                                       (insert entry)
+                                       (org-get-category (point-min)))))
+                       (when (or (string= "Holidays" category)
+                                (string= "Vacation" category))
+                         (return 'org-agenda-date-weekend))))))
+              (when face (return face)))))))
+
 (setq org-google-weather-format "%L: %i %c, %l-%h %s")
 
 (setq org-footnote-auto-label 'plain)

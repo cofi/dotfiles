@@ -213,6 +213,7 @@
          (org-done ((t (:foreground "OliveDrab4" :strike-through t))))
          (org-agenda-done ((t (:foreground "OliveDrab4"))))
          (org-agenda-structure ((t (:foreground "cornsilk4"))))
+         (org-agenda-date-weekend ((t (:foreground "brown"))))
          (org-meta-line ((t (:foreground "tan4"))))
          ))))
 

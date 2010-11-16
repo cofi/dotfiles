@@ -70,6 +70,17 @@
                   " " filename-and-process)))
     )
 
+  (defun ibuffer-ediff-marked-buffers ()
+    (interactive)
+    (let* ((marked-buffers (ibuffer-get-marked-buffers))
+           (len (length marked-buffers)))
+      (unless (= 2 len)
+        (error (format "%s buffer%s been marked (needs to be 2)"
+                       len (if (= len 1) " has" "s have"))))
+      (ediff-buffers (car marked-buffers) (cadr marked-buffers))))
+
+  (define-key ibuffer-mode-map "=" 'ibuffer-ediff-marked-buffers)
+
   (add-hook 'ibuffer-mode-hook
             (lambda ()
               (ibuffer-auto-mode 1)

@@ -67,7 +67,8 @@
        '(type . buffer)))
 
     (require-and-exec 'lacarte
-      (defvar anything-c-source-lacarte
+      (defvar anything-c-lacarte-current-buffer nil)
+      (defvar anything-c-source-current-buffer-lacarte
         '((name . "Lacarte")
           (init . (lambda ()
                     (setq anything-c-lacarte-current-buffer (current-buffer))))
@@ -149,7 +150,7 @@
      (when (fboundp 'lacarte-execute-command)
        (defun cofi/anything-lacarte ()
          (interactive)
-         (anything-other-buffer 'anything-c-source-lacarte "*anything lacarte*"))
+         (anything-other-buffer 'anything-c-source-current-buffer-lacarte "*anything lacarte*"))
        (global-set-key (kbd "<f10>") 'cofi/anything-lacarte))
     )
 (provide 'cofi-anything)

@@ -88,15 +88,8 @@
                         uniquify-ignore-buffers-re "^\\*"))
 
 (require-and-exec 'multi-term
-                  (global-set-key (kbd "<f1>") 'multi-term)
-                  (global-set-key (kbd "M-<f1>") 'multi-term-next)
-                  ;; Super-<f1> for small terminal window (vertical split, above)
-                  (global-set-key (kbd "s-<f1>") (lambda ()
-                                                   (interactive)
-                                                   (split-window nil 10)
-                                                   (multi-term)
-                                                   ))
-                  )
+                  (global-set-key (kbd "C-c C-t") 'multi-term-dedicated-open)
+                  (global-set-key (kbd "C-c M-t") 'multi-term-next))
 
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))

@@ -96,6 +96,11 @@
 
 (require-and-exec 'dired+)
 
+(require-and-exec 'point-stack
+  (global-set-key (kbd "<f1>") 'point-stack-push)
+  (global-set-key (kbd "<f2>") 'point-stack-pop)
+  (global-set-key (kbd "C-<f2>") 'point-stack-forward-stack-pop))
+
 (require-and-exec 'eldoc
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)

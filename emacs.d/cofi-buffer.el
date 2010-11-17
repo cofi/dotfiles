@@ -79,7 +79,7 @@
                        len (if (= len 1) " has" "s have"))))
       (ediff-buffers (car marked-buffers) (cadr marked-buffers))))
 
-  (define-key ibuffer-mode-map "=" 'ibuffer-ediff-marked-buffers)
+  (define-key ibuffer-mode-map "<" 'ibuffer-ediff-marked-buffers)
 
   (add-hook 'ibuffer-mode-hook
             (lambda ()

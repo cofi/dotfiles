@@ -262,7 +262,8 @@
 
 (global-set-key (kbd "C-c i") 'magit-status)
 
-(eval-after-load "diff" '(define-key diff-mode-map (kbd "q") 'kill-this-buffer))
+(add-hook 'diff-mode-hook '(lambda ()
+                            (local-set-key (kbd "q") 'kill-this-buffer)))
 
 (global-set-key (kbd "C-c b") 'revert-buffer)
 

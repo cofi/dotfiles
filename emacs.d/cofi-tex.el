@@ -1,7 +1,6 @@
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq fill-column 80)
                            (auto-fill-mode 1)))
-(add-hook 'TeX-mode-hook 'speck-mode)
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
 (eval-after-load "cdlatex"

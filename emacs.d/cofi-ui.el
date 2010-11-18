@@ -88,8 +88,8 @@
                         uniquify-ignore-buffers-re "^\\*"))
 
 (require-and-exec 'multi-term
-                  (global-set-key (kbd "C-c C-t") 'multi-term-dedicated-open)
-                  (global-set-key (kbd "C-c M-t") 'multi-term-next))
+                  (global-set-key (kbd "<f11>") 'multi-term-dedicated-open)
+                  (global-set-key (kbd "C-<f11>") 'multi-term-next))
 
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))

@@ -128,7 +128,7 @@
               (full (mapcar (lambda (d) (concat path d))
                             combinations)))
          (anything-other-buffer (mapcar* (lambda (s d)
-                                           (make-anything-directory-source s d 'flat))
+                                           (make-anything-directory-source s d 'deep))
                                          combinations
                                          full)
                                 "*anything uni*")))

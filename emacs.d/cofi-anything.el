@@ -119,6 +119,8 @@
        (let* ((dirs '("FoC" "FGdI3" "GdI3" "SE" "TS"))
               (subdirs '("aufgaben" "uebungen"))
               (path "~/Work/Uni/")
+              (relevant-files-re (rx "." (or "c" "org" "java" "asm" "tex" "py" "pdf")
+                                     string-end))
               (combinations (reduce 'append
                                     (mapcar (lambda (d)
                                               (mapcar (lambda (s)
@@ -128,7 +130,7 @@
               (full (mapcar (lambda (d) (concat path d))
                             combinations)))
          (anything-other-buffer (mapcar* (lambda (s d)
-                                           (make-anything-directory-source s d 'deep))
+                                           (make-anything-directory-source s d 'deep relevant-files-re))
                                          combinations
                                          full)
                                 "*anything uni*")))

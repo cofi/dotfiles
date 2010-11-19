@@ -136,14 +136,16 @@ nil are ignored."
     )
   )
 
-(defun filter (predicate xs)
-  "Returns elements of `xs' that satisfy `predicate'."
-  (if xs
-      (if (funcall predicate (car xs))
-          (cons (car xs)
-                (filter predicate (cdr xs)))
-        (filter predicate (cdr xs)))
-    '()))
+(if (locate-library "cl-seq")
+    (fset 'filter 'remove-if-not)
+  (defun filter (predicate xs)
+    "Returns elements of `xs' that satisfy `predicate'."
+    (if xs
+        (if (funcall predicate (car xs))
+            (cons (car xs)
+                  (filter predicate (cdr xs)))
+          (filter predicate (cdr xs)))
+      '())))
 
 (defun directory-files-no-dots (directory &optional full match nosort)
   "Returns files in `directory' without `.' and `..'.

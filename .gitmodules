@@ -46,3 +46,9 @@
 [submodule "elisp/vendor/pretty-mode"]
 	path = elisp/vendor/pretty-mode
 	url = git://github.com/cofi/pretty-mode.git
+[submodule "yasnippets/org-mode"]
+	path = yasnippets/org-mode
+	url = git@github.com:cofi/yasnippet-org-mode.git
+[submodule "yasnippets/latex-mode"]
+	path = yasnippets/latex-mode
+	url = git@github.com:cofi/yasnippets-latex.git

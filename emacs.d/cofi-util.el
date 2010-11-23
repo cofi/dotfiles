@@ -192,7 +192,7 @@ nil are ignored."
   (let ((subdirs (directory-files-subdirs-no-dots directory t nil nosort))
         (files (directory-files-no-subdirs directory t match nosort)))
     (append files
-            (reduce 'append
+            (apply 'append
                     (mapcar (lambda (d) (directory-files-deep d match nosort))
                             subdirs)))))
 
@@ -202,7 +202,7 @@ nil are ignored."
   (let ((subdirs (directory-files-subdirs-no-dots directory t nil nosort))
         (files (directory-files-no-subdirs directory t match nosort)))
     (append files
-            (reduce 'append
+            (apply 'append
                     (mapcar (lambda (d) (directory-files-no-subdirs d t))
                             subdirs)))))
 

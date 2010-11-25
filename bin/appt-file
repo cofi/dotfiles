@@ -5,8 +5,7 @@ if [[ $1 == "-clear" ]]; then
     echo > $APPT_FILE_PATH
     exit
 fi
-if [ $# -gt 1 ]; then
-    echo $1
+if [ $# -gt 0 ]; then
     echo $@ > $APPT_FILE_PATH
 else
     cat $APPT_FILE_PATH

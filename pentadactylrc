@@ -15,7 +15,7 @@ command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc
 
 command! ril sidebar Read It Later
 
-set guioptions=BC
+set guioptions=MBC
 colorscheme cofi
 set editor="emacsclient -c"
 

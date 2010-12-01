@@ -79,3 +79,16 @@ wiki() {
     # see https://dgl.cx/2008/11/wpdns-pres/
     dig +short txt $1.wp.dg.cx
 }
+
+# Remove latex files
+rml() {
+    if [[ $# -gt 0 ]] {
+        for d in "$@"; do
+            rm -r "$d"/(auto|_region_.tex|*.(aux|log|out))
+        done
+    } else {
+        d=$(pwd)
+        files=eval "$d"/{auto,_region_.tex,*.aux,*.out,*.log}
+        rm -r "$d"/(auto|_region_.tex|*.(aux|log|out))
+    }
+}

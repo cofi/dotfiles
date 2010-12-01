@@ -48,7 +48,7 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 
-# usefull listing
+# useful listing
 alias ls='ls -Fh --color=auto'
 alias ll='ls -l'
 alias la='ls -A'

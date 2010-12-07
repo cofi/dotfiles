@@ -1,9 +1,12 @@
 ;; -*- mode: emacs-lisp; mode: rainbow -*-
+
+(defvar color-cofi-bg "#202020")
+(defvar color-cofi-fg "#FFFFFF")
 (require-and-exec 'color-theme
     (defun color-theme-cofi ()
       (interactive)
       (color-theme-install
-       '(color-theme-cofi
+       `(color-theme-cofi
          ((background-color . "gray13")
           (background-mode . dark)
           (border-color . "black")
@@ -16,7 +19,7 @@
           (view-highlight-face . highlight)
           )
 
-         (default ((t (:background "#202020" :foreground "#FFFFFF"))))
+         (default ((t (:background ,color-cofi-bg :foreground ,color-cofi-fg))))
          (italic ((t (:italic t :family "Dejavu Sans Mono" :height 80))))
          (underline ((t (:underline t))))
          (bold ((t (:bold t))))
@@ -42,8 +45,10 @@
          (diff-changed-face ((t (:foreground "blue"))))
          (diff-removed-face ((t (:foreground "red"))))
          (diff-context-face ((t (:foreground "gray"))))
-         (diff-file-header-face ((t (:foreground "gold" :background nil))))
-         (diff-function-face ((t (:foreground "gray50" :background nil))))
+         (diff-file-header-face ((t (:foreground "gold" :background
+                                                 ,color-cofi-bg))))
+         (diff-function-face ((t (:foreground "gray50" :background
+                                              ,color-cofi-bg))))
          (diff-header-face ((t (:foreground "gold" :background nil))))
          (diff-hunk-header-face ((t (:foreground "gold"))))
          (diff-index-face ((t (:bold t :weight bold :background "gray70"))))
@@ -52,7 +57,8 @@
          (ibuffer-git-add-face ((t (:foreground "green"))))
          (ibuffer-git-del-face ((t (:foreground "red"))))
 
-         (magit-diff-file-header ((t (:foreground "gold" :background nil))))
+         (magit-diff-file-header ((t (:foreground "gold" :background
+                                                  ,color-cofi-bg))))
          (magit-diff-hunk-header ((t (:foreground "gold"))))
          (magit-diff-none ((t (:foreground "gray"))))
          (magit-diff-add ((t (:foreground "green"))))
@@ -65,18 +71,18 @@
          (dired-symlink ((t (:foreground "purple"))))
 
          (diredp-flag-mark-line ((t (:background "cornsilk2" :foreground "blue violet"))))
-         (diredp-read-priv ((t (:background nil :foreground "green"))))
-         (diredp-write-priv ((t (:background nil :foreground "firebrick"))))
-         (diredp-exec-priv ((t (:background nil :foreground "light grey"))))
-         (diredp-no-priv ((t (:background nil :foreground "white"))))
+         (diredp-read-priv ((t (:background ,color-cofi-bg :foreground "green"))))
+         (diredp-write-priv ((t (:background ,color-cofi-bg :foreground "firebrick"))))
+         (diredp-exec-priv ((t (:background ,color-cofi-bg :foreground "light grey"))))
+         (diredp-no-priv ((t (:background ,color-cofi-bg :foreground "white"))))
          (diredp-dir-priv ((t (:foreground "sky blue"))))
 
          (diredp-file-name ((t (:foreground "slate blue"))))
          (diredp-file-suffix ((t (:foreground "light grey"))))
          (diredp-compressed-file-suffix ((t (:foreground "gold"))))
          (diredp-inode+size ((t (:foreground "cyan"))))
-         (diredp-date-time )
-         (diredp-dir-heading ((t (:background nil :foreground "deep sky blue"))))
+         (diredp-date-time ((t (:foreground "navy"))))
+         (diredp-dir-heading ((t (:background ,color-cofi-bg :foreground "deep sky blue"))))
 
          (ediff-current-diff-face-A ((t (:background "pale green" :foreground "firebrick"))))
          (ediff-current-diff-face-Ancestor ((t (:background "violet red" :foreground "black"))))
@@ -188,12 +194,18 @@
 
          (zmacs-region ((t (:background "lightgoldenrod2"))))
 
-         (rst-level-1-face ((t (:bold t :foreground "chocolate4" :background nil))))
-         (rst-level-2-face ((t (:bold t :foreground "chocolate3" :background nil))))
-         (rst-level-3-face ((t (:bold t :foreground "chocolate2" :background nil))))
-         (rst-level-4-face ((t (:bold t :foreground "orange3" :background nil))))
-         (rst-level-5-face ((t (:bold t :foreground "dark orange" :background nil))))
-         (rst-level-6-face ((t (:bold t :foreground "dark khaki" :background nil))))
+         (rst-level-1-face ((t (:bold t :foreground "chocolate4" :background
+                                      ,color-cofi-bg))))
+         (rst-level-2-face ((t (:bold t :foreground "chocolate3" :background
+                                      ,color-cofi-bg))))
+         (rst-level-3-face ((t (:bold t :foreground "chocolate2" :background
+                                      ,color-cofi-bg))))
+         (rst-level-4-face ((t (:bold t :foreground "orange3" :background
+                                      ,color-cofi-bg))))
+         (rst-level-5-face ((t (:bold t :foreground "dark orange" :background
+                                      ,color-cofi-bg))))
+         (rst-level-6-face ((t (:bold t :foreground "dark khaki" :background
+                                      ,color-cofi-bg))))
 
          (org-hide ((t (:foreground "gray13"))))
          (org-level-1 ((t (:bold t :foreground "chocolate4"))))

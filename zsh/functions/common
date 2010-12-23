@@ -88,7 +88,6 @@ rml() {
         done
     } else {
         d=$(pwd)
-        files=eval "$d"/{auto,_region_.tex,*.aux,*.out,*.log}
         rm -r "$d"/(auto|_region_.tex|*.(aux|log|out))
     }
 }

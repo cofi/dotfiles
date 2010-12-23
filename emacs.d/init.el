@@ -43,6 +43,7 @@
             "cofi-bbdb"
             "cofi-calendar"
             "cofi-color"
+            "cofi-desktop"
             "cofi-mail"
             "cofi-project"
             "cofi-snippets"

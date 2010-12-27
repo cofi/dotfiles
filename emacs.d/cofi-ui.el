@@ -117,7 +117,7 @@
 (mapc (lambda (ext)
         (push ext completion-ignored-extensions))
       '(
-        ".pdf" ".dvi" ".djvu" ".ps"
+        ".dvi" ".djvu" ".ps"
         ".mov" ".mp4" ".ogv"
         ".mp3" ".ogg"
         ".doc" ".ods" ".odt" ".pps" ".ppt"
@@ -253,7 +253,10 @@
 ;; KeyBindings ========================================
 (global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
-(global-set-key (kbd "C-c m") 'idomenu)
+
+(if (fboundp 'anything-imenu)
+    (global-set-key (kbd "C-c m") 'anything-imenu)
+  (global-set-key (kbd "C-c m") 'idomenu))
 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x M-b") 'ido-switch-buffer-other-window)

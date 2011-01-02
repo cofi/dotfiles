@@ -218,4 +218,64 @@ Note: This assumes all files are in the org-directory."
 
 (require 'org-protocol)
 
+;; time sexp ==============================
+(defconst cofi-org-ws-boundary
+  '(2010 10 18
+    2011  2 18))
+(defconst cofi-org-ws-pause-weeks
+  '(49 50 51 52 1))
+
+(defconst cofi-org-ss-boundary
+  '(2011 4 11
+    2011 7 15))
+(defconst cofi-org-ss-pause-weeks
+  '())
+
+(defconst cofi-org-dayname-to-weekday
+  '(
+    ("So" . 0)
+    ("Mo" . 1)
+    ("Di" . 2)
+    ("Mi" . 3)
+    ("Do" . 4)
+    ("Fr" . 5)
+    ("Sa" . 6)))
+
+(defun cofi-org-term-class (day term-boundary term-pause)
+  (let ((weekday (if (stringp day)
+                     (cdr (assoc day cofi-org-dayname-to-weekday))
+                   day)))
+    (cofi-with-sane-calendar
+     (eval `(org-diary-class ,@term-boundary ,weekday ,@term-pause)))))
+
+(defun cofi-org-ws-class (day)
+  (cofi-org-term-class day cofi-org-ws-boundary cofi-org-ws-pause-weeks))
+
+(defun cofi-org-ss-class (day)
+  (cofi-org-term-class day cofi-org-ss-boundary cofi-org-ss-pause-weeks))
+
+(defun cofi-org-ws-cyclic (n year month day &optional mark)
+  (cofi-with-sane-calendar
+   (let ((cofi-boundary (eval `(diary-block ,@cofi-org-ws-boundary))))
+     (cofi-org-cyclic n year month day mark))))
+
+(defun cofi-org-ss-cyclic (n year month day &optional mark)
+  (cofi-with-sane-calendar
+   (let ((cofi-boundary (eval `(diary-block ,@cofi-org-ss-boundary))))
+     (cofi-org-cyclic n year month day mark))))
+
+(defun cofi-org-cyclic (n year month day &optional mark)
+  "Uses `ENTRY' and `COFI-BOUNDARY' from outer scope.
+Same arguments as in diary cyclic."
+    (cofi-with-sane-calendar
+     (when (and
+            (or cofi-boundary t)             ; ignore if there is no cofi-boundary in outer scope
+            (diary-cyclic n year month day mark))
+       entry)))
+
+(defmacro cofi-with-sane-calendar (&rest body)
+  `(let ((calendar-date-style 'iso))
+       ,@body))
+;; ========================================
+
 (provide 'cofi-org)

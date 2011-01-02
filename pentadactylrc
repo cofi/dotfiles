@@ -3,6 +3,7 @@ command! -nargs=* g tabopen https://encrypted.google.com/search?q=<args>
 command! py tabopen http://python.org
 command! -nargs=1 pydoc tabopen http://docs.python.org/<args>
 command! -nargs=1 pylib tabopen http://docs.python.org/library/<args>.html
+command! -nargs=* pypi tabopen http://pypi.python.org/pypi?%3Aaction=search&term=<args>&submit=search
 command! -nargs=* s tabopen https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=<args>
 command! webreg tabopen https://www.dekanat.informatik.tu-darmstadt.de/webreg/index.php?&page=login
 command! -nargs=* wpd tabopen http://de.wikipedia.org/wiki/<args>

@@ -251,6 +251,7 @@ searchBindings = [("M-s " ++ key, S.selectSearch engine) | (key, engine) <- sear
                                                   , S.maps
                                                   , images
                                                   , code
+                                                  , pypi
                                                   , S.youtube
                                                   , S.hoogle
                                                   , S.hackage
@@ -268,6 +269,7 @@ searchBindings = [("M-s " ++ key, S.selectSearch engine) | (key, engine) <- sear
       google = S.searchEngine "g" "https://encrypted.google.com/search?q="
       define = S.searchEngine "def" "https://encrypted.google.com/search?q=define:"
       images = S.searchEngine "img" "http://images.google.com/images?q="
+      pypi = S.searchEngine "pypi" "http://pypi.python.org/pypi?%3Aaction=search&submit=search&term="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

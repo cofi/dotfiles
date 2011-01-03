@@ -3,7 +3,6 @@
 export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
 export PATH=$PATH:$HOME/.bin
-export PYTHONPATH=$HOME/lib/python
 
 function load_config() {
     if [[ -f $1 ]] {

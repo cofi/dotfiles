@@ -13,6 +13,20 @@
 ;; Folding
 (add-hook 'python-mode-hook 'hs-minor-mode)
 
+;; setup pymacs
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+;; setup ropemacs
+(setq ropemacs-enable-autoimport t
+      ropemacs-autoimport-modules '( "os"
+                                     "os.path"
+                                     "sys"
+                                    ))
+(setq ropemacs-enable-shortcuts nil)
+(pymacs-load "ropemacs" "rope-")
 ;; Modes
 (add-hook 'python-mode-hook
           (lambda ()
@@ -27,7 +41,12 @@
               (local-set-key (kbd "M-n") 'flymake-goto-next-error)
               (local-set-key (kbd "M-p") 'flymake-goto-prev-error)
               (local-set-key (kbd "C-c C-SPC") 'flymake-mode)
-              (local-set-key (kbd "C-c SPC") 'python-shell)))
+              (local-set-key (kbd "C-c SPC") 'python-shell)
+              (local-set-key (kbd "M-?") 'rope-code-assist)
+              (local-set-key (kbd "C-M-?") 'rope-lucky-assist)
+              (local-set-key (kbd "C-c g") 'rope-goto-definition)
+              (local-set-key (kbd "C-c d") 'rope-show-doc)
+              (local-set-key (kbd "C-c t") 'rope-show-calltip)))
 
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook

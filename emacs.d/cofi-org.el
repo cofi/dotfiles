@@ -39,6 +39,7 @@ Note: This assumes all files are in the org-directory."
 (defvar cofi/org-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "a") 'org-agenda-list)
+    (define-key map (kbd "r") 'org-capture)
     (define-key map (kbd "s") cofi/org-state-map)
     (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
     (define-key map (kbd "l") 'org-store-link)
@@ -134,7 +135,6 @@ Note: This assumes all files are in the org-directory."
 
 ;; Capture ==============================
 (setq org-default-notes-file (concat org-directory "remember.org"))
-(global-set-key (kbd "C-c r") 'org-capture)
 
 ;; Adapted from http://emacs-fu.blogspot.com/2009/04/remember.html
 (defun cofi/capture-frame ()
@@ -163,17 +163,17 @@ Note: This assumes all files are in the org-directory."
 (defun cofi/capture-frame-finalize ()
   "Special treatment for capture frames when finalizing."
   (interactive)
-    (cofi/capture-wrap (function org-capture-finalize)))
+  (cofi/capture-wrap (function org-capture-finalize)))
 
 (defun cofi/capture-frame-kill ()
   "Special treatment for capture frames when killing."
   (interactive)
-    (cofi/capture-wrap (function org-capture-kill)))
+  (cofi/capture-wrap (function org-capture-kill)))
 
 (defun cofi/capture-frame-refile ()
   "Special treatment for capture frames when killing."
   (interactive)
-    (cofi/capture-wrap (function org-capture-refile)))
+  (cofi/capture-wrap (function org-capture-refile)))
 
 (add-hook 'org-capture-mode-hook
           (lambda ()

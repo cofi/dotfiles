@@ -1,3 +1,7 @@
+(eval-when-compile
+    (require 'cl)
+    (require 'queue))
+
 (defmacro require-and-exec (feature &optional &rest body)
   "Require the feature and execute body if it was successfull loaded."
   `(if (require ,feature nil 'noerror)
@@ -136,74 +140,55 @@ nil are ignored."
     )
   )
 
-(if (locate-library "cl-seq")
-    (fset 'filter 'remove-if-not)
-  (defun filter (predicate xs)
-    "Returns elements of `xs' that satisfy `predicate'."
-    (if xs
-        (if (funcall predicate (car xs))
-            (cons (car xs)
-                  (filter predicate (cdr xs)))
-          (filter predicate (cdr xs)))
-      '())))
+(defun dot? (fname &optional dotfiles)
+  "Determines if `FNAME' is a dot or dotfile if `DOTFILES' is non-nil."
+  (let ((f (file-name-nondirectory fname)))
+     (if dotfiles
+         (string-prefix-p "." f)
+       (or (string= "." f) (string= ".." f)))))
 
-(defun directory-files-no-dots (directory &optional full match nosort)
+(defun ls-no-dots (directory &optional full dotfiles match)
   "Returns files in `directory' without `.' and `..'.
 `full', `match' and `nosort' act as in `directory-files'"
-  (filter (lambda (f) (not (string-match (rx (or string-start "/")
-                                         (or "." "..")
-                                         string-end) f)))
-          (directory-files directory full match nosort)))
+    (remove-if (lambda (f) (dot? f dotfiles))
+               (directory-files directory full match)))
 
-(defun directory-files-subdirs (directory &optional full match nosort)
-  "Returns subdirectories in `directory'.
-`full', `match' and `nosort' act as in `directory-files'"
-  (let ((dirs (filter 'file-directory-p
-                      (directory-files-no-dots directory t match nosort))))
-  (if full
-      dirs
-    (mapcar 'file-name-nondirectory dirs))))
+(defun ls-dirs (directory &optional dotfiles match)
+  "Returns all dirs in `DIR'.
+`DOTFILES' -- if non-nil don't include dirs starting with a `.'
+`MATCH' -- if non-nil only include dirs matching the regexp"
+  (remove-if-not #'file-directory-p
+                 (ls-no-dots directory t dotfiles match)))
 
-(defun directory-files-subdirs-no-dots (directory &optional full match nosort)
-  "Returns subdirectories in `directory' without `.' and `..'.
-`full', `match' and `nosort' act as in `directory-files'"
-  (let* ((dirs (filter 'file-directory-p
-                       (directory-files-no-dots directory t match nosort)))
-         (nodots (filter (lambda (d) (not (string-match (rx (or string-start "/")
-                                         (or "." "..")
-                                         string-end) d)))
-                         dirs)))
-  (if full
-      nodots
-    (mapcar 'file-name-nondirectory nodots))))
+(defun ls-files (directory &optional dotfiles match)
+  "Returns all files in `DIR'.
+`DOTFILES' -- if non-nil don't include files starting with a `.'
+`MATCH' -- if non-nil only include files matching the regexp"
+  (remove-if #'file-directory-p
+             (ls-no-dots directory t dotfiles match)))
 
-(defun directory-files-no-subdirs (directory &optional full match nosort)
-  "Returns subdirectories in `directory'.
-`full', `match' and `nosort' act as in `directory-files'"
-  (let ((dirs (filter (lambda (f) (not (file-directory-p f)))
-                      (directory-files-no-dots directory t match nosort))))
-  (if full
-      dirs
-    (mapcar 'file-name-nondirectory dirs))))
+(defun enqueue-all (queue l)
+  "Enqueues in `QUEUE' all entries of `L'."
+  (mapc (lambda (e) (queue-enqueue queue e))
+        l))
 
-(defun directory-files-deep (directory &optional match nosort)
-  "Returns files in `directory' and its subdirectories with full path.
-`match' and `nosort' act as in `directory-files'."
-  (let ((subdirs (directory-files-subdirs-no-dots directory t nil nosort))
-        (files (directory-files-no-subdirs directory t match nosort)))
-    (append files
-            (apply 'append
-                    (mapcar (lambda (d) (directory-files-deep d match nosort))
-                            subdirs)))))
+(defun ls-files-deep (dir &optional dotfiles match)
+  "Returns all files within `DIR'.
+`DOTFILES' -- if non-nil don't include files and dirs starting with a `.'
+`MATCH' -- if non-nil only include files and dirs matching the regexp"
+  (let ((dirs (queue-create)))
+    (enqueue-all dirs (ls-dirs dir dotfiles match))
+    (loop while (> (queue-length dirs) 0)
+          nconc (let ((d (queue-dequeue dirs)))
+                  (enqueue-all dirs (ls-dirs d dotfiles match))
+                  (ls-files d dotfiles match)))))
 
-(defun directory-files-flat (directory &optional match nosort)
-  "Returns files in `directory' and its toplevel subdirs with full path.
-`match' and `nosort' act as in `directory-files'."
-  (let ((subdirs (directory-files-subdirs-no-dots directory t nil nosort))
-        (files (directory-files-no-subdirs directory t match nosort)))
-    (append files
-            (apply 'append
-                    (mapcar (lambda (d) (directory-files-no-subdirs d t))
-                            subdirs)))))
+(defun ls-files-deep-1 (dir &optional dotfiles match)
+  "Returns all files within `DIR' descending one level.
+`DOTFILES' -- if non-nil don't include files and dirs starting with a `.'
+`MATCH' -- if non-nil only include files and dirs matching the regexp"
+  (let ((dirs (cons dir (ls-dirs dir dotfiles match))))
+    (loop for d in dirs
+          nconc (ls-files d dotfiles match))))
 
 (provide 'cofi-util)

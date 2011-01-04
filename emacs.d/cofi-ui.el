@@ -255,15 +255,15 @@
 (global-set-key (kbd "C-M-h") 'backward-kill-word)
 
 (if (fboundp 'anything-imenu)
-    (global-set-key (kbd "C-c m") 'anything-imenu)
-  (global-set-key (kbd "C-c m") 'idomenu))
+    (global-set-key (kbd "C-c i") 'anything-imenu)
+  (global-set-key (kbd "C-c i") 'idomenu))
 
 (global-set-key (kbd "C-x M-f") 'ido-find-file-other-window)
 (global-set-key (kbd "C-x M-b") 'ido-switch-buffer-other-window)
 (global-set-key (kbd "C-x C-d") 'ido-display-buffer)
 (global-set-key (kbd "C-x M-d") 'dired-other-window)
 
-(global-set-key (kbd "C-c i") 'magit-status)
+(global-set-key (kbd "C-c g") 'magit-status)
 
 (add-hook 'diff-mode-hook '(lambda ()
                             (local-set-key (kbd "q") 'kill-this-buffer)))

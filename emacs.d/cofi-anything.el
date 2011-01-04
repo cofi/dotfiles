@@ -80,14 +80,23 @@
           (action . (("Open" . (lambda (candidate)
                                  (call-interactively candidate))))))))
 
-    (defun make-anything-directory-source (source-name dir &optional deep match)
+    (defun cofi/anything-dir-deep (source-name dir &optional dotfiles match)
       "Returns an anything source for a particular directory.
 `deep' may be `deep' or `flat'."
       `((name . ,(concat source-name))
-        (candidates . ,(cond
-                        ((eq deep 'deep) (directory-files-deep dir match))
-                        ((eq deep 'flat) (directory-files-flat dir match))
-                        (t (directory-files-no-subdirs dir t match))))
+        (candidates . ,(ls-files-deep dir dotfiles match))
+        (action . (("Open" . find-file)))
+        (type . file)))
+    (defun cofi/anything-dir-flat (source-name dir &optional dotfiles match)
+      "Returns an anything source for a particular directory."
+      `((name . ,(concat source-name))
+        (candidates . ,(ls-files-deep-1 dir dotfiles match))
+        (action . (("Open" . find-file)))
+        (type . file)))
+    (defun cofi/anything-dir (source-name dir &optional dotfiles match)
+      "Returns an anything source for a particular directory."
+      `((name . ,(concat source-name))
+        (candidates . ,(ls-files dir dotfiles match))
         (action . (("Open" . find-file)))
         (type . file)))
     ;; --------------------------------------------------
@@ -114,33 +123,37 @@
                                 anything-c-source-locate)
                              "*anything with files*"))
 
+
+     (defvar cofi/anything-uni-sources '())
+     (defvar cofi/anything-config-sources '())
+     (defun cofi/update-anything-sources ()
+       (interactive)
+       (setq cofi/anything-uni-sources
+             (let* ((dirs '("FoC" "FGdI3" "GdI3" "SE" "TS"))
+                    (subdirs '("aufgaben" "uebungen"))
+                    (path "~/Work/Uni/")
+                    (combinations (reduce 'append
+                                          (mapcar (lambda (d)
+                                                    (mapcar (lambda (s)
+                                                              (concat d "/" s))
+                                                            subdirs))
+                                                  dirs)))
+                    (full (mapcar (lambda (d) (concat path d))
+                                  combinations)))
+               (mapcar* (lambda (s d) (cofi/anything-dir-deep s d t))
+                        combinations
+                        full)))
+
+       (setq cofi/anything-config-sources
+             `(,(cofi/anything-dir-flat "Dot" "~/config/dotfiles/" t)))
+       )
      (defun cofi/anything-uni ()
        (interactive)
-       (let* ((dirs '("FoC" "FGdI3" "GdI3" "SE" "TS"))
-              (subdirs '("aufgaben" "uebungen"))
-              (path "~/Work/Uni/")
-              (combinations (reduce 'append
-                                    (mapcar (lambda (d)
-                                              (mapcar (lambda (s)
-                                                        (concat d "/" s))
-                                                      subdirs))
-                                            dirs)))
-              (full (mapcar (lambda (d) (concat path d))
-                            combinations)))
-         (anything-other-buffer (mapcar* (lambda (s d)
-                                           (make-anything-directory-source s d 'deep))
-                                         combinations
-                                         full)
-                                "*anything uni*")))
+       (anything-other-buffer cofi/anything-uni-sources "*anything uni*"))
      
      (defun cofi/anything-config ()
        (interactive)
-       (anything-other-buffer
-        (list
-         (make-anything-directory-source "Dot Emacs"
-                                         "~/config/dotfiles/emacs.d/" 'deep)
-         (make-anything-directory-source "Dot" "~/config/dotfiles/"))
-        "*anything config*"))
+       (anything-other-buffer cofi/anything-config-sources "*anything config*"))
 
      (let ((map (make-sparse-keymap)))
        (define-key map (kbd "u") 'cofi/anything-uni)

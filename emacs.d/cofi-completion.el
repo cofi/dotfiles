@@ -54,7 +54,6 @@
                          ac-source-words-in-buffer
 ;;                          ac-source-words-in-same-mode-buffers
                          ac-source-yasnippet
-                         ac-source-pysmell
                          ac-source-dictionary
                          )))
 

@@ -226,6 +226,7 @@
 (global-hl-line-mode t)
 (column-number-mode 1)
 (add-hook 'find-file-hook (lambda () (linum-mode 1))) ;start linum only for real files
+(defadvice normal-mode (after re-line activate) (linum-mode 1)) ; fix normal-mode disabling
 (show-paren-mode t)
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))

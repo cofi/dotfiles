@@ -177,7 +177,7 @@ nil are ignored."
 `DOTFILES' -- if non-nil don't include files and dirs starting with a `.'
 `MATCH' -- if non-nil only include files and dirs matching the regexp"
   (let ((dirs (queue-create)))
-    (enqueue-all dirs (ls-dirs dir dotfiles match))
+    (queue-enqueue dirs dir)
     (loop while (> (queue-length dirs) 0)
           nconc (let ((d (queue-dequeue dirs)))
                   (enqueue-all dirs (ls-dirs d dotfiles match))

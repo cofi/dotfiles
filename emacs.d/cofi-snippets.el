@@ -1,15 +1,15 @@
 (add-to-list 'load-path "~/.elisp/vendor/yasnippet")
+(setq yas/prompt-functions '(yas/ido-prompt
+                             yas/completing-prompt))
+(setq yas/also-auto-indent-first-line nil)
+(setq yas/indent-line 'fixed)
+(setq yas/fallback-behavior 'call-other-command)
+(setq yas/trigger-key (kbd "TAB"))
 (require-and-exec 'yasnippet
     (yas/initialize)
     (yas/load-directory "~/.yasnippets")
     (yas/load-directory "~/dev/snippets")
-    (setq yas/prompt-functions '(yas/ido-prompt
-                                 yas/completing-prompt))
-    (setq yas/also-auto-indent-first-line t)
-    (setq yas/fallback-behavior 'call-other-command)
-    (setq yas/trigger-key (kbd "TAB"))
-    (global-set-key (kbd "M-RET") 'yas/expand)
-    )
+    (global-set-key (kbd "M-RET") 'yas/expand))
 
 (define-key yas/minor-mode-map "\C-c&" nil)
 

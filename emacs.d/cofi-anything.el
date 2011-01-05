@@ -145,8 +145,17 @@
                         full)))
 
        (setq cofi/anything-config-sources
-             `(,(cofi/anything-dir-flat "Dot" "~/config/dotfiles/" t)))
-       )
+             `(((name . "Dot")
+                (candidates . ,(append (ls-files "~/config/dotfiles/" t)
+                                       (ls-files "~/config/dotfiles/bin" t)
+                                       (ls-files "~/config/dotfiles/quick" t)))
+                (action . (("Open" . find-file)))
+                (type . file))
+               ,(cofi/anything-dir-deep "Emacs" "~/config/dotfiles/emacs.d/" t ".el$")
+               ,(cofi/anything-dir-deep "Zsh" "~/config/dotfiles/zsh/" t)
+               ,(cofi/anything-dir-deep "Snippets" "~/config/dotfiles/yasnippets/" t))
+             ))
+
      (run-with-idle-timer 10 t #'cofi/update-anything-sources)
      (defun cofi/anything-uni ()
        (interactive)

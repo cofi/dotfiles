@@ -1,6 +1,5 @@
-(eval-when-compile
-    (require 'cl)
-    (require 'queue))
+(require 'cl)
+(require 'queue)
 
 (defmacro require-and-exec (feature &optional &rest body)
   "Require the feature and execute body if it was successfull loaded."

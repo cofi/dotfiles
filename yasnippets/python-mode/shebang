@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: shebang
+# contributor: Michael Markert <markert.michael@googlemail.com>
+# key: sb
+# --
+#!/usr/bin/env python
+# -*- coding: `buffer-file-coding-system` -*-

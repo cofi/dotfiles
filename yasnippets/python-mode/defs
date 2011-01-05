@@ -1,0 +1,21 @@
+# -*- coding: utf-8 mode: snippet -*-
+# name: Method with sphinx doc
+# key: defms
+# contributor: Michael Markert <markert.michael@googlemail.com>
+# --
+def ${1:name}($2):
+    """$3
+    ${2:$(let ((indent (concat "\n" (make-string (current-column) 32)))
+               (args (mapcar 'car
+                              (mapcar '(lambda (x) (split-string x "="))
+                                       (split-string (replace-regexp-in-string "[[:blank:]]*" "" text)
+                                                     "," t)))))
+        (mapconcat (lambda (x)
+                     (format ":param %s:" x))
+                   args
+                   indent))
+    }
+    :returns: $4
+    :rtype: $5
+    """
+    $0

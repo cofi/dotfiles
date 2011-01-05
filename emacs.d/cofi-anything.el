@@ -147,6 +147,7 @@
        (setq cofi/anything-config-sources
              `(,(cofi/anything-dir-flat "Dot" "~/config/dotfiles/" t)))
        )
+     (run-with-idle-timer 10 t #'cofi/update-anything-sources)
      (defun cofi/anything-uni ()
        (interactive)
        (anything-other-buffer cofi/anything-uni-sources "*anything uni*"))

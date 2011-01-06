@@ -1,0 +1,8 @@
+# -*- coding: utf-8 mode: snippet -*-
+# name: Define method with javadoc
+# key: def
+# contributor: Michael Markert <markert.michael@googlemail.com>
+# --
+${1:void} ${2:name}(${3:arg}) {
+    $0
+}

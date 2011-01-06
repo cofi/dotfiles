@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: for each
+# contributor: Michael Markert <markert.michael@googlemail.com>
+# key: foreach
+# --
+for(${1:type} ${2:name} : ${3:coll}) {
+    $0
+}

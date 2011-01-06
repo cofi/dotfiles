@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name : Switch
+# key : switch
+# contributor : Michael Markert <markert.michael@googlemail.com>
+# expand-env : ((yas-triggers-in-field t))
+# --
+switch (${1:cond}) {
+    case$0
+}

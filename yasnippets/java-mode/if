@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : if
+# contributor : Michael Markert <markert.michael@googlemail.com>
+# --
+if (${1:cond}) {
+    ${0}
+}

@@ -1,0 +1,21 @@
+# -*- coding: utf-8 mode: snippet -*-
+# name: Define method with javadoc
+# key: defdoc
+# contributor: Michael Markert <markert.michael@googlemail.com>
+# --
+/**
+ *
+ * ${3:$(let ((docsep "\n * ")
+              (args (mapcar 'cadr
+                            (mapcar (lambda (x)
+                                      (split-string x " " t))
+                                    (split-string text "," t)))))
+    (mapconcat (lambda (x)
+                 (format "@param %s" x))
+               args
+               docsep))
+ }
+${1:$(when (not (string= text "void")) " * @returns \n")} */
+${1:void} ${2:name}(${3:arg}) {
+    $0
+}

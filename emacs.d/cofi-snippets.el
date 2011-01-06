@@ -9,6 +9,7 @@
     (setq yas/also-auto-indent-first-line nil)
     (setq yas/indent-line 'fixed)
     (setq yas/fallback-behavior 'call-other-command)
+    (setq yas/triggers-in-field t)
     (setq yas/trigger-key (kbd "TAB")))
 
 (define-key yas/minor-mode-map "\C-c&" nil)

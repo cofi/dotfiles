@@ -25,8 +25,8 @@
       pgg-scheme 'gpg
       pgg-query-keyserver t
       pgg-default-keyserver-address "pgp.mit.edu"
-      pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
-      pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
+      pgg-default-user-id "Michael Markert (cofi) <markert.michael@googlemail.com>"
+      pgg-gpg-user-id "Michael Markert (cofi) <markert.michael@googlemail.com>"
       pgg-encrypt-for-me t
       pgg-gpg-use-agent t
       )

@@ -16,6 +16,7 @@
       '(
         "~/.elisp"
         "~/.emacs.d"
+        "~/.elisp/vendor/full-ack"
         "~/.elisp/vendor/magit"
         "~/.elisp/vendor/sackspace"
         "~/.elisp/vendor/keychain-environment"

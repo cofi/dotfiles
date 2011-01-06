@@ -1,6 +1,7 @@
 [user]
     name = Michael Markert
     email = markert.michael@googlemail.com
+    signingkey = Michael Markert <markert.michael@googlemail.com>
 
 [core]
     whitespace = fix,-indent-with-non-tab,trailing-space

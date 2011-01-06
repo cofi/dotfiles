@@ -158,7 +158,7 @@
                ))
        )
 
-     (run-with-idle-timer 10 t #'cofi/update-anything-sources)
+     (run-with-timer 0 600 #'cofi/update-anything-sources)
      (defun cofi/anything-uni ()
        (interactive)
        (anything-other-buffer cofi/anything-uni-sources "*anything uni*"))

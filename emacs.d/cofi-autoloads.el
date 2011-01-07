@@ -38,6 +38,9 @@
 
 (autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
 
+(add-to-list 'auto-mode-alist '("/rfc[0-9]+\\.txt\\(\\.gz\\)?\\'" . rfcview-mode))
+(autoload 'rfcview-mode "rfcview" nil t)
+
 (autoload 'smex "smex" "A better M-x" t)
 
 (autoload 'speck-mode "speck" "Auto spellchecking mode." t)

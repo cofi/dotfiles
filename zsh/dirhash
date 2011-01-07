@@ -3,3 +3,7 @@
 function add_hash() {
     test -d "$1" && hash -d $2="$1"
 }
+
+while read line; do
+    eval add_hash "$line"
+done < ~/config/diralias

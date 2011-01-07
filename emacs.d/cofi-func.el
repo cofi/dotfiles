@@ -111,19 +111,40 @@ will not be passed to `start-kbd-macro'."
   (interactive)
   (cofi/macro-dwim 0))
 
-;; Relying on cofi-dir-alias-pairs (list of pairs: ("alias" . "dir")
-;; and cofi-dir-aliases (list of aliases)
+(defconst cofi-alias-file (expand-file-name "~/config/diralias")
+  "File contains line separated entries of `DIR' `ALIAS'.
+Neither dir nor alias may contain spaces.")
+(defconst cofi-aliases
+  (with-temp-buffer
+    (insert-file-contents cofi-alias-file)
+    (mapcar (lambda (line)
+              (let ((split (split-string line " ")))
+                (cons (cadr split) (car split))))
+            (split-string (buffer-string) "\n" t))))
+
 (defun cofi-cd-alias (alias)
   "Change directory to aliased one."
-  (interactive (list (ido-completing-read "Alias: " cofi-dir-aliases nil t)))
-  (let ((dir (cdr (assoc alias cofi-dir-alias-pairs))))
+  (interactive (list (ido-completing-read "Alias: "
+                                          (mapcar #'car
+                                                  cofi-aliases) nil t)))
+  (let ((dir (cdr (assoc alias cofi-aliases))))
     (cd dir)))
 
 (defun cofi-dired-alias (alias)
   "Open dired on aliased directory."
-  (interactive (list (ido-completing-read "Alias: " cofi-dir-aliases nil t)))
-  (let ((dir (cdr (assoc alias cofi-dir-alias-pairs))))
+  (interactive (list (ido-completing-read "Alias: "
+                                          (mapcar #'car
+                                                  cofi-aliases) nil t)))
+  (let ((dir (cdr (assoc alias cofi-aliases))))
     (dired dir)))
+
+(defun cofi-find-at-alias (alias)
+  "Find file in aliased directory."
+  (interactive (list (ido-completing-read "Alias: "
+                                          (mapcar #'car
+                                                  cofi-aliases) nil t)))
+  (let ((dir (cdr (assoc alias cofi-aliases))))
+    (ido-find-file-in-dir dir)))
 
 ;; Taken from http://www.emacswiki.org/emacs/ArtistMode
 (defun artist-ido-select-operation (type)

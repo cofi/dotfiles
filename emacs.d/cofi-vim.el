@@ -55,6 +55,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   (vim-mapleader-add "e" 'cofi/file)
   (vim-mapleader-add "E" 'cofi/file-alternate)
+  (vim-mapleader-add "o" 'cofi-find-at-alias)
   (vim-mapleader-add "b" 'cofi/buffer)
   (vim-mapleader-add "B" 'cofi/buffer-alternate)
   (vim-mapleader-add "w" 'save-buffer)

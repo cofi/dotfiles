@@ -19,8 +19,7 @@
       ido-create-new-buffer 'always
       ido-use-url-at-point nil
       ido-use-filename-at-point nil
-      ido-ignore-extensions t
-      ido-max-directory-size 300000)
+      ido-ignore-extensions t)
 
 (eval-after-load "ido"
   '(progn
@@ -43,7 +42,9 @@
                              '(
                                "^auto/$"
                                "_region_"
-                               )))))
+                               )))
+     (fset 'ido-directory-too-big-p #'ignore)))
+
 (ido-mode 'files)
 (ido-everywhere 1)
 ;; ==================================================
@@ -60,6 +61,9 @@
                     '(diminish 'highlight-parentheses-mode))
                   (eval-after-load "undo-tree"
                     '(diminish 'undo-tree-mode)))
+
+(require-and-exec 'ansi-color
+                  (ansi-color-for-comint-mode-on))
 
 (setq recentf-auto-cleanup 'never)
 (setq recentf-max-saved-items 500)

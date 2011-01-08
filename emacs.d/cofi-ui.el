@@ -207,6 +207,10 @@
               woman-use-topic-at-point t
               woman-cache-filename "~/.wmncach.el")
 
+(eval-after-load "info"
+  '(add-to-list 'Info-directory-list
+         "~/doc/info"))
+
 ;; mixedCase to small_words_with_underscores (visually)
 (setq glasses-separate-parentheses-p nil
       glasses-uncapitalize-p t

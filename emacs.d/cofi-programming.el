@@ -3,6 +3,8 @@
                         haskell-mode-hook
                         emacs-lisp-mode-hook
                         sh-mode-hook
+                        lisp-mode-hook
+                        clojure-mode-hook
                         ))
 (mapc 'load '(
               "cofi-markers"

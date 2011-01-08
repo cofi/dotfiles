@@ -1,3 +1,7 @@
+(defconst startup-time
+  (current-time)
+  "Time Emacs started.")
+
 (defun cofi/fortune2scratch ()
   "Return a comment-padded fortune cookie."
   (let ((cookie (shell-command-to-string "fortune -a")))
@@ -7,9 +11,12 @@
 
 (setq initial-scratch-message (cofi/fortune2scratch))
 
-(defconst startup-time
-  (current-time)
-  "Time Emacs started.")
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (add-to-list 'package-archives '("elpa" . "http://tromey.com/elpa/"))
+  (add-to-list 'package-archives '("technomancy" . "http://repo.technomancy.us/emacs/"))
+  (package-initialize))
 
 (mapc (lambda (dir)
              (add-to-list 'load-path dir))

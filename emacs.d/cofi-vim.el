@@ -100,6 +100,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   (push 'magit-mode viper-emacs-state-mode-list)
   (push 'magit-key-mode viper-emacs-state-mode-list)
+  (push 'clojure-mode viper-vi-state-mode-list)
   ;; ===================================================
 
   ;; Conflicts ========================================

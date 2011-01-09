@@ -80,17 +80,16 @@
           (action . (("Open" . (lambda (candidate)
                                  (call-interactively candidate))))))))
 
-    (defun cofi/anything-dir-deep (source-name dir &optional dotfiles match)
-      "Returns an anything source for a particular directory.
-`deep' may be `deep' or `flat'."
-      `((name . ,(concat source-name))
-        (candidates . ,(ls-files-deep dir dotfiles match))
-        (action . (("Open" . find-file)))
-        (type . file)))
-    (defun cofi/anything-dir-flat (source-name dir &optional dotfiles match)
+    (defun cofi/anything-dir-deep (source-name dir &optional dotfiles fmatch dmatch)
       "Returns an anything source for a particular directory."
       `((name . ,(concat source-name))
-        (candidates . ,(ls-files-deep-1 dir dotfiles match))
+        (candidates . ,(ls-files-deep dir dotfiles fmatch dmatch))
+        (action . (("Open" . find-file)))
+        (type . file)))
+    (defun cofi/anything-dir-flat (source-name dir &optional dotfiles fmatch dmatch)
+      "Returns an anything source for a particular directory."
+      `((name . ,(concat source-name))
+        (candidates . ,(ls-files-deep-1 dir dotfiles fmatch dmatch))
         (action . (("Open" . find-file)))
         (type . file)))
     (defun cofi/anything-dir (source-name dir &optional dotfiles match)

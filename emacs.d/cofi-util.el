@@ -171,23 +171,25 @@ nil are ignored."
   (mapc (lambda (e) (queue-enqueue queue e))
         l))
 
-(defun ls-files-deep (dir &optional dotfiles match)
+(defun ls-files-deep (dir &optional dotfiles fmatch dmatch)
   "Returns all files within `DIR'.
 `DOTFILES' -- if non-nil don't include files and dirs starting with a `.'
-`MATCH' -- if non-nil only include files and dirs matching the regexp"
+`FMATCH' -- if non-nil only include files matching the regexp
+`DMATCH' -- if non-nil only include files in dirs matching the regexp"
   (let ((dirs (queue-create)))
     (queue-enqueue dirs dir)
     (loop while (> (queue-length dirs) 0)
           nconc (let ((d (queue-dequeue dirs)))
-                  (enqueue-all dirs (ls-dirs d dotfiles match))
-                  (ls-files d dotfiles match)))))
+                  (enqueue-all dirs (ls-dirs d dotfiles dmatch))
+                  (ls-files d dotfiles fmatch)))))
 
-(defun ls-files-deep-1 (dir &optional dotfiles match)
+(defun ls-files-deep-1 (dir &optional dotfiles fmatch dmatch)
   "Returns all files within `DIR' descending one level.
 `DOTFILES' -- if non-nil don't include files and dirs starting with a `.'
-`MATCH' -- if non-nil only include files and dirs matching the regexp"
-  (let ((dirs (cons dir (ls-dirs dir dotfiles match))))
+`FMATCH' -- if non-nil only include files matching the regexp
+`DMATCH' -- if non-nil only include and search dirs matching the regexp"
+  (let ((dirs (cons dir (ls-dirs dir dotfiles dmatch))))
     (loop for d in dirs
-          nconc (ls-files d dotfiles match))))
+          nconc (ls-files d dotfiles fmatch))))
 
 (provide 'cofi-util)

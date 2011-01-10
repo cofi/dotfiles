@@ -175,7 +175,8 @@ nil are ignored."
   "Returns all files within `DIR'.
 `DOTFILES' -- if non-nil don't include files and dirs starting with a `.'
 `FMATCH' -- if non-nil only include files matching the regexp
-`DMATCH' -- if non-nil only include files in dirs matching the regexp"
+`DMATCH' -- if non-nil only include files in dirs matching the regexp; if parent
+            dir failed its dirs will not be searched."
   (let ((dirs (queue-create)))
     (queue-enqueue dirs dir)
     (loop while (> (queue-length dirs) 0)

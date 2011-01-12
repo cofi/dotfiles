@@ -51,6 +51,8 @@
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook
           #'(lambda ()
+              ;; move single quote to string class for quote pairing
+              (modify-syntax-entry ?' "\"")
               (setq autopair-handle-action-fns
                     (list #'autopair-default-handle-action
                           #'autopair-python-triple-quote-action))))

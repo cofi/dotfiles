@@ -26,7 +26,6 @@
                                      "sys"
                                     ))
 (setq ropemacs-enable-shortcuts nil)
-(pymacs-load "ropemacs" "rope-")
 ;; Modes
 (add-hook 'python-mode-hook
           (lambda ()
@@ -59,5 +58,9 @@
               (setq autopair-handle-action-fns
                     (list #'autopair-default-handle-action
                           #'autopair-python-triple-quote-action))))
+
+(add-hook 'python-mode-hook
+          #'(lambda ()
+              (pymacs-load "ropemacs" "rope-")))
 
 (provide 'cofi-python)

@@ -46,7 +46,10 @@
               (local-set-key (kbd "C-M-?") 'rope-lucky-assist)
               (local-set-key (kbd "C-c g") 'rope-goto-definition)
               (local-set-key (kbd "C-c d") 'rope-show-doc)
-              (local-set-key (kbd "C-c t") 'rope-show-calltip)))
+              (local-set-key (kbd "C-c t") 'rope-show-calltip)
+              (local-set-key (kbd "C-c ?") 'pylookup-lookup)))
+
+(setq pylookup-db-file "~/var/pylookup.db")
 
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook

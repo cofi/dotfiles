@@ -29,6 +29,7 @@
         "~/.elisp/vendor/keychain-environment"
         "~/.elisp/vendor/gist"
         "~/.elisp/vendor/rainbow"
+        "~/.elisp/vendor/pylookup"
         "~/.elisp/vendor/scratch"
         "~/.elisp/vendor/offlineimap"
         "/usr/local/share/emacs/site-lisp/semi/"

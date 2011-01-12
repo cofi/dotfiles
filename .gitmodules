@@ -52,3 +52,6 @@
 [submodule "elisp/vendor/full-ack"]
 	path = elisp/vendor/full-ack
 	url = git://github.com/nschum/full-ack.git
+[submodule "elisp/vendor/pylookup"]
+	path = elisp/vendor/pylookup
+	url = git://github.com/tsgates/pylookup.git

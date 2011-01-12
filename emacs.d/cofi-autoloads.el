@@ -36,6 +36,12 @@
 
 (autoload 'try-pysmell-complete "pysmell" "PySmell-Hippie-Completer" t)
 
+(autoload 'pylookup-lookup "pylookup"
+  "Lookup SEARCH-TERM in the Python HTML indexes." t)
+
+(autoload 'pylookup-update "pylookup" 
+  "Run pylookup-update and create the database at `pylookup-db-file'." t)
+
 (autoload 'rainbow-mode "rainbow-mode" "Highlight color names in buffer" t)
 
 (add-to-list 'auto-mode-alist '("/rfc[0-9]+\\.txt\\(\\.gz\\)?\\'" . rfcview-mode))

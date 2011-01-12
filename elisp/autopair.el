@@ -263,7 +263,7 @@ three elements are (ACTION PAIR POS-BEFORE).
 
 ACTION is one of `opening', `insert-quote', `skip-quote',
 `backspace', `newline' or `paired-delimiter'. PAIR is the pair of
-the `last-input-event' character, if applicable. POS-BEFORE is
+the `autopair-inserted' character, if applicable. POS-BEFORE is
 value of point before action command took place .")
 
 
@@ -306,6 +306,17 @@ behaviour, be sure to include `autopair-default-handle-wrap-action' in
 the list, or call it in your handlers.")
 (make-variable-buffer-local 'autopair-handle-wrap-action-fns)
 
+(defvar autopair-inserted nil
+  "Delimiter inserted by last interactive autopair command.
+
+This is calculated with `autopair-calculate-inserted', which see.")
+
+(defun autopair-calculate-inserted ()
+  "Attempts to guess the delimiter the current command is inserting.
+
+For now, simply returns `last-command-event'"
+  last-command-event)
+
 ;; minor mode and global mode
 ;;
 (define-globalized-minor-mode autopair-global-mode autopair-mode autopair-on)
@@ -326,7 +337,7 @@ the list, or call it in your handlers.")
            (define-key map (kbd "DEL") 'autopair-backspace)
            (define-key map (kbd "RET") 'autopair-newline)
            (dotimes (char 256) ;; only searches the first 256 chars,
-                               ;; TODO: is this enough/toomuch/stupid?
+             ;; TODO: is this enough/toomuch/stupid?
              (unless (member char
                              (getf autopair-dont-pair :never))
                (let* ((syntax-entry (aref (syntax-table) char))
@@ -444,17 +455,20 @@ A list of four elements is returned:
         (when (and (eq (nth 0 start-syntax) (nth 0 end-syntax))
                    (eq (nth 3 start-syntax) (nth 3 end-syntax)))
           (list 'wrap (or (second autopair-action)
-                          (autopair-find-pair last-input-event))
+                          (autopair-find-pair autopair-inserted))
                 point-before
                 region-before))))))
+
+(defun autopair-original-binding ()
+  (or (key-binding `[,autopair-inserted])
+      (key-binding (this-single-command-keys))
+      (key-binding fallback-keys)))
 
 (defun autopair-fallback (&optional fallback-keys)
   (let* ((autopair-emulation-alist nil)
          (beyond-cua (let ((cua--keymap-alist nil))
-                       (or (key-binding (this-single-command-keys))
-                           (key-binding fallback-keys))))
-         (beyond-autopair (or (key-binding (this-single-command-keys))
-                              (key-binding fallback-keys))))
+                       (autopair-original-binding)))
+         (beyond-autopair (autopair-original-binding)))
     (when autopair-autowrap
       (setq autopair-wrap-action (autopair-calculate-wrap-action)))
     
@@ -504,7 +518,7 @@ original command as if autopair didn't exist"
 (defun autopair-exception-p (where-sym exception-where-sym blacklist &optional fn)
   (and (or (eq exception-where-sym :everywhere)
            (eq exception-where-sym where-sym))
-       (member last-input-event
+       (member autopair-inserted
                (if fn
                    (mapcar fn (getf blacklist exception-where-sym))
                  (getf blacklist exception-where-sym)))))
@@ -545,6 +559,7 @@ returned) and uplisting stops there."
 ;; 
 (defun autopair-insert-or-skip-quote ()
   (interactive)
+  (setq autopair-inserted (autopair-calculate-inserted))
   (let* ((syntax-triplet (autopair-syntax-ppss))
          (syntax-info (first syntax-triplet))
          (where-sym (second syntax-triplet))
@@ -559,22 +574,22 @@ returned) and uplisting stops there."
     (cond (;; decides whether to skip the quote...
            ;;
            (and (not escaped-p)
-                (eq last-input-event (char-after (point)))
+                (eq autopair-inserted (char-after (point)))
                 (or
                  ;; ... if we're already inside a string and the
                  ;; string starts with the character just inserted,
                  ;; or it's a generically terminated string
                  (and inside-string
                       (or (eq inside-string t)
-                          (eq last-input-event inside-string)))
+                          (eq autopair-inserted inside-string)))
                  ;; ... if we're in a comment and ending a string
                  ;; (the inside-string criteria does not work
                  ;; here...)
                  (and (eq where-sym :comment)
                       (condition-case nil
-                          (eq last-input-event (char-after (scan-sexps (1+ (point)) -1)))
+                          (eq autopair-inserted (char-after (scan-sexps (1+ (point)) -1)))
                         (error nil)))))
-           (setq autopair-action (list 'skip-quote last-input-event (point))))
+           (setq autopair-action (list 'skip-quote autopair-inserted (point))))
           (;; decides whether to pair, i.e do *not* pair the quote if...
            ;;
            (not
@@ -598,26 +613,27 @@ returned) and uplisting stops there."
              ;; ... comment-disable or string-disable are true here.
              ;; The latter is only useful if we're in a string
              ;; terminated by a character other than
-             ;; `last-input-event'.
+             ;; `autopair-inserted'.
              (some #'(lambda (sym)
                        (autopair-exception-p where-sym sym autopair-dont-pair))
                    '(:comment :string))))
-           (setq autopair-action (list 'insert-quote last-input-event (point)))))
+           (setq autopair-action (list 'insert-quote autopair-inserted (point)))))
     (autopair-fallback)))
 
-  (put 'autopair-insert-or-skip-quote 'function-documentation
+(put 'autopair-insert-or-skip-quote 'function-documentation
      '(concat "Insert or possibly skip over a quoting character.\n\n"
               (autopair-document-bindings)))
 
 (defun autopair-in-unterminated-string-p (autopair-triplet)
-  (and (eq last-input-event (fourth (third autopair-triplet)))
+  (and (eq autopair-inserted (fourth (third autopair-triplet)))
        (condition-case nil (progn (scan-sexps (ninth (third autopair-triplet)) 1) nil) (error t))))     
 
 
 (defun autopair-insert-opening ()
   (interactive)
+  (setq autopair-inserted (autopair-calculate-inserted))
   (when (autopair-pair-p)
-    (setq autopair-action (list 'opening (autopair-find-pair last-input-event) (point))))
+    (setq autopair-action (list 'opening (autopair-find-pair autopair-inserted) (point))))
   (autopair-fallback))
 (put 'autopair-insert-opening 'function-documentation
      '(concat "Insert opening delimiter and possibly automatically close it.\n\n"
@@ -625,17 +641,19 @@ returned) and uplisting stops there."
 
 (defun autopair-skip-close-maybe ()
   (interactive)
+  (setq autopair-inserted (autopair-calculate-inserted))
   (when (autopair-skip-p)
-    (setq autopair-action (list 'closing (autopair-find-pair last-input-event) (point))))
+    (setq autopair-action (list 'closing (autopair-find-pair autopair-inserted) (point))))
   (autopair-fallback))
 (put 'autopair-skip-close-maybe 'function-documentation
      '(concat "Insert or possibly skip over a closing delimiter.\n\n"
-               (autopair-document-bindings)))
+              (autopair-document-bindings)))
 
 (defun autopair-backspace ()
   (interactive)
-    (when (char-before)
-      (setq autopair-action (list 'backspace (autopair-find-pair (char-before)) (point))))
+  (setq autopair-inserted (autopair-calculate-inserted))
+  (when (char-before)
+    (setq autopair-action (list 'backspace (autopair-find-pair (char-before)) (point))))
   (autopair-fallback (kbd "DEL")))
 (put 'autopair-backspace 'function-documentation
      '(concat "Possibly delete a pair of paired delimiters.\n\n"
@@ -643,6 +661,7 @@ returned) and uplisting stops there."
 
 (defun autopair-newline ()
   (interactive)
+  (setq autopair-inserted (autopair-calculate-inserted))
   (let ((pair (autopair-find-pair (char-before))))
     (when (eq (char-after) pair)
       (setq autopair-action (list 'newline pair (point))))
@@ -652,13 +671,12 @@ returned) and uplisting stops there."
               (autopair-document-bindings (kbd "RET"))))
 
 (defun autopair-skip-p ()
-  (interactive)
   (let* ((syntax-triplet (autopair-syntax-ppss))
          (syntax-info (first syntax-triplet))
          (orig-point (point)))
     (cond ((eq autopair-skip-criteria 'help-balance)
            (save-excursion
-             (let ((pos-pair (autopair-up-list syntax-info last-input-event)))
+             (let ((pos-pair (autopair-up-list syntax-info autopair-inserted)))
                ;; if `autopair-up-list' returned something valid, we
                ;; probably want to skip but only if on of the following is true.
                ;;
@@ -673,7 +691,7 @@ returned) and uplisting stops there."
                     (or (eq (car pos-pair) (cdr pos-pair))
                         (< orig-point (cdr pos-pair))
                         (eq (char-after (car pos-pair))
-                            (autopair-find-pair last-input-event)))))))
+                            (autopair-find-pair autopair-inserted)))))))
           ((eq autopair-skip-criteria 'need-opening)
            (save-excursion
              (condition-case err
@@ -697,7 +715,7 @@ returned) and uplisting stops there."
                      (save-excursion
                        (let ((pos-pair (autopair-up-list syntax-info))
                              (prev-point (point-max))
-                             (expected-closing (autopair-find-pair last-input-event)))
+                             (expected-closing (autopair-find-pair autopair-inserted)))
                          (condition-case err
                              (progn
                                (while (not (eq prev-point (point)))
@@ -720,7 +738,7 @@ returned) and uplisting stops there."
                                    ;; autopair if we're in a mixed parens situation,
                                    ;; i.e. the last list jumped over was started by
                                    ;; the paren we're trying to match
-                                   ;; (`last-input-event') and ended by a different
+                                   ;; (`autopair-inserted') and ended by a different
                                    ;; parens, or the closing paren we stopped at is
                                    ;; also different from the expected. The second
                                    ;; `scan-lists' places point at the closing of the
@@ -729,7 +747,7 @@ returned) and uplisting stops there."
                                    (condition-case err
                                        (prog1
                                            (eq (char-after (scan-lists (point) -1 0))
-                                               last-input-event)
+                                               autopair-inserted)
                                          (goto-char (scan-lists (point) -1 -1)))
                                      (error t))
                                    
@@ -790,102 +808,110 @@ returned) and uplisting stops there."
 
 (defun autopair-blink (&optional pos)
   (when autopair-blink
-  (if pos
-      (save-excursion
-        (goto-char pos)
-        (sit-for autopair-blink-delay))
-    (sit-for autopair-blink-delay))))
+    (if pos
+        (save-excursion
+          (goto-char pos)
+          (sit-for autopair-blink-delay))
+      (sit-for autopair-blink-delay))))
 
 (defun autopair-default-handle-action (action pair pos-before)
   ;;(message "action is %s" action)
-  (cond (;; automatically insert closing delimiter
-         (and (eq 'opening action)
-              (not (eq pair (char-before))))
-         (insert pair)
-         (autopair-blink)
-         (backward-char 1))
-        (;; automatically insert closing quote delimiter
-         (eq 'insert-quote action)
-         (insert pair)
-         (autopair-blink)
-         (backward-char 1))
-        (;; automatically skip oper closer quote delimiter
-         (and (eq 'skip-quote action)
-              (eq pair (char-after (point))))
-         (delete-char 1)
-         (autopair-blink-matching-open))
-        (;; skip over newly-inserted-but-existing closing delimiter
-         ;; (normal case)
-         (eq 'closing action)
-         (let ((skipped 0))
-           (when autopair-skip-whitespace
-             (setq skipped (save-excursion (skip-chars-forward "\s\n\t"))))
-           (when (eq last-input-event (char-after (+ (point) skipped)))
-             (unless (zerop skipped) (autopair-blink (+ (point) skipped)))
-             (delete-char (1+ skipped))
-             (autopair-blink-matching-open))))
-        (;; autodelete closing delimiter
-         (and (eq 'backspace action)
-              (eq pair (char-after (point))))
-         (delete-char 1))
-        (;; opens an extra line after point, then indents
-         (and (eq 'newline action)
-              (eq pair (char-after (point))))
-         (save-excursion
-           (newline-and-indent))
-         (indent-according-to-mode)
-         (when (or (and (boundp 'global-hl-line-mode)
-                        global-hl-line-mode)
-                   (and (boundp 'hl-line-mode)
-                        hl-line-mode))
-           (hl-line-unhighlight) (hl-line-highlight)))))
+  (condition-case err
+      (cond (;; automatically insert closing delimiter
+             (and (eq 'opening action)
+                  (not (eq pair (char-before))))
+             (insert pair)
+             (autopair-blink)
+             (backward-char 1))
+            (;; automatically insert closing quote delimiter
+             (eq 'insert-quote action)
+             (insert pair)
+             (autopair-blink)
+             (backward-char 1))
+            (;; automatically skip oper closer quote delimiter
+             (and (eq 'skip-quote action)
+                  (eq pair (char-after (point))))
+             (delete-char 1)
+             (autopair-blink-matching-open))
+            (;; skip over newly-inserted-but-existing closing delimiter
+             ;; (normal case)
+             (eq 'closing action)
+             (let ((skipped 0))
+               (when autopair-skip-whitespace
+                 (setq skipped (save-excursion (skip-chars-forward "\s\n\t"))))
+               (when (eq autopair-inserted (char-after (+ (point) skipped)))
+                 (unless (zerop skipped) (autopair-blink (+ (point) skipped)))
+                 (if (zerop skipped)
+                     (progn (backward-char 1) (delete-char 1) (forward-char))
+                   (delete-char (1+ skipped)))
+                 (autopair-blink-matching-open))))
+            (;; autodelete closing delimiter
+             (and (eq 'backspace action)
+                  (eq pair (char-after (point))))
+             (delete-char 1))
+            (;; opens an extra line after point, then indents
+             (and (eq 'newline action)
+                  (eq pair (char-after (point))))
+             (save-excursion
+               (newline-and-indent))
+             (indent-according-to-mode)
+             (when (or (and (boundp 'global-hl-line-mode)
+                            global-hl-line-mode)
+                       (and (boundp 'hl-line-mode)
+                            hl-line-mode))
+               (hl-line-unhighlight) (hl-line-highlight))))
+    (error
+     (message "[autopair] Ignored error in `autopair-default-handle-action'"))))
 
 (defun autopair-default-handle-wrap-action (action pair pos-before region-before)
   "Default handler for the wrapping action in `autopair-wrap'"
-  (when (eq 'wrap action)
-    (let ((reverse-selected (= (car region-before) pos-before)))
-      (cond
-       ((eq 'opening (first autopair-action))
-        ;; (message "wrap-opening!")
-        (cond (reverse-selected
-               (goto-char (1+ (cdr region-before)))
-               (insert pair)
-               (autopair-blink)
-               (goto-char (1+ (car region-before))))
-              (t
-               (delete-backward-char 1)
-               (insert pair)
-               (goto-char (car region-before))
-               (insert last-input-event)))
-        (setq autopair-action nil) )
-       (;; wraps
-        (eq 'closing (first autopair-action))
-        ;; (message "wrap-closing!")
-        (cond (reverse-selected
-               (delete-backward-char 1)
-               (insert pair)
-               (goto-char (1+ (cdr region-before)))
-               (insert last-input-event))
-              (t
-               (goto-char (car region-before))
-               (insert pair)
-               (autopair-blink)
-               (goto-char (+ 2 (cdr region-before)))))
-        (setq autopair-action nil))
-       ((eq 'insert-quote (first autopair-action))
-        (cond (reverse-selected
-               (goto-char (1+ (cdr region-before)))
-               (insert pair)
-               (autopair-blink))
-              (t
-               (goto-char (car region-before))
-               (insert last-input-event)
-               (autopair-blink)))
-        (setq autopair-action nil))
-       (reverse-selected
-        (delete-backward-char 1)
-        (goto-char (cdr region-before))
-        (insert last-input-event))))))
+  (condition-case err
+      (when (eq 'wrap action)
+        (let ((reverse-selected (= (car region-before) pos-before)))
+          (cond
+           ((eq 'opening (first autopair-action))
+            ;; (message "wrap-opening!")
+            (cond (reverse-selected
+                   (goto-char (1+ (cdr region-before)))
+                   (insert pair)
+                   (autopair-blink)
+                   (goto-char (1+ (car region-before))))
+                  (t
+                   (delete-backward-char 1)
+                   (insert pair)
+                   (goto-char (car region-before))
+                   (insert autopair-inserted)))
+            (setq autopair-action nil) )
+           (;; wraps
+            (eq 'closing (first autopair-action))
+            ;; (message "wrap-closing!")
+            (cond (reverse-selected
+                   (delete-backward-char 1)
+                   (insert pair)
+                   (goto-char (1+ (cdr region-before)))
+                   (insert autopair-inserted))
+                  (t
+                   (goto-char (car region-before))
+                   (insert pair)
+                   (autopair-blink)
+                   (goto-char (+ 2 (cdr region-before)))))
+            (setq autopair-action nil))
+           ((eq 'insert-quote (first autopair-action))
+            (cond (reverse-selected
+                   (goto-char (1+ (cdr region-before)))
+                   (insert pair)
+                   (autopair-blink))
+                  (t
+                   (goto-char (car region-before))
+                   (insert autopair-inserted)
+                   (autopair-blink)))
+            (setq autopair-action nil))
+           (reverse-selected
+            (delete-backward-char 1)
+            (goto-char (cdr region-before))
+            (insert autopair-inserted)))))
+    (error
+     (message "[autopair] Ignored error in `autopair-default-handle-wrap-action'"))))
 
 
 ;; example python triple quote helper
@@ -942,8 +968,9 @@ returned) and uplisting stops there."
 
 (defun autopair-extra-insert-opening ()
   (interactive)
+  (setq autopair-inserted (autopair-calculate-inserted))
   (when (autopair-extra-pair-p)
-    (setq autopair-action (list 'opening (autopair-find-pair last-input-event) (point))))
+    (setq autopair-action (list 'opening (autopair-find-pair autopair-inserted) (point))))
   (autopair-fallback))
 (put 'autopair-extra-insert-opening 'function-documentation
      '(concat "Insert (an extra) opening delimiter and possibly automatically close it.\n\n"
@@ -951,8 +978,9 @@ returned) and uplisting stops there."
 
 (defun autopair-extra-skip-close-maybe ()
   (interactive)
+  (setq autopair-inserted (autopair-calculate-inserted))
   (when (autopair-extra-skip-p)
-    (setq autopair-action (list 'closing last-input-event (point))))
+    (setq autopair-action (list 'closing autopair-inserted (point))))
   (autopair-fallback))
 (put 'autopair-extra-skip-close-maybe 'function-documentation
      '(concat "Insert or possibly skip over a (and extra) closing delimiter.\n\n"
@@ -971,7 +999,7 @@ returned) and uplisting stops there."
          (syntax-info (first syntax-triplet))
          (where-sym (second syntax-triplet))
          (orig-point (point)))
-    (and (eq (char-after (point)) last-input-event)
+    (and (eq (char-after (point)) autopair-inserted)
          (some #'(lambda (sym)
                    (autopair-exception-p where-sym sym autopair-extra-pairs #'cdr))
                '(:comment :string :code :everywhere))
@@ -980,7 +1008,7 @@ returned) and uplisting stops there."
                (backward-sexp (point-max))
              (error
               (goto-char (third err))))
-           (search-forward (make-string 1 (autopair-find-pair last-input-event))
+           (search-forward (make-string 1 (autopair-find-pair autopair-inserted))
                            orig-point
                            'noerror)))))
 
@@ -990,7 +1018,8 @@ returned) and uplisting stops there."
 (defun autopair-insert-or-skip-paired-delimiter ()
   " insert or skip a character paired delimiter"
   (interactive)
-  (setq autopair-action (list 'paired-delimiter last-input-event (point)))
+  (setq autopair-inserted (autopair-calculate-inserted))
+  (setq autopair-action (list 'paired-delimiter autopair-inserted (point)))
   (autopair-fallback))
 
 (put 'autopair-insert-or-skip-paired-delimiter 'function-documentation
@@ -1005,7 +1034,8 @@ returned) and uplisting stops there."
 ;; 'delete-selection properties of the autopair commands. The function
 ;; would return non-nil when no wrapping should/could be performed.
 ;;
-;; Until then use some `defadvice' i.e. monkey-patching
+;; Until then use some `defadvice' i.e. monkey-patching, which relies
+;; on these features' implementation details.
 ;;
 (put 'autopair-insert-opening 'delete-selection t)
 (put 'autopair-skip-close-maybe 'delete-selection t)

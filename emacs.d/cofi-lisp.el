@@ -18,18 +18,19 @@
 (add-hook 'slime-repl-mode-hook
           (lambda () (local-set-key (kbd "C-c C-z") 'other-buffer)))
 
-(defun subst-autopair-with-paredit ()
-  (interactive)
-  (setq autopair-dont-activate t)
-  (enable-paredit-mode))
+(defvar paredit-mode-hooks '(lisp-interaction-mode-hook
+                             emacs-lisp-mode-hook
+                             lisp-mode-hook
+                             clojure-mode-hook
+                             slime-repl-mode-hook))
 
 (require-and-exec 'paredit
-  (dolist (hook '(lisp-interaction-mode-hook
-                  emacs-lisp-mode-hook
-                  lisp-mode-hook
-                  clojure-mode-hook
-                  slime-repl-mode-hook))
-    (add-hook hook 'subst-autopair-with-paredit)))
+  (defadvice paredit-mode (after subst-autopair (arg))
+    "Disable autopair when running paredit."
+    (setq autopair-dont-activate (not paredit-mode)))
+
+  (dolist (hook paredit-mode-hooks)
+    (add-hook hook #'enable-paredit-mode)))
 
 (add-to-list 'auto-mode-alist '("\\.cl$" . lisp-mode))
 

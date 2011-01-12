@@ -82,6 +82,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-b", windowPromptBringCopy acPromptConfig)
                  , ("M-z", manPrompt promptConfig)
                  , ("M-q", dirExecPromptNamed acPromptConfig spawn (withHome ".quick") "Quicks: ")
+                 , ("M-S-q", dirExecPromptNamed acPromptConfig spawn (withHome ".quick") "Quicks: ")
                    -- Window/workspace management
                  , ("M-S-h", sendMessage MirrorShrink)
                  , ("M-S-l", sendMessage MirrorExpand)

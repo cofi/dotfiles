@@ -8,10 +8,12 @@
                  ("Config" (filename . ".emacs.d/"))
 
                  ("Programming" (or
+                                 (mode . c-mode)
+                                 (mode . java-mode)
+                                 (mode . lisp-mode)
+                                 (mode . clojure-mode)
                                  (mode . python-mode)
                                  (mode . haskell-mode)
-                                 (name . "\\*Python.*\\*")
-                                 (name . "\\*haskell.*\\*")
                                  (mode . emacs-lisp-mode)
                                  (mode . sh-mode)
                                  ))
@@ -44,6 +46,9 @@
                  ("Shells" (or
                             (mode . eshell-mode)
                             (mode . shell-mode)
+                            (mode . slime-repl-mode)
+                            (name . "\\*Python.*\\*")
+                            (name . "\\*haskell.*\\*")
                             ))
 
                  ("Magit" (or 

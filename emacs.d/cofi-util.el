@@ -131,4 +131,28 @@
     (loop for d in dirs
           nconc (ls-files d dotfiles fmatch))))
 
+(defun parent-dir (file-name)
+  "Parent directory of given file."
+  (file-name-directory
+   (directory-file-name (file-name-directory (expand-file-name file-name)))))
+
+(defun find-makefile (file-or-dir)
+  "Searches for file `Makefile' in up to 3 parent dirs of `file-or-dir'."
+  (let ((f "Makefile")
+        (dir (file-name-directory file-or-dir)))
+    (loop for i from 1 to 3             ; try 3 dirs up
+          if (file-exists-p (concat dir f))
+          return dir
+          else
+          do (setq dir (parent-dir dir)))))
+
+(defun makefile-targets (makefile)
+  "Gathers alphanumeric makefile targets from `MAKEFILE'."
+  (let ((targets '()))
+    (with-current-buffer (find-file-noselect makefile)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\([[:alnum:]].+?\\):\\(:?$\\| \\)" nil t)
+        (push (car (split-string (match-string-no-properties 1) " " t)) targets)))
+    targets))
+
 (provide 'cofi-util)

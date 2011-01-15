@@ -158,6 +158,17 @@
        )
 
      (run-with-timer 0 600 #'cofi/update-anything-sources)
+
+     (defvar anything-makefile-path nil)
+     (defvar anything-makefile-targets
+       `((name . "Make")
+         (init . (lambda () (setq anything-makefile-path (find-makefile default-directory))))
+         (candidates . (lambda () (makefile-targets (concat anything-makefile-path "Makefile"))))
+         (volatile)
+         (action . (("Make target" . (lambda (candidate)
+                                       (compile (concat "cd " anything-makefile-path
+                                                        " && make " candidate))))))))
+
      (defun cofi/anything-uni ()
        (interactive)
        (anything-other-buffer cofi/anything-uni-sources "*anything uni*"))
@@ -165,10 +176,14 @@
      (defun cofi/anything-config ()
        (interactive)
        (anything-other-buffer cofi/anything-config-sources "*anything config*"))
+     (defun cofi/anything-make ()
+       (interactive)
+       (anything-other-buffer anything-makefile-targets "*anything make*"))
 
      (let ((map (make-sparse-keymap)))
        (define-key map (kbd "u") 'cofi/anything-uni)
        (define-key map (kbd "c") 'cofi/anything-config)
+       (define-key map (kbd "m") 'cofi/anything-make)
        (global-set-key (kbd "C-c a") map))
 
      (when (fboundp 'lacarte-execute-command)

@@ -1,9 +1,21 @@
+(defun cofi/latex-build-and-view (&optional only-build)
+  (interactive "P")
+  (let ((name (TeX-active-master))
+        (fstring (if TeX-PDF-mode
+                     "xdg-open %s.pdf"
+                   "xdg-open %s.dvi")))
+    (and (TeX-command "LaTeX" 'TeX-master-file)
+       (not only-build)
+       (shell-command (format fstring name)))))
+
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq fill-column 80)
                            (auto-fill-mode 1)))
 
 (when (locate-library "cdlatex")
-  (add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t))))
+  (add-hook 'LaTeX-mode-hook (lambda ()
+                               (setq autopair-dont-activate t)
+                               (local-set-key (kbd "<f12>") 'cofi/latex-build-and-view))))
 
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")
                               'cdlatex-mode

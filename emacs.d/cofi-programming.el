@@ -5,6 +5,7 @@
                         sh-mode-hook
                         lisp-mode-hook
                         clojure-mode-hook
+                        c-mode-hook
                         ))
 (mapc 'load '(
               "cofi-markers"
@@ -13,6 +14,7 @@
               "cofi-lisp"
               "cofi-python"
               "cofi-tex"
+              "cofi-c"
               ))
 
 (provide 'cofi-programming)

@@ -148,11 +148,13 @@
 
 (defun makefile-targets (makefile)
   "Gathers alphanumeric makefile targets from `MAKEFILE'."
-  (let ((targets '()))
-    (with-current-buffer (find-file-noselect makefile)
+  (let ((targets '())
+        (buf (find-file-noselect makefile)))
+    (with-current-buffer buf
       (goto-char (point-min))
       (while (re-search-forward "^\\([[:alnum:]].+?\\):\\(:?$\\| \\)" nil t)
         (push (car (split-string (match-string-no-properties 1) " " t)) targets)))
+    (kill-buffer buf)
     targets))
 
 (provide 'cofi-util)

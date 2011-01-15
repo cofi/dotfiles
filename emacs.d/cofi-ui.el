@@ -305,9 +305,6 @@
 (global-set-key (kbd "M-r") 'query-replace-regexp)
 (global-set-key (kbd "M-R") 'query-replace)
 
-;; M-TAB is shadowed
-(define-key function-key-map (kbd "C-TAB") (kbd "M-TAB"))
-
 (when (locate-library "scratch")
   (autoload 'scratch "scratch" nil t)
   (global-set-key (kbd "<f12>") 'scratch))
@@ -335,15 +332,10 @@
 (put 'dired-find-alternate-file 'disabled nil)
 ;; ==================================================
 
-;; external programs ========================================
-(global-set-key (kbd "C-c f") 'browse-url-firefox)
-(setq browse-url-firefox-new-window-is-tab t)
-;; ==================================================
-
 ;; prettyfying ==============================
 (add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
 (require-and-exec 'pretty-mode
-                  (global-pretty-mode t)
+                  (global-pretty-mode 1)
                   (mapc (lambda (mode)
                           (pretty-add-keywords mode '(
                                                       ("=" . "←")

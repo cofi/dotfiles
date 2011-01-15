@@ -46,9 +46,6 @@
 [submodule "yasnippets/org-mode"]
 	path = yasnippets/org-mode
 	url = git@github.com:cofi/yasnippet-org-mode.git
-[submodule "yasnippets/latex-mode"]
-	path = yasnippets/latex-mode
-	url = git@github.com:cofi/yasnippets-latex.git
 [submodule "elisp/vendor/full-ack"]
 	path = elisp/vendor/full-ack
 	url = git://github.com/nschum/full-ack.git

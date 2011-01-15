@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: Michael Markert <markert.michael@gmail.com>
+# key: eq
+# name: \begin{equation} ... \end{equation}
+# --
+\begin{${1:$$(yas/choose-value '("equation" "gather" "align" "multline"))}${2:*}}
+$0
+\end{$1$2}

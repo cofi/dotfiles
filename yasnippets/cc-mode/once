@@ -1,4 +1,6 @@
-#name : #ifndef XXX; #define XXX; #endif
+# -*- mode: snippet -*-
+# name : Include once
+# key: once
 # --
 #ifndef ${1:_`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H_}
 #define $1

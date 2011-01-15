@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: Michael Markert <markert.michael@gmail.com>
+# key: matrix
+# name: \begin{matrix} ... \end{matrix}
+# --
+\begin{${1:$$(yas/choose-value '("pmatrix" "bmatrix" "Bmatrix" "vmatrix" "Vmatrix"))}}
+  $0
+\end{$1}

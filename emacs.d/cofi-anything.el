@@ -145,7 +145,7 @@
 
        (setq cofi/anything-config-sources
              `(
-               ,(cofi/anything-dir-deep "Emacs" "~/config/dotfiles/emacs.d/" t ".el$")
+               ,(cofi/anything-dir-flat "Emacs" "~/config/dotfiles/emacs.d/" t ".el$")
                ,(cofi/anything-dir-deep "Snippets" "~/config/dotfiles/yasnippets/" t)
                ,(cofi/anything-dir-deep "Zsh" "~/config/dotfiles/zsh/" t)
                ((name . "Dot")

@@ -6,7 +6,7 @@
 (setq comment-multi-line t)
 (setq-default c-auto-newline t)
 
-(require-and-exec 'c-eldoc-mode
+(require-and-exec 'c-eldoc
   (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode))
 
 (provide 'cofi-c)

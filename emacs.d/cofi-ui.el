@@ -222,6 +222,8 @@
 (setq-default cursor-type 'bar)
 
 (setq autopair-autowrap t)
+
+(setq compilation-scroll-output 'first-error)
 ;; ==================================================
 
 ;; Default modes ========================================

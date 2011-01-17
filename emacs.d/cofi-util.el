@@ -157,6 +157,6 @@
         (push (car (split-string (match-string-no-properties 1) " " t)) targets)))
     (unless was-open
       (kill-buffer buf))
-    targets))
+    (reverse targets)))
 
 (provide 'cofi-util)

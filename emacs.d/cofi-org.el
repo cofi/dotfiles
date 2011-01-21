@@ -39,9 +39,15 @@ Note: This assumes all files are in the org-directory."
 (defvar cofi/org-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "a") 'org-agenda-list)
+    (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
+    (define-key map (kbd "o a") (lambda () (interactive)
+                                  (let ((org-indirect-buffer-display 'other-window))
+                                    (org-agenda-list))))
+    (define-key map (kbd "o t") (lambda () (interactive)
+                                  (let ((org-indirect-buffer-display 'other-window))
+                                    (org-todo-list 0))))
     (define-key map (kbd "r") 'org-capture)
     (define-key map (kbd "s") cofi/org-state-map)
-    (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
     (define-key map (kbd "l") 'org-store-link)
     (define-key map (kbd "v") 'cofi/visit-org-agenda-files)
     (define-key map (kbd "c") 'calendar)
@@ -79,7 +85,8 @@ Note: This assumes all files are in the org-directory."
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
       org-agenda-start-on-weekday nil
-      )
+      org-indirect-buffer-display 'current-window
+      org-agenda-restore-windows-after-quit t)
 
 (setq org-agenda-day-face-function
       (lambda (date)

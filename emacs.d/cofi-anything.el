@@ -129,7 +129,7 @@
        (interactive)
        (setq cofi/anything-uni-sources
              (let* ((dirs '("FoC" "FGdI3" "GdI3" "SE" "TS"))
-                    (subdirs '("aufgaben" "uebungen"))
+                    (subdirs '("aufgaben" "uebungen" "notes"))
                     (path "~/Work/Uni/")
                     (combinations (reduce 'append
                                           (mapcar (lambda (d)

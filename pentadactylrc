@@ -1,3 +1,4 @@
+" Search, Quick Nav
 command! -nargs=* d tabopen https://duckduckgo.com/?q=<args>&v=
 command! -nargs=* g tabopen https://encrypted.google.com/search?q=<args>
 command! py tabopen http://python.org
@@ -16,14 +17,39 @@ command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc
 
 command! ril sidebar Read It Later
 
-set guioptions=MBC
+set guioptions=sMBC
 colorscheme cofi
-set editor="emacsclient -c"
+set editor="emacsclient -c --alternate-editor=gvim"
 
 set mapleader=","
-map <leader>n -silent :bnext<CR>
-map <leader>p -silent :bprev<CR>
-map <C-right> -silent :bnext<CR>
-map <C-left> -silent :bprev<CR>
-map <f12> -silent :toolbartoggle Navigations-Symbolleiste<CR>
+set hlfind
+set hintmatching=wordstartswith
 map <A-a> -silent :dialog addbookmark<CR>
+map <C-l> -silent :nohlfind<CR>
+
+" Tabs
+map <leader>n -silent :tabnext<CR>
+map <leader>p -silent :tabprev<CR>
+map <C-right> -silent :tabnext<CR>
+map <C-left> -silent :tabprev<CR>
+map <leader>f -silent :tabrewind<CR>
+map <leader>l -silent :tablast<CR>
+map <leader>d -silent :tabduplicate<CR>
+
+" Movement
+inoremap <C-f> <right>
+inoremap <C-b> <left>
+inoremap <A-f> <C-right>
+inoremap <A-b> <C-left>
+inoremap <C-h> <BS>
+inoremap <C-w> <C-BS>
+
+nnoremap j 5j
+nnoremap k 5k
+nnoremap <C-e> 10<C-e>
+nnoremap <C-y> 10<C-y>
+
+" NoScript
+map <A-o> :set nso!=<A-Tab>
+map <A-s> :set nss!=<A-Tab>
+map <A-S-s> :set nst!=<A-Tab>

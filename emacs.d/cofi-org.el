@@ -117,6 +117,16 @@ Note: This assumes all files are in the org-directory."
 (eval-after-load "org-table"
   '(define-key orgtbl-mode-map (kbd "C-c t") 'orgtbl-insert-radio-table))
 
+;; Babel
+(setq org-src-fontify-natively t
+      org-src-preserve-indentation t
+      org-babel-load-languages '((emacs-lisp . t)
+                                 (python . t)
+                                 (clojure . t)
+                                 (gnuplot . t)
+                                 (latex . t)
+                                 (sh . t)))
+
 ;; Appt
 (setq appt-message-warning-time 15 ;; warn 15 min in advance
       appt-display-mode-line t

@@ -59,9 +59,9 @@ Note: This assumes all files are in the org-directory."
 (when (fboundp 'anything-other-buffer)
   (defun cofi/anything-org-files ()
     (interactive)
-    (anything-other-buffer (make-anything-directory-source "org-files"
-                                                           org-directory 'deep
-                                                           "\.org\\(_archive\\)?")
+    (anything-other-buffer (cofi/anything-dir-deep "org-files"
+                                                   org-directory t
+                                                   "\.org\\(_archive\\)?")
                            "*anything org*"))
   (define-key cofi/org-mode-map (kbd "V") 'cofi/anything-org-files))
 

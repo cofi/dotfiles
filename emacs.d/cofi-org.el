@@ -229,9 +229,32 @@ Note: This assumes all files are in the org-directory."
         ("+" "\\st{%s}" nil)
         ("=" "\\verb=%s=" nil)
         ("~" "\\verb~%s~" t)
-        ("@" "\\alert{%s}" nil)))
+        ("@" "\\alert{%s}" nil)
+        ("$" "\\(%s\\)" nil)))
 
 (setq org-export-latex-listings t)
+(setq org-export-latex-default-class "scrartcl")
+(setq org-export-latex-default-packages-alist
+      '(("AUTO" "inputenc" t)
+        ("T1" "fontenc" t)
+        ("ngerman" "babel" nil)
+        ("" "graphicx" t)
+        ("" "textcomp" t)
+        ("" "marvosym" t)
+        ("" "amsmath" t)
+        ("" "amssymb" t)
+        ("" "hyperref" nil)
+        ("" "soul" t)
+        "\\tolerance=1000"))
+
+(eval-after-load "org-latex"
+  '(add-to-list 'org-export-latex-classes
+               '("scrartcl" "\\documentclass[a4paper,10pt]{scrartcl}"
+                ("\\section{%s}"       . "\\section*{%s}")
+                ("\\subsection{%s}"    . "\\subsection*{%s}")
+                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                ("\\paragraph{%s}"     . "\\paragraph*{%s}")
+                ("\\subparagraph{%s}"  . "\\subparagraph*{%s}"))))
 
 (require 'org-protocol)
 

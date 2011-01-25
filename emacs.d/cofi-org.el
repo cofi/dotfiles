@@ -309,7 +309,7 @@ Note: This assumes all files are in the org-directory."
 Same arguments as in diary cyclic."
     (cofi-with-sane-calendar
      (when (and
-            (or cofi-boundary t)             ; ignore if there is no cofi-boundary in outer scope
+            (or (not (boundp 'cofi-boundary)) cofi-boundary)
             (diary-cyclic n year month day mark))
        entry)))
 

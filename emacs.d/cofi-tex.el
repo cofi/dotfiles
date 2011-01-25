@@ -5,6 +5,8 @@
                      "xdg-open %s.pdf"
                    "xdg-open %s.dvi")))
     (and (TeX-command "LaTeX" 'TeX-master-file)
+       ;; Build twice to get references right
+       (TeX-command "LaTeX" 'TeX-master-file)
        (not only-build)
        (shell-command (format fstring name)))))
 

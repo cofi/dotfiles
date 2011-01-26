@@ -48,7 +48,8 @@
               (local-set-key (kbd "C-c t") 'rope-show-calltip)
               (local-set-key (kbd "C-c ?") 'pylookup-lookup)))
 
-(setq pylookup-db-file "~/var/pylookup.db")
+(setq pylookup-db-file "~/var/pylookup.db"
+      pylookup-html-locations '("~/doc/python-2.7/"))
 
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook

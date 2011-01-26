@@ -6,7 +6,11 @@
 (setq comment-multi-line t)
 (setq-default c-auto-newline t)
 
+(defun cofi-c-line-comments ()
+  (setq comment-start "//"
+        comment-end ""))
+(add-hook 'c-mode-hook 'cofi-c-line-comments)
+
 (require-and-exec 'c-eldoc
   (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode))
-
 (provide 'cofi-c)

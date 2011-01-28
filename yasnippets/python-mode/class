@@ -34,5 +34,5 @@ class ${1:ClassName}(${2:object}):
         (mapconcat (lambda (x)
                      (format "self._%s = %s" x x))
                    args
-                   indent))
+                   indent))}
 

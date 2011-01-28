@@ -4,7 +4,7 @@
 # contributor: Yasser González Fernández <yglez@uh.cu>
 # contributor: Michael Markert <markert.michael@googlemail.com>
 # --
-def ${1:name}($2):
+def ${1:name}(self, $2):
     """$3
     ${2:$(let ((indent (concat "\n" (make-string (current-column) 32)))
                (args (mapcar 'car

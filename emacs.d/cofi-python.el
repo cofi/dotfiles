@@ -49,7 +49,8 @@
               (local-set-key (kbd "C-c ?") 'pylookup-lookup)))
 
 (setq pylookup-db-file "~/var/pylookup.db"
-      pylookup-html-locations '("~/doc/python-2.7/"))
+      pylookup-html-locations '("~/doc/python-2.7/")
+      pylookup-completing-read #'anything-completing-read)
 
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook

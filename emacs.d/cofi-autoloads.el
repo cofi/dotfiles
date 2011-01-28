@@ -8,6 +8,9 @@
 (autoload 'auto-dictionary-mode "auto-dictionary"
   "A minor mode that automatically sets `ispell-dictionary`." t)
 
+(autoload 'bison-mode "bison-mode" nil t)
+(add-to-list 'auto-mode-alist '(".yp\{2\}?$" . bison-mode))
+
 (autoload 'boxquote-defun "boxquote" "Boxquote the current defun" t)
 (autoload 'boxquote-insert-buffer "boxquote" "Insert & boxquote a buffer" t)
 (autoload 'boxquote-insert-file "boxquote" "Insert & boxquote a file" t)
@@ -23,6 +26,9 @@
 (autoload 'dedicated-mode "dedicated" "Dedicate currect buffer." t)
 
 (autoload 'dired-jump "dired" "Jump to current buffer's file in dired" t)
+
+(autoload 'flex-mode "flex-mode" nil t)
+(add-to-list 'auto-mode-alist '(".f?lex$" . flex-mode))
 
 (autoload 'home-end-end "home-end" "Go to end of line/window/buffer." t)
 (autoload 'home-end-home "home-end" "Go to beginning of line/window/buffer." t)

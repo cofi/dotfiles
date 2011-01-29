@@ -175,19 +175,6 @@ Neither dir nor alias may contain spaces.")
                                             ("Trimming" . trimming)
                                             ("Borders" . borders)
                                             ("Spray-chars" . spray-chars))))))))
-(defvar cofi/git-blame-options ""
-  "Additional options for `cofi/git-blame'")
-
-(defun cofi/git-blame (start end)
-  "Calls git blame on region."
-  (interactive "r")
-  (let ((from (line-number-at-pos start))
-        (to (line-number-at-pos end))
-        (command-string "git blame %s -L %d,%d -- %s")
-        (fname (buffer-file-name))
-        (opts (unless (boundp cofi/git-blame-options)
-                "")))
-    (shell-command (format command-string opts from to fname))))
 
 (defun cofi/end-prog-line ()
   "End the physical line with modes statement end char."

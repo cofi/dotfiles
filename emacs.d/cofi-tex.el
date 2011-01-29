@@ -36,4 +36,14 @@
       TeX-parse-self t
       TeX-PDF-mode t)
 
+(defun cofi/german-quotes ()
+  (interactive)
+  (setq TeX-open-quote "\"`")
+  (setq TeX-close-quote "\"'"))
+
+(defun cofi/english-quotes ()
+  (interactive)
+  (setq TeX-open-quote "``")
+  (setq TeX-close-quote "''"))
+
 (provide 'cofi-tex)

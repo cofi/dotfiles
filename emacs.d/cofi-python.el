@@ -10,6 +10,17 @@
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pylint-init)))
 
+(add-to-list 'load-path "~/.elisp/python-mode/")
+(autoload 'python-mode "python-mode" "Python Mode." t)
+(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+
+(require 'ipython)
+(setq py-python-command-args '( "-colors" "Linux"))
+
+(defadvice py-execute-buffer (around python-keep-focus activate)
+  "return focus to python code buffer"
+  (save-excursion ad-do-it))
+
 ;; Folding
 (add-hook 'python-mode-hook 'hs-minor-mode)
 
@@ -40,7 +51,6 @@
               (local-set-key (kbd "M-n") 'flymake-goto-next-error)
               (local-set-key (kbd "M-p") 'flymake-goto-prev-error)
               (local-set-key (kbd "C-c C-SPC") 'flymake-mode)
-              (local-set-key (kbd "C-c SPC") 'python-shell)
               (local-set-key (kbd "M-?") 'rope-code-assist)
               (local-set-key (kbd "C-M-?") 'rope-lucky-assist)
               (local-set-key (kbd "C-c g") 'rope-goto-definition)

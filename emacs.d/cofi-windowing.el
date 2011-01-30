@@ -57,31 +57,59 @@
 
   ;; Windowing
   (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-w") 'other-window)
-    (define-key map (kbd "w") 'other-window)
+    ;; Splitting
     (define-key map (kbd "s") 'split-window-vertically)
     (define-key map (kbd "v") 'split-window-horizontally)
+    (define-key map (kbd "|") 'split-window-horizontally)
+    (define-key map (kbd "/") 'smart-split)
+
+    ;; Deleting
     (define-key map (kbd "o") 'delete-other-windows)
     (define-key map (kbd "1") 'delete-other-windows)
     (define-key map (kbd "d") 'delete-window)
+    
+    ;; Frame sizing
     (define-key map (kbd "m") 'frame/maximize)
     (define-key map (kbd "n") 'frame/normal)
     (define-key map (kbd "f") 'frame/fullscreen-toggle)
+
+    ;; Sizing
     (define-key map (kbd "RET") 'enlarge-window)
-    (define-key map (kbd "+") 'enlarge-window-horizontally)
-    (define-key map (kbd "=") 'balance-windows)
-    (define-key map (kbd "/") 'smart-split)
+    (define-key map (kbd "-")   'shrink-window-horizontally)
+    (define-key map (kbd "+")   'enlarge-window-horizontally)
+    (define-key map (kbd "S--") 'shrink-window)
+    (define-key map (kbd "S-+") 'enlarge-window)
+    (define-key map (kbd "=")   'balance-windows)
 
-    (define-key map (kbd "h") 'windmove-left)
-    (define-key map (kbd "j") 'windmove-down)
-    (define-key map (kbd "k") 'windmove-up)
-    (define-key map (kbd "l") 'windmove-right)
+    ;; Moving
+    (define-key map (kbd "C-w")     'other-window)
+    (define-key map (kbd "w")       'other-window)
+    (define-key map (kbd "h")       'windmove-left)
+    (define-key map (kbd "j")       'windmove-down)
+    (define-key map (kbd "k")       'windmove-up)
+    (define-key map (kbd "l")       'windmove-right)
+    (define-key map (kbd "<left>")  'windmove-left)
+    (define-key map (kbd "<down>")  'windmove-down)
+    (define-key map (kbd "<up>")    'windmove-up)
+    (define-key map (kbd "<right>") 'windmove-right)
 
-    (define-key map (kbd "H") 'swap-with-left)
-    (define-key map (kbd "J") 'swap-with-down)
-    (define-key map (kbd "K") 'swap-with-up)
-    (define-key map (kbd "L") 'swap-with-right)
-    (define-key map (kbd "SPC") 'swap-window)
-    (global-set-key (kbd "C-w") map))
+    ;; Swapping
+    (define-key map (kbd "H")         'swap-with-left)
+    (define-key map (kbd "J")         'swap-with-down)
+    (define-key map (kbd "K")         'swap-with-up)
+    (define-key map (kbd "L")         'swap-with-right)
+    (define-key map (kbd "S-<left>")  'swap-with-left)
+    (define-key map (kbd "S-<down>")  'swap-with-down)
+    (define-key map (kbd "S-<up>")    'swap-with-up)
+    (define-key map (kbd "S-<right>") 'swap-with-right)
+    (define-key map (kbd "SPC")       'swap-window)
+
+    ;; winner-mode
+    (define-key map (kbd "u") 'winner-undo)
+    (define-key map (kbd "r") 'winner-redo)
+
+    (global-set-key (kbd "C-w")   map)
+    (global-set-key (kbd "C-x w") map) ;; alternative for buffers were C-w is used
+    )
 
 (provide 'cofi-windowing)

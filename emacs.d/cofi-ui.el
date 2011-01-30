@@ -242,6 +242,10 @@
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))
 
+(setq winner-dont-bind-my-keys t)
+(require-and-exec 'winner
+                  (winner-mode 1))
+
 (setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function
                                         kill-buffer-query-functions))
 ;; ==================================================

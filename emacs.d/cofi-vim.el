@@ -75,6 +75,7 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   (vim-mapleader-add "g" 'magit-status)
 
+  (vim-mapleader-add "s" 'cofi/switch-file)
   (vim-mapleader-add ";" 'cofi/end-prog-line)
   ;; ==================================================
 

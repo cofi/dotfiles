@@ -205,6 +205,7 @@
 
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t
+              woman-imenu t
               woman-cache-filename "~/.wmncach.el")
 
 (eval-after-load "info"

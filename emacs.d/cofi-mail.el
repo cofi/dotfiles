@@ -80,7 +80,8 @@
      (require-and-exec 'mime-setup
                        (add-hook 'mime-view-mode-hook
                                  (lambda ()
-                                   (local-set-key "f" 'browse-url))))
+                                   (local-set-key "f" 'browse-url)
+                                   (local-set-key "F" 'w3m-view-url-with-external-browser))))
 
      (setq wl-summary-always-sticky-folder-list t
            wl-summary-line-format "|%P|%T| %Y/%M/%D %h:%m %t%[%30(%c %f%) %] %s"

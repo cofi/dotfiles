@@ -1,11 +1,11 @@
-#!/usr/bin/zsh
+#!/bin/zsh
 emulate -L zsh
-
+ename=$0
 usage () {
     cat << EOF
-usage $0 [-f format] [-o output] file,[file,[...]]
+Usage: $ename [-f format] [-o output] file,[file,[...]]
   -h     Show this message.
-  -f     Specify format.
+  -f     Specify format. Default to xz
          Legal formats: gz, bz2, lzma, xz, zip
   -o     Output file (format is appended).
 EOF
@@ -27,11 +27,17 @@ while getopts "hf:o:" option; do
 done
 shift $((OPTIND-1))
 
-# default to lzma format
-format=${format:-lzma}
+# default to xz format
+format=${format:-xz}
 
 # Use first file as output if none is specified
 output=${output:-$1}
+
+# check for missing files
+if [[ ${#@} -eq 0 ]]; then
+    usage
+    exit 1
+fi
 
 complete=
 # tar files if necessary

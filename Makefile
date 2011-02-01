@@ -15,6 +15,8 @@ compile:
 	 emacs --batch --no-site-file --eval '(byte-recompile-directory "elisp/" 0 t)'
 
 deploy:
+	mkdir -p ~/.xmonad
+	mkdir -p ~/.pentadactyl
 	for file in $(NORMAL_FILES); do $(LINK_CMD) $(PWD)/$$file ~/.$$file; done
 	$(LINK_CMD) $(PWD)/vimenv_setup ~/.vimrc
 	$(LINK_CMD) $(PWD)/newsbeuterconfig ~/.newsbeuter/config

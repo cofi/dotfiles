@@ -9,6 +9,7 @@
 
                  ("Programming" (or
                                  (mode . c-mode)
+                                 (mode . c++-mode)
                                  (mode . java-mode)
                                  (mode . lisp-mode)
                                  (mode . clojure-mode)

@@ -180,7 +180,7 @@ Neither dir nor alias may contain spaces.")
   "End the physical line with modes statement end char."
   (interactive)
   (let* ((modes '((c-mode    . ";")
-                  (cpp-mode  . ";")
+                  (c++-mode  . ";")
                   (java-mode . ";")
                   (js-mode   . ";")))
          (char (or (cdr (assq major-mode modes))
@@ -193,7 +193,7 @@ Neither dir nor alias may contain spaces.")
 (defun cofi/open-header (fname)
   "Open associated .h for `fname' and set `fname' as cofi-switched-from."
   (find-file (replace-regexp-in-string
-              "\\(.*\\)\..+\\'" "\\1.h"
+              "\\(.*\\)\\..+\\'" "\\1.h"
               fname t))
   (set (make-local-variable 'cofi-switched-from) fname))
 
@@ -202,7 +202,7 @@ Neither dir nor alias may contain spaces.")
 Major mode determines association."
   (interactive)
   (let* ((modes '((c-mode    . (lambda () (cofi/open-header buffer-file-name)))
-                  (cpp-mode  . (lambda () (cofi/open-header buffer-file-name)))))
+                  (c++-mode  . (lambda () (cofi/open-header buffer-file-name)))))
          (fun (cdr (assq major-mode modes))))
     (if (boundp 'cofi-switched-from)
         (find-file cofi-switched-from)

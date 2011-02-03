@@ -1,61 +1,15 @@
 # -*- mode: sh -*-
 
-#term-specific bindings
-case "$TERM" in
-    linux)
-        bindkey '\e[1~' beginning-of-line
-        bindkey '\e[4~' end-of-line     
-        bindkey '\e[3~' delete-char    
-        bindkey '\e[2~' overwrite-mode
-        bindkey '\e[C' forward-word
-        bindkey '\e[D' backward-word
-        ;;
-    *screen*)
-        # In Linux console
-        bindkey '\e[1~' beginning-of-line
-        bindkey '\e[4~' end-of-line    
-        bindkey '\e[3~' delete-char   
-        bindkey '\e[2~' overwrite-mode
-        # Just in rxvt
-        bindkey '\eOc' forward-word 
-        bindkey '\eOd' backward-word 
-        #For use in xterm
-        #bindkey '\e[1;5C' forward-word
-        #bindkey '\e[1;5D' backward-word
-        ;;
-    *rxvt*)
-        bindkey '\e[7~' beginning-of-line
-        bindkey '\e[8~' end-of-line  
-        bindkey '\eOc' forward-word  
-        bindkey '\eOd' backward-word 
-        bindkey '\e[3~' delete-char
-        bindkey '\e[2~' overwrite-mode 
-        ;;
-    xterm*)
-        bindkey '\e[1~' beginning-of-line
-        bindkey '\e[4~' end-of-line 
-        bindkey '\e[3~' delete-char
-        bindkey '\e[2~' overwrite-mode
-        bindkey '\e[1;5C' forward-word
-        bindkey '\e[1;5D' backward-word
-        ;;
-esac
-
 #PgUp/Dn for history completion
 bindkey "\e[5~" history-search-backward
 bindkey "\e[6~" history-search-forward
 
-#<C>+e for command-line editor
+#<M-e> for command-line editor
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey "^E" edit-command-line
+bindkey "^[e" edit-command-line
 
 bindkey "\e[A" up-line-or-search	# up arrow for back-history-search
 bindkey "\e[B" down-line-or-search	# down arrow for fwd-history-search
 
 bindkey " " magic-space			# do history expansion on space
-
-#<C> + <Space> -> pipe STDERR/STDOUT to /dev/null
-run-silent () { RBUFFER="$RBUFFER > /dev/null 2>&1" }
-zle -N run-silent
-bindkey '^@' run-silent

@@ -6,6 +6,7 @@
                         lisp-mode-hook
                         clojure-mode-hook
                         c-mode-hook
+                        c++-mode-hook
                         ))
 (mapc 'load '(
               "cofi-markers"

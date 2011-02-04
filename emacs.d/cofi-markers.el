@@ -2,7 +2,7 @@
 
 (require-and-exec 'fic-mode
    (add-to-hooks 'fic-mode (append prog-mode-hooks
-                                   '(rst-mode-hook tex-mode-hook org-mode-hook))))
+                                   '(rst-mode-hook TeX-mode-hook org-mode-hook))))
 
 (defconst marker-regexp "\\<\\(HACK\\|FIXME\\|TODO\\|XXX+\\|BUG\\):"
   "Regexp that matches the markers.")

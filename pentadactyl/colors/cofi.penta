@@ -1,9 +1,7 @@
-" Vimperator ColorScheme
-" cofi
-" based on evening-tmp, but stripped tabbar settings.
+" Pentadactyl ColorScheme
 "
 " put into
-" ~/.vimperator/colors/ directory
+" ~/.pentadactyl/colors/ directory
 " and
 " :colorscheme cofi
 
@@ -28,12 +26,7 @@ hi String               color: Orchid;
 hi Number               color: Orchid;
 hi Object               color: SkyBlue;
 hi Function             color: Khaki;
-hi URL                  color: GreenYellow;
+hi URL                  color: blue;
+hi NonText              color: Black; background: #333;
 
 style about:blank html { background-color:#333; }
-
-style -name statusbar chrome://* <<EOM
-#status-bar statusbarpanel { padding: 0 1px !important; }
-statusbarpanel > * { margin: 0 !important; padding:0 !important; }
-EOM
-

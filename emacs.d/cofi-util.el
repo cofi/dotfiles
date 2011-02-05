@@ -154,9 +154,9 @@
     (with-current-buffer buf
       (goto-char (point-min))
       (while (re-search-forward "^\\([[:alnum:]].+?\\):\\(:?$\\| \\)" nil t)
-        (push (car (split-string (match-string-no-properties 1) " " t)) targets)))
+        (add-to-list 'targets (car (split-string (match-string-no-properties 1) " " t)) t)))
     (unless was-open
       (kill-buffer buf))
-    (reverse targets)))
+    targets))
 
 (provide 'cofi-util)

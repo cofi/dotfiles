@@ -57,8 +57,17 @@
                          ac-source-dictionary
                          )))
 
+    (defun cofi/ac-java-setup ()
+      (setq ac-sources '(
+                         ac-source-words-in-buffer
+                         ac-source-eclim
+                         ac-source-yasnippet
+                         ac-source-dictionary
+                         )))
+
     (add-hook 'emacs-lisp-mode-hook 'cofi/ac-elisp-setup)
     (add-hook 'python-mode-hook 'cofi/ac-python-setup)
+    (add-hook 'java-mode-hook 'cofi/ac-java-setup)
     (global-auto-complete-mode t)
     )
 

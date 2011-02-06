@@ -7,6 +7,7 @@
                         clojure-mode-hook
                         c-mode-hook
                         c++-mode-hook
+                        java-mode-hook
                         ))
 (mapc 'load '(
               "cofi-markers"
@@ -16,6 +17,7 @@
               "cofi-python"
               "cofi-tex"
               "cofi-c"
+              "cofi-java"
               ))
 
 (provide 'cofi-programming)

@@ -52,3 +52,6 @@
 [submodule "elisp/vendor/pylookup"]
 	path = elisp/vendor/pylookup
 	url = git://github.com/tsgates/pylookup.git
+[submodule "elisp/vendor/emacs-eclim"]
+	path = elisp/vendor/emacs-eclim
+	url = https://github.com/senny/emacs-eclim.git

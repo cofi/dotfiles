@@ -7,6 +7,7 @@ import XMonad.Util.Run
  
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
+import XMonad.Actions.DynamicWorkspaces
 import XMonad.Actions.SinkAll
 import XMonad.Actions.WindowGo
 import XMonad.Actions.SpawnOn
@@ -103,6 +104,9 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-<U>", withFocused float)
                  , ("M-<D>", windows $ W.shift "hide")
                  , ("M-`", windows $ W.greedyView "hide")
+                 , ("M-d", removeWorkspace)
+                 , ("M-'", selectWorkspace acPromptConfig)
+                 , ("M-S-'", withWorkspace acPromptConfig (windows . W.shift))
                    -- Apps
                  , ("M-e", raiseMaybe (spawn "emacsclient -c") emacsQuery)
                  , ("M-S-e", spawn "emacsclient -c")

@@ -28,6 +28,7 @@
       pgg-default-user-id "Michael Markert <markert.michael@googlemail.com>"
       pgg-gpg-user-id "Michael Markert <markert.michael@googlemail.com>"
       pgg-encrypt-for-me t
+      pgg-decrypt-automatically t
       pgg-gpg-use-agent t
       )
 

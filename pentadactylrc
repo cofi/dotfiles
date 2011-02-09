@@ -1,14 +1,15 @@
 " Search, Quick Nav
 command! -nargs=* d tabopen https://duckduckgo.com/?q=<args>&v=
+command! -nargs=* s tabopen https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=<args>
 command! -nargs=* g tabopen https://encrypted.google.com/search?q=<args>
+
+command! -nargs=* pypi tabopen http://pypi.python.org/pypi?%3Aaction=search&term=<args>&submit=search
 command! py tabopen http://python.org
 command! -nargs=? pydoc tabopen http://docs.python.org/<args>
 command! -nargs=1 pylib tabopen http://docs.python.org/library/<args>.html
-command! -nargs=* pypi tabopen http://pypi.python.org/pypi?%3Aaction=search&term=<args>&submit=search
-command! -nargs=* s tabopen https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw=<args>
-command! webreg tabopen https://www.dekanat.informatik.tu-darmstadt.de/webreg/index.php?&page=login
-command! -nargs=* wpd tabopen http://de.wikipedia.org/wiki/Special:Search?go=Go&search=<args>
+
 command! -nargs=* wp tabopen http://en.wikipedia.org/wiki/Special:Search?go=Go&search=<args>
+command! -nargs=* wpd tabopen http://de.wikipedia.org/wiki/Special:Search?go=Go&search=<args>
 command! -nargs=* dict tabopen http://www.dict.cc/?s=<args>
 command! -nargs=* beo tabopen http://dict.tu-chemnitz.de/dings.cgi?lang=de&service=deen&query=<args>
 command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=<args>&relink=on
@@ -22,7 +23,10 @@ set editor="emacsclient -c --alternate-editor=gvim"
 set mapleader=","
 set hlfind
 set hintmatching=wordstartswith
+set newtab+=help
+
 map <A-a> -silent :dialog addbookmark<CR>
+map <A-b> -silent :tabopen chrome://browser/content/places/places.xul<CR>
 map <C-l> -silent :nohlfind<CR>
 
 " Tabs

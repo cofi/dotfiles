@@ -319,6 +319,16 @@
 (when (locate-library "home-end")
   (global-set-key (kbd "<home>") 'home-end-home)
   (global-set-key (kbd "<end>") 'home-end-end))
+
+(let ((map (make-sparse-keymap)))
+  (define-key map (kbd "f") 'auto-fill-mode)
+  (define-key map (kbd "o") 'orgstruct++-mode)
+  (define-key map (kbd "p") 'pretty-mode)
+  (define-key map (kbd "r") 'auto-revert-mode)
+  (define-key map (kbd "s") 'speck-mode)
+  (define-key map (kbd "t") 'orgtbl-mode)
+  (define-key map (kbd "w") 'whitespace-mode)
+  (global-set-key (kbd "C-x m") map))
 ;; ==================================================
 
 ;; Colums ========================================

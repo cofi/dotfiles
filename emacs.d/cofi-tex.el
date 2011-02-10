@@ -1,14 +1,15 @@
-(defun cofi/latex-build-and-view (&optional only-build)
-  (interactive "P")
+(defun cofi/latex-build ()
+  (interactive)
   (let ((name (TeX-active-master))
-        (fstring (if TeX-PDF-mode
-                     "xdg-open %s.pdf"
-                   "xdg-open %s.dvi")))
-    (and (TeX-command "LaTeX" 'TeX-master-file)
-       ;; Build twice to get references right
-       (TeX-command "LaTeX" 'TeX-master-file)
-       (not only-build)
-       (shell-command (format fstring name)))))
+        (fname (TeX-active-master t))
+        (opener "xdg-open %s.pdf"))
+    (compile (format "pdflatex %s && pdflatex %s" fname fname))))
+
+(defun cofi/latex-view ()
+  (interactive)
+  (let ((name (TeX-active-master))
+        (opener "xdg-open %s.pdf"))
+    (shell-command (format opener name))))
 
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq fill-column 80)
@@ -17,7 +18,8 @@
 (when (locate-library "cdlatex")
   (add-hook 'LaTeX-mode-hook (lambda ()
                                (setq autopair-dont-activate t)
-                               (local-set-key (kbd "<f12>") 'cofi/latex-build-and-view))))
+                               (local-set-key (kbd "<f12>") 'cofi/latex-build)
+                               (local-set-key (kbd "C-<f12>") 'cofi/latex-view))))
 
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")
                               'cdlatex-mode

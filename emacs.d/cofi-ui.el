@@ -320,6 +320,7 @@
   (global-set-key (kbd "<home>") 'home-end-home)
   (global-set-key (kbd "<end>") 'home-end-end))
 
+;;; mode keymap
 (let ((map (make-sparse-keymap)))
   (define-key map (kbd "f") 'auto-fill-mode)
   (define-key map (kbd "o") 'orgstruct++-mode)
@@ -329,6 +330,14 @@
   (define-key map (kbd "t") 'orgtbl-mode)
   (define-key map (kbd "w") 'whitespace-mode)
   (global-set-key (kbd "C-x m") map))
+;;; insert keymap
+(let ((map (make-sparse-keymap)))
+  (define-key map (kbd "b") 'insert-buffer)
+  (define-key map (kbd "c") 'clipper-insert)
+  (define-key map (kbd "f") 'insert-file)
+  (define-key map (kbd "s") 'yas/insert-snippet)
+  (global-set-key (kbd "C-x i") map))
+
 ;; ==================================================
 
 ;; Colums ========================================

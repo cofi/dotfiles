@@ -330,6 +330,7 @@
   (define-key map (kbd "t") 'orgtbl-mode)
   (define-key map (kbd "w") 'whitespace-mode)
   (global-set-key (kbd "C-x m") map))
+
 ;;; insert keymap
 (let ((map (make-sparse-keymap)))
   (define-key map (kbd "b") 'insert-buffer)
@@ -370,5 +371,11 @@
                                                       )))
                         '(python-mode c-mode java-mode cpp-mode)))
 ;; ========================================
+;; bookmarks ==============================
+(setq bookmark-default-file "~/var/emacs-bookmarks"
+      bmkp-bmenu-commands-file "~/var/emacs-bmkp-bmenu-commands.el"
+      bmkp-bmenu-state-file "~/var/emacs-bmkp-bmenu-state.el")
+
+(require-and-exec 'bookmark+)
 
 (provide 'cofi-ui)

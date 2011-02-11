@@ -1,6 +1,8 @@
 (autoload 'ack "full-ack" "Run ack." t)
 (autoload 'ack-same "full-ack" "Run ack in files matching the current major mode." t)
 
+(autoload 'all "all" "Edit all matching lines" t)
+
 (autoload 'adict-change-dictionary "auto-dictionary"
   "Set buffer language to LANG and stop detecting it automatically." t)
 (autoload 'adict-guess-dictionary "auto-dictionary"
@@ -22,6 +24,11 @@
 
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
+
+(autoload 'clipper-create "clipper" "Create a new clip." t)
+(autoload 'clipper-delete "clipper" "Delete an existing clip." t)
+(autoload 'clipper-insert "clipper" "Insert a clip into the current buffer." t)
+(autoload 'clipper-edit-clip "clipper" "Edit an existing clip." t)
 
 (autoload 'dedicated-mode "dedicated" "Dedicate currect buffer." t)
 

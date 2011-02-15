@@ -322,6 +322,7 @@
 
 ;;; mode keymap
 (let ((map (make-sparse-keymap)))
+  (define-key map (kbd "d") 'dedicated-mode)
   (define-key map (kbd "f") 'auto-fill-mode)
   (define-key map (kbd "o") 'orgstruct++-mode)
   (define-key map (kbd "p") 'pretty-mode)

@@ -4,6 +4,7 @@ import qualified XMonad.StackSet as W
 
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run
+import XMonad.Util.NamedScratchpad
  
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
@@ -121,6 +122,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-<F12>", sendMessage $ JumpToLayout "Full")
                  ]
                  ++ searchBindings
+                 ++ scratchpadBindings
 
   where shutdown = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 2 0"
         logout = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 3 0"
@@ -225,6 +227,7 @@ myManageHook = (composeAll . concat $
                 ,[ className =? b --> doShift "2:browse" | b <- browse ]
                 ,[ className =? c --> doShift "3:code"   | c <- code ]
                 ,[ className =? i --> doIgnore           | i <- ignores ]
+                ,[ namedScratchpadManageHook scratchpads ]
                 ])
                <+> manageDocks
   where ignores = []
@@ -233,6 +236,20 @@ myManageHook = (composeAll . concat $
         code  = []
         comms = ["Kopete"]
 ----------------------------------------
+
+scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
+              , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
+              , NS "monitor"  "urxvtcd -e htop" (title =? "htop") scratchFloat
+              , NS "python"  "urxvtcd -e ipython" (title =? "ipython") scratchFloat
+              ]
+  where scratchFloat = customFloating size
+        size = W.RationalRect (1/4) (1/4) (1/2) (1/2)
+
+scratchpadBindings = [ ("M-; t", namedScratchpadAction scratchpads "term")
+                     , ("M-; h", namedScratchpadAction scratchpads "haskell")
+                     , ("M-; p", namedScratchpadAction scratchpads "python")
+                     , ("M-; m", namedScratchpadAction scratchpads "monitor")
+                     ]
 
 -- Search----------------------------------------
 searchBindings = [("M-s " ++ key, S.selectSearch engine) | (key, engine) <- searchList]

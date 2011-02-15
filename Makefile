@@ -17,6 +17,7 @@ compile:
 deploy:
 	mkdir -p ~/.xmonad
 	mkdir -p ~/.pentadactyl
+	mkdir -p ~/.newsbeuter
 	for file in $(NORMAL_FILES); do $(LINK_CMD) $(PWD)/$$file ~/.$$file; done
 	$(LINK_CMD) $(PWD)/vimenv_setup ~/.vimrc
 	$(LINK_CMD) $(PWD)/newsbeuterconfig ~/.newsbeuter/config

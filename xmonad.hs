@@ -13,6 +13,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Actions.SpawnOn
 import qualified XMonad.Actions.Search as S
 import XMonad.Actions.Search (SearchEngine(..))
+import XMonad.Actions.UpdatePointer
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.UrgencyHook
@@ -54,7 +55,7 @@ main = do
                          , workspaces = ["1:comm", "2:browse", "3:code"] ++ map show [4..9] ++ ["mail", "feeds", "hide"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
-                         , logHook = dynamicLogWithPP $ myPP xmproc 
+                         , logHook = updatePointer (Relative 0.5 0.5) >> (dynamicLogWithPP $ myPP xmproc)
                          , manageHook = myManageHook
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir

@@ -91,3 +91,11 @@ rml() {
         rm -r "$d"/(auto|_region_.tex|*.(aux|log|out))
     }
 }
+
+encrypt() {
+    gpg -es -r $GPGKEY $1
+}
+
+decrypt() {
+    gpg -o ${1%.*} -d $1
+}

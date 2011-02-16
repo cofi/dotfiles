@@ -231,7 +231,7 @@ myManageHook = (composeAll . concat $
                 ])
                <+> manageDocks
   where ignores = []
-        floats = ["MPlayer", "Smplayer", "Vlc", "Plasma-desktop", "Lancelot", "Kmix"]
+        floats = ["MPlayer", "Smplayer", "Vlc", "Kaffeine", "Plasma-desktop", "Lancelot", "Kmix"]
         browse = []
         code  = []
         comms = ["Kopete"]
@@ -239,8 +239,8 @@ myManageHook = (composeAll . concat $
 
 scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
-              , NS "monitor"  "urxvtcd -e htop" (title =? "htop") scratchFloat
-              , NS "python"  "urxvtcd -e ipython" (title =? "ipython") scratchFloat
+              , NS "monitor" "urxvtcd -e htop" (title =? "htop") scratchFloat
+              , NS "python" "urxvtcd -e ipython" (title =? "ipython") scratchFloat
               ]
   where scratchFloat = customFloating size
         size = W.RationalRect (1/4) (1/4) (1/2) (1/2)

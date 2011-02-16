@@ -9,22 +9,6 @@
 dactyl.assert("noscriptOverlay" in window,
               "This plugin requires the NoScript add-on.");
 
-function subdomains(host) {
-    if (/(^|\.)\d+$|:.*:/.test(host))
-        // IP address or similar
-        return [host];
-
-    let tld = host.replace(/.*\./, "");
-    try {
-        tld = services.get("tld").getBaseDomainFromHost(host);
-    }
-    catch (e) {}
-
-    let ary = host.split(".");
-    ary = [ary.slice(i).join(".") for (i in util.range(ary.length - 1, 0, -1))];
-    return ary.filter(function (h) h.length >= tld.length);
-}
-
 /*
  *  this.globalJS ? !this.alwaysBlockUntrustedContent || !this.untrustedSites.matches(s)
  *                : this.jsPolicySites.matches(s) && !this.untrustedSites.matches(s) && !this.isForbiddenByHttpsStatus(s));
@@ -32,7 +16,7 @@ function subdomains(host) {
 
 function getSites() {
     // This logic comes directly from NoScript. To my mind, it's insane.
-    const ns     = services.get("noscript");
+    const ns     = services.noscript;
     const global = options["script"];
     const groups = { allowed: ns.jsPolicySites, temp: ns.tempSites, untrusted: ns.untrustedSites };
     const show   = set(options["noscript-list"]);
@@ -68,7 +52,7 @@ function getSites() {
             if ((!hasPort || ns.ignorePorts) && (show.full || show.base)) {
                 let domain = !ns.isForbiddenByHttpsStatus(site) && ns.getDomain(site);
                 if (domain && ns.isJSEnabled(domain) == enabled) {
-                    ary = subdomains(domain);
+                    ary = util.subdomains(domain);
                     if (!show.base && ary.length > 1)
                         ary = ary.slice(1);
                     if (!show.full)
@@ -113,6 +97,40 @@ function getObjects() {
     return specific.concat(general).filter(function (site) !set.add(seen, site));
 }
 
+var onUnload = util.overlayObject(gBrowser, {
+    // Extend NoScript's bookmarklet handling hack to the command-line
+    // Modified from NoScript's own wrapper.
+    loadURIWithFlags: function loadURIWithFlags(url) {
+        let args = arguments;
+        function load() loadURIWithFlags.superapply(gBrowser, args);
+
+        let caller = Components.stack.caller.filename.replace(/.* -> /, "");
+        if (!commandline.command || !RegExp("^(chrome://dactyl/|resource://dactyl[/-]|dactyl:)").test(caller))
+            return load();
+
+        try {
+            for (let [cmd, args] in commands.parseCommands(commandline.command))
+                var origURL = args.literalArg;
+
+            let isJS = function isJS(url) /^(?:data|javascript):/i.test(url);
+            let allowJS = prefs.get("noscript.allowURLBarJS", true);
+
+            if (isJS(origURL) && allowJS) {
+                if (services.noscript.executeJSURL(origURL, load))
+                    return;
+            }
+            else if (url != origURL && isJS(url)) {
+                if(services.noscript.handleBookmark(url, load))
+                    return;
+            }
+        }
+        catch (e) {
+            util.reportError(e);
+        }
+        return load();
+    }
+});
+
 highlight.loadCSS(<css>
     NoScriptAllowed         color: green;
     NoScriptBlocked         color: #444; font-style: italic;
@@ -125,25 +143,24 @@ let groupProto = {};
     memoize(groupProto, group, function () services.get("noscript")[group + "Sites"].matches(this.site)));
 let groupDesc = {
     NoScriptTemp:       "Temporarily allowed",
-    NoScriptAllowed:    "Allowed permanantly",
+    NoScriptAllowed:    "Allowed permanently",
     NoScriptUntrusted:  "Untrusted",
     NoScriptBlocked:    "Blocked"
 };
 
-function splitContext(context, generate, list) {
+function splitContext(context, list) {
     for (let [name, title, filter] in values(list)) {
-        let ctxt = context.fork(name);
+        let ctxt = context.split(name);
         ctxt.title = [title];
-        ctxt.generate = generate;
         ctxt.filters.push(filter);
     }
 }
 
 completion.noscriptObjects = function (context) {
-    const ns = services.get("noscript");
     let whitelist = this.set;
     context = context.fork();
     context.compare = CompletionContext.Sort.unsorted;
+    context.generate = getObjects;
     context.keys = {
         text: util.identity,
         description: function (key) set.has(whitelist, key) ? "Allowed" : "Forbidden"
@@ -153,11 +170,10 @@ completion.noscriptObjects = function (context) {
         ["allowed",   "Allowed objects",   function (item) set.has(whitelist, item.item)]]);
 };
 completion.noscriptSites = function (context) {
-    const ns = services.get("noscript");
-
     context.pushProcessor(0, function (item, text, next)
         next.call(this, item, <span highlight={item.group}>{text}</span>));
     context.compare = CompletionContext.Sort.unsorted;
+    context.generate = getSites;
     context.keys = {
         text: util.identity,
         description: function (site) groupDesc[this.group] +
@@ -169,7 +185,7 @@ completion.noscriptSites = function (context) {
                                                        "NoScriptBlocked",
         groups: function (site) ({ site: site, __proto__: groupProto })
     };
-    splitContext(context, getSites, [
+    splitContext(context, [
         ["normal",    "Active sites",    function (item) item.groups.jsPolicy || !item.groups.untrusted],
         ["untrusted", "Untrusted sites", function (item) !item.groups.jsPolicy && item.groups.untrusted]]);
     context.maxItems = 100;
@@ -244,8 +260,8 @@ options.add(["script"],
     "Whether NoScript is enabled",
     "boolean", false,
     {
-        getter: function () services.get("noscript").jsEnabled,
-        setter: function (val) services.get("noscript").jsEnabled = val,
+        getter: function () services.noscript.jsEnabled,
+        setter: function (val) services.noscript.jsEnabled = val,
         initialValue: true,
         persist: false
     });
@@ -256,54 +272,53 @@ options.add(["script"],
         description: "The list of sites allowed to execute scripts",
         action: function (add, sites) sites.length && noscriptOverlay.safeAllow(sites, add, false, -1),
         completer: function (context) completion.noscriptSites(context),
-        has: function (val) set.has(services.get("noscript").jsPolicySites.sitesMap, val) &&
-            !set.has(services.get("noscript").tempSites.sitesMap, val),
+        has: function (val) set.has(services.noscript.jsPolicySites.sitesMap, val) &&
+            !set.has(services.noscript.tempSites.sitesMap, val),
         get set() set.subtract(
-            services.get("noscript").jsPolicySites.sitesMap,
-            services.get("noscript").tempSites.sitesMap)
+            services.noscript.jsPolicySites.sitesMap,
+            services.noscript.tempSites.sitesMap)
     }, {
         names: ["noscript-tempsites", "nst"],
         description: "The list of sites temporarily allowed to execute scripts",
         action: function (add, sites) sites.length && noscriptOverlay.safeAllow(sites, add, true, -1),
         completer: function (context) completion.noscriptSites(context),
-        get set() services.get("noscript").tempSites.sitesMap
+        get set() services.noscript.tempSites.sitesMap
     }, {
         names: ["noscript-untrusted", "nsu"],
         description: "The list of untrusted sites",
-        action: function (add, sites) sites.length && services.get("noscript").setUntrusted(sites, true),
+        action: function (add, sites) sites.length && services.noscript.setUntrusted(sites, add),
         completer: function (context) completion.noscriptSites(context),
-        get set() services.get("noscript").untrustedSites.sitesMap
+        get set() services.noscript.untrustedSites.sitesMap
     }, {
         names: ["noscript-objects", "nso"],
         description: "The list of allowed objects",
         get set() set(array.flatten(
             [Array.concat(v).map(function (v) v + "@" + this, k)
-             for ([k, v] in Iterator(services.get("noscript").objectWhitelist))])),
+             for ([k, v] in Iterator(services.noscript.objectWhitelist))])),
         action: function (add, patterns) {
-            const ns = services.get("noscript");
             for (let pattern in values(patterns)) {
                 let [mime, site] = util.split(pattern, /@/, 2);
                 if (add)
-                    ns.allowObject(site, mime);
+                    services.noscript.allowObject(site, mime);
                 else {
-                    let list = ns.objectWhitelist[site];
+                    let list = services.noscript.objectWhitelist[site];
                     if (list) {
                         if (list == "*") {
-                            delete ns.objectWhitelist[site];
-                            ns.objectWhitelistLen--;
+                            delete services.noscript.objectWhitelist[site];
+                            services.noscript.objectWhitelistLen--;
                         }
                         else {
                             let types = list.filter(function (type) type != mime);
-                            ns.objectWhitelistLen -= list.length - types.length;
-                            ns.objectWhitelist[site] = types;
+                            services.noscript.objectWhitelistLen -= list.length - types.length;
+                            services.noscript.objectWhitelist[site] = types;
                             if (!types.length)
-                                delete ns.objectWhitelist[site];
+                                delete services.noscript.objectWhitelist[site];
                         }
                     }
                 }
             }
             if (add)
-                ns.reloadAllowedObjects(config.browser.selectedBrowser);
+                services.noscript.reloadAllowedObjects(config.browser.selectedBrowser);
         },
         completer: function (context) completion.noscriptObjects(context)
     }
@@ -335,13 +350,13 @@ options.add(["script"],
 XML.ignoreWhitespace = false;
 XML.prettyPrinting   = false;
 var INFO =
-<plugin name="noscript" version="0.2.1"
+<plugin name="noscript" version="0.4"
         href="http://dactyl.sf.net/pentadactyl/plugins#noscript-plugin"
         summary="NoScript integration"
         xmlns={NS}>
     <author email="maglione.k@gmail.com">Kris Maglione</author>
     <license href="http://opensource.org/licenses/mit-license.php">MIT</license>
-    <project name="Pentadactyl" minVersion="1.0"/>
+    <project name="Pentadactyl" min-version="1.0"/>
     <p>
         This plugin provides tight integration with the NoScript add-on.
         In addition to commands and options to control the behavior of
@@ -371,7 +386,7 @@ var INFO =
         </description>
     </item>
     <item>
-        <tags>'noscript-forbid' 'nsf'</tags>
+        <tags>'nsf' 'noscript-forbid'</tags>
         <spec>'noscript-forbid'</spec>
         <type>stringlist</type> <default></default>
         <description>
@@ -383,7 +398,7 @@ var INFO =
         </description>
     </item>
     <item>
-        <tags>'noscript-list' 'nsl'</tags>
+        <tags>'nsl' 'noscript-list'</tags>
         <spec>'noscript-list'</spec>
         <type>stringlist</type> <default></default>
         <description>
@@ -395,7 +410,7 @@ var INFO =
         </description>
     </item>
     <item>
-        <tags>'noscript-objects' 'nso'</tags>
+        <tags>'nso' 'noscript-objects'</tags>
         <spec>'noscript-objects'</spec>
         <type>stringlist</type> <default></default>
         <description>
@@ -407,7 +422,7 @@ var INFO =
         </description>
     </item>
     <item>
-        <tags>'noscript-sites' 'nss'</tags>
+        <tags>'nss' 'noscript-sites'</tags>
         <spec>'noscript-sites'</spec>
         <type>stringlist</type> <default></default>
         <description>
@@ -419,7 +434,7 @@ var INFO =
         </description>
     </item>
     <item>
-        <tags>'noscript-tempsites' 'nst'</tags>
+        <tags>'nst' 'noscript-tempsites'</tags>
         <spec>'noscript-tempsites'</spec>
         <type>stringlist</type> <default></default>
         <description>
@@ -432,7 +447,7 @@ var INFO =
         </description>
     </item>
     <item>
-        <tags>'noscript-untrusted' 'nsu'</tags>
+        <tags>'nsu' 'noscript-untrusted'</tags>
         <spec>'noscript-untrusted'</spec>
         <type>stringlist</type> <default></default>
         <description>

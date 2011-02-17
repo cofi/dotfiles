@@ -29,10 +29,10 @@ URxvt.foreground:       white
 
 URxvt.saveLines:        10000
 URxvt.xftAntialias:     true
-URxvt.font:             xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:unifont:pixelsize=13:antialias=true,hinting=true
-URxvt.boldFont:         xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:unifont:pixelsize=13:antialias=true,hinting=true
-URxvt.italicFont:       xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:unifont:pixelsize=13:antialias=true,hinting=true
-URxvt.bolditalicFont:   xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:unifont:pixelsize=13:antialias=true,hinting=true
+URxvt.font:             xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=13:antialias=true,hinting=true
+URxvt.boldFont:         xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=13:antialias=true,hinting=true
+URxvt.italicFont:       xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=13:antialias=true,hinting=true
+URxvt.bolditalicFont:   xft:inconsolata:pixelsize=13:antialias=true:hinting=true, xft:dejavu sans mono:pixelsize=13:antialias=true,hinting=true
 
 URxvt.internalBorder:   0
 URxvt.underlineColor:	#999999
@@ -76,4 +76,3 @@ URxvt.urgentOnBell: True
 Emacs.font:     inconsolata-10
 Emacs.geometry: 90x60
 Xft.hinting:    1
-

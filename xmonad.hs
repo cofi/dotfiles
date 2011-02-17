@@ -48,7 +48,7 @@ main = do
   homeDir <- getHomeDirectory
   systemID <- getSystemID
   xmproc <- spawnPipe $ xmobar systemID
-  xmonad $ withUrgencyHook NoUrgencyHook $ defaultConfig { terminal = myTerm
+  xmonad $ withUrgencyHook NoUrgencyHook $ ewmh $ defaultConfig { terminal = myTerm
                          , focusFollowsMouse = True
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
@@ -61,7 +61,7 @@ main = do
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir
     where
-      myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
+      myStartupHook = setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false " 
                ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true" 
       xmobar systemID = case (nodeName systemID) of

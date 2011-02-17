@@ -223,6 +223,7 @@ myManageHook = (composeAll . concat $
                  , newsbeuterQuery --> doShift "feeds"
                  ]
                 ,[ className =? f --> doFloat            | f <- floats ]
+                ,[ className =? f --> doCenterFloat      | f <- cfloats ]
                 ,[ className =? c --> doShift "1:comm"   | c <- comms ]
                 ,[ className =? b --> doShift "2:browse" | b <- browse ]
                 ,[ className =? c --> doShift "3:code"   | c <- code ]
@@ -231,7 +232,8 @@ myManageHook = (composeAll . concat $
                 ])
                <+> manageDocks
   where ignores = []
-        floats = ["MPlayer", "Smplayer", "Vlc", "Kaffeine", "Plasma-desktop", "Lancelot", "Kmix"]
+        floats = ["Plasma-desktop", "Lancelot", "Kmix"]
+        cfloats = ["MPlayer", "Smplayer", "Vlc", "Kaffeine"]
         browse = []
         code  = []
         comms = ["Kopete"]

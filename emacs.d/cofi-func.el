@@ -209,4 +209,14 @@ Major mode determines association."
       (if fun
           (funcall fun)))))
 
+(defun count-words (&optional start end)
+  "Count words in region."
+  (interactive "r")
+  (message (format "Words: %s" (count-matches "\\w+" start end))))
+
+(defun count-words-buffer ()
+  "Count words in buffer."
+  (interactive)
+  (count-words (point-min) (point-max)))
+
 (provide 'cofi-func)

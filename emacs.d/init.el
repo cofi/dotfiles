@@ -51,7 +51,6 @@
             "cofi-buffer"
             "cofi-bbdb"
             "cofi-calendar"
-            "cofi-color"
             "cofi-desktop"
             "cofi-mail"
             "cofi-project"
@@ -77,7 +76,7 @@
                         ;; Exit Emacs after quitting WL
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
 
-(color-theme-cofi)
+(load-theme 'cofi)
 
 (message "Time needed to load: %d seconds."
          (time-to-seconds (time-since startup-time)))

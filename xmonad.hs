@@ -31,6 +31,7 @@ import XMonad.Layout.TwoPane (TwoPane(..))
 import XMonad.Layout.ThreeColumns (ThreeCol(..))
 import XMonad.Layout.Named (named)
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.CenteredMaster
 
 import XMonad.Prompt
 import XMonad.Prompt.Shell (shellPrompt)
@@ -194,11 +195,12 @@ promptConfig = defaultXPConfig { font = promptFont
 -- Layouts ------------------------------------
 twoPane = named "Two" $ TwoPane 0.04 0.5
 threePane = named "Three" $ ThreeCol 1 0.04 0.4
+centerGrid = named "CenterGrid" $ centerMaster Grid
 
 myLayout = smartBorders $ avoidStruts (
   onWorkspace "1:comm" (unevenTile ||| Grid ||| Full) $
   onWorkspace "hide" Grid $
-  tiled ||| Mirror tiled ||| twoPane ||| threePane ||| Full)
+  tiled ||| Mirror tiled ||| twoPane ||| threePane ||| centerGrid ||| Full)
   where
     unevenTile = ResizableTall 2 incDelta 0.8 []
     tiled = ResizableTall 1 incDelta goldenRatio []

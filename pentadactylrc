@@ -52,6 +52,6 @@ nnoremap <C-e> 10<C-e>
 nnoremap <C-y> 10<C-y>
 
 " NoScript
-map <A-o> :set nso!=<A-Tab>
 map <A-s> :set nss!=<A-Tab>
+map <A-C-s> :set nso!=<A-Tab>
 map <A-S-s> :set nst!=<A-Tab>

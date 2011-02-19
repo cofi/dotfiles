@@ -107,7 +107,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-<U>", withFocused float)
                  , ("M-<D>", windows $ W.shift "hide")
                  , ("M-`", windows $ W.greedyView "hide")
-                 , ("M-d", removeWorkspace)
+                 , ("M-C-d", removeWorkspace)
                  , ("M-'", selectWorkspace acPromptConfig)
                  , ("M-S-'", withWorkspace acPromptConfig (windows . W.shift))
                    -- Apps

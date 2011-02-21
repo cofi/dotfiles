@@ -202,14 +202,14 @@ myPromptKeymap = M.union defaultXPKeymap $ M.fromList
                  , ((controlMask, xK_h), deleteString Prev)
                  , ((controlMask, xK_f), moveCursor Next)
                  , ((controlMask, xK_b), moveCursor Prev)
-                 , ((controlMask, xK_p), moveHistory W.focusUp')
-                 , ((controlMask, xK_n), moveHistory W.focusDown')
+                 , ((controlMask, xK_p), moveHistory W.focusDown')
+                 , ((controlMask, xK_n), moveHistory W.focusUp')
                  ]
 promptConfig = defaultXPConfig { font = promptFont
                              , bgColor = promptBG
                              , fgColor = promptNFG
-                             , bgHLight = promptSFG
-                             , fgHLight = promptBG
+                             , bgHLight = promptBG
+                             , fgHLight = promptSFG
                              , promptBorderWidth = 0
                              , height = 16
                              , historySize = 512

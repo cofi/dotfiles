@@ -32,6 +32,8 @@ import XMonad.Layout.ThreeColumns (ThreeCol(..))
 import XMonad.Layout.Named (named)
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.CenteredMaster
+import XMonad.Layout.WindowArranger
+import XMonad.Layout.SimplestFloat
 
 import XMonad.Prompt
 import XMonad.Prompt.Shell (shellPrompt)
@@ -90,23 +92,45 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                    -- Window/workspace management
                  , ("M-S-h", sendMessage MirrorShrink)
                  , ("M-S-l", sendMessage MirrorExpand)
-                 , ("M-<Escape>", kill)
-                 , ("M-S-<Escape>", kill1)
                  , ("M-u", focusUrgent)
                  , ("M-S-u", clearUrgents)
                  , ("M-S-t", sinkAll)
+                   -- movement
                  , ("M-<Tab>", nextNonEmpty)
                  , ("M-S-<Tab>", prevNonEmpty)
                  , ("M-C-<Tab>", toggleWS)
-                 , ("M-<R>", nextEmpty)
-                 , ("M-<L>", prevEmpty)
-                 , ("M-S-<R>", shiftToNext)
-                 , ("M-S-<L>", shiftToPrev)
+                 , ("M-]", nextEmpty)
+                 , ("M-[", prevEmpty)
+                 , ("M-S-]", shiftToNext)
+                 , ("M-S-[", shiftToPrev)
+                 , ("M-S-`", windows $ W.shift "hide")
+                 , ("M-`", windows $ W.greedyView "hide")
+
+                 , ("M-\\", withFocused float)
+
+                 , ("M-a", sendMessage Arrange)
+                 , ("M-S-a", sendMessage DeArrange)
+
+                 , ("M-<U>", sendMessage $ MoveUp 10)
+                 , ("M-S-<U>", sendMessage $ IncreaseUp 10)
+                 , ("M-C-<U>", sendMessage $ DecreaseUp 10)
+
+                 , ("M-<L>", sendMessage $ MoveLeft 10)
+                 , ("M-S-<L>", sendMessage $ IncreaseLeft 10)
+                 , ("M-C-<L>", sendMessage $ DecreaseLeft 10)
+
+                 , ("M-<R>", sendMessage $ MoveRight 10)
+                 , ("M-S-<R>", sendMessage $ IncreaseRight 10)
+                 , ("M-C-<R>", sendMessage $ DecreaseRight 10)
+
+                 , ("M-<D>", sendMessage $ MoveDown 10)
+                 , ("M-S-<D>", sendMessage $ IncreaseDown 10)
+                 , ("M-C-<D>", sendMessage $ DecreaseDown 10)
+
+                 , ("M-<Escape>", kill)
+                 , ("M-S-<Escape>", kill1)
                  , ("M-c", windows copyToAll)
                  , ("M-S-c", killAllOtherCopies)
-                 , ("M-<U>", withFocused float)
-                 , ("M-<D>", windows $ W.shift "hide")
-                 , ("M-`", windows $ W.greedyView "hide")
                  , ("M-C-d", removeWorkspace)
                  , ("M-'", selectWorkspace acPromptConfig)
                  , ("M-S-'", withWorkspace acPromptConfig (windows . W.shift))
@@ -118,6 +142,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
                  , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") weechatQuery)
                    -- Layoutjumper
+                 , ("M-<F1>", sendMessage $ JumpToLayout "Float")
                  , ("M-<F2>", sendMessage $ JumpToLayout "Two")
                  , ("M-<F3>", sendMessage $ JumpToLayout "Three")
                  , ("M-<F12>", sendMessage $ JumpToLayout "Full")
@@ -197,11 +222,12 @@ twoPane = named "Two" $ TwoPane 0.04 0.5
 threePane = named "Three" $ ThreeCol 1 0.04 0.4
 centerGrid = named "CenterGrid" $ centerMaster Grid
 
-myLayout = smartBorders $ avoidStruts (
+myLayout = windowArrange $ smartBorders $ avoidStruts $
   onWorkspace "1:comm" (unevenTile ||| Grid ||| Full) $
   onWorkspace "hide" Grid $
-  tiled ||| Mirror tiled ||| twoPane ||| threePane ||| centerGrid ||| Full)
+  tiled ||| Mirror tiled ||| twoPane ||| threePane ||| centerGrid ||| float ||| Full
   where
+    float = named "Float" simplestFloat
     unevenTile = ResizableTall 2 incDelta 0.8 []
     tiled = ResizableTall 1 incDelta goldenRatio []
     goldenRatio = toRational (2/(1 + sqrt 5 :: Double))
@@ -256,9 +282,9 @@ scratchpadBindings = [ ("M-; t", namedScratchpadAction scratchpads "term")
                      ]
 
 -- Search----------------------------------------
-searchBindings = [("M-s " ++ key, S.selectSearch engine) | (key, engine) <- searchList]
+searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- searchList]
                  ++
-                 [("M-a", S.promptSearch promptConfig multi)]
+                 [("M-/", S.promptSearch promptConfig multi)]
     where
       searchList = [ ("g", google)
                    , ("m", S.maps)

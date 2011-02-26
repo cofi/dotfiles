@@ -35,8 +35,10 @@
       ropemacs-autoimport-modules '( "os"
                                      "os.path"
                                      "sys"
-                                    ))
-(setq ropemacs-enable-shortcuts nil)
+                                    )
+      ropemacs-global-prefix "C-c p"
+      ropemacs-enable-shortcuts nil)
+
 ;; Modes
 (add-hook 'python-mode-hook
           (lambda ()

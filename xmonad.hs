@@ -268,9 +268,10 @@ myManageHook = (composeAll . concat $
 ----------------------------------------
 
 scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
-              , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
               , NS "monitor" "urxvtcd -e htop" (title =? "htop") scratchFloat
               , NS "python" "urxvtcd -e ipython" (title =? "ipython") scratchFloat
+              , NS "clojure" "urxvtcd -e clj" (title =? "clj") scratchFloat
+              , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
               ]
   where scratchFloat = customFloating size
         size = W.RationalRect (1/4) (1/4) (1/2) (1/2)
@@ -278,6 +279,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
 scratchpadBindings = [ ("M-; t", namedScratchpadAction scratchpads "term")
                      , ("M-; h", namedScratchpadAction scratchpads "haskell")
                      , ("M-; p", namedScratchpadAction scratchpads "python")
+                     , ("M-; c", namedScratchpadAction scratchpads "clojure")
                      , ("M-; m", namedScratchpadAction scratchpads "monitor")
                      ]
 
@@ -330,7 +332,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
 
       (!>) :: SearchEngine -> SearchEngine -> SearchEngine
       (SearchEngine name1 site1) !> (SearchEngine name2 site2) =
-        SearchEngine (name1 ++ "/" ++ name2) (\s -> if (name1++":") `isPrefixOf` s
+        SearchEngine (name1 ++ "/" ++ name2) (\ s -> if (name1++":") `isPrefixOf` s
                                                     then site1 $ removeColonPrefix s
                                                     else site2 s)
         where removeColonPrefix = drop 1 . dropWhile (/= ':')

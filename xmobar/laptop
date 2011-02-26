@@ -6,7 +6,7 @@ Config { font =  "xft:Dejavu Sans:size=8:antialias=true:hinting=true:hintstyle=h
        , border = NoBorder
        , lowerOnStart = False
        , commands = [ Run Wireless "wlan0" ["-t", "(<essid> <quality>)", "-L", "30", "-H", "70", "--low", "red", "--normal","orange","--high","green"] 60
-                    , Run Thermal "THM0" ["-t", "<temp>°C", "-L", "40", "-H", "60", "--low", "green", "--normal","orange","--high","red"] 60
+                    , Run ThermalZone 0 ["-t", "<temp>°C", "-L", "40", "-H", "60", "--low", "green", "--normal","orange","--high","red"] 60
                     , Run MultiCpu ["-t", "<total0> <total1> <total2> <total3>", "-S", "Yes", "-p", "3", "-L","3","-H","50","--low","green","--normal","orange","--high","red"] 60
                     , Run Battery ["-t", "<acstatus> <left>", "-S", "Yes", "-p", "3", "-L", "40", "-H", "70", "--low", "red", "--normal","orange","--high", "green"] 60
                     , Run Memory ["-t","M: <usedratio>", "-S", "Yes", "-p", "3", "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
@@ -18,5 +18,5 @@ Config { font =  "xft:Dejavu Sans:size=8:antialias=true:hinting=true:hintstyle=h
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{<fc=yellow>%appt%</fc> %wlan0wi% <fc=steelbue>✦</fc> %THM0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
+       , template = "%StdinReader% }{<fc=yellow>%appt%</fc> %wlan0wi% <fc=steelbue>✦</fc> %thermal0% <fc=steelblue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ⚡ %battery% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
        }

@@ -300,6 +300,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , scroogle
                                                   , wiki
                                                   , wikiD
+                                                  , github
+                                                  , bitbucket
                                                   , define
                                                   , dict 
                                                   , leo 
@@ -325,6 +327,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       define = S.searchEngine "def" "https://encrypted.google.com/search?q=define:"
       images = S.searchEngine "img" "http://images.google.com/images?q="
       pypi = S.searchEngine "pypi" "http://pypi.python.org/pypi?%3Aaction=search&submit=search&term="
+      github = S.searchEngine "gh" "https://github.com/search?q="
+      bitbucket = S.searchEngine "bb" "https://bitbucket.org/repo/all?name="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

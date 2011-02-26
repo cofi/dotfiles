@@ -219,4 +219,38 @@ Major mode determines association."
   (interactive)
   (count-words (point-min) (point-max)))
 
+(defvar cofi-file-apps-next #'cofi-file-alt)
+
+(defun cofi-toggle-file-apps ()
+  (interactive)
+  (let ((next cofi-file-apps-next))
+    (cond
+     ((eq cofi-file-apps-next #'cofi-file-standard) (setq cofi-file-apps-next
+                                                          #'cofi-file-alt))
+     ((eq cofi-file-apps-next #'cofi-file-alt) (setq cofi-file-apps-next
+                                                     #'cofi-file-standard))
+     (t (setq cofi-file-apps-next #'cofi-file-alt)
+        (setq next #'cofi-file-standard)))
+    (funcall next)))
+
+(defun cofi-file-standard ()
+  (setq org-file-apps '((auto-mode . emacs)
+                        ("\.x?html?" . default)
+                        ("\.pdf" . default)
+                        ("\.pdf::\\([0-9]+\\)" . "okular --page=%1 %s")))
+  (setq TeX-view-program-selection '((output-dvi "xdg-open")
+                                     (output-pdf "xdg-open")
+                                     (output-html "xdg-open")))
+  (message "Using standard file openers."))
+
+(defun cofi-file-alt ()
+  (setq org-file-apps '((auto-mode . emacs)
+                        ("\.x?html?$" . "conkeror %s")
+                        ("\.pdf" . "zathura %s")
+                        ("\.pdf::\\([0-9]+\\)" . "okular --page=%1 %s")))
+  (setq TeX-view-program-selection '((output-dvi "xdg-open")
+                                     (output-pdf "zathura")
+                                     (output-html "conkeror")))
+  (message "Using alternative file openers."))
+
 (provide 'cofi-func)

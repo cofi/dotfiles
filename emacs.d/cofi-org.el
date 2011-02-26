@@ -75,11 +75,6 @@ Note: This assumes all files are in the org-directory."
                                                   (end-of-line)
                                                   (org-meta-return)))))
 
-(setq org-file-apps '((auto-mode . emacs)
-                      ("\.x?html?" . default)
-                      ("\.pdf" . default)
-                      ("\.pdf::\\([0-9]+\\)" . "okular --page=%1 %s")))
-
 ;; Agenda
 (setq org-agenda-skip-unavailable-files t
       org-agenda-skip-deadline-if-done t

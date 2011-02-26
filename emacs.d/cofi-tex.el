@@ -1,8 +1,7 @@
 (defun cofi/latex-build ()
   (interactive)
   (let ((name (TeX-active-master))
-        (fname (TeX-active-master t))
-        (opener "xdg-open %s.pdf"))
+        (fname (TeX-active-master t)))
     (compile (format "pdflatex %s && pdflatex %s" fname fname))))
 
 (defun cofi/latex-view ()
@@ -25,16 +24,13 @@
                               'cdlatex-mode
                              'LaTeX-math-mode))
 
-(setq TeX-view-program-selection '((output-dvi "xdg-open")
-                                   (output-pdf "xdg-open")
-                                   (output-html "xdg-open")))
-
 (eval-after-load "cdlatex"
   '(progn
      (define-key cdlatex-mode-map "\t" nil)
      (define-key cdlatex-mode-map (kbd "C-<tab>") 'cdlatex-tab)))
 
 (setq TeX-auto-save t
+      TeX-save-query nil
       TeX-parse-self t
       TeX-PDF-mode t)
 

@@ -77,6 +77,7 @@
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
 
 (load-theme 'cofi)
+(cofi-file-standard)
 
 (message "Time needed to load: %d seconds."
          (time-to-seconds (time-since startup-time)))

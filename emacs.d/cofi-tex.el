@@ -20,9 +20,12 @@
                                (local-set-key (kbd "<f12>") 'cofi/latex-build)
                                (local-set-key (kbd "C-<f12>") 'cofi/latex-view))))
 
+(defun turn-on-reftex () (reftex-mode 1))
+
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")
                               'cdlatex-mode
                              'LaTeX-math-mode))
+(add-hook 'LaTeX-mode-hook #'turn-on-reftex)
 
 (eval-after-load "cdlatex"
   '(progn
@@ -32,6 +35,7 @@
 (setq TeX-auto-save t
       TeX-save-query nil
       TeX-parse-self t
+      TeX-newline-function #'reindent-then-newline-and-indent
       TeX-PDF-mode t)
 
 (defun cofi/german-quotes ()

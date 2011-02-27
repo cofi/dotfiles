@@ -253,4 +253,11 @@ Major mode determines association."
                                      (output-html "conkeror")))
   (message "Using alternative file openers."))
 
+(defun cofi/cdlatex (prefix)
+  (interactive "P")
+  (if (or (in-mode? 'org-mode)
+         orgstruct-mode)
+      (org-cdlatex-mode prefix)
+    (cdlatex-mode prefix)))
+
 (provide 'cofi-func)

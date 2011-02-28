@@ -204,14 +204,14 @@
 
 (setq dabbrev-case-replace nil)
 
-(setq backup-directory-alist '(("" . "~/.emacs-backups")))
+(setq backup-directory-alist '(("" . "~/var/emacs/backups")))
 (setq auto-save-default nil
       auto-save-list-file-prefix "~/var/emacs/auto-save-list/save-")
 
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t
               woman-imenu t
-              woman-cache-filename "~/.wmncach.el")
+              woman-cache-filename "~/var/emacs/woman-cache")
 
 (eval-after-load "info"
   '(add-to-list 'Info-directory-list
@@ -236,6 +236,7 @@
 (require-and-exec 'autopair
                   (autopair-global-mode 1))
 (require-and-exec 'saveplace
+                  (setq save-place-file "~/var/emacs/places")
                   (setq-default save-place t))
 (transient-mark-mode t)
 (display-time-mode t)
@@ -379,9 +380,9 @@
                         '(python-mode c-mode java-mode cpp-mode)))
 ;; ========================================
 ;; bookmarks ==============================
-(setq bookmark-default-file "~/var/emacs-bookmarks"
-      bmkp-bmenu-commands-file "~/var/emacs-bmkp-bmenu-commands.el"
-      bmkp-bmenu-state-file "~/var/emacs-bmkp-bmenu-state.el")
+(setq bookmark-default-file "~/var/emacs/bookmarks"
+      bmkp-bmenu-commands-file "~/var/emacs/bmkp-bmenu-commands.el"
+      bmkp-bmenu-state-file "~/var/emacs/bmkp-bmenu-state.el")
 
 (require-and-exec 'bookmark+)
 

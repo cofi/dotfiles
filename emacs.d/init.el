@@ -32,6 +32,7 @@
         "~/.elisp/vendor/pylookup"
         "~/.elisp/vendor/scratch"
         "~/.elisp/vendor/offlineimap"
+        "~/.elisp/vendor/popwin-el"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"

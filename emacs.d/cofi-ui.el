@@ -115,6 +115,8 @@
                             (lambda (frame)
                               (funcall 'keychain/refresh)))
                   (add-hook 'after-init-hook 'keychain/refresh))
+(require-and-exec 'popwin
+  (setq display-buffer-function #'popwin:display-buffer))
 ;; ==================================================
 
 ;; Settings ========================================

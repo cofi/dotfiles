@@ -115,6 +115,9 @@
                             (lambda (frame)
                               (funcall 'keychain/refresh)))
                   (add-hook 'after-init-hook 'keychain/refresh))
+
+(setq popwin:popup-window-position 'bottom
+      popwin:popup-window-height 0.3)
 (require-and-exec 'popwin
   (setq display-buffer-function #'popwin:display-buffer))
 ;; ==================================================

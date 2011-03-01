@@ -1,4 +1,4 @@
-text/html;                     /usr/bin/w3m '%s'
+text/html;                     browser '%s'
 application/pdf;               /usr/bin/okular '%s'
 application/x-bz;              /usr/bin/ark '%s'
 application/x-bzip2;           /usr/bin/ark '%s'

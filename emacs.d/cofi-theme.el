@@ -16,6 +16,9 @@
 
      `(italic ((t (:italic t :family "Dejavu Sans Mono" :height 80))))
      `(border ((t (:background "black"))))
+
+     `(highlight ((t (:background "sienna"))))
+
      `(change-log-acknowledgement-face ((t (:foreground "firebrick"))))
      `(change-log-conditionals-face ((t (:foreground "dark goldenrod"))))
      `(change-log-date-face ((t (:foreground "rosy brown"))))
@@ -206,6 +209,8 @@
      `(org-agenda-structure ((t (:foreground "cornsilk4"))))
      `(org-agenda-date-weekend ((t (:foreground "brown"))))
      `(org-meta-line ((t (:foreground "tan4"))))
+
+     `(anything-header ((t (:foreground "gold" :background "black"))))
      ))
 
 (provide-theme 'cofi)

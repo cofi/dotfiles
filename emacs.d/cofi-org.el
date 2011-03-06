@@ -11,6 +11,14 @@
           org-agenda-files "~/Org/agenda")
   (setq org-directory "~/"))
 
+(setq org-refile-targets '((buffer-file-name :maxlevel . 3)
+                           (org-agenda-files :maxlevel . 2)
+                           )
+      org-refile-use-outline-path 'file)
+
+(setq org-completion-use-ido t
+      org-outline-path-complete-in-steps nil)
+
 (autoload 'org-agenda-files "org")
 (defun cofi/visit-org-agenda-files (fname)
   "Visit agenda files.
@@ -175,27 +183,27 @@ Note: This assumes all files are in the org-directory."
 (defun cofi/capture-frame-finalize ()
   "Special treatment for capture frames when finalizing."
   (interactive)
-  (cofi/capture-wrap (function org-capture-finalize)))
+  (cofi/capture-wrap #'org-capture-finalize))
 
 (defun cofi/capture-frame-kill ()
   "Special treatment for capture frames when killing."
   (interactive)
-  (cofi/capture-wrap (function org-capture-kill)))
+  (cofi/capture-wrap #'org-capture-kill))
 
 (defun cofi/capture-frame-refile ()
-  "Special treatment for capture frames when killing."
+  "Special treatment for capture frames when refiling."
   (interactive)
-  (cofi/capture-wrap (function org-capture-refile)))
+  (cofi/capture-wrap #'org-capture-refile))
 
 (add-hook 'org-capture-mode-hook
           (lambda ()
             (define-key org-capture-mode-map (kbd "C-c C-c")
-                        (function cofi/capture-frame-finalize))
+                        #'cofi/capture-frame-finalize)
             (define-key org-capture-mode-map (kbd "C-c C-k")
-                        (function cofi/capture-frame-kill))
+                        #'cofi/capture-frame-kill)
             (define-key org-capture-mode-map (kbd "C-c C-w")
-                        (function cofi/capture-frame-refile)
-              )))
+                        #'cofi/capture-frame-refile)
+            ))
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline (format "%s/todo.org" org-directory) "Tasks")

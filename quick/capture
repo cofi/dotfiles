@@ -1,0 +1,2 @@
+#! /bin/sh
+emacsclient -c --alternate-editor="" -e "(cofi/capture-frame)"

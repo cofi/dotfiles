@@ -110,6 +110,8 @@ Note: This assumes all files are in the org-directory."
 
 (setq org-footnote-auto-label 'plain)
 
+(setq org-special-ctrl-a/e t)
+
 ;; ToDo
 (setq org-todo-keywords '((sequence
                           "TODO"

@@ -1,11 +1,11 @@
 #! /bin/sh
 
-BASE="setxkbmap -model evdev -option compose:menu,ctrl:nocaps"
+BASE="setxkbmap -model evdev -option compose:ralt,ctrl:nocaps"
 us="$BASE -layout us"
 de="$BASE -layout de"
 
 case $1 in
     de) eval $de ;;
     us) eval $us ;;
-    *) eval $us ;;
+     *) eval $us ;;
 esac

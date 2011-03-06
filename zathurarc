@@ -1,0 +1,6 @@
+map + zoom in
+map - zoom out
+map = zoom 0.0
+map <F12> fullscreen
+map <C-q> quit
+map <S-<Space>> scroll full_up

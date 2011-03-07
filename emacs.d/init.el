@@ -18,7 +18,7 @@
   (add-to-list 'package-archives '("technomancy" . "http://repo.technomancy.us/emacs/"))
   (package-initialize))
 
-(load "~/.elisp/nxhtml/autostart.el")
+;; (load "~/.elisp/nxhtml/autostart.el")
 
 (mapc (lambda (dir)
              (add-to-list 'load-path dir))

@@ -118,10 +118,10 @@
 
 (setq popwin:popup-window-position 'bottom
       popwin:popup-window-height 0.3)
-(push '("*Calendar*" :height 25) popwin:special-display-config)
 
 (require-and-exec 'popwin
-  (setq display-buffer-function #'popwin:display-buffer))
+  (setq display-buffer-function #'popwin:display-buffer)
+  (push '("*Calendar*" :height 25) popwin:special-display-config))
 ;; ==================================================
 
 ;; Settings ========================================

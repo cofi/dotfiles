@@ -5,7 +5,6 @@
     (yas/initialize)
     (yas/load-directory "~/.yasnippets")
     (yas/load-directory "~/dev/snippets")
-    (global-set-key (kbd "M-RET") 'yas/expand)
     (setq yas/also-auto-indent-first-line nil)
     (setq yas/indent-line 'fixed)
     (setq yas/fallback-behavior 'call-other-command)

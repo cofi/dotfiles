@@ -189,4 +189,6 @@
                       mairix-map))
     )
 
+(add-hook 'mime-view-mode-hook 'longlines-mode)
+
 (provide 'cofi-mail)

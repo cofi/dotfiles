@@ -197,6 +197,9 @@
 ;; Let speck highlight doublets
 (setq speck-doublet t)
 
+(setq ispell-program-name "aspell"
+      ispell-extra-args '("--sug-mode=ultra" "--run-together"))
+
 ;; tab settings
 
 (setq-default tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68

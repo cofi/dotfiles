@@ -311,6 +311,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , code
                                                   , pypi
                                                   , S.youtube
+                                                  , zdfMediathek
                                                   , S.hoogle
                                                   , S.hackage
                                                   , imdb 
@@ -331,6 +332,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       github = S.searchEngine "gh" "https://github.com/search?q="
       bitbucket = S.searchEngine "bb" "https://bitbucket.org/repo/all?name="
       debbugs = S.searchEngine "deb" "http://bugs.debian.org/"
+      zdfMediathek = S.searchEngine "zdf" "http://www.zdf.de/ZDFmediathek/#/suche/"
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

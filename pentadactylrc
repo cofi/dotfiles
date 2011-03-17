@@ -22,8 +22,9 @@ set editor="emacsclient -c --alternate-editor=gvim"
 
 set mapleader=","
 set hlfind
-set hintmatching=wordstartswith
+set hintmatching=contains
 set newtab+=help
+set hintkeys=asdfghjkl;
 
 map <A-a> -silent :dialog addbookmark<CR>
 map <A-b> -silent :tabopen chrome://browser/content/places/places.xul<CR>

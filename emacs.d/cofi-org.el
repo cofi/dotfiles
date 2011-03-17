@@ -214,6 +214,9 @@ Note: This assumes all files are in the org-directory."
          "* %?\n  %i\n  %x")
         ("n" "Note" entry (file (format "%s/notes.org" org-directory))
          "* %?\n  %i\n  %a")
+        ("s" "Save link for reading" entry (file (format "%s/links.org" org-directory))
+         "* %:description\n  %:link\n  %U"
+         )
         ))
 ;; ==================================================
 

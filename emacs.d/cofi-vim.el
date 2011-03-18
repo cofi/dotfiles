@@ -148,5 +148,8 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
       )))
   
   (add-hook 'post-command-hook 'cofi/viper-bar)
+
+  ;; Disable annoying vim compatibilities
+  (define-key viper-vi-basic-map (kbd "C-y") nil)
 )
 (provide 'cofi-vim)

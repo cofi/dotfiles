@@ -5,7 +5,7 @@
 " and
 " :colorscheme cofi
 
-hi StatusLine           color: #333;     background: #ddd;
+hi StatusLine           color: #fff;     background: #ddd;
 
 
 hi Normal               background: white; font-size: 12px;

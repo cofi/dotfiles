@@ -132,7 +132,8 @@
      
      `(which-func ((t (:foreground "gold"))))
      
-     `(primary-selection ((t (:background "lightgoldenrod2"))))
+     `(primary-selection ((t (:foreground "gold" :background "black"))))
+     `(secondary-selection ((t (:foreground "black" :background "gold"))))
      
      `(reb-match-0 ((t (:background "light blue"))))
      `(reb-match-1 ((t (:background "aquamarine"))))
@@ -142,7 +143,6 @@
      `(region ((t (:background "gray33"))))
      `(hl-line ((default (:background "gray20")) (nil nil)))
      
-     `(secondary-selection ((t (:background "yellow"))))
      `(sh-heredoc-face ((t (:foreground "tan"))))
      
      `(show-paren-match-face ((t (:background "forest green"))))

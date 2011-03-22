@@ -22,21 +22,37 @@
 
 (defun turn-on-reftex () (reftex-mode 1))
 
+(setq reftex-plug-into-AUCTeX t)
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")
                               'cdlatex-mode
                              'LaTeX-math-mode))
 (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-
-(eval-after-load "cdlatex"
-  '(progn
-     (define-key cdlatex-mode-map "\t" nil)
-     (define-key cdlatex-mode-map (kbd "C-<tab>") 'cdlatex-tab)))
 
 (setq TeX-auto-save t
       TeX-save-query nil
       TeX-parse-self t
       TeX-newline-function #'reindent-then-newline-and-indent
       TeX-PDF-mode t)
+
+(eval-after-load "cdlatex"
+  '(progn
+     (define-key cdlatex-mode-map "\t" nil)
+     (define-key cdlatex-mode-map (kbd "C-<tab>") 'cdlatex-tab)))
+
+(setq cdlatex-paired-parens "$[({")
+
+(setq cdlatex-math-modify-alist
+      '(
+        (?B "\\mathbb" nil t nil nil)
+        ))
+(setq cdlatex-math-symbol-alist
+      '(
+        (?0 ("\\emptyset" "\\varnothing"))
+        (?1 ("_1"))
+        (?2 ("_2"))
+        (?3 ("_3"))
+        (?! ("\\neg" "\\not"))
+        ))
 
 (defun cofi/german-quotes ()
   (interactive)

@@ -156,7 +156,7 @@ Note: This assumes all files are in the org-directory."
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
 ;; Capture ==============================
-(setq org-default-notes-file (concat org-directory "remember.org"))
+(setq org-default-notes-file (concat org-directory "capture.org"))
 
 ;; Adapted from http://emacs-fu.blogspot.com/2009/04/remember.html
 (defun cofi/capture-frame ()

@@ -208,15 +208,23 @@ Note: This assumes all files are in the org-directory."
             ))
 
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline (format "%s/todo.org" org-directory) "Tasks")
+      '(("t" "Todo" entry (file (format "%s/todo.org" org-directory))
          "* TODO %?\n  %i\n  %a")
         ("x" "Note with Clipboard" entry (file (format "%s/notes.org" org-directory))
          "* %?\n  %i\n  %x")
         ("n" "Note" entry (file (format "%s/notes.org" org-directory))
          "* %?\n  %i\n  %a")
-        ("s" "Save link for reading" entry (file (format "%s/links.org" org-directory))
+        ;; dedicated templates
+        ("s" "Save link for reading" entry (file+headline
+                                            (format "%s/links.org" org-directory)
+                                            "Unsorted")
          "* %:description\n  %:link\n  %U"
          )
+        ("c" "Contacts" entry (file (format "%s/contacts.org" org-directory))
+         "* %(org-contacts-template-wl-name)
+:PROPERTIES:
+:EMAIL: %(org-contacts-template-wl-email)
+:END:")
         ))
 ;; ==================================================
 
@@ -325,5 +333,26 @@ Same arguments as in diary cyclic."
   `(let ((calendar-date-style 'iso))
        ,@body))
 ;; ========================================
+;; contacts ====================
+(setq org-contacts-files `(,(format "%s/contacts.org" org-directory)))
+(require 'org-contacts)
+
+(require 'std11)                        ; from FLIM
+(require 'wl-address)                   ; from Wanderlust
+(defun wl-get-from-header-content (buffer)
+  (save-excursion
+    (set-buffer buffer)
+    (std11-narrow-to-header)
+    (prog1
+        (std11-fetch-field "From")
+      (widen))))
+
+(defun org-contacts-template-wl-name ()
+  (wl-address-header-extract-realname (wl-get-from-header-content
+                                       (org-capture-get :original-buffer))))
+(defun org-contacts-template-wl-email ()
+  (wl-address-header-extract-address (wl-get-from-header-content
+                                      (org-capture-get :original-buffer))))
+;;  ========================================
 
 (provide 'cofi-org)

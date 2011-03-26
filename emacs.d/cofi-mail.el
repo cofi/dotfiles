@@ -49,7 +49,8 @@
   (turn-on-auto-fill)
   (auto-complete-mode)
   (yas/minor-mode)
-  (turn-on-speck))
+  (auto-dictionary-mode)
+  (turn-on-flyspell))
 
 (eval-after-load "wl"
   '(progn

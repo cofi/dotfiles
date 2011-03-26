@@ -18,7 +18,6 @@ command! -nargs=* zdf tabopen http://www.zdf.de/ZDFmediathek/#/suche/<args>
 command! ril sidebar! Read It Later
 
 set guioptions=sMBC
-colorscheme cofi
 set editor="emacsclient -c --alternate-editor=gvim"
 
 set mapleader=","

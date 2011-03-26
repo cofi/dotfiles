@@ -57,8 +57,18 @@
   (dolist (hook hooks)
     (add-hook hook fun)))
 
+(defvar cofi/before-kill-hook
+  '(
+    recentf-save-list
+    bookmark-save
+    )
+  "Functions to be executed by `SAVE-KILL-EMACS'")
+
 (defun save-kill-emacs ()
   (interactive)
+  (mapc (lambda (f) (ignore-errors (funcall f)))
+        cofi/before-kill-hook
+        )
   (if (modified-buffers?)
       (progn
         (when (not (eq window-system 'x))

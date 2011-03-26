@@ -52,6 +52,7 @@
         (?2 ("_2"))
         (?3 ("_3"))
         (?! ("\\neg" "\\not"))
+        (?. ("\\cdot" "\\ldots"))
         ))
 
 (defun cofi/german-quotes ()

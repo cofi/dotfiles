@@ -128,12 +128,15 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
   (eval-after-load 'outline
     '(progn
        (defun vimpulse-outline-setup ()
-         (define-key viper-vi-basic-map "za" 'outline-toggle-children)
-         (define-key viper-vi-basic-map "zm" 'hide-body)
-         (define-key viper-vi-basic-map "zr" 'show-all)
-         (define-key viper-vi-basic-map "zo" 'show-subtree)
-         (define-key viper-vi-basic-map "zc" 'hide-subtree)
-         (define-key viper-vi-basic-map "z@" outline-mode-prefix-map))
+         (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
+           (define-key map "za" 'outline-toggle-children)
+           (define-key map "zm" 'hide-body)
+           (define-key map "zr" 'show-all)
+           (define-key map "zo" 'show-subtree)
+           (define-key map "zc" 'hide-subtree)
+           (define-key map "z@" outline-mode-prefix-map)
+           (setq viper-vi-local-user-map map)
+           (viper-change-state-to-vi)))
 
        ;; aww why have you no hook?
        (defadvice outline-minor-mode (after setup-vim-outline activate)

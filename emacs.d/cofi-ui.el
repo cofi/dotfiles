@@ -336,6 +336,8 @@
   (define-key map (kbd "c") 'cofi/cdlatex)
   (define-key map (kbd "d") 'dedicated-mode)
   (define-key map (kbd "f") 'auto-fill-mode)
+  (define-key map (kbd "h") 'hs-minor-mode)
+  (define-key map (kbd "l") 'outline-minor-mode)
   (define-key map (kbd "o") 'orgstruct++-mode)
   (define-key map (kbd "p") 'pretty-mode)
   (define-key map (kbd "r") 'auto-revert-mode)

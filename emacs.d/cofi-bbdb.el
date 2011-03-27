@@ -18,7 +18,7 @@
           bbdb-use-alternate-names t
           bbdb-elided-display t
           bbdb-north-american-phone-numbers-p nil
-          bbdb/mail-auto-create-p 'bbdb-ignore-some-messages-hook
+          bbdb/mail-auto-create-p nil
           bbdb-ignore-some-messages-alist
           '(
             ( "From" . "info\\|no.?reply\\|no.?mail\\|DAEMON\\|daemon\\|promotion\\|service\\|newsletter\\|mailman")

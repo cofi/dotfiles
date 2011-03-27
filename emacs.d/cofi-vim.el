@@ -107,26 +107,38 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   ;; Conflicts ========================================
   (define-key viper-insert-basic-map (kbd "C-d") nil) ; conflicts with yasnippet
+  (define-key viper-vi-global-user-map (kbd "C-c /") nil)  ; conflicts with org
   ;; ==================================================
 
   ;; Misc ========================================
-  (eval-after-load "org"
-    '(progn
-       (define-key viper-vi-global-user-map (kbd "C-c /") 'org-sparse-tree)
-       (add-hook 'org-mode-hook
-                 (lambda ()
-                   (setq
-                    viper-vi-local-user-map
-                        (let ((map (make-sparse-keymap)))
-                          (define-key map (kbd "RET") 'org-open-at-point)
-                          map)
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (setq viper-vi-local-user-map
+                    (let ((map (make-sparse-keymap)))
+                      (define-key map (kbd "RET") 'org-open-at-point)
+                      map)
                     viper-insert-local-user-map
-                        (let ((map (make-sparse-keymap)))
-                          (define-key map (kbd "M-l") 'org-metaright)
-                          (define-key map (kbd "M-h") 'org-metaleft)
-                          map))
-                   ;; some times local-maps don't get reloaded, this forces it
-                   (viper-change-state-to-vi)))
+                    (let ((map (make-sparse-keymap)))
+                      (define-key map (kbd "M-l") 'org-metaright)
+                      (define-key map (kbd "M-h") 'org-metaleft)
+                      map))
+              ;; some times local-maps don't get reloaded, this forces it
+              (viper-change-state-to-vi)))
+
+  (eval-after-load 'outline
+    '(progn
+       (defun vimpulse-outline-setup ()
+         (define-key viper-vi-basic-map "za" 'outline-toggle-children)
+         (define-key viper-vi-basic-map "zm" 'hide-body)
+         (define-key viper-vi-basic-map "zr" 'show-all)
+         (define-key viper-vi-basic-map "zo" 'show-subtree)
+         (define-key viper-vi-basic-map "zc" 'hide-subtree)
+         (define-key viper-vi-basic-map "z@" outline-mode-prefix-map))
+
+       ;; aww why have you no hook?
+       (defadvice outline-minor-mode (after setup-vim-outline activate)
+         (vimpulse-outline-setup))
+       (add-hook 'outline-mode-hook 'vimpulse-outline-setup)
        ))
 
   (setq cofi/default-cursor-color "OliveDrab4")

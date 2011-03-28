@@ -9,11 +9,11 @@ Config { font =  "xft:Dejavu Sans:size=9:antialias=true:hinting=true:hintstyle=h
                     , Run Memory ["-t","M: <usedratio>%", "-S", "Yes", "-p", "3",  "-L", "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
                     , Run Swap ["-t", "S: <usedratio>%", "-L", "-S", "Yes", "-p", "3",  "40", "-H", "70", "--low", "green", "--normal","orange","--high","red"] 60
                     , Run Date "%a %b %d %H:%M" "date" 6
-                    , Run Com "master_volume" [] "volume" 10
+                    , Run Volume "default" "Master" ["-t", "<volume>% <status>"] 10
                     , Run StdinReader
                     , Run Com "appt-file" [] "appt" 60
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{%appt% <fc=steelbue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ♩ %volume% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
+       , template = "%StdinReader% }{%appt% <fc=steelbue>✦</fc> %multicpu% <fc=steelblue>✦</fc> %memory% <fc=steelblue>✦</fc> ♩ %default:Master% <fc=steelblue>✦</fc> <fc=khaki>%date%</fc>"
        }

@@ -368,5 +368,8 @@ Same arguments as in diary cyclic."
        return-value
        (concat "%^{" org-contacts-email-property "}p"))))
 ;;  ========================================
+;; Misc ==============================
+(setq org-link-mailto-program '(compose-mail "%a" "%s"))
+;; ==================================================
 
 (provide 'cofi-org)

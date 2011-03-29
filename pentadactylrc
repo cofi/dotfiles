@@ -47,6 +47,11 @@ inoremap <A-b> <C-left>
 inoremap <C-h> <BS>
 inoremap <C-w> <C-BS>
 
+nnoremap -count <C-S-d> <scroll-up>
+nnoremap -count <C-S-u> <scroll-down>
+nnoremap -count <C-S-f> <scroll-page-up>
+nnoremap -count <C-S-b> <scroll-page-down>
+
 nnoremap j 5j
 nnoremap k 5k
 nnoremap <C-e> 10<C-e>

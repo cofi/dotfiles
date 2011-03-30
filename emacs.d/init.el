@@ -52,7 +52,6 @@
             "cofi-autoloads"
             "cofi-anything"
             "cofi-buffer"
-            "cofi-bbdb"
             "cofi-calendar"
             "cofi-desktop"
             "cofi-mail"

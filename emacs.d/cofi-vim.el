@@ -107,14 +107,14 @@ Vanilla in vi-state; Prefixed witf `C-' in insert-state and emacs-state.")
 
   ;; Conflicts ========================================
   (define-key viper-insert-basic-map (kbd "C-d") nil) ; conflicts with yasnippet
-  (define-key viper-vi-global-user-map (kbd "C-c /") nil)  ; conflicts with org
+  (define-key viper-vi-basic-map (kbd "C-c /") nil)  ; conflicts with org
   ;; ==================================================
 
   ;; Misc ========================================
   (add-hook 'org-mode-hook
             (lambda ()
               (setq viper-vi-local-user-map
-                    (let ((map (make-sparse-keymap)))
+                    (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
                       (define-key map (kbd "RET") 'org-open-at-point)
                       map)
                     viper-insert-local-user-map

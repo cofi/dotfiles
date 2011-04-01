@@ -169,4 +169,10 @@
       (kill-buffer buf))
     targets))
 
+(defun combinate (xs ys combinator)
+  "Combinate each x with each y using the given combinator."
+  (loop for x in xs
+       append (loop for y in ys
+                    collect (funcall combinator x y))))
+
 (provide 'cofi-util)

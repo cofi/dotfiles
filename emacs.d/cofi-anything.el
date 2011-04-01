@@ -122,7 +122,6 @@
                                 anything-c-source-locate)
                              "*anything with files*"))
 
-
      (defvar cofi/anything-uni-sources '())
      (defvar cofi/anything-config-sources '())
      (defun cofi/update-anything-sources ()
@@ -130,18 +129,15 @@
        (setq cofi/anything-uni-sources
              (let* ((dirs '("FoC" "FGdI3" "GdI3" "SE" "TS"))
                     (subdirs '("aufgaben" "uebungen" "notes"))
+                    (combinator (lambda (x y) (format "%s/%s" x y)))
                     (path "~/Work/Uni/")
-                    (combinations (reduce 'append
-                                          (mapcar (lambda (d)
-                                                    (mapcar (lambda (s)
-                                                              (concat d "/" s))
-                                                            subdirs))
-                                                  dirs)))
-                    (full (mapcar (lambda (d) (concat path d))
-                                  combinations)))
-               (mapcar* (lambda (s d) (cofi/anything-dir-deep s d t))
-                        combinations
-                        full)))
+                    (combinations (combinate dirs subdirs combinator))
+                    (full (mapcar (lambda (d) (concat path d)) combinations)))
+
+               (loop for name in combinations
+                     for dir in full
+                     when (file-accessible-directory-p dir)
+                     collect (cofi/anything-dir-deep name dir t))))
 
        (setq cofi/anything-config-sources
              `(

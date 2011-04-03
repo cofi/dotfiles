@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; mode: rainbow -*-
 
-(deftheme cofi
+(deftheme cofi-dark
   "cofi theme.")
 
 (let ((bg "#202020")
@@ -11,7 +11,7 @@
       (vc-context "gray")
       )
     (custom-theme-set-faces
-     'cofi
+     'cofi-dark
      `(default ((((min-colors 4096)) (:background ,bg :foreground ,fg))))
 
      `(italic ((t (:italic t :family "Dejavu Sans Mono" :height 80))))
@@ -213,4 +213,4 @@
      `(anything-header ((t (:foreground "gold" :background "black"))))
      ))
 
-(provide-theme 'cofi)
+(provide-theme 'cofi-dark)

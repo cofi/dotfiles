@@ -78,7 +78,7 @@
                         ;; Exit Emacs after quitting WL
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
 
-(load-theme 'cofi)
+(load-theme 'cofi-dark)
 (cofi-file-standard)
 
 (message "Time needed to load: %d seconds."

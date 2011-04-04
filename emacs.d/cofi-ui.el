@@ -249,7 +249,17 @@
 (when (string= hostname "hitchhiker")
     (display-battery-mode t))
 
-(setq winner-dont-bind-my-keys t)
+(setq winner-dont-bind-my-keys t
+      winner-boring-buffers '("*anything*"
+                              "*anything buffers*"
+                              "*anything bookmarks*"
+                              "*anything make*"
+                              "*anything uni*"
+                              "*anything config*"
+                              "*Completions*"
+                              "*Help*"
+                              "*compilation*"))
+
 (require-and-exec 'winner
                   (winner-mode 1))
 

@@ -222,7 +222,7 @@
 
 (setq-default major-mode 'text-mode)
 (setq dired-dwim-target t)
-(add-hook 'dired-mode-hook 'auto-revert-mode)
+(add-hook 'dired-mode-hook 'turn-on-auto-revert-mode)
 (setq-default cursor-type 'bar)
 
 (setq autopair-autowrap t)

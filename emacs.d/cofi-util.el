@@ -175,4 +175,18 @@
        append (loop for y in ys
                     collect (funcall combinator x y))))
 
+(defun range (start &optional end step)
+  "Range of numbers from `START' to (including) `END' with stepwidth `STEP'.
+If only one argument is supplied it will be the end, 0 will be start.
+Mimicks Python's `range'"
+  (let ((step (or step 1))
+        (start (if end
+                   start
+                 0))
+        (end (if end
+                 end
+               start)))
+    (loop for i from start to end by step
+          collect i)))
+
 (provide 'cofi-util)

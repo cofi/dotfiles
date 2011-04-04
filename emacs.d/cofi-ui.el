@@ -211,6 +211,8 @@
               woman-imenu t
               woman-cache-filename "~/var/emacs/woman-cache")
 
+(setq-default show-trailing-whitespace t)
+
 (eval-after-load "info"
   '(add-to-list 'Info-directory-list
          "~/doc/info"))

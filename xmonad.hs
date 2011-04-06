@@ -59,7 +59,7 @@ main = do
                          , workspaces = ["1:comm", "2:browse", "3:code"] ++ map show [4..9] ++ ["mail", "feeds", "hide"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
-                         , logHook = updatePointer (Relative 0.5 0.5) >> (dynamicLogWithPP $ myPP xmproc)
+                         , logHook = updatePointer (Relative 0.5 0.5) >> dynamicLogWithPP (myPP xmproc)
                          , manageHook = myManageHook
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir
@@ -235,7 +235,7 @@ myLayout = windowArrange $ smartBorders $ avoidStruts $
 ----------------------------------------
 
 -- Queries ----------------------------------------
-prefixTitle prefix = (fmap (prefix `isPrefixOf`) title)
+prefixTitle prefix = fmap (prefix `isPrefixOf`) title
 weechatQuery = prefixTitle "weechat"
 emacsQuery = prefixTitle "emacs"
 wanderlustQuery = title =? "Wanderlust Mail"

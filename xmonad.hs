@@ -5,7 +5,7 @@ import qualified XMonad.StackSet as W
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
- 
+
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DynamicWorkspaces
@@ -65,8 +65,8 @@ main = do
                          } `additionalKeysP` myKeys homeDir
     where
       myStartupHook = setWMName "LG3D"
-      trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false " 
-               ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true" 
+      trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false "
+               ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true"
       xmobar systemID = case (nodeName systemID) of
         "hitchhiker" -> "xmobar ~/.xmobar/laptop"
         "coficore"   -> "xmobar ~/.xmobar/desktop"
@@ -174,7 +174,7 @@ myKeys homeDir = [ ("M-<Backspace>", spawn respawn)
         acPromptConfig = promptConfig { autoComplete = Just 500000 }
 
 -- PrettyPrinter ----------------------------------------
-myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]" 
+myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
                     , ppSep     = " :: "
                     , ppWsSep   = " "
                     , ppVisible = xmobarColor "#000000" "DarkSlateGrey"
@@ -197,8 +197,8 @@ promptSFG = "#00aa4a"           -- selected Foreground
 myPromptKeymap = M.union defaultXPKeymap $ M.fromList
                  [
                    ((controlMask, xK_g), quit)
-                 , ((controlMask, xK_m), setSuccess True >> setDone True) 
-                 , ((controlMask, xK_j), setSuccess True >> setDone True) 
+                 , ((controlMask, xK_m), setSuccess True >> setDone True)
+                 , ((controlMask, xK_j), setSuccess True >> setDone True)
                  , ((controlMask, xK_h), deleteString Prev)
                  , ((controlMask, xK_f), moveCursor Next)
                  , ((controlMask, xK_b), moveCursor Prev)
@@ -238,7 +238,7 @@ myLayout = windowArrange $ smartBorders $ avoidStruts $
 prefixTitle prefix = (fmap (prefix `isPrefixOf`) title)
 weechatQuery = prefixTitle "weechat"
 emacsQuery = prefixTitle "emacs"
-wanderlustQuery = title =? "Wanderlust Mail" 
+wanderlustQuery = title =? "Wanderlust Mail"
 newsbeuterQuery = title =? "newsbeuter"
 firefoxQuery = className =? "Firefox"
 
@@ -304,8 +304,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , bitbucket
                                                   , debbugs
                                                   , define
-                                                  , dict 
-                                                  , leo 
+                                                  , dict
+                                                  , leo
                                                   , S.maps
                                                   , images
                                                   , code
@@ -314,7 +314,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , zdfMediathek
                                                   , S.hoogle
                                                   , S.hackage
-                                                  , imdb 
+                                                  , imdb
                                                   , S.alpha
                                                   , mathworld
                                                   , S.prefixAware google

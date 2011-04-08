@@ -19,14 +19,6 @@
 
      `(highlight ((t (:background "sienna"))))
 
-     `(change-log-acknowledgement-face ((t (:foreground "firebrick"))))
-     `(change-log-conditionals-face ((t (:foreground "dark goldenrod"))))
-     `(change-log-date-face ((t (:foreground "rosy brown"))))
-     `(change-log-email-face ((t (:foreground "dark goldenrod"))))
-     `(change-log-file-face ((t (:foreground "blue"))))
-     `(change-log-function-face ((t (:foreground "dark goldenrod"))))
-     `(change-log-list-face ((t (:foreground "purple"))))
-     `(change-log-name-face ((t (:foreground "cadet blue"))))
      `(comint-highlight-input ((t (:bold t))))
      `(comint-highlight-prompt ((t (:foreground "dark blue"))))
 

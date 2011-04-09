@@ -143,7 +143,7 @@
 
      `(trailing-whitespace ((t (:background "red"))))
 
-     `(minibuffer-prompt ((t (:foreground "orange"))))
+     `(minibuffer-prompt ((t (:foreground "orange" :bold t))))
 
      `(viper-minibuffer-insert ((t (:background "white" :foreground "black"))))
      `(viper-minibuffer-emacs ((t (:background "gray13" :foreground "white"))))

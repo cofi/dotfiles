@@ -25,9 +25,9 @@
                              slime-repl-mode-hook))
 
 (require-and-exec 'paredit
-  (defadvice paredit-mode (after subst-autopair (arg))
+  (defadvice paredit-mode (after subst-autopair activate)
     "Disable autopair when running paredit."
-    (setq autopair-dont-activate (not paredit-mode)))
+    (setq autopair-dont-activate paredit-mode))
 
   (dolist (hook paredit-mode-hooks)
     (add-hook hook #'enable-paredit-mode)))

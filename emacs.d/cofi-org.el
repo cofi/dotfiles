@@ -240,7 +240,7 @@ Note: This assumes all files are in the org-directory."
 
 (setq org-export-latex-emphasis-alist
       '(("*" "\\textbf{%s}" nil)
-        ("/" "\\emph{%s}" nil) 
+        ("/" "\\emph{%s}" nil)
         ("_" "\\underline{%s}" nil)
         ("+" "\\st{%s}" nil)
         ("=" "\\verb=%s=" nil)

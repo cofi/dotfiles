@@ -101,7 +101,7 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
 
   (dolist (mode '(magit-mode magit-key-mode magit-show-branches-mode))
     (push mode viper-emacs-state-mode-list))
-  
+
   (push 'clojure-mode viper-vi-state-mode-list)
   ;; ===================================================
 
@@ -170,10 +170,10 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
       (set-cursor-color cofi/viper-emacs-cursor-color))
      ((eq viper-current-state 'replace-state)
       (set-cursor-color cofi/viper-replace-cursor-color))
-     (t 
+     (t
       (set-cursor-color cofi/default-cursor-color)
       )))
-  
+
   (add-hook 'post-command-hook 'cofi/viper-bar)
 
   ;; Disable annoying vim compatibilities

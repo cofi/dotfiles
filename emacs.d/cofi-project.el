@@ -3,7 +3,7 @@
   (when (fboundp 'ibuffer)
     (defun mk/proj-buffer-p (b)
       "Is the buffer `b' part of the project?"
-      (and mk-proj-name 
+      (and mk-proj-name
            (or (mk-proj-buffer-p b)
                (string= (buffer-name b) mk-proj-fib-name)
                (string= (buffer-file-name b) mk-proj-tags-file))))

@@ -38,11 +38,11 @@
   (funcall 'plasma-send-notification msg title timeout))
 
 (defun x-urgency-hint (frame arg &optional source)
-  (let* ((wm-hints (append (x-window-property 
-			    "WM_HINTS" frame "WM_HINTS" 
+  (let* ((wm-hints (append (x-window-property
+			    "WM_HINTS" frame "WM_HINTS"
 			    (if source
 				source
-			      (string-to-number 
+			      (string-to-number
 			       (frame-parameter frame 'outer-window-id)))
 			    nil t) nil))
 	 (flags (car wm-hints)))

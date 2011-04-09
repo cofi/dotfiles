@@ -5,7 +5,7 @@
 (setq european-calendar-style t)
 (setq calendar-time-display-form
       '(24-hours ":" minutes (and time-zone (concat " (" time-zone ")"))))
- 
+
 (setq calendar-day-name-array
       ["Sonntag" "Montag" "Dienstag" "Mittwoch"
        "Donnerstag" "Freitag" "Samstag"])
@@ -18,7 +18,7 @@
 (setq calendar-latitude 49.9)
 (setq calendar-longitude 8.7)
 (setq calendar-location-name "Darmstadt, D")
- 
+
 (setq german-holidays
       '(
         (holiday-fixed 1 1 "Neujahr")

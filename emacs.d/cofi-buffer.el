@@ -4,7 +4,7 @@
   (setq ibuffer-show-empty-filter-groups nil)
 
   (setq ibuffer-saved-filter-groups
-        (quote (("default"      
+        (quote (("default"
                  ("Config" (filename . ".emacs.d/"))
 
                  ("Programming" (or
@@ -31,7 +31,7 @@
                    (mode . org-agenda-mode)
                   ))
                  ("Org" (mode . org-mode))
-                 
+
                  ("Dired" (mode . dired-mode))
 
                  ("Wanderlust" (or
@@ -52,7 +52,7 @@
                             (name . "\\*haskell.*\\*")
                             ))
 
-                 ("Magit" (or 
+                 ("Magit" (or
                            (mode . magit-mode)
                            (name . "\\*magit-.*\\*")
                            ))

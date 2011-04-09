@@ -67,7 +67,7 @@
     (define-key map (kbd "o") 'delete-other-windows)
     (define-key map (kbd "1") 'delete-other-windows)
     (define-key map (kbd "d") 'delete-window)
-    
+
     ;; Frame sizing
     (define-key map (kbd "m") 'frame/maximize)
     (define-key map (kbd "n") 'frame/normal)

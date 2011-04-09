@@ -1,5 +1,5 @@
 (require-and-exec 'flymake
-  ;; check only after save 
+  ;; check only after save
   (setq flymake-no-changes-timeout 9999
         flymake-start-syntax-check-on-newline nil)
 

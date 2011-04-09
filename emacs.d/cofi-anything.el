@@ -168,7 +168,7 @@
      (defun cofi/anything-uni ()
        (interactive)
        (anything-other-buffer cofi/anything-uni-sources "*anything uni*"))
-     
+
      (defun cofi/anything-config ()
        (interactive)
        (anything-other-buffer cofi/anything-config-sources "*anything config*"))

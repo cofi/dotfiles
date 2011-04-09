@@ -20,7 +20,7 @@
           (y-or-n-p "Subject missing. Send? "))
       (error "Abort.")))
 
-;; SEMI-PGG files are safe to delete, Hello GPG_AGENT 
+;; SEMI-PGG files are safe to delete, Hello GPG_AGENT
 (setq pgg-default-scheme 'gpg
       pgg-scheme 'gpg
       pgg-query-keyserver t

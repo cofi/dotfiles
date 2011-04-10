@@ -22,6 +22,7 @@
 
   (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
   (define-key viper-insert-global-user-map (kbd "C-c") 'viper-intercept-ESC-key)
+  (define-key viper-insert-global-user-map (kbd "RET") 'reindent-then-newline-and-indent)
 
   (when (string< vimpulse-version "0.5")
     (require-and-exec 'goto-last-change

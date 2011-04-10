@@ -9,6 +9,9 @@
 [apply]
     whitespace = fix
 
+[branch]
+    autosetupmerge = true
+
 [color]
     status = auto
     diff = auto

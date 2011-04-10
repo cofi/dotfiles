@@ -1,0 +1,4 @@
+#! /bin/sh
+# Shows log and diffstat of pulled commits
+git pull "$@"
+git log --pretty=format:"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)" HEAD@{1}..

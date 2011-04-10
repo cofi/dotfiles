@@ -54,6 +54,7 @@
             "cofi-buffer"
             "cofi-calendar"
             "cofi-desktop"
+            "cofi-ediff"
             "cofi-mail"
             "cofi-project"
             "cofi-snippets"

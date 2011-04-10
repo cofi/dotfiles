@@ -28,8 +28,13 @@
     error = cyan
     header = yellow
 
+[mergetool "ediff"]
+    cmd = emacsclient --eval \"(ediff-git-merge-emacsclient \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\")\"
+    trustExitCode = true
+
 [merge]
-    tool = kdiff3
+    tool = ediff
+
 [diff]
     tool = gvimdiff
     renames = copy

@@ -173,7 +173,8 @@
 
 (setq inhibit-startup-screen t)
 
-(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; Use UTF-8 dammit
 (prefer-coding-system       'utf-8)

@@ -28,12 +28,16 @@
     error = cyan
     header = yellow
 
-[mergetool "ediff"]
-    cmd = emacsclient --eval \"(ediff-git-merge-emacsclient \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\")\"
+[mergetool "ediff-windowed"]
+    cmd = emacsclient -c --eval \"(ediff-git-merge-emacsclient \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\" t)\"
+    trustExitCode = true
+
+[mergetool "ediff-term"]
+    cmd = emacsclient -nw --eval \"(ediff-git-merge-emacsclient \\\"$LOCAL\\\" \\\"$REMOTE\\\" \\\"$BASE\\\" \\\"$MERGED\\\" t)\"
     trustExitCode = true
 
 [merge]
-    tool = ediff
+    tool = ediff-windowed
 
 [diff]
     tool = gvimdiff

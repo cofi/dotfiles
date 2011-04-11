@@ -64,20 +64,24 @@
             "cofi-completion"
             ))
 
-(defun cofi/prog-loads ()
-  (load "cofi-programming"))
-(add-hook 'emacs-startup-hook 'cofi/prog-loads)
+(defvar cofi/full-emacs t "Load all settings not just minimal.")
+(defvar cofi/mail-instance nil "This is an email instance.")
 
-;; from http://edward.oconnor.cx/2010/08/standalone-gnus
 (add-to-list 'command-switch-alist
              '("wl" . (lambda (&rest ignore)
-                        ;; no line numbers with mail
-                        (global-linum-mode -1)
-                        ;; Start wanderlust when Emacs starts
-                        (add-hook 'emacs-startup-hook 'wl t)
-                        (remove-hook 'emacs-startup-hook 'cofi/prog-loads)
+                        (setq cofi/mail-instance t)
+                        (setq cofi/full-emacs nil)
                         ;; Exit Emacs after quitting WL
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
+
+(add-hook 'emacs-startup-hook (lambda ()
+                                (when cofi/mail-instance
+                                  (global-linum-mode -1)
+                                  (wl)
+                                  (add-hook 'emacs-startup-hook 'wl t))
+                                (when cofi/full-emacs
+                                  (load "cofi-programming"))
+                                ))
 
 (load-theme 'cofi-dark)
 (cofi-file-standard)

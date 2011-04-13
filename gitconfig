@@ -74,3 +74,4 @@
     amend = commit --amend -C HEAD
     amendc = commit --amend
     tree = log --graph --pretty=oneline --decorate
+    ls-ignored = ls-files --exclude-standard --ignored --others

@@ -59,6 +59,9 @@
     d1 = diff HEAD^1..
     df = diff
     dfc = diff --cached
+    wd1 = diff --word-diff=color HEAD^1..
+    wdf = diff --word-diff=color
+    wdfc = diff --word-diff=color --cached
     gdf = difftool
     gdfc = difftool --cached
     mg = merge

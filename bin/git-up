@@ -1,4 +1,6 @@
 #! /bin/sh
 # Shows log and diffstat of pulled commits
+
+HEAD=$(git rev-parse HEAD)
 git pull "$@"
-git log --pretty=format:"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)" HEAD@{1}..
+git log --pretty=format:"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)" $HEAD..

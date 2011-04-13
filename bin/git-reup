@@ -1,6 +1,7 @@
 #! /bin/sh
 # Shows log and diffstat of pulled commits (using rebase)
 
+HEAD=$(git rev-parse HEAD)
 git pull --rebase "$@"
-git --no-pager diff --color --stat HEAD@{1}..
-git log --pretty=format:"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)" HEAD@{1}..
+git --no-pager diff --color --stat $HEAD..
+git log --pretty=format:"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)" $HEAD..

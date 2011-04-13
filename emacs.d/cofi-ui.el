@@ -171,6 +171,8 @@
 
 (setq comment-style 'align)
 
+(setq reb-re-syntax 'string)
+
 (setq inhibit-startup-screen t)
 
 (setq ediff-split-window-function 'split-window-horizontally

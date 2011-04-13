@@ -127,7 +127,7 @@
      (defun cofi/update-anything-sources ()
        (interactive)
        (setq cofi/anything-uni-sources
-             (let* ((dirs '("FoC" "FGdI3" "GdI3" "SE" "TS"))
+             (let* ((dirs '("DKE" "HCS" "NCS" "MfI3" "CMS"))
                     (subdirs '("aufgaben" "uebungen" "notes"))
                     (combinator (lambda (x y) (format "%s/%s" x y)))
                     (path "~/Work/Uni/")

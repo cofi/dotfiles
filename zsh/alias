@@ -78,4 +78,4 @@ alias h='history'
 alias which='builtin which -a'
 
 # dev
-alias diff='diff -Naur'
+alias pdiff='diff -Naur'

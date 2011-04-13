@@ -42,6 +42,7 @@ alias open='kde-open 2&> /dev/null'
 
 #Globbing sucks with git's revision modifiers
 alias git='noglob git'
+alias g='git'
 
 #color grep
 alias grep='grep --color=auto'

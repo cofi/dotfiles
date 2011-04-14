@@ -34,7 +34,6 @@
         "~/.elisp/vendor/pylookup"
         "~/.elisp/vendor/scratch"
         "~/.elisp/vendor/offlineimap"
-        "~/.elisp/vendor/popwin-el"
         "/usr/local/share/emacs/site-lisp/semi/"
         "/usr/local/share/emacs/site-lisp/flim/"
         "/usr/local/share/emacs/site-lisp/apel/"
@@ -42,10 +41,10 @@
         "/usr/local/share/emacs/site-lisp/wl/"
         ))
 
+(require 'cofi-util)
 (defvar hostname (car (split-string system-name "\\." t)))
 (defvar on-mobile? (find hostname '("hitchhiker") :test #'string=))
 
-(require 'cofi-util)
 (require 'cofi-vim)
 (load "private" 'noerror)
 
@@ -67,6 +66,8 @@
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
 (defvar cofi/mail-instance nil "This is an email instance.")
 
+(mapc #'load cofi/standard-settings)
+
 (add-to-list 'command-switch-alist
              '("wl" . (lambda (&rest ignore)
                         (setq cofi/mail-instance t)
@@ -75,7 +76,6 @@
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
 
 (add-hook 'emacs-startup-hook (lambda ()
-                                (mapc #'load cofi/standard-settings)
                                 (when cofi/mail-instance
                                   (global-linum-mode -1)
                                   (wl)
@@ -85,6 +85,5 @@
                                 ))
 (load-theme 'cofi-dark)
 (cofi-file-standard)
-
 (message "Time needed to load: %d seconds."
          (time-to-seconds (time-since startup-time)))

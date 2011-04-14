@@ -43,6 +43,7 @@
         ))
 
 (defvar hostname (car (split-string system-name "\\." t)))
+(defvar on-mobile? (find hostname '("hitchhiker") :test #'string=))
 
 (require 'cofi-util)
 (require 'cofi-vim)

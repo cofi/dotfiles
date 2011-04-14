@@ -247,7 +247,7 @@
 (add-hook 'find-file-hook (lambda () (linum-mode 1))) ;start linum only for real files
 (defadvice normal-mode (after re-line activate) (linum-mode 1)) ; fix normal-mode disabling
 (show-paren-mode t)
-(when (string= hostname "hitchhiker")
+(when on-mobile?
     (display-battery-mode t))
 
 (setq winner-dont-bind-my-keys t

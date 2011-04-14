@@ -49,21 +49,20 @@
 (require 'cofi-vim)
 (load "private" 'noerror)
 
-(mapc #'load '(
-            "cofi-autoloads"
-            "cofi-anything"
-            "cofi-buffer"
-            "cofi-calendar"
-            "cofi-desktop"
-            "cofi-ediff"
-            "cofi-mail"
-            "cofi-project"
-            "cofi-snippets"
-            "cofi-ui"
-            "cofi-org"
-            "cofi-windowing"
-            "cofi-completion"
-            ))
+(defvar cofi/standard-settings '("cofi-autoloads"
+                                 "cofi-anything"
+                                 "cofi-buffer"
+                                 "cofi-calendar"
+                                 "cofi-desktop"
+                                 "cofi-ediff"
+                                 "cofi-mail"
+                                 "cofi-project"
+                                 "cofi-snippets"
+                                 "cofi-ui"
+                                 "cofi-org"
+                                 "cofi-windowing"
+                                 "cofi-completion"))
+(defvar cofi/full-settings '("cofi-programming"))
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
 (defvar cofi/mail-instance nil "This is an email instance.")
@@ -76,14 +75,14 @@
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
 
 (add-hook 'emacs-startup-hook (lambda ()
+                                (mapc #'load cofi/standard-settings)
                                 (when cofi/mail-instance
                                   (global-linum-mode -1)
                                   (wl)
                                   (add-hook 'emacs-startup-hook 'wl t))
                                 (when cofi/full-emacs
-                                  (load "cofi-programming"))
+                                  (mapc #'load cofi/full-settings))
                                 ))
-
 (load-theme 'cofi-dark)
 (cofi-file-standard)
 

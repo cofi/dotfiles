@@ -212,7 +212,7 @@
               woman-imenu t
               woman-cache-filename "~/var/emacs/woman-cache")
 
-(setq-default show-trailing-whitespace t)
+(add-hook 'find-file-hook (lambda () (setq show-trailing-whitespace t)))
 
 (eval-after-load "info"
   '(add-to-list 'Info-directory-list

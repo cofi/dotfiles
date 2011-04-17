@@ -308,6 +308,7 @@
 (global-set-key (kbd "C-x C-f") 'cofi/file-alternate)
 (global-set-key (kbd "C-x b") 'cofi/buffer)
 (global-set-key (kbd "C-x B") 'cofi/buffer-alternate)
+(global-set-key (kbd "C-x C-c") 'cofi/buffer)
 
 (require-and-exec 'cofi-func
   (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)

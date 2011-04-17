@@ -101,8 +101,8 @@
 (require-and-exec 'dired+)
 
 (require-and-exec 'point-stack
-  (global-set-key (kbd "<f1>") 'point-stack-push)
-  (global-set-key (kbd "<f2>") 'point-stack-pop)
+  (global-set-key (kbd "<f2>") 'point-stack-push)
+  (global-set-key (kbd "S-<f2>") 'point-stack-pop)
   (global-set-key (kbd "C-<f2>") 'point-stack-forward-stack-pop))
 
 (require-and-exec 'eldoc

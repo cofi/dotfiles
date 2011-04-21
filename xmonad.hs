@@ -336,6 +336,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       debbugs = S.searchEngine "deb" "http://bugs.debian.org/"
       zdfMediathek = S.searchEngine "zdf" "http://www.zdf.de/ZDFmediathek/#/suche/"
       pgpmit = S.searchEngine "pgp" "http://pgp.mit.edu:11371/pks/lookup?search="
+      alpha = S.searchEngine "alpha" "http://www.wolframalpha.com/input/i="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

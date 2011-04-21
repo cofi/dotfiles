@@ -47,9 +47,10 @@
   (setq make-backup-files nil)
   (setq fill-column 72)
   (turn-on-auto-fill)
-  (auto-complete-mode)
-  (yas/minor-mode)
+  (auto-complete-mode 1)
+  (yas/minor-mode 1)
   (auto-dictionary-mode)
+  (mail-abbrevs-mode 1)
   (turn-on-flyspell))
 
 (add-hook 'mime-view-mode-hook

@@ -323,7 +323,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , S.prefixAware google
                                                   ]
       -- new ones
-      wikiD = S.searchEngine "wpd" "https://secure.wikimedia.org/wikipedia/de/wiki/Special:Search?go=Go&search="
+      wiki = S.searchEngine "wp" "http://en.wikipedia.org/wiki/Special:Search?go=Go&search="
+      wikiD = S.searchEngine "wpd" "http://de.wikipedia.org/wiki/Special:Search?go=Go&search="
       dict = S.searchEngine "dict" "http://www.dict.cc/?s="
       leo = S.searchEngine "leo" "http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&relink=on&search="
       imdb = S.searchEngine "imdb" "http://www.imdb.com/find?s=all&q="
@@ -341,7 +342,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch
-      wiki = S.namedEngine "wp" S.wikipedia
 
       (!>) :: SearchEngine -> SearchEngine -> SearchEngine
       (SearchEngine name1 site1) !> (SearchEngine name2 site2) =

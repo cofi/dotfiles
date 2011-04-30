@@ -62,6 +62,10 @@ map <A-s> :set nss!=<A-Tab>
 map <A-C-s> :set nso!=<A-Tab>
 map <A-S-s> :set nst!=<A-Tab>
 
+" Instapaper
+command! instapaper :open readlater
+nnoremap <A-r> :instapaper<CR>
+
 " Org
 command! store-link -javascript
    \ -desc 'Store link for Orgmode'

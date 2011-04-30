@@ -63,9 +63,23 @@ map <A-C-s> :set nso!=<A-Tab>
 map <A-S-s> :set nst!=<A-Tab>
 
 " Org
-command! store-link -js io.system('emacsclient -c "org-protocol:/store-link:/' + encodeURIComponent(buffer.URL) + '/' + encodeURIComponent(buffer.title) + '"')
-command! capture -js io.system('emacsclient -c "org-protocol:/capture:/x/' + encodeURIComponent(buffer.URL) + '/' + encodeURIComponent(buffer.title) + '/' + encodeURIComponent(window.getSelection()) + '"')
-command! save-link -js io.system('emacsclient -c "org-protocol:/capture:/s/' + encodeURIComponent(buffer.URL) + '/' + encodeURIComponent(buffer.title) + '"')
+command! store-link -javascript
+   \ -desc 'Store link for Orgmode'
+   \ io.system('emacsclient -c "org-protocol:/store-link:/'
+   \ + encodeURIComponent(buffer.URL) + '/'
+   \ + encodeURIComponent(buffer.title) + '"')
+command! capture -javascript
+   \ -desc 'Capture URL with selection in Orgmode.'
+   \ io.system('emacsclient -c "org-protocol:/capture:/x/'
+   \ + encodeURIComponent(buffer.URL) + '/'
+   \ + encodeURIComponent(buffer.title) + '/'
+   \ + encodeURIComponent(window.getSelection()) + '"')
+
+command! save-link -javascript
+   \ -desc 'Save link in Orgmode.'
+   \ io.system('emacsclient -c "org-protocol:/capture:/s/'
+   \ + encodeURIComponent(buffer.URL) + '/'
+   \ + encodeURIComponent(buffer.title) + '"')
 
 nnoremap <A-w> :save-link<CR>
 nnoremap <A-l> :store-link<CR>

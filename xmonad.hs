@@ -296,6 +296,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                    , ("d", wikiD)
                    , ("t", dict)
                    , ("l", leo)
+                   , ("s", scroogle)
                    ]
       multi = S.namedEngine "multi" $ foldr1 (!>) [ google
                                                   , scroogle

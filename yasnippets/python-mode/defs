@@ -1,6 +1,6 @@
 # -*- coding: utf-8 mode: snippet -*-
-# name: Method with sphinx doc
-# key: defms
+# name: Function with sphinx doc
+# key: defs
 # contributor: Michael Markert <markert.michael@googlemail.com>
 # --
 def ${1:name}($2):

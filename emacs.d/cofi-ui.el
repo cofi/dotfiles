@@ -231,6 +231,7 @@
 (setq autopair-autowrap t)
 
 (setq compilation-scroll-output 'first-error)
+(setq font-lock-verbose nil)
 ;; ==================================================
 
 ;; Default modes ========================================

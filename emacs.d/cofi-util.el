@@ -189,4 +189,23 @@ Mimicks Python's `range'"
     (loop for i from start to end by step
           collect i)))
 
+(defun empty-string? (s)
+  "Test if `S' is an empty string."
+  (string= s ""))
+
+(defun cofi/org-wmean (values weights)
+  "Sum `VALUES' weighted according to `WEIGHTS' and divide by the sum of `WEIGHTS'.
+Tailored specific to org tables, i.e. input expected as strings and output are
+strings."
+  (loop for v in values
+        for w in weights
+        unless (or (empty-string? v) (empty-string? w))
+        sum (string-to-number w) into wsum
+        collect (* (string-to-number v) (string-to-number w))
+                into weighted-values
+        finally (return (let ((weighted-sum (/ (reduce #'+ weighted-values) wsum)))
+                          (if (= weighted-sum 0)
+                              ""
+                            (format "%.1f" weighted-sum))))))
+
 (provide 'cofi-util)

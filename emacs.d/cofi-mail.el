@@ -1,6 +1,8 @@
 (add-hook 'mail-citation-hook 'trivial-cite)
 (setq tc-make-attribution (function tc-simple-attribution-kai))
 
+(require 'elscreen-wl)
+
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"
   (interactive)

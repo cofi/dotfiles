@@ -54,6 +54,7 @@
                                  "cofi-calendar"
                                  "cofi-desktop"
                                  "cofi-ediff"
+                                 "cofi-elscreen"
                                  "cofi-mail"
                                  "cofi-project"
                                  "cofi-snippets"

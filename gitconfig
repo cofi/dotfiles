@@ -48,6 +48,7 @@
 [alias]
     ad = add
     ap = add -p
+    ai = add -i
     pl = pull
     pr = pull --rebase
     ps = push
@@ -59,15 +60,17 @@
     d1 = diff HEAD^1..
     df = diff
     dfc = diff --cached
-    wd1 = diff --word-diff=color HEAD^1..
-    wdf = diff --word-diff=color
-    wdfc = diff --word-diff=color --cached
+    wd1 = diff --word-diff=color HEAD^1.. #word-diff from last commit
+    wdf = diff --word-diff=color          #word-diff
+    wdfc = diff --word-diff=color --cached # word-diff cached
     gdf = difftool
     gdfc = difftool --cached
     mg = merge
     gmg = mergetool
-    vu = ls-files -u                #view unmerged files
-    l1 = !git --no-pager log HEAD^1..
+    vu = ls-files -u                    #view unmerged files
+    l1 = log HEAD^1..                   #last commit
+    l5 = log HEAD^5..                   # last 5 commits
+    l5o = log --pretty=oneline HEAD^5.. # last 5 commits onlined
     lp = log -p
     slog = log --pretty=format:\"%h - %cr - %s (%cn)\"
     stats = shortlog -s -n -e --no-merges

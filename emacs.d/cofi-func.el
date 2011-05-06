@@ -260,4 +260,8 @@ Major mode determines association."
       (org-cdlatex-mode prefix)
     (cdlatex-mode prefix)))
 
+(defun highlight-80 ()
+  (interactive)
+  (column-marker-1 80))
+
 (provide 'cofi-func)

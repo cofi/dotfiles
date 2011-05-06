@@ -55,11 +55,14 @@
                                  "cofi-desktop"
                                  "cofi-ediff"
                                  "cofi-elscreen"
+                                 "cofi-files"
+                                 "cofi-keys"
                                  "cofi-mail"
                                  "cofi-project"
                                  "cofi-snippets"
                                  "cofi-ui"
                                  "cofi-org"
+                                 "cofi-vcs"
                                  "cofi-windowing"
                                  "cofi-completion"))
 (defvar cofi/full-settings '("cofi-programming"))

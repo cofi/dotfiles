@@ -112,4 +112,18 @@
     (global-set-key (kbd "C-x w") map) ;; alternative for buffers were C-w is used
     )
 
+(setq winner-dont-bind-my-keys t
+      winner-boring-buffers '("*anything*"
+                              "*anything buffers*"
+                              "*anything bookmarks*"
+                              "*anything make*"
+                              "*anything uni*"
+                              "*anything config*"
+                              "*Completions*"
+                              "*Help*"
+                              "*compilation*"))
+
+(require-and-exec 'winner
+                  (winner-mode 1))
+
 (provide 'cofi-windowing)

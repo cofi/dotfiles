@@ -76,5 +76,6 @@
 (add-hook 'python-mode-hook
           #'(lambda ()
               (pymacs-load "ropemacs" "rope-")))
-
+(when (fboundp 'column-marker-1)
+  (add-hook 'python-mode-hook 'highlight-80))
 (provide 'cofi-python)

@@ -21,4 +21,15 @@
 (defadvice elscreen-toggle (around elscreen-create-automatically activate)
   (elscreen-create-automatically ad-do-it))
 
+;;; magit support
+(defadvice magit-status (before elscreen-create-before-magit activate)
+  (elscreen-create))
+
+(add-hook 'magit-mode-hook (lambda ()
+                             (local-set-key (kbd "q")
+                                            (lambda ()
+                                              (interactive)
+                                              (quit-window)
+                                              (elscreen-kill)))))
+
 (provide 'cofi-elscreen)

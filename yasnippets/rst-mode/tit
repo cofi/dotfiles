@@ -1,4 +1,6 @@
+# -*- coding: utf-8 mode: snippet -*-
 #name : Document title
+#key: ==
 # --
 ${1:$(make-string (string-width text) ?\=)}
 ${1:Title}

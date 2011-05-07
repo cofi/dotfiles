@@ -1,4 +1,6 @@
+# -*- coding: utf-8 mode: snippet -*-
 #name : Chapter title
+#key: =
 # --
 ${1:Chapter}
 ${1:$(make-string (string-width text) ?\=)}

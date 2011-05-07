@@ -9,5 +9,6 @@
 
 (global-set-key (kbd "C-c g") 'magit-status)
 (require 'ahg)
+(setq ahg-global-key-prefix (kbd "C-c h"))
 
 (provide 'cofi-vcs)

@@ -74,6 +74,7 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
   (vim-mapleader-add "C" 'delete-frame)
 
   (vim-mapleader-add "g" 'magit-status)
+  (vim-mapleader-add "h" 'ahg-status)
 
   (vim-mapleader-add "s" 'cofi/switch-file)
   (vim-mapleader-add ";" 'cofi/end-prog-line)

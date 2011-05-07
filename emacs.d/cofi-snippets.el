@@ -25,9 +25,7 @@
             (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
             (define-key yas/keymap [tab] 'yas/next-field)))
 
-(eval-after-load "magit"
-  (add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t))))
-(eval-after-load "calc"
-  (add-hook 'calc-mode-hook (lambda () (setq yas/dont-activate t))))
+(add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t)))
+(add-hook 'calc-mode-hook (lambda () (setq yas/dont-activate t)))
 
 (provide 'cofi-snippets)

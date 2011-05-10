@@ -63,8 +63,8 @@ map -g user <A-C-s> set nso!=<A-Tab>
 map -g user <A-S-s> :set nst!=<A-Tab>
 
 " Instapaper -- depends on instapaper bookmarklet with `readlater' keyword
-command! instapaper -ex open readlater
-map -g user <A-r> -ex instapaper<CR>
+command! instapaper open readlater
+map -g user <A-r> -ex instapaper
 
 " Org
 command! store-link -javascript

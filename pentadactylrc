@@ -26,18 +26,18 @@ set hintmatching=contains
 set newtab+=help
 set hintkeys=asdfghjkl;
 
-map <A-a> -silent :dialog addbookmark<CR>
-map <A-b> -silent :tabopen chrome://browser/content/places/places.xul<CR>
-map <C-l> -silent :nohlfind<CR>
+map -g user <A-a> -silent -ex dialog addbookmark
+map -g user <A-b> -silent -ex tabopen chrome://browser/content/places/places.xul
+map -g user <C-l> -silent -ex nohlfind
 
 " Tabs
-map <leader>n -silent :tabnext<CR>
-map <leader>p -silent :tabprev<CR>
-map <C-right> -silent :tabnext<CR>
-map <C-left> -silent :tabprev<CR>
-map <leader>f -silent :tabrewind<CR>
-map <leader>l -silent :tablast<CR>
-map <leader>d -silent :tabduplicate<CR>
+map -g user <leader>n -silent -ex tabnext
+map -g user <leader>p -silent -ex tabprev
+map -g user <C-right> -silent -ex tabnext
+map -g user <C-left> -silent -ex tabprev
+map -g user <leader>f -silent -ex tabrewind
+map -g user <leader>l -silent -ex tablast
+map -g user <leader>d -silent -ex tabduplicate
 
 " Movement
 inoremap <C-f> <right>
@@ -58,13 +58,13 @@ nnoremap <C-e> 10<C-e>
 nnoremap <C-y> 10<C-y>
 
 " NoScript
-map <A-s> :set nss!=<A-Tab>
-map <A-C-s> :set nso!=<A-Tab>
-map <A-S-s> :set nst!=<A-Tab>
+map -g user <A-s> :set nss!=<A-Tab>
+map -g user <A-C-s> set nso!=<A-Tab>
+map -g user <A-S-s> :set nst!=<A-Tab>
 
-" Instapaper
-command! instapaper :open readlater
-nnoremap <A-r> :instapaper<CR>
+" Instapaper -- depends on instapaper bookmarklet with `readlater' keyword
+command! instapaper -ex open readlater
+map -g user <A-r> -ex instapaper<CR>
 
 " Org
 command! store-link -javascript
@@ -85,8 +85,8 @@ command! save-link -javascript
    \ + encodeURIComponent(buffer.URL) + '/'
    \ + encodeURIComponent(buffer.title) + '"')
 
-nnoremap <A-w> :save-link<CR>
-nnoremap <A-l> :store-link<CR>
+map -g user <A-w> -ex save-link
+map -g user <A-l> -ex store-link
 
 " UTM trimmer, based on http://pentablg.blogspot.com/2011/05/tip-of-day-mapping-javascript.html
 command! yank-utm -javascript -desc 'yank utm-trimmed url'

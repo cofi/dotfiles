@@ -95,6 +95,8 @@
       wl-auto-save-drafts-interval nil)
 (setq mime-edit-split-message nil)
 (setq wl-generate-mailer-string-function 'wl-generate-user-agent-string-1)
+
+(setq elmo-folder-update-confirm nil)
 ;; org-contacts
 (add-hook 'wl-draft-mode-hook
           (lambda ()

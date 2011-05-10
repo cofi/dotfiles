@@ -87,3 +87,14 @@ command! save-link -javascript
 
 nnoremap <A-w> :save-link<CR>
 nnoremap <A-l> :store-link<CR>
+
+" UTM trimmer, based on http://pentablg.blogspot.com/2011/05/tip-of-day-mapping-javascript.html
+command! yank-utm -javascript -desc 'yank utm-trimmed url'
+   \ let url = buffer.URL;
+   \ let utm = url.indexOf('?utm');
+   \ if ( utm > 0 ) {
+   \     url = url.substring(0, utm);
+   \     dactyl.clipboardWrite(url, true);
+   \}
+
+map -g user <Leader>y -ex yank-utm

@@ -257,4 +257,20 @@ Major mode determines association."
   (interactive)
   (column-marker-1 80))
 
+(defvar cofi/current-colorscheme nil)
+(defvar cofi/colorschemes '(cofi-dark cofi-light))
+(defun cofi/toggle-colorscheme (&optional arg)
+  (interactive "p")
+  (let (chosen (car (nthcdr arg cofi/colorschemes))
+               found)
+    (unless chosen
+      (setq chosen (car cofi/colorschemes)))
+    (when cofi/current-colorscheme
+      (disable-theme cofi/current-colorscheme))
+    (load-theme chosen)
+    (setq cofi/colorschemes (append
+                             (remove chosen cofi/colorschemes)
+                             (list chosen)))
+    (setq cofi/current-colorscheme chosen)))
+
 (provide 'cofi-func)

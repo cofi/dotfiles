@@ -269,4 +269,16 @@ See `POUR-MAPPINGS-WITH'."
       (setq  lst (cdr lst)))
     (nreverse acc)))
 
+(defmacro cmd (&rest code)
+  "Macro for shorter keybindings."
+  `(lambda ()
+     (interactive)
+     ,@code))
+
+(defmacro cmd-arg (args iflag &rest code)
+  "Macro for shorter keybindings with argument."
+  `(lambda (,@args)
+     (interactive iflag)
+     ,@code))
+
 (provide 'cofi-util)

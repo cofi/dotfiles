@@ -47,6 +47,13 @@
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (autoload 'markdown-mode "markdown-mode" "Mode for markdown files" t)
 
+(autoload 'multi-term-dedicated-open "multi-term" nil t)
+(autoload 'multi-term-next "multi-term" nil t)
+
+(autoload 'point-stack-push "point-stack" nil t)
+(autoload 'point-stack-pop "point-stack" nil t)
+(autoload 'point-stack-forward-stack-pop "point-stack" nil t)
+
 (autoload 'try-pysmell-complete "pysmell" "PySmell-Hippie-Completer" t)
 
 (autoload 'pylookup-lookup "pylookup"
@@ -83,5 +90,7 @@ gists." t)
   t)
 
 (autoload 'offlineimap "offlineimap" nil t)
+
+(autoload 'scratch "scratch" nil t)
 
 (provide 'cofi-autoloads)

@@ -8,16 +8,13 @@
 
 ;; other packages ========================================
 (require-and-exec 'diminish
-                  (eval-after-load "yasnippet"
-                    '(diminish 'yas/minor-mode " Y"))
-                  (eval-after-load "autopair"
-                    '(diminish 'autopair-mode " p"))
-                  (eval-after-load "eldoc"
-                    '(diminish 'eldoc-mode " ED"))
-                  (eval-after-load "highlight-parentheses"
-                    '(diminish 'highlight-parentheses-mode))
-                  (eval-after-load "undo-tree"
-                    '(diminish 'undo-tree-mode)))
+  (dolist (triple '(("yasnippet" yas/minor-mode " Y")
+                    ("autopair" autopair-mode " p")
+                    ("eldoc" eldoc-mode " ED")
+                    ("highlight-parentheses" highlight-parentheses-mode)
+                    ("undo-tree" undo-tree-mode)))
+    `(eval-after-load (car ,triple)
+       (diminish (cadr ,triple) (caddr ,triple)))))
 
 (require-and-exec 'ansi-color
                   (ansi-color-for-comint-mode-on))

@@ -213,4 +213,60 @@ strings."
      (interactive)
      (,mode 1)))
 
+(defmacro defkeymap (symbol &rest mappings)
+  "Define keymap bound to `SYMBOL'.
+See `POUR-MAPPINGS-WITH'."
+  `(setq ,symbol (fill-keymap (make-sparse-keymap) ,@mappings)))
+
+(defun global-bind-keymap (binding &rest mappings)
+  "Define keymap bound to with a global keybinding on `BINDING'.
+See `POUR-MAPPINGS-WITH'."
+  (let (map (make-sparse-keymap))
+    (fill-keymap map mappings)
+    (global-set-key (read-kbd-macro binding) map)))
+
+(defun fill-keymap (keymap &rest mappings)
+  "Fill `KEYMAP' with `MAPPINGS'.
+See `POUR-MAPPINGS-WITH'."
+  (pour-mappings-with (lambda (key fun) (define-key keymap key fun)) mappings)
+  keymap)
+
+(defmacro gen-fill-keymap-hook (keymap &rest mappings)
+  "Build fun that fills `KEYMAP' with `MAPPINGS'.
+See `POUR-MAPPINGS-WITH'."
+  `(lambda () (fill-keymap ,keymap ,@mappings)))
+
+(defun fill-local-keymap (&rest mappings)
+  "Fill local keymap with `MAPPINGS'.
+See `POUR-MAPPINGS-WITH'."
+  (pour-mappings-with 'local-set-key mappings))
+
+(defun fill-global-keymap (&rest mappings)
+  "Fill global keymap with `MAPPINGS'.
+See `POUR-MAPPINGS-WITH'."
+  (pour-mappings-with 'global-set-key mappings))
+
+(defun pour-mappings-with (fill-fun mappings)
+  "Calls `FILL-FUN' on every key-fun pair in `MAPPINGS'.
+`MAPPINGS' is a list of string-fun pairs, with a `READ-KBD-MACRO'-readable string and a interactive-fun."
+  (dolist (mapping (group mappings 2))
+    (funcall fill-fun (read-kbd-macro (car mapping)) (cadr mapping))))
+
+(defun group (lst n)
+  "Group `LST' into portions of `N'."
+  (let (groups)
+    (while lst
+      (push (take n lst) groups)
+      (setq lst (nthcdr n lst)))
+    (nreverse groups)))
+
+(defun take (n lst)
+  "Return atmost the first `N' items of `LST'."
+  (let (acc '())
+    (while (and lst (> n 0))
+      (decf n)
+      (push (car lst) acc)
+      (setq  lst (cdr lst)))
+    (nreverse acc)))
+
 (provide 'cofi-util)

@@ -16,7 +16,7 @@
             (lambda () (local-set-key (kbd "C-c M-p") 'slime-repl-set-package))))
 
 (add-hook 'slime-repl-mode-hook
-          (lambda () (local-set-key (kbd "C-c C-z") 'other-buffer)))
+          (gen-fill-keymap-hook slime-repl-mode-map "C-c C-z" 'other-buffer))
 
 (defvar paredit-mode-hooks '(lisp-interaction-mode-hook
                              emacs-lisp-mode-hook

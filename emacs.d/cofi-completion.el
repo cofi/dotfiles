@@ -12,10 +12,11 @@
 
     (setq ac-fuzzy-enable t)
     (setq-default ac-auto-start 2)
-    (define-key ac-complete-mode-map (kbd "C-l") 'ac-expand-common)
-    (define-key ac-complete-mode-map (kbd "C-j") 'ac-next)
-    (define-key ac-complete-mode-map (kbd "C-k") 'ac-previous)
-    (define-key ac-complete-mode-map (kbd "ESC") 'keyboard-quit)
+    (fill-keymap ac-complete-mode-map
+                 "C-l" 'ac-expand-common
+                 "C-j" 'ac-next
+                 "C-k" 'ac-previou
+                 "ESC" 'keyboard-quit)
 
     (setq ac-dictionary-directories '("~/.emacs.d/completion-dicts"))
 

@@ -18,10 +18,11 @@
                            (auto-fill-mode 1)))
 
 (when (locate-library "cdlatex")
-  (add-hook 'LaTeX-mode-hook (lambda ()
-                               (setq autopair-dont-activate t)
-                               (local-set-key (kbd "<f12>") 'cofi/latex-build)
-                               (local-set-key (kbd "C-<f12>") 'cofi/latex-view))))
+  (add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t)))
+  (add-hook 'LaTeX-mode-hook
+            (gen-fill-keymap-hook LaTeX-mode-map
+                                  "<f12>" 'cofi/latex-build
+                                  "C-<f12>" 'cofi/latex-view)))
 
 (defun turn-on-reftex () (reftex-mode 1))
 

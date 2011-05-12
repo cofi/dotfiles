@@ -32,56 +32,52 @@ Note: This assumes all files are in the org-directory."
   `(lambda () (interactive)
     (org-todo ,state)))
 
-(defvar cofi/org-state-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "t") (cofi/set-todo-state "TODO"))
-    (define-key map (kbd "s") (cofi/set-todo-state "STARTED"))
-    (define-key map (kbd "w") (cofi/set-todo-state "WAITING"))
-    (define-key map (kbd "f") (cofi/set-todo-state "DEFERRED"))
-    ;; 
-    (define-key map (kbd "l") (cofi/set-todo-state "DELEGATED"))
-    (define-key map (kbd "x") (cofi/set-todo-state "CANCELLED"))
-    (define-key map (kbd "d") (cofi/set-todo-state "DONE"))
+(defkeymap 'cofi/org-state-map
+    "t" (cofi/set-todo-state "TODO")
+    "s" (cofi/set-todo-state "STARTED")
+    "w" (cofi/set-todo-state "WAITING")
+    "f" (cofi/set-todo-state "DEFERRED")
+    "l" (cofi/set-todo-state "DELEGATED")
+    "x" (cofi/set-todo-state "CANCELLED")
+    "d" (cofi/set-todo-state "DONE"))
+
+(defkeymap 'cofi/org-mode-map
+    "a" 'org-agenda-list
+    "t" (lambda () (interactive) (org-todo-list 0))
+    "o a" (lambda () (interactive)
+             (let ((org-indirect-buffer-display 'other-window))
+               (org-agenda-list)))
+    "o t" (lambda () (interactive)
+             (let ((org-indirect-buffer-display 'other-window))
+               (org-todo-list 0)))
+    "r" 'org-capture
+    "s" cofi/org-state-map
+    "l" 'org-store-link
+    "v" 'cofi/visit-org-agenda-files
+    "V" 'cofi/anything-org-files
+    "c" 'calendar
+    "f" 'org-footnote-action)
     map))
 
-(defvar cofi/org-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "a") 'org-agenda-list)
-    (define-key map (kbd "t") (lambda () (interactive) (org-todo-list 0)))
-    (define-key map (kbd "o a") (lambda () (interactive)
-                                  (let ((org-indirect-buffer-display 'other-window))
-                                    (org-agenda-list))))
-    (define-key map (kbd "o t") (lambda () (interactive)
-                                  (let ((org-indirect-buffer-display 'other-window))
-                                    (org-todo-list 0))))
-    (define-key map (kbd "r") 'org-capture)
-    (define-key map (kbd "s") cofi/org-state-map)
-    (define-key map (kbd "l") 'org-store-link)
-    (define-key map (kbd "v") 'cofi/visit-org-agenda-files)
-    (define-key map (kbd "c") 'calendar)
-    (define-key map (kbd "f") 'org-footnote-action)
-    map))
-(global-set-key (kbd "<f5>") cofi/org-mode-map)
-(global-set-key (kbd "C-c o") cofi/org-mode-map)
+(defun cofi/anything-org-files ()
+  (interactive)
+  (anything-other-buffer (cofi/anything-dir-deep "org-files"
+                                                 org-directory t
+                                                 "\.org\\(_archive\\)?")
+                         "*anything org*"))
 
-(when (fboundp 'anything-other-buffer)
-  (defun cofi/anything-org-files ()
-    (interactive)
-    (anything-other-buffer (cofi/anything-dir-deep "org-files"
-                                                   org-directory t
-                                                   "\.org\\(_archive\\)?")
-                           "*anything org*"))
-  (define-key cofi/org-mode-map (kbd "V") 'cofi/anything-org-files))
+(fill-global-keymap "<f5>" cofi/org-mode-map
+                    "C-c o" cofi/org-mode-map)
 
+(add-hook 'org-mode-hook (lambda () (org-display-inline-images t)))
 (add-hook 'org-mode-hook
-          (lambda ()
-            (org-display-inline-images t)
-            (local-set-key (kbd "M-n") 'outline-next-visible-heading)
-            (local-set-key (kbd "M-p") 'outline-previous-visible-heading)
-            (local-set-key (kbd "C-M-<return>") (lambda ()
-                                                  (interactive)
-                                                  (end-of-line)
-                                                  (org-meta-return)))))
+          (gen-fill-keymap-hook org-mode-map
+                                "M-n" 'outline-next-visible-heading
+                                "M-p" 'outline-previous-visible-heading
+                                "C-M-<return>" (lambda ()
+                                                 (interactive)
+                                                 (end-of-line)
+                                                 (org-meta-return))))
 
 ;; Agenda
 (setq org-agenda-skip-unavailable-files t

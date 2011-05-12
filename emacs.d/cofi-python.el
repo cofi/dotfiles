@@ -50,15 +50,16 @@
 ;; Keybindings
 (add-hook 'python-mode-hook
           (lambda ()
-              (local-set-key (kbd "M-n") 'flymake-goto-next-error)
-              (local-set-key (kbd "M-p") 'flymake-goto-prev-error)
-              (local-set-key (kbd "C-c C-SPC") 'flymake-mode)
-              (local-set-key (kbd "M-?") 'rope-code-assist)
-              (local-set-key (kbd "C-M-?") 'rope-lucky-assist)
-              (local-set-key (kbd "C-c g") 'rope-goto-definition)
-              (local-set-key (kbd "C-c d") 'rope-show-doc)
-              (local-set-key (kbd "C-c t") 'rope-show-calltip)
-              (local-set-key (kbd "C-c ?") 'pylookup-lookup)))
+            (fill-keymap py-mode-map
+              "M-n"       'flymake-goto-next-error
+              "M-p"       'flymake-goto-prev-error
+              "C-c C-SPC" 'flymake-mode
+              "M-?"       'rope-code-assist
+              "C-M-?"     'rope-lucky-assist
+              "C-c g"     'rope-goto-definition
+              "C-c d"     'rope-show-doc
+              "C-c t"     'rope-show-calltip
+              "C-c ?"     'pylookup-lookup)))
 
 (setq pylookup-db-file "~/var/pylookup.db"
       pylookup-html-locations '("~/doc/python-2.7/")

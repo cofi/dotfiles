@@ -24,7 +24,7 @@
 
 (require-and-exec 'sml-modeline
                   (setq sml-modeline-len  8)
-                  (sml-modeline-mode t))
+                  (sml-modeline-mode 1))
 
 (require-and-exec 'highlight-parentheses
                   (add-hook 'find-file-hook 'highlight-parentheses-mode))
@@ -35,17 +35,8 @@
                         uniquify-after-kill-buffer-p t
                         uniquify-ignore-buffers-re "^\\*"))
 
-(require-and-exec 'multi-term
-                  (global-set-key (kbd "<f11>") 'multi-term-dedicated-open)
-                  (global-set-key (kbd "C-<f11>") 'multi-term-next))
-
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))
-
-(require-and-exec 'point-stack
-  (global-set-key (kbd "<f2>") 'point-stack-push)
-  (global-set-key (kbd "S-<f2>") 'point-stack-pop)
-  (global-set-key (kbd "C-<f2>") 'point-stack-forward-stack-pop))
 
 (require-and-exec 'eldoc
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)

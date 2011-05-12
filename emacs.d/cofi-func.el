@@ -77,17 +77,13 @@
   (interactive "p")
   (cofi/inc-at-pt (- (abs amount))))
 
-(defun comment-or-uncomment-current-line-or-region ()
+(defun toggle-comment-on-line-or-region (&optional min max)
   "Comments or uncomments current current line or whole lines in region."
-  (interactive)
-  (save-excursion
-    (let (min max)
-      (if (region-active-p)
-          (setq min (region-beginning) max (region-end))
-        (setq min (point) max (point)))
-      (comment-or-uncomment-region
-       (progn (goto-char min) (line-beginning-position))
-       (progn (goto-char max) (line-end-position))))))
+  (interactive "r")
+  (if (region-active-p)
+      (comment-or-uncomment-region min max)
+    (comment-or-uncomment-region (line-beginning-position)
+                                 (line-end-position))))
 
 (defun cofi/macro-dwim (arg)
   "Start, end, execute or clear macro.

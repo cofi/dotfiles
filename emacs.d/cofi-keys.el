@@ -22,7 +22,7 @@
 (global-set-key (kbd "C-x C-c") 'cofi/buffer)
 
 (require-and-exec 'cofi-func
-  (global-set-key (kbd "C-;") 'comment-or-uncomment-current-line-or-region)
+  (global-set-key (kbd "C-;") 'toggle-comment-on-line-or-region)
   (global-set-key (kbd "<f4>") 'cofi/macro-dwim)
   (global-set-key (kbd "S-<f4>") 'cofi/reset-macro)
 

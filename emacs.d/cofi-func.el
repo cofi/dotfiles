@@ -78,6 +78,10 @@
     (comment-or-uncomment-region (line-beginning-position)
                                  (line-end-position))))
 
+(defadvice comment-region (before copy-region-on-comment (beg end &optional arg) activate)
+  "Copy commented region before commenting."
+  (copy-region-as-kill beg end))
+
 (defun cofi/macro-dwim (arg)
   "Start, end, execute or clear macro.
 Call with 0 to clear last macro. If there is no last macro define a new one, if\

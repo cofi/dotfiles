@@ -54,6 +54,7 @@
                                  "cofi-ediff"
                                  "cofi-elscreen"
                                  "cofi-files"
+                                 "cofi-func"
                                  "cofi-keys"
                                  "cofi-mail"
                                  "cofi-project"

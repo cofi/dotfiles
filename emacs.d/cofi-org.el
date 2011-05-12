@@ -32,7 +32,7 @@ Note: This assumes all files are in the org-directory."
   `(lambda () (interactive)
     (org-todo ,state)))
 
-(defkeymap 'cofi/org-state-map
+(defkeymap cofi/org-state-map
     "t" (cofi/set-todo-state "TODO")
     "s" (cofi/set-todo-state "STARTED")
     "w" (cofi/set-todo-state "WAITING")
@@ -41,7 +41,7 @@ Note: This assumes all files are in the org-directory."
     "x" (cofi/set-todo-state "CANCELLED")
     "d" (cofi/set-todo-state "DONE"))
 
-(defkeymap 'cofi/org-mode-map
+(defkeymap cofi/org-mode-map
     "a" 'org-agenda-list
     "t" (lambda () (interactive) (org-todo-list 0))
     "o a" (lambda () (interactive)
@@ -57,7 +57,6 @@ Note: This assumes all files are in the org-directory."
     "V" 'cofi/anything-org-files
     "c" 'calendar
     "f" 'org-footnote-action)
-    map))
 
 (defun cofi/anything-org-files ()
   (interactive)

@@ -35,13 +35,13 @@
  "C-<f2>" 'point-stack-forward-stack-pop
 
  ;; multi term
- "<f11>" 'multi-term-dedicated-open
+ "<f11>"   'multi-term-dedicated-open
  "C-<f11>" 'multi-term-next
  ;; scratch
  "<f12>" 'scratch
  ;; home-end
  "<home>" 'home-end-home
- "<end>" 'home-end-end
+ "<end>"  'home-end-end
  )
 
 

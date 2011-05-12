@@ -47,15 +47,8 @@
   (set (make-local-variable 'speck-syntactic) t)
   (speck-mode arg))
 
-(defun turn-on-speck ()
-  "Turn speck mode on."
-  (interactive)
-  (speck-mode 1))
-
-(defun turn-on-speck-prog ()
-  "Turn programming speck mode on."
-  (interactive)
-  (speck-prog-mode 1))
+(fset 'turn-on-speck (turn-on speck-mode))
+(fset 'turn-on-speck-prog (turn-on speck-prog-mode))
 
 (defun cofi/inc-at-pt (amount)
   "Increment the number at point by `amount'"

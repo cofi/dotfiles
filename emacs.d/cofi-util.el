@@ -207,5 +207,10 @@ strings."
                           (if (= weighted-sum 0)
                               ""
                             (format "%.1f" weighted-sum))))))
+(defmacro turn-on (mode)
+  "Return a `turn-on' fun for given mode."
+  `(lambda ()
+     (interactive)
+     (,mode 1)))
 
 (provide 'cofi-util)

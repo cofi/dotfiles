@@ -331,37 +331,6 @@ Same arguments as in diary cyclic."
 ;; contacts ====================
 (setq org-contacts-files `(,(format "%s/contacts.org" org-directory)))
 (require 'org-contacts)
-
-(require 'std11)
-(require 'elmo)
-(require 'wl-address)
-(require 'wl-summary)
-
-(defun wl-get-from-header-content ()
-  (save-excursion
-    (set-buffer (org-capture-get :original-buffer))
-    (cond
-     ((eq major-mode 'wl-summary-mode) (when wl-summary-buffer-elmo-folder
-                                         (elmo-message-field
-                                          wl-summary-buffer-elmo-folder
-                                          (wl-summary-message-number)
-                                          'from)))
-     ((eq major-mode 'mime-view-mode) (std11-narrow-to-header)
-                                      (prog1
-                                          (std11-fetch-field "From")
-                                        (widen))))))
-
-(defun org-contacts-template-wl-name (&optional return-value)
-  (let ((from (wl-get-from-header-content)))
-    (or (and from (wl-address-header-extract-realname from))
-       return-value
-       "%^{Name}")))
-
-(defun org-contacts-template-wl-email (&optional return-value)
-  (let ((from (wl-get-from-header-content)))
-    (or (and from (wl-address-header-extract-address from))
-       return-value
-       (concat "%^{" org-contacts-email-property "}p"))))
 ;;  ========================================
 ;; Misc ==============================
 (setq org-link-mailto-program '(compose-mail "%a" "%s"))

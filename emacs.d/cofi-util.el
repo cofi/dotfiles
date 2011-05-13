@@ -218,13 +218,6 @@ strings."
 See `POUR-MAPPINGS-WITH'."
   `(setq ,symbol (fill-keymap (make-sparse-keymap) ,@mappings)))
 
-(defun global-bind-keymap (binding &rest mappings)
-  "Define keymap bound to with a global keybinding on `BINDING'.
-See `POUR-MAPPINGS-WITH'."
-  `(let (map (make-sparse-keymap))
-    (fill-keymap map ,@mappings)
-    (global-set-key (read-kbd-macro binding) map)))
-
 (defun fill-keymap (keymap &rest mappings)
   "Fill `KEYMAP' with `MAPPINGS'.
 See `POUR-MAPPINGS-WITH'."

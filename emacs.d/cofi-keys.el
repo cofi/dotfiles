@@ -42,6 +42,10 @@
  ;; home-end
  "<home>" 'home-end-home
  "<end>"  'home-end-end
+
+ ;; maps
+ "C-x m" cofi-minor-mode-map
+ "C-x i" cofi-insert-map
  )
 
 
@@ -60,26 +64,26 @@
 (define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
 
 ;;; mode keymap
-(global-bind-keymap "C-x m"
-                    "c" 'cofi/cdlatex
-                    "d" 'dedicated-mode
-                    "f" 'auto-fill-mode
-                    "g" 'glasses-mode
-                    "h" 'hs-minor-mode
-                    "l" 'outline-minor-mode
-                    "o" 'orgstruct++-mode
-                    "p" 'pretty-mode
-                    "r" 'auto-revert-mode
-                    "s" 'flyspell-mode
-                    "t" 'orgtbl-mode
-                    "w" 'whitespace-mode)
+(defkeymap cofi-minor-mode-map
+  "c" 'cofi/cdlatex
+  "d" 'dedicated-mode
+  "f" 'auto-fill-mode
+  "g" 'glasses-mode
+  "h" 'hs-minor-mode
+  "l" 'outline-minor-mode
+  "o" 'orgstruct++-mode
+  "p" 'pretty-mode
+  "r" 'auto-revert-mode
+  "s" 'flyspell-mode
+  "t" 'orgtbl-mode
+  "w" 'whitespace-mode)
 
 ;;; insert keymap
-(global-bind-keymap "C-x i"
-                    "b" 'insert-buffer
-                    "c" 'clipper-insert
-                    "f" 'insert-file
-                    "s" 'yas/insert-snippet)
+(defkeymap cofi-insert-map
+  "b" 'insert-buffer
+  "c" 'clipper-insert
+  "f" 'insert-file
+  "s" 'yas/insert-snippet)
 
 (add-hook 'ido-setup-hook
           (gen-fill-keymap-hook ido-completion-map

@@ -129,6 +129,18 @@
        (setq cofi/anything-uni-sources
              (let* ((dirs '("DKE" "HCS" "NCS" "MfI3" "CMS"))
                     (subdirs '("aufgaben" "uebungen" "notes"))
+                    (file-filters `(("aufgaben" ,(gen-extension-re "pdf"))
+                                    ("uebungen" ,(concat "Makefile" "\\|"
+                                                           (gen-extension-re "tex"
+                                                                             "gp"
+                                                                             "v"
+                                                                             "java"
+                                                                             "py"
+                                                                             "hs"
+                                                                             "lisp"
+                                                                             "clj")))
+                                    ("notes" ,(gen-extension-re "org"))
+                               ))
                     (combinator (lambda (x y) (format "%s/%s" x y)))
                     (path "~/Work/Uni/")
                     (combinations (combinate dirs subdirs combinator))
@@ -137,7 +149,9 @@
                (loop for name in combinations
                      for dir in full
                      when (file-accessible-directory-p dir)
-                     collect (cofi/anything-dir-deep name dir t))))
+                     collect (cofi/anything-dir-deep name dir t
+                                                     (cadr (assoc (file-name-nondirectory dir)
+                                                                  file-filters))))))
 
        (setq cofi/anything-config-sources
              `(

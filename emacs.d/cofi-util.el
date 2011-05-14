@@ -274,4 +274,12 @@ See `POUR-MAPPINGS-WITH'."
      (interactive iflag)
      ,@code))
 
+(defun gen-extension-re (&rest extensions)
+  "Generate a regexp that matches all `EXTENSIONS'."
+  (concat "\\.\\("
+          (mapconcat 'identity
+                     extensions
+                     "\\|")
+          "\\)$"))
+
 (provide 'cofi-util)

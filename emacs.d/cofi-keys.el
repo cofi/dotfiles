@@ -1,4 +1,27 @@
 (require 'cofi-autoloads)
+
+;;; mode keymap
+(defkeymap cofi-minor-mode-map
+  "c" 'cofi/cdlatex
+  "d" 'dedicated-mode
+  "f" 'auto-fill-mode
+  "g" 'glasses-mode
+  "h" 'hs-minor-mode
+  "l" 'outline-minor-mode
+  "o" 'orgstruct++-mode
+  "p" 'pretty-mode
+  "r" 'auto-revert-mode
+  "s" 'flyspell-mode
+  "t" 'orgtbl-mode
+  "w" 'whitespace-mode)
+
+;;; insert keymap
+(defkeymap cofi-insert-map
+  "b" 'insert-buffer
+  "c" 'clipper-insert
+  "f" 'insert-file
+  "s" 'yas/insert-snippet)
+
 (fill-global-keymap
  ;; buffer
  "C-c y"   'bury-buffer
@@ -62,28 +85,6 @@
                                   "C-c C-a C-c" 'artist-ido-select-settings))
 
 (define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
-
-;;; mode keymap
-(defkeymap cofi-minor-mode-map
-  "c" 'cofi/cdlatex
-  "d" 'dedicated-mode
-  "f" 'auto-fill-mode
-  "g" 'glasses-mode
-  "h" 'hs-minor-mode
-  "l" 'outline-minor-mode
-  "o" 'orgstruct++-mode
-  "p" 'pretty-mode
-  "r" 'auto-revert-mode
-  "s" 'flyspell-mode
-  "t" 'orgtbl-mode
-  "w" 'whitespace-mode)
-
-;;; insert keymap
-(defkeymap cofi-insert-map
-  "b" 'insert-buffer
-  "c" 'clipper-insert
-  "f" 'insert-file
-  "s" 'yas/insert-snippet)
 
 (add-hook 'ido-setup-hook
           (gen-fill-keymap-hook ido-completion-map

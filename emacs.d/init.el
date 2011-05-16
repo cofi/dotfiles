@@ -52,7 +52,7 @@
                                  "cofi-calendar"
                                  "cofi-desktop"
                                  "cofi-ediff"
-                                 "cofi-elscreen"
+;;                                  "cofi-elscreen"
                                  "cofi-files"
                                  "cofi-func"
                                  "cofi-keys"
@@ -64,6 +64,7 @@
                                  "cofi-vcs"
                                  "cofi-rst"
                                  "cofi-windowing"
+                                 "cofi-workgroups"
                                  "cofi-completion"))
 (defvar cofi/full-settings '("cofi-programming"))
 

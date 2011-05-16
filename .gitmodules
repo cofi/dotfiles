@@ -55,3 +55,6 @@
 [submodule "elisp/vendor/emacs-eclim"]
 	path = elisp/vendor/emacs-eclim
 	url = https://github.com/senny/emacs-eclim.git
+[submodule "elisp/vendor/workgroups"]
+	path = elisp/vendor/workgroups
+	url = git://github.com/tlh/workgroups.el.git

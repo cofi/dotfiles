@@ -1,7 +1,7 @@
 (add-hook 'mail-citation-hook 'trivial-cite)
 (setq tc-make-attribution (function tc-simple-attribution-kai))
 
-(require 'elscreen-wl)
+;; (require 'elscreen-wl)
 
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"
@@ -90,8 +90,7 @@
 (setq wl-thread-indent-level 2
       wl-thread-insert-opened t)
 (setq wl-forward-subject-prefix "Fwd: " )
-(setq wl-draft-use-frame t
-      wl-draft-always-delete-myself t
+(setq wl-draft-always-delete-myself t
       wl-auto-save-drafts-interval nil)
 (setq mime-edit-split-message nil)
 (setq wl-generate-mailer-string-function 'wl-generate-user-agent-string-1)

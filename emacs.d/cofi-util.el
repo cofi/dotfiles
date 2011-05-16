@@ -282,4 +282,7 @@ See `POUR-MAPPINGS-WITH'."
                      "\\|")
           "\\)$"))
 
+(defun cofi/var-file (filename)
+  (format "~/var/%s" filename))
+
 (provide 'cofi-util)

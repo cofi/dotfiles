@@ -61,7 +61,7 @@
               "C-c t"     'rope-show-calltip
               "C-c ?"     'pylookup-lookup)))
 
-(setq pylookup-db-file "~/var/pylookup.db"
+(setq pylookup-db-file (cofi/var-file "~/var/pylookup.db")
       pylookup-html-locations '("~/doc/python-2.7/")
       pylookup-completing-read #'anything-completing-read)
 

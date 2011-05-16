@@ -74,9 +74,9 @@
 (require-and-exec 'bookmark+)
 ;;; ========================================
 ;;; backups & autosave
-(setq backup-directory-alist '(("" . "~/var/emacs/backups")))
+(setq backup-directory-alist `(("" . ,(cofi/var-file "emacs/backups"))))
 (setq auto-save-default nil
-      auto-save-list-file-prefix "~/var/emacs/auto-save-list/save-")
+      auto-save-list-file-prefix (cofi/var-file "emacs/auto-save-list/save-"))
 ;;; ========================================
 ;;; recent files ====================
 (setq recentf-auto-cleanup 'never)

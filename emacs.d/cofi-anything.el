@@ -26,7 +26,7 @@
       anything-candidate-number-limit 100
       anything-su-or-sudo "sudo")
 
-(setq anything-c-locate-db-file "~/var/locate.db")
+(setq anything-c-locate-db-file (cofi/var-file "locate.db"))
 (setq anything-c-locate-command (format "locate -d %s -i -r %%s"
                                         anything-c-locate-db-file))
 ;; --------------------------------------------------

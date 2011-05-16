@@ -123,7 +123,7 @@
 (setq-default woman-use-own-frame nil
               woman-use-topic-at-point t
               woman-imenu t
-              woman-cache-filename "~/var/emacs/woman-cache")
+              woman-cache-filename (cofi/var-file "emacs/woman-cache"))
 
 (eval-after-load "info"
   '(add-to-list 'Info-directory-list
@@ -147,7 +147,7 @@
 (require-and-exec 'autopair
                   (autopair-global-mode 1))
 (require-and-exec 'saveplace
-                  (setq save-place-file "~/var/emacs/places")
+                  (setq save-place-file (cofi/var-file "emacs/places"))
                   (setq-default save-place t))
 (transient-mark-mode t)
 (display-time-mode t)

@@ -16,11 +16,11 @@ Also returns nil if pid is nil."
   (require 'desktop-menu))
 
 ;; File/path settings
-(setq desktop-path '("~/var/emacs/desktop/")
-      desktop-dirname "~/var/emacs/desktop/"
+(setq desktop-path `(,(cofi/var-file "emacs/desktop/"))
+      desktop-dirname (cofi/var-file "emacs/desktop/")
       desktop-base-file-name "desktop"
-      desktop-menu-path '("~/var/emacs/desktop/menu/")
-      desktop-menu-directory "~/var/emacs/desktop/menu/"
+      desktop-menu-path `(,(cofi/var-file "emacs/desktop/menu/"))
+      desktop-menu-directory (cofi/var-file "emacs/desktop/menu/")
       desktop-menu-list-file "menu"
       desktop-menu-base-filename "menu-desktop")
 

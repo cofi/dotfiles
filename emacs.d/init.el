@@ -52,6 +52,7 @@
                                  "cofi-calendar"
                                  "cofi-desktop"
                                  "cofi-ediff"
+                                 "cofi-elisp"
 ;;                                  "cofi-elscreen"
                                  "cofi-files"
                                  "cofi-func"

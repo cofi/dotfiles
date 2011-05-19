@@ -1,17 +1,3 @@
-;; Add ` '-Pair for elisp
-(add-hook 'emacs-lisp-mode-hook
-           #'(lambda ()
-               (push '(?` . ?')
-                     (getf autopair-extra-pairs :comment))
-               (push '(?` . ?')
-                     (getf autopair-extra-pairs :string))))
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (local-set-key (kbd "C-c C-c") 'eval-buffer)
-            (setq mode-name "eL")))
-
-(require 'eldoc-extensions)
-
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
   (add-hook hook
             ;; viper overshadows slime-repl binding
@@ -20,19 +6,12 @@
 (add-hook 'slime-repl-mode-hook
           (gen-fill-keymap-hook slime-repl-mode-map "C-c C-z" 'other-buffer))
 
-(defvar paredit-mode-hooks '(lisp-interaction-mode-hook
-                             emacs-lisp-mode-hook
-                             lisp-mode-hook
+(require 'paredit)
+(defvar paredit-mode-hooks '(lisp-mode-hook
                              clojure-mode-hook
                              slime-repl-mode-hook))
 
-(require-and-exec 'paredit
-  (defadvice paredit-mode (after subst-autopair activate)
-    "Disable autopair when running paredit."
-    (setq autopair-dont-activate paredit-mode))
-
-  (dolist (hook paredit-mode-hooks)
-    (add-hook hook #'enable-paredit-mode)))
+(add-to-hooks #'enable-paredit-mode paredit-mode-hooks)
 
 (add-to-list 'auto-mode-alist '("\\.cl$" . lisp-mode))
 

@@ -10,6 +10,8 @@
             (local-set-key (kbd "C-c C-c") 'eval-buffer)
             (setq mode-name "eL")))
 
+(require 'eldoc-extensions)
+
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
   (add-hook hook
             ;; viper overshadows slime-repl binding

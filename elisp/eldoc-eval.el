@@ -1,4 +1,4 @@
-;;; eldoc-extensions.el -- Show eldoc when using M-:
+;;; eldoc-eval.el -- Show eldoc when using M-:
 
 ;; Copyright (C) 2011, Thierry Volpiatto, all rights reserved.
 
@@ -66,6 +66,6 @@ Should take one arg: the string to display")
 
 (global-set-key [remap eval-expression] 'eldoc-eval-expression)
 
-(provide 'eldoc-extensions)
+(provide 'eldoc-eval)
 
-;; eldoc-extensions.el ends here
+;; eldoc-eval.el ends here

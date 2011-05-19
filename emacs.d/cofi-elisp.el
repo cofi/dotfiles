@@ -13,7 +13,7 @@
 (add-hook 'emacs-lisp-mode-hook
           (gen-fill-keymap-hook emacs-lisp-mode-map
                                 "C-c C-c" 'eval-buffer))
-(require 'eldoc-extensions)
+(require 'eldoc-eval)
 
 (add-to-hooks #'enable-paredit-mode '(lisp-interaction-mode-hook
                                       emacs-lisp-mode-hook))

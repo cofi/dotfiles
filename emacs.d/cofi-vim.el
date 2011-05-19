@@ -1,3 +1,4 @@
+(require 'cofi-util)
 (add-to-list 'load-path "~/.elisp/vendor/vimpulse")
 (add-to-list 'load-path "~/.elisp/vendor/undo-tree")
 (setq viper-toggle-key [pause])
@@ -14,11 +15,12 @@
   ;; ============================================================
 
   ;; Keybindings ==========
-  (define-key viper-vi-global-user-map (kbd "Y") (kbd "y$")) ; oh why are you compatible to THAT?!
-  (define-key viper-vi-global-user-map (kbd "_") 'viper-bol-and-skip-white)
-  (define-key viper-vi-global-user-map (kbd "+") 'viper-next-line-at-bol)
-  (define-key viper-vi-global-user-map (kbd "C-t") 'transpose-chars)
-  (define-key viper-vi-global-user-map (kbd "C-e") 'viper-goto-eol)
+  (fill-keymap viper-vi-global-user-map
+               "Y" (kbd "y$") ; oh why are you compatible to THAT?!
+               "_" 'viper-bol-and-skip-white
+               "+" 'viper-next-line-at-bol
+               "C-t" 'transpose-chars
+               "C-e" 'viper-goto-eol)
 
   (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
 
@@ -28,56 +30,60 @@
     (require-and-exec 'undo-tree
        (define-key viper-vi-basic-map (kbd "C-r") 'undo-tree-redo)))
 
-  (define-key viper-vi-global-user-map (kbd "SPC") 'viper-scroll-up)
-  (define-key viper-vi-global-user-map (kbd "S-SPC") 'viper-scroll-down)
-  (define-key viper-vi-global-user-map (kbd "+") 'cofi/inc-at-pt)
-  (define-key viper-vi-global-user-map (kbd "-") 'cofi/dec-at-pt)
+  (fill-keymap viper-vi-global-user-map
+               "SPC" 'viper-scroll-up
+               "S-SPC" 'viper-scroll-down
+               "+" 'cofi/inc-at-pt
+               "-" 'cofi/dec-at-pt)
   ;; ==================================================
 
   ;; Mapleader ========================================
   (defconst vim-mapleader "," "Mapping prefix
 Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
-  (defvar vim-mapleader-map (make-sparse-keymap) "Mapleader keymap")
+  (defvar cofi/vim-mapleader-map (make-sparse-keymap) "Mapleader keymap")
   ;; <leader> key in normal-mode
-  (define-key viper-vi-global-user-map vim-mapleader vim-mapleader-map)
+  (define-key viper-vi-global-user-map vim-mapleader cofi/vim-mapleader-map)
   ;; C-<leader> key in insert-mode
   (define-key viper-insert-global-user-map (read-kbd-macro
                                             (format "C-%s" vim-mapleader))
-                                           vim-mapleader-map)
+                                           cofi/vim-mapleader-map)
   ;; C-<leader> key in emacs-mode
   (define-key viper-emacs-global-user-map (read-kbd-macro
                                             (format "C-%s" vim-mapleader))
-                                           vim-mapleader-map)
+                                           cofi/vim-mapleader-map)
+  (fill-keymap cofi/vim-mapleader-map
+    "e" 'cofi/file
+    "E" 'cofi/file-alternate
+    "o" 'cofi-find-at-alias
+    "b" 'cofi/buffer
+    "B" 'cofi/buffer-alternate
+    "w" 'save-buffer
+    "W" 'save-some-buffers
+    "k" 'kill-buffer-and-window
+    "K" 'kill-this-buffer
+    "<" 'cofi-cd-alias
+    "d" 'dired-jump
+    "D" 'cofi-dired-alias
+
+    "m" 'compile
+
+    "n" 'split-window-horizontally
+    "c" 'delete-window
+    "N" 'make-frame-command
+    "C" 'delete-frame
+
+    ;; in vcs
+    ;; g -> magit-status
+    ;; h -> ahg-status
+    ;; H -> ahg keymap
+
+    "s" 'cofi/switch-file
+    ";" 'cofi/end-prog-line
+    )
+
   (defun vim-mapleader-add (keyseq fun)
     (interactive "kKeysequence: \naFunction:")
-    (define-key vim-mapleader-map keyseq fun))
-
-  (vim-mapleader-add "e" 'cofi/file)
-  (vim-mapleader-add "E" 'cofi/file-alternate)
-  (vim-mapleader-add "o" 'cofi-find-at-alias)
-  (vim-mapleader-add "b" 'cofi/buffer)
-  (vim-mapleader-add "B" 'cofi/buffer-alternate)
-  (vim-mapleader-add "w" 'save-buffer)
-  (vim-mapleader-add "W" 'save-some-buffers)
-  (vim-mapleader-add "k" 'kill-buffer-and-window)
-  (vim-mapleader-add "K" 'kill-this-buffer)
-  (vim-mapleader-add "<" 'cofi-cd-alias)
-  (vim-mapleader-add "d" 'dired-jump)
-  (vim-mapleader-add "D" 'cofi-dired-alias)
-
-  (vim-mapleader-add "m" 'compile)
-
-  (vim-mapleader-add "n" 'split-window-horizontally)
-  (vim-mapleader-add "c" 'delete-window)
-  (vim-mapleader-add "N" 'make-frame-command)
-  (vim-mapleader-add "C" 'delete-frame)
-
-  ;; g -> magit-status
-  ;; h -> ahg-status
-  ;; H -> ahg keymap
-
-  (vim-mapleader-add "s" 'cofi/switch-file)
-  (vim-mapleader-add ";" 'cofi/end-prog-line)
+    (define-key cofi/vim-mapleader-map (read-kbd-macro keyseq) fun))
   ;; ==================================================
 
   ;; Vim-like backspace (backspace=indent,eol,start) ==========
@@ -87,12 +93,14 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
 
   ;; Search keybindings ========================================
   (when (string< vimpulse-version "0.5")
-    (define-key viper-vi-basic-map (kbd "/") 'isearch-forward-regexp)
-    (define-key viper-vi-basic-map (kbd "?") 'isearch-backward-regexp)
-    (define-key viper-vi-basic-map (kbd "n") 'isearch-repeat-forward)
-    (define-key viper-vi-basic-map (kbd "N") 'isearch-repeat-backward)
-    (define-key isearch-mode-map (kbd "C-n") 'isearch-repeat-forward)
-    (define-key isearch-mode-map (kbd "C-p") 'isearch-repeat-backward)
+    (fill-keymap viper-vi-basic-map
+                 "/" 'isearch-forward-regexp
+                 "?" 'isearch-backward-regexp
+                 "n" 'isearch-repeat-forward
+                 "N" 'isearch-repeat-backward)
+    (fill-keymap isearch-mode-map
+                 "C-n" 'isearch-repeat-forward
+                 "C-p" 'isearch-repeat-backward)
     )
   (push '("nohighlight" (isearch-done)) ex-token-alist)
   ;; ==================================================
@@ -128,54 +136,48 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
               ;; some times local-maps don't get reloaded, this forces it
               (viper-change-state-to-vi)))
 
-  (eval-after-load 'outline
-    '(progn
-       (defun vimpulse-outline-setup ()
-         (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
-           (define-key map "za" 'outline-toggle-children)
-           (define-key map "zm" 'hide-body)
-           (define-key map "zr" 'show-all)
-           (define-key map "zo" 'show-subtree)
-           (define-key map "zc" 'hide-subtree)
-           (define-key map "z@" outline-mode-prefix-map)
-           (setq viper-vi-local-user-map map)
-           (viper-change-state-to-vi)))
+  (defun vimpulse-outline-setup ()
+    (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
+      (fill-keymap map
+                   "za" 'outline-toggle-children
+                   "zm" 'hide-body
+                   "zr" 'show-all
+                   "zo" 'show-subtree
+                   "zc" 'hide-subtree
+                   "z@" outline-mode-prefix-map)
+      (setq viper-vi-local-user-map map)
+      (viper-change-state-to-vi)))
 
-       ;; aww why have you no hook?
-       (defadvice outline-minor-mode (after setup-vim-outline activate)
-         (vimpulse-outline-setup))
-       (add-hook 'outline-mode-hook 'vimpulse-outline-setup)
-       ))
+  ;; aww why have you no hook?
+  (defadvice outline-minor-mode (after setup-vim-outline activate)
+    (vimpulse-outline-setup))
+  (add-hook 'outline-mode-hook 'vimpulse-outline-setup)
 
   (defun vimpulse-org-setup ()
     (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
-      (define-key map "za" 'org-cycle)
-      (define-key map "zA" 'org-shifttab)
-      (define-key map "zm" 'hide-body)
-      (define-key map "zr" 'show-all)
-      (define-key map "zo" 'show-subtree)
-      (define-key map "zc" 'hide-subtree)
-      (setq viper-vi-local-user-map map)
-      (viper-change-state-to-vi)))
+           (fill-keymap map
+                        "za" 'org-cycle
+                        "zA" 'org-shifttab
+                        "zm" 'hide-body
+                        "zr" 'show-all
+                        "zo" 'show-subtree
+                        "zc" 'hide-subtree)
+           (setq viper-vi-local-user-map map)
+           (viper-change-state-to-vi)))
   (add-hook 'org-mode-hook 'vimpulse-org-setup)
 
-  (setq cofi/default-cursor-color "OliveDrab4")
-  (setq cofi/viper-insert-cursor-color "dark red")
-  (setq cofi/viper-replace-cursor-color "red")
-  (setq cofi/viper-emacs-cursor-color "sienna")
+  (setq cofi/default-cursor-color       "OliveDrab4"
+        cofi/viper-insert-cursor-color  "dark red"
+        cofi/viper-replace-cursor-color "red"
+        cofi/viper-emacs-cursor-color   "sienna")
 
   (defun cofi/viper-bar ()
     "Change cursor color according to viper-state."
-    (cond
-     ((eq viper-current-state 'insert-state)
-      (set-cursor-color cofi/viper-insert-cursor-color))
-     ((eq viper-current-state 'emacs-state)
-      (set-cursor-color cofi/viper-emacs-cursor-color))
-     ((eq viper-current-state 'replace-state)
-      (set-cursor-color cofi/viper-replace-cursor-color))
-     (t
-      (set-cursor-color cofi/default-cursor-color)
-      )))
+    (case viper-current-state
+      (insert-state  (set-cursor-color cofi/viper-insert-cursor-color))
+      (emacs-state   (set-cursor-color cofi/viper-emacs-cursor-color))
+      (replace-state (set-cursor-color cofi/viper-replace-cursor-color))
+      (otherwise     (set-cursor-color cofi/default-cursor-color))))
 
   (add-hook 'post-command-hook 'cofi/viper-bar)
 

@@ -92,14 +92,17 @@
                                 "C-l" 'ido-next-match))
 
 ;;; quick exit for some modes
-(fill-keymaps (list
-               diff-mode-map
-               compilation-mode-map
-               ahg-diff-mode-map ahg-short-log-mode-map ahg-log-mode-map ahg-glog-mode-map
-               ahg-command-mode-map ahg-status-mode-map ahg-mq-patches-mode-map
-               )
-              "q" 'View-quit
-              "Q" 'kill-buffer-and-window
-              )
+(dolist (hook '(diff-mode-hook
+                compilation-mode-hook
+                ahg-diff-mode-hook
+                ahg-short-log-mode-hook
+                ahg-log-mode-hook
+                ahg-glog-mode-hook
+                ahg-command-mode-hook
+                ahg-status-mode-hook
+                ahg-mq-patches-mode-hook))
+  (add-hook hook (gen-local-fill-keymap-hook
+                  "q" 'quit-window
+                  "Q" 'kill-buffer-and-window)))
 
 (provide 'cofi-keys)

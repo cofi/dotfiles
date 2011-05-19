@@ -235,6 +235,11 @@ See `POUR-MAPPINGS-WITH'."
 See `POUR-MAPPINGS-WITH'."
   `(lambda () (fill-keymap ,keymap ,@mappings)))
 
+(defmacro gen-local-fill-keymap-hook (&rest mappings)
+  "Build fun that fills local keymap with `MAPPINGS'.
+See `POUR-MAPPINGS-WITH'."
+  `(lambda () (fill-local-keymap ,@mappings)))
+
 (defun fill-local-keymap (&rest mappings)
   "Fill local keymap with `MAPPINGS'.
 See `POUR-MAPPINGS-WITH'."

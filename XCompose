@@ -137,3 +137,6 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 <Multi_key> <O> <O> : "●" U25CF # BIG DOT
 <Multi_key> <O> <o> : "•" U2022 # SMALL DOT
 <Multi_key> <T> <M> : "™"   U2122 # TRADE MARK SIGN
+
+<Multi_key> <-> <-> : "–"   U2013 # EN DASH
+<Multi_key> <_> <_> : "—"   U2014 # EM DASH

@@ -224,6 +224,12 @@ See `POUR-MAPPINGS-WITH'."
   (pour-mappings-with (lambda (key fun) (define-key keymap key fun)) mappings)
   keymap)
 
+(defun fill-keymaps (keymaps &rest mappings)
+  "Fill `KEYMAPS' with `MAPPINGS'.
+See `POUR-MAPPINGS-WITH'."
+  (dolist (keymap keymaps keymaps)
+    (pour-mappings-with (lambda (key fun) (define-key keymap key fun)) mappings)))
+
 (defmacro gen-fill-keymap-hook (keymap &rest mappings)
   "Build fun that fills `KEYMAP' with `MAPPINGS'.
 See `POUR-MAPPINGS-WITH'."

@@ -91,4 +91,15 @@
                                 "C-h" 'ido-prev-match
                                 "C-l" 'ido-next-match))
 
+;;; quick exit for some modes
+(fill-keymaps (list
+               diff-mode-map
+               compilation-mode-map
+               ahg-diff-mode-map ahg-short-log-mode-map ahg-log-mode-map ahg-glog-mode-map
+               ahg-command-mode-map ahg-status-mode-map ahg-mq-patches-mode-map
+               )
+              "q" 'View-quit
+              "Q" 'kill-buffer-and-window
+              )
+
 (provide 'cofi-keys)

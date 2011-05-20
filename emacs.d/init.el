@@ -11,6 +11,11 @@
      "\n")))
 (setq initial-scratch-message (cofi/fortune2scratch))
 
+(setq custom-safe-themes '("4a8ee16dec9b957d68e04f64a79d88f10fb49f3f"
+                           "315eb5b3d8e17ccaec85d61830858ffc27fc8b02"
+                           default))
+(load-theme 'cofi-dark)
+
 (when
     (load
      (expand-file-name "~/.emacs.d/elpa/package.el"))
@@ -89,7 +94,6 @@
                                 (when cofi/full-emacs
                                   (mapc #'load cofi/full-settings))
                                 ))
-(load-theme 'cofi-dark)
 (cofi-file-standard)
 (message "Time needed to load: %d seconds."
          (time-to-seconds (time-since startup-time)))

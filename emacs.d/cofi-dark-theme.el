@@ -14,7 +14,7 @@
      'cofi-dark
      `(default ((((min-colors 4096)) (:background ,bg :foreground ,fg))))
 
-     `(italic ((t (:italic t :family "Dejavu Sans Mono" :height 80))))
+     `(italic ((t (:italic t :family "Dejavu Sans Mono" :height 80 :underline nil))))
      `(border ((t (:background "black"))))
 
      `(highlight ((t (:background "sienna"))))

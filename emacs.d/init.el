@@ -19,8 +19,9 @@
 (when
     (load
      (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (add-to-list 'package-archives '("elpa" . "http://tromey.com/elpa/"))
-  (add-to-list 'package-archives '("technomancy" . "http://repo.technomancy.us/emacs/"))
+  (dolist (archive '(("marmalade" . "http://marmalade-repo.org/packages/")
+                     ("elpa" . "http://tromey.com/elpa/")))
+    (add-to-list 'package-archives archive))
   (package-initialize))
 
 ;; (load "~/.elisp/nxhtml/autostart.el")

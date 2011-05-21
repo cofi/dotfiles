@@ -306,6 +306,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , bitbucket
                                                   , debbugs
                                                   , define
+                                                  , urbanDictionary
                                                   , dict
                                                   , leo
                                                   , S.maps
@@ -339,6 +340,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       zdfMediathek = S.searchEngine "zdf" "http://www.zdf.de/ZDFmediathek/#/suche/"
       pgpmit = S.searchEngine "pgp" "http://pgp.mit.edu:11371/pks/lookup?search="
       alpha = S.searchEngine "alpha" "http://www.wolframalpha.com/input/i="
+      urbanDictionary = S.searchEngine "ud" "http://www.urbandictionary.com/define.php?term="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

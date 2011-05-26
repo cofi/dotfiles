@@ -44,6 +44,7 @@
       'wl-draft-kill
       'mail-send-hook))
 
+;;; for manual setting mail config
 (defun cofi/write-mail ()
   (interactive)
   (setq make-backup-files nil)
@@ -51,14 +52,25 @@
   (turn-on-auto-fill)
   (auto-complete-mode 1)
   (yas/minor-mode 1)
-  (auto-dictionary-mode)
+  (auto-dictionary-mode 1)
   (mail-abbrevs-mode 1)
   (turn-on-flyspell))
 
+;;; automatical for wl-drafts
+(add-all-to-hook 'wl-draft-mode-hook
+                 (turn-on auto-complete-mode)
+                 (turn-on auto-dictionary-mode)
+                 (turn-on yas/minor-mode)
+                 (turn-on mail-abbrevs-mode)
+                 'turn-on-flyspell
+                 'turn-on-auto-fill
+                 (lambda () (setq make-backup-files nil
+                             fill-column 72)))
+
 (add-hook 'mime-view-mode-hook
-          (lambda ()
-            (local-set-key "f" 'browse-url)
-            (local-set-key "F" 'w3m-view-url-with-external-browser)))
+          (gen-local-fill-keymap-hook
+           "f" 'browse-url
+           "F" 'w3m-view-url-with-external-browser))
 
 (add-hook 'wl-mail-send-pre-hook 'mail-attachment-check)
 (add-hook 'wl-mail-send-pre-hook 'mail-subject-check)
@@ -101,25 +113,26 @@
           (lambda ()
             (add-to-list 'completion-at-point-functions
                          'org-contacts-message-complete-function)))
+
 ;; Proportion of the summary and message windows
 (setq wl-message-window-size '(3 . 7))
-(add-hook 'wl-mail-setup-hook 'cofi/write-mail)
 (eval-after-load "wl"
   '(progn
      (require 'mime-w3m)
-     (define-key wl-draft-mode-map (kbd "C-<tab>") 'completion-at-point)
      ;; Invert behaviour of with and without argument replies.
      (let ((with-arg wl-draft-reply-without-argument-list)
            (without-arg wl-draft-reply-with-argument-list))
        (setq wl-draft-reply-without-argument-list without-arg
              wl-draft-reply-with-argument-list with-arg))
 
-     ;; Switch reply keys
-     (define-key wl-summary-mode-map (kbd "A") 'wl-summary-reply)
-     (define-key wl-summary-mode-map (kbd "a") 'wl-summary-reply-with-citation)
-     (define-key wl-summary-mode-map (kbd "D") 'wl-thread-delete)
-     (define-key wl-summary-mode-map (kbd "<f12>") 'offlineimap)
+     (fill-keymap wl-summary-mode-map
+                  ;; Switch reply keys
+                  "A" 'wl-summary-reply
+                  "a" 'wl-summary-reply-with-citation
+                  "D" 'wl-thread-delete
+                  "<f12>" 'offlineimap)
      (define-key wl-folder-mode-map (kbd "<f12>") 'offlineimap)
+     (define-key wl-draft-mode-map (kbd "C-<tab>") 'completion-at-point)
      ))
 
 (require-and-exec 'mairix
@@ -161,21 +174,21 @@
               wl-summary-buffer-elmo-folder
               (wl-summary-message-number)
               (intern (downcase field)))))
-         (define-key wl-folder-mode-map (kbd "C-/") 'mairix-search)
-         (define-key wl-summary-mode-map (kbd "C-/") 'mairix-search)))
+         (fill-keymaps `(,wl-folder-mode-map ,wl-summary-mode-map)
+                       "C-/" 'mairix-search)))
 
-    (global-set-key (kbd "<f9>")
-                    (let ((mairix-map (make-sparse-keymap)))
-                      (define-key mairix-map "/" 'mairix-search)
-                      (define-key mairix-map "s" 'mairix-save-search)
-                      (define-key mairix-map "i" 'mairix-use-saved-search)
-                      (define-key mairix-map "e" 'mairix-edit-saved-searches)
-                      (define-key mairix-map "w" 'mairix-widget-search)
-                      (define-key mairix-map "u" 'mairix-update-database)
-                      (define-key mairix-map "f" 'mairix-search-from-this-article)
-                      (define-key mairix-map "t" 'mairix-search-thread-this-article)
-                      (define-key mairix-map "b" 'mairix-widget-search-based-on-article)
-                      mairix-map))
+    (defkeymap cofi/mairix-keymap
+      "/" 'mairix-search
+      "s" 'mairix-save-search
+      "i" 'mairix-use-saved-search
+      "e" 'mairix-edit-saved-searches
+      "w" 'mairix-widget-search
+      "u" 'mairix-update-database
+      "f" 'mairix-search-from-this-article
+      "t" 'mairix-search-thread-this-article
+      "b" 'mairix-widget-search-based-on-article)
+
+    (global-set-key (kbd "<f9>") cofi/mairix-keymap)
     )
 
 (provide 'cofi-mail)

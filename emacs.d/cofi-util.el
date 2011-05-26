@@ -57,6 +57,11 @@
   (dolist (hook hooks)
     (add-hook hook fun)))
 
+(defun add-all-to-hook (hook &rest funs)
+  "Add functions to hook"
+  (dolist (fun funs)
+    (add-hook hook fun)))
+
 (defvar cofi/before-kill-hook
   '(
     recentf-save-list

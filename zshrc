@@ -86,9 +86,15 @@ if [[ -d $ZSHDIR ]] {
     load_config $ZSHDIR/completion
     load_config $ZSHDIR/extensions
     load_config $ZSHDIR/bindkey
-    if [[ $TERM != "linux" && $TERM != "dumb" ]] {
-        load_config $ZSHDIR/prompt
-    }
+    case "$TERM" in
+        linux)
+            ;;
+        dumb)
+            export PROMPT="%F{green}%n@%m %d %#> %F{white}"
+            ;;
+        *) load_config $ZSHDIR/prompt
+            ;;
+    esac
     load_config $ZSHDIR/style
 }
 

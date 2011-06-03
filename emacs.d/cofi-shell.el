@@ -30,4 +30,7 @@
 (require-and-exec 'shell-command
                   (shell-command-completion-mode))
 
+(setq dirtrack-list '("[a-zA-Z@]+ \\(~.*?\\) %>" 1))
+(add-hook 'shell-mode-hook (turn-on dirtrack-mode))
+
 (provide 'cofi-shell)

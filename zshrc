@@ -86,7 +86,7 @@ if [[ -d $ZSHDIR ]] {
     load_config $ZSHDIR/completion
     load_config $ZSHDIR/extensions
     load_config $ZSHDIR/bindkey
-    if [[ $TERM != "linux" ]] {
+    if [[ $TERM != "linux" && $TERM != "dumb" ]] {
         load_config $ZSHDIR/prompt
     }
     load_config $ZSHDIR/style

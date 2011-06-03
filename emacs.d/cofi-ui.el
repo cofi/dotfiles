@@ -17,9 +17,6 @@
         (eval-after-load file
              `(diminish ,mode ,lighter))))
 
-(require-and-exec 'ansi-color
-                  (ansi-color-for-comint-mode-on))
-
 (require-and-exec 'sml-modeline
                   (setq sml-modeline-len  8)
                   (sml-modeline-mode 1))
@@ -32,9 +29,6 @@
                         uniquify-separator "/"
                         uniquify-after-kill-buffer-p t
                         uniquify-ignore-buffers-re "^\\*"))
-
-(require-and-exec 'shell-command
-                  (shell-command-completion-mode))
 
 (require-and-exec 'eldoc
   (add-hook 'python-mode-hook 'turn-on-eldoc-mode)

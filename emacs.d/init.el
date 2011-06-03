@@ -70,6 +70,7 @@
                                  "cofi-org"
                                  "cofi-vcs"
                                  "cofi-rst"
+                                 "cofi-shell"
                                  "cofi-windowing"
                                  "cofi-workgroups"
                                  "cofi-completion"))

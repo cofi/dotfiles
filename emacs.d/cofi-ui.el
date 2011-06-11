@@ -21,6 +21,7 @@
                   (setq sml-modeline-len  8)
                   (sml-modeline-mode 1))
 
+(setq hl-paren-colors '("#9C0F0F" "#BF0303" "#E20800" "#E85752" "#F08682" "#F9CCCA"))
 (require-and-exec 'highlight-parentheses
                   (add-hook 'find-file-hook 'highlight-parentheses-mode))
 

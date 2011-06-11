@@ -297,7 +297,7 @@ Note: This assumes all files are in the org-directory."
                      (cdr (assoc day cofi-org-dayname-to-weekday))
                    day)))
     (cofi-with-sane-calendar
-     (eval `(org-diary-class ,@term-boundary ,weekday ,@term-pause)))))
+     (apply #'org-diary-class `(,@term-boundary ,weekday ,@term-pause)))))
 
 (defun cofi-org-ws-class (day)
   (cofi-org-term-class day cofi-org-ws-boundary cofi-org-ws-pause-weeks))
@@ -307,12 +307,12 @@ Note: This assumes all files are in the org-directory."
 
 (defun cofi-org-ws-cyclic (n year month day &optional mark)
   (cofi-with-sane-calendar
-   (let ((cofi-boundary (eval `(diary-block ,@cofi-org-ws-boundary))))
+   (let ((cofi-boundary (apply #'diary-block cofi-org-ws-boundary)))
      (cofi-org-cyclic n year month day mark))))
 
 (defun cofi-org-ss-cyclic (n year month day &optional mark)
   (cofi-with-sane-calendar
-   (let ((cofi-boundary (eval `(diary-block ,@cofi-org-ss-boundary))))
+   (let ((cofi-boundary (apply #'diary-block cofi-org-ss-boundary)))
      (cofi-org-cyclic n year month day mark))))
 
 (defun cofi-org-cyclic (n year month day &optional mark)

@@ -2,7 +2,7 @@
 
 PWD := `pwd`
 LINK_CMD := ln --symbolic --force -T
-NORMAL_FILES := `ls -I xmonad.hs -I README -I newsbeuterconfig -I vimenv_setup -I Makefile -I pentadactyl -I zathurarc`
+NORMAL_FILES := `ls -I xmonad.hs -I README -I newsbeuterconfig -I vimenv_setup -I Makefile -I pentadactyl -I zathurarc -I ipy_user_conf.py`
 
 refresh:
 	 #emacs --batch --no-site-file --eval '(byte-recompile-directory "emacs.d/")'
@@ -26,3 +26,4 @@ deploy:
 	@$(LINK_CMD) $(PWD)/pentadactyl/plugins ~/.pentadactyl/plugins
 	@$(LINK_CMD) $(PWD)/pentadactyl/colors ~/.pentadactyl/colors
 	@$(LINK_CMD) $(PWD)/zathurarc ~/.config/zathura/zathurarc
+	@$(LINK_CMD) $(PWD)/ipy_user_conf.py ~/.ipython/ipy_user_conf.py

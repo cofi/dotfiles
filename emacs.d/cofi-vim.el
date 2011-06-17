@@ -110,7 +110,10 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
   (define-key viper-insert-global-user-map (kbd "C-\\") 'viper-intercept-ESC-key)
   (define-key viper-vi-global-user-map (kbd "C-\\") 'viper-escape-to-emacs)
 
-  (dolist (mode '(magit-mode magit-key-mode magit-show-branches-mode))
+  (dolist (mode '(magit-mode
+                  magit-key-mode
+                  magit-show-branches-mode
+                  prolog-inferior-mode))
     (push mode viper-emacs-state-mode-list))
 
   (push 'clojure-mode viper-vi-state-mode-list)

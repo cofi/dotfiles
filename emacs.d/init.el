@@ -16,9 +16,9 @@
                            default))
 (load-theme 'cofi-dark)
 
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
+(when (or (and (string< emacs-version "24.0")
+               (load (expand-file-name "~/.emacs.d/elpa/package.el")))
+          (require 'package))
   (dolist (archive '(("marmalade" . "http://marmalade-repo.org/packages/")
                      ("elpa" . "http://tromey.com/elpa/")))
     (add-to-list 'package-archives archive))

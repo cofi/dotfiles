@@ -1,8 +1,10 @@
 (add-to-loadpath "~/.elisp/vendor/slime/")
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
   (add-hook hook
+            (gen-local-fill-keymap-hook
             ;; viper overshadows slime-repl binding
-            (lambda () (local-set-key (kbd "C-c M-p") 'slime-repl-set-package))))
+             "C-c M-p" 'slime-repl-set-package
+             "C-c '"   'slime-selector)))
 
 (add-hook 'slime-repl-mode-hook
           (gen-fill-keymap-hook slime-repl-mode-map "C-c C-z" 'other-buffer))

@@ -22,16 +22,25 @@
   "f" 'insert-file
   "s" 'yas/insert-snippet)
 
+;;; breadcrumbs keymap
+(defkeymap cofi-breadcrumbs-map
+  "s" 'bc-set
+  "P" 'bc-previous
+  "N" 'bc-next
+  "p" 'bc-local-previous
+  "n" 'bc-local-next
+  "c" 'bc-goto-current
+  "l" 'bc-list
+  "C" 'bc-clear)
+
 (fill-global-keymap
  ;; buffer
  "C-c y"   'bury-buffer
  "C-c Y"   'quit-window
- "C-c b"   'revert-buffer
+ "C-c r"   'revert-buffer
  "C-x b"   'cofi/buffer
  "C-x B"   'cofi/buffer-alternate
  "C-x C-c" 'cofi/buffer
- ;; files
-
 
  ;; files
  "C-x M-f" 'ido-find-file-other-window
@@ -69,8 +78,8 @@
  ;; maps
  "C-x m" cofi-minor-mode-map
  "C-x i" cofi-insert-map
+ "C-c b" cofi-breadcrumbs-map
  )
-
 
 (if (fboundp 'anything-imenu)
     (global-set-key (kbd "C-c i") 'anything-imenu)

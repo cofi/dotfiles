@@ -22,6 +22,15 @@
   "Insert & boxquote output of shell command" t)
 (autoload 'boxquote-unbox "boxquote" "Remove boxquote that surrounds point" t)
 
+(autoload 'bc-set               "breadcrumb" "Set bookmark in current point."   t)
+(autoload 'bc-previous          "breadcrumb" "Go to previous bookmark."         t)
+(autoload 'bc-next              "breadcrumb" "Go to next bookmark."             t)
+(autoload 'bc-local-previous    "breadcrumb" "Go to previous local bookmark."   t)
+(autoload 'bc-local-next        "breadcrumb" "Go to next local bookmark."       t)
+(autoload 'bc-goto-current      "breadcrumb" "Go to the current bookmark."      t)
+(autoload 'bc-list              "breadcrumb" "List all bookmarks in menu mode." t)
+(autoload 'bc-clear             "breadcrumb" "Clear all bookmarks."             t)
+
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
 

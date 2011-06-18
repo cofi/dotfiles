@@ -301,4 +301,8 @@ See `POUR-MAPPINGS-WITH'."
 (defun cofi/var-file (filename)
   (format "~/var/%s" filename))
 
+(defun add-major-mode (re mode)
+  "Add new major-mode alist-pair."
+  (pushnew (cons re mode) auto-mode-alist))
+
 (provide 'cofi-util)

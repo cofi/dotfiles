@@ -26,24 +26,26 @@
 
 ;; (load "~/.elisp/nxhtml/autostart.el")
 
-(dolist (dir '(
-               "~/.elisp"
-               "~/.emacs.d"
-               "~/.elisp/vendor/full-ack"
-               "~/.elisp/vendor/sackspace"
-               "~/.elisp/vendor/keychain-environment"
-               "~/.elisp/vendor/gist"
-               "~/.elisp/vendor/rainbow"
-               "~/.elisp/vendor/pylookup"
-               "~/.elisp/vendor/scratch"
-               "~/.elisp/vendor/offlineimap"
-               "/usr/local/share/emacs/site-lisp/semi/"
-               "/usr/local/share/emacs/site-lisp/flim/"
-               "/usr/local/share/emacs/site-lisp/apel/"
-               "/usr/local/share/emacs/23.2/site-lisp/emu/"
-               "/usr/local/share/emacs/site-lisp/wl/"
-               ))
-  (add-to-list 'load-path dir))
+(defun add-to-loadpath (&rest dirs)
+  (dolist (dir dirs load-path)
+    (add-to-list 'load-path dir :test #'string=)))
+
+(add-to-loadpath "~/.elisp"
+                 "~/.emacs.d"
+                 "~/.elisp/vendor/full-ack"
+                 "~/.elisp/vendor/sackspace"
+                 "~/.elisp/vendor/keychain-environment"
+                 "~/.elisp/vendor/gist"
+                 "~/.elisp/vendor/rainbow"
+                 "~/.elisp/vendor/pylookup"
+                 "~/.elisp/vendor/scratch"
+                 "~/.elisp/vendor/offlineimap"
+                 "/usr/local/share/emacs/site-lisp/semi/"
+                 "/usr/local/share/emacs/site-lisp/flim/"
+                 "/usr/local/share/emacs/site-lisp/apel/"
+                 "/usr/local/share/emacs/23.2/site-lisp/emu/"
+                 "/usr/local/share/emacs/site-lisp/wl/"
+                 )
 
 (require 'cofi-util)
 (defvar hostname (car (split-string system-name "\\." t)))

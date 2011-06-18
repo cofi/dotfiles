@@ -58,3 +58,6 @@
 [submodule "elisp/vendor/workgroups"]
 	path = elisp/vendor/workgroups
 	url = git://github.com/tlh/workgroups.el.git
+[submodule "elisp/vendor/slime"]
+	path = elisp/vendor/slime
+	url = git://github.com/nablaone/slime.git

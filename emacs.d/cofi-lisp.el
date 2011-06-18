@@ -1,3 +1,4 @@
+(add-to-loadpath "~/.elisp/vendor/slime/")
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
   (add-hook hook
             ;; viper overshadows slime-repl binding
@@ -24,8 +25,8 @@
 (add-hook 'sldb-mode-hook #'(lambda () (setq autopair-dont-activate t)))
 
 (require-and-exec 'slime
-     (require 'slime-autoloads)
-     (slime-setup '(slime-repl)))
+                  (slime-setup '(slime-fancy)))
+(setq slime-protocol-version 'ignore)
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 

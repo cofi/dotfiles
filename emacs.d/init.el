@@ -43,7 +43,6 @@
                  "/usr/local/share/emacs/site-lisp/semi/"
                  "/usr/local/share/emacs/site-lisp/flim/"
                  "/usr/local/share/emacs/site-lisp/apel/"
-                 "/usr/local/share/emacs/23.2/site-lisp/emu/"
                  "/usr/local/share/emacs/site-lisp/wl/"
                  )
 
@@ -102,3 +101,14 @@
 (load-theme 'cofi-dark)                 ; ensure that colorscheme colors will be used
 (message "Time needed to load: %d seconds."
          (time-to-seconds (time-since startup-time)))
+
+
+;;; This was installed by package-install.el.
+;;; This provides support for the package system and
+;;; interfacing with ELPA, the package archive.
+;;; Move this code earlier if you want to reference
+;;; packages in your .emacs.
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (package-initialize))

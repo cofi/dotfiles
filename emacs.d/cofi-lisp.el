@@ -25,7 +25,8 @@
 (add-hook 'sldb-mode-hook #'(lambda () (setq autopair-dont-activate t)))
 
 (require-and-exec 'slime
-                  (slime-setup '(slime-fancy)))
+                  (slime-setup '(slime-fancy
+                                 slime-banner)))
 (setq slime-protocol-version 'ignore)
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)

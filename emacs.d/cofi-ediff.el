@@ -30,7 +30,9 @@
 
 ;;; clean recursive edit
 (add-hook 'ediff-after-quit-hook 'exit-recursive-edit)
-(add-hook 'ediff-after-quit-hook (lambda () (if ediff-git-clean-frame (delete-frame))))
+(add-hook 'ediff-after-quit-hook (lambda () (when ediff-git-clean-frame
+                                              (setq ediff-git-clean-frame nil)
+                                              (delete-frame))))
 
 ;;; restore windows and frames
 (add-to-hooks (lambda ()

@@ -11,8 +11,8 @@
      "\n")))
 (setq initial-scratch-message (cofi/fortune2scratch))
 
-(setq custom-safe-themes '("4a8ee16dec9b957d68e04f64a79d88f10fb49f3f"
-                           "315eb5b3d8e17ccaec85d61830858ffc27fc8b02"
+(setq custom-safe-themes '("1553f2abb2999e2ab0b1550d3e5807515699b9d3"
+                           "8d4816cd75e73ead5af307e5e490c33f923699db"
                            default))
 (load-theme 'cofi-dark)
 

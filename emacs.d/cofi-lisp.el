@@ -1,4 +1,6 @@
-(add-to-loadpath "~/.elisp/vendor/slime/")
+(add-to-loadpath "~/.elisp/vendor/slime/"
+                 "~/.elisp/vendor/clojure-mode/")
+
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
   (add-hook hook
             (gen-local-fill-keymap-hook

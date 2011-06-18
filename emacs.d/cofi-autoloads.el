@@ -31,6 +31,9 @@
 (autoload 'bc-list              "breadcrumb" "List all bookmarks in menu mode." t)
 (autoload 'bc-clear             "breadcrumb" "Clear all bookmarks."             t)
 
+(autoload 'clojure-mode "clojure-mode.el" "clojure mode" t)
+(autoload 'clojure-test-mode "clojure-test-mode.el" "clojure test minor mode" t)
+
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 (autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
 

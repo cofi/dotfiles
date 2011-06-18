@@ -8,9 +8,10 @@
              "C-c M-p" 'slime-repl-set-package
              "C-c '"   'slime-selector)))
 
-(add-hook 'slime-repl-mode-hook
-          (gen-fill-keymap-hook slime-repl-mode-map "C-c C-z" 'other-buffer))
+;;; CL
+(add-major-mode "\\.cl$" lisp-mode)
 
+;;; paredit
 (require 'paredit)
 (defvar paredit-mode-hooks '(lisp-mode-hook
                              clojure-mode-hook
@@ -18,9 +19,9 @@
 
 (add-to-hooks #'enable-paredit-mode paredit-mode-hooks)
 
-(add-to-list 'auto-mode-alist '("\\.cl$" . lisp-mode))
-
-(add-to-list 'load-path "~/dev/lisp/slime/")
+;;; slime
+(add-hook 'slime-repl-mode-hook
+          (gen-fill-keymap-hook slime-repl-mode-map "C-c C-z" 'other-buffer))
 (setq slime-lisp-implementations
       `((sbcl ("sbcl" "--core" ,(expand-file-name "~/var/sbcl.swank-core"))
               :init (lambda (port-file _)

@@ -44,7 +44,8 @@
 
 ;;; Dired ==============================
 (setq dired-recursive-copies 'always
-      dired-dwim-target t)
+      dired-dwim-target t
+      wdired-allow-to-change-permissions t)
 (require-and-exec 'dired+)
 (add-hook 'dired-mode-hook 'turn-on-auto-revert-mode)
 ;;; ========================================

@@ -18,7 +18,10 @@
 
 (add-to-list 'load-path "~/dev/lisp/slime/")
 (setq slime-lisp-implementations
-      '((sbcl ("sbcl") :coding-system utf-8-unix)))
+      `((sbcl ("sbcl" "--core" ,(expand-file-name "~/var/sbcl.swank-core"))
+              :init (lambda (port-file _)
+                      (format "(swank:start-server %S)\n" port-file))
+              :coding-system utf-8-unix)))
 
 (setq slime-net-coding-system 'utf-8-unix)
 

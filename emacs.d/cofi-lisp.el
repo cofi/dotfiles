@@ -10,6 +10,7 @@
 
 ;;; CL
 (add-major-mode "\\.cl$" lisp-mode)
+(setq lisp-indent-function 'common-lisp-indent-function)
 
 ;;; paredit
 (require 'paredit)

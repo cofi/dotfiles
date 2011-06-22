@@ -20,4 +20,11 @@
               "cofi-java"
               ))
 
+(defun cofi/close-after-successful-compilation (buffer desc)
+  "Close compilation buffer window after successful compilation."
+  (unless (string-match "exited abnormally" desc)
+    (delete-windows-on buffer)))
+
+(push 'cofi/close-after-successful-compilation compilation-finish-functions)
+
 (provide 'cofi-programming)

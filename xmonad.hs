@@ -321,6 +321,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , pgpmit
                                                   , S.alpha
                                                   , mathworld
+                                                  , ctan
                                                   , S.prefixAware google
                                                   ]
       -- new ones
@@ -341,6 +342,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       pgpmit = S.searchEngine "pgp" "http://pgp.mit.edu:11371/pks/lookup?search="
       alpha = S.searchEngine "alpha" "http://www.wolframalpha.com/input/i="
       urbanDictionary = S.searchEngine "ud" "http://www.urbandictionary.com/define.php?term="
+      ctan = S.searchEngine "ctan" "http://www.ctan.org/search/?search_type=description&search_type=filename&search_type=id&search="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

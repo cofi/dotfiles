@@ -20,4 +20,12 @@
 (vim-mapleader-add "h" 'ahg-status)
 (vim-mapleader-add "H" ahg-global-map)
 
+(fill-keymap ahg-status-mode-map
+             "d" 'ahg-status-diff
+             "<tab>" 'ahg-status-diff
+             ":" 'ahg-status-shell-command
+             "n" 'next-line
+             "p" 'previous-line
+             )
+
 (provide 'cofi-vcs)

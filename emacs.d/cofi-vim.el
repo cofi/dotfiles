@@ -125,49 +125,22 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
   ;; ==================================================
 
   ;; Misc ========================================
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (setq viper-vi-local-user-map
-                    (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
-                      (define-key map (kbd "RET") 'org-open-at-point)
-                      map)
-                    viper-insert-local-user-map
-                    (let ((map (make-sparse-keymap)))
-                      (define-key map (kbd "M-l") 'org-metaright)
-                      (define-key map (kbd "M-h") 'org-metaleft)
-                      map))
-              ;; some times local-maps don't get reloaded, this forces it
-              (viper-change-state-to-vi)))
+  (defun cofi/vimpulse-define-keys (mode state &rest pairs)
+    "Define groups of key cmd `PAIRS' for `MODE' in `STATE'."
+    (dolist (mapping (group pairs 2))
+      (vimpulse-define-key mode state (read-kbd-macro (car mapping)) (cadr mapping))))
 
-  (defun vimpulse-outline-setup ()
-    (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
-      (fill-keymap map
-                   "za" 'outline-toggle-children
-                   "zm" 'hide-body
-                   "zr" 'show-all
-                   "zo" 'show-subtree
-                   "zc" 'hide-subtree
-                   "z@" outline-mode-prefix-map)
-      (setq viper-vi-local-user-map map)
-      (viper-change-state-to-vi)))
-
-  ;; aww why have you no hook?
-  (defadvice outline-minor-mode (after setup-vim-outline activate)
-    (vimpulse-outline-setup))
-  (add-hook 'outline-mode-hook 'vimpulse-outline-setup)
-
-  (defun vimpulse-org-setup ()
-    (let ((map (or viper-vi-local-user-map (make-sparse-keymap))))
-           (fill-keymap map
-                        "za" 'org-cycle
-                        "zA" 'org-shifttab
-                        "zm" 'hide-body
-                        "zr" 'show-all
-                        "zo" 'show-subtree
-                        "zc" 'hide-subtree)
-           (setq viper-vi-local-user-map map)
-           (viper-change-state-to-vi)))
-  (add-hook 'org-mode-hook 'vimpulse-org-setup)
+  (cofi/vimpulse-define-keys 'org-mode 'vi-state
+                             "RET" 'org-open-at-point
+                             "za" 'org-cycle
+                             "zA" 'org-shifttab
+                             "zm" 'hide-body
+                             "zr" 'show-all
+                             "zo" 'show-subtree
+                             "zc" 'hide-subtree)
+  (cofi/vimpulse-define-keys 'org-mode 'insert-state
+                             "M-l" 'org-metaright
+                             "M-h" 'org-metaleft)
 
   (setq cofi/default-cursor-color       "OliveDrab4"
         cofi/viper-insert-cursor-color  "dark red"

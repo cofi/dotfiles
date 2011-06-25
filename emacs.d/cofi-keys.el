@@ -22,6 +22,16 @@
   "f" 'insert-file
   "s" 'yas/insert-snippet)
 
+;;; anything keymap
+(defkeymap cofi-anything-map
+    "C-b" 'anything-browse-code
+    "b"   'anything-bookmarks
+    "c"   'cofi/anything-config
+    "m"   'cofi/anything-make
+    "u"   'cofi/anything-uni
+    "M"   'cofi/anything-lacarte
+    "l"   'anything-locate)
+
 ;;; breadcrumbs keymap
 (defkeymap cofi-breadcrumbs-map
   "s" 'bc-set
@@ -79,6 +89,7 @@
  "C-x m" cofi-minor-mode-map
  "C-x i" cofi-insert-map
  "C-c b" cofi-breadcrumbs-map
+ "C-c a" cofi-anything-map
  )
 
 (if (fboundp 'anything-imenu)

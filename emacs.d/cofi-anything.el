@@ -191,13 +191,6 @@
        (interactive)
        (anything-other-buffer anything-makefile-targets "*anything make*"))
 
-     (let ((map (make-sparse-keymap)))
-       (define-key map (kbd "b") 'anything-bookmarks)
-       (define-key map (kbd "c") 'cofi/anything-config)
-       (define-key map (kbd "m") 'cofi/anything-make)
-       (define-key map (kbd "u") 'cofi/anything-uni)
-       (global-set-key (kbd "C-c a") map))
-
      (when (fboundp 'lacarte-execute-command)
        (defun cofi/anything-lacarte ()
          (interactive)

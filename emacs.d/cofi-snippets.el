@@ -28,4 +28,13 @@
 (add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t)))
 (add-hook 'calc-mode-hook (lambda () (setq yas/dont-activate t)))
 
+(defun cofi/region-to-snippet (begin end)
+  "Write new snippet based on current region."
+  (interactive "r")
+  (let ((region (buffer-substring begin end)))
+    (yas/new-snippet)
+    (save-excursion
+      (end-of-buffer)
+      (insert region))))
+
 (provide 'cofi-snippets)

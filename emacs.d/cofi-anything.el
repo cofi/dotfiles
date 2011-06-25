@@ -18,6 +18,7 @@
            ;; echo area
            " *Echo Area" " *Minibuf"
            (and line-start (optional " ") "*" (* anything) "*")
+           "Map_Sym.txt"
            )))
 
 (setq anything-idle-delay 0.3

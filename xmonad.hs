@@ -300,6 +300,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                    ]
       multi = S.namedEngine "multi" $ foldr1 (!>) [ google
                                                   , scroogle
+                                                  , duck
                                                   , wiki
                                                   , wikiD
                                                   , github
@@ -343,6 +344,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       alpha = S.searchEngine "alpha" "http://www.wolframalpha.com/input/i="
       urbanDictionary = S.searchEngine "ud" "http://www.urbandictionary.com/define.php?term="
       ctan = S.searchEngine "ctan" "http://www.ctan.org/search/?search_type=description&search_type=filename&search_type=id&search="
+      duck = S.searchEngine "d" "http://duckduckgo.com/?q="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

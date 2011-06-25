@@ -93,6 +93,7 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
+(setq browse-url-browser-function #'w3m-browse-url)
 ;; Spelling ====================
 (setq speck-engine 'Hunspell
       speck-hunspell-library-directory "/usr/share/hunspell/")

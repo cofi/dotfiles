@@ -23,9 +23,15 @@
 (fill-keymap ahg-status-mode-map
              "d" 'ahg-status-diff
              "<tab>" 'ahg-status-diff
-             ":" 'ahg-status-shell-command
+             ":" 'ahg-status-do-command
              "n" 'next-line
              "p" 'previous-line
+             "P" (cmd (ahg-do-command "push"))
+             "F" (cmd (ahg-do-command "fetch"))
              )
+
+(fill-keymap ahg-command-mode-map
+             "q" 'quit-window
+             "Q" 'kill-buffer-and-window)
 
 (provide 'cofi-vcs)

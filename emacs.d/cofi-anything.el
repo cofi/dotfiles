@@ -29,7 +29,7 @@
 (setq anything-c-locate-db-file (cofi/var-file "locate.db"))
 (setq anything-c-locate-command (format "locate -d %s -i -r %%s"
                                         anything-c-locate-db-file))
-(add-hook 'emacs-startup-hook #'alcs-update-restart 'append)
+(add-hook 'emacs-startup-hook (catch-error-hook (alcs-update-restart)) 'append)
 ;; --------------------------------------------------
 (require-and-exec 'anything
     (require 'anything-config)

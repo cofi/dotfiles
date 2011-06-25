@@ -20,6 +20,8 @@
 
 (defadvice paredit-mode (after subst-autopair activate)
     "Disable autopair when running paredit."
-    (setq autopair-dont-activate paredit-mode))
+    (if paredit-mode
+        (autopair-mode -1)
+        (autopair-mode 1)))
 
 (provide 'cofi-elisp)

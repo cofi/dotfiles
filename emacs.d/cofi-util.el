@@ -305,4 +305,10 @@ See `POUR-MAPPINGS-WITH'."
   "Add new major-mode alist-pair."
   (pushnew (cons re mode) auto-mode-alist))
 
+(defmacro catch-error-hook (&rest body)
+  "Create function suitable for hooks and catching errors."
+  `(lambda ()
+     (ignore-errors
+       ,@body)))
+
 (provide 'cofi-util)

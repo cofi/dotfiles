@@ -35,8 +35,11 @@
 
 (require-and-exec 'slime
                   (slime-setup '(slime-fancy
-                                 slime-banner)))
+                                 slime-banner
+                                 anything-slime)))
 (setq slime-protocol-version 'ignore)
+(when (fboundp 'anything-slime-complete)
+  (setq slime-complete-symbol-function #'anything-slime-complete))
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 

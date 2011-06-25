@@ -99,5 +99,7 @@
                                 ))
 (cofi-file-standard)
 (load-theme 'cofi-dark)                 ; ensure that colorscheme colors will be used
-(message "Time needed to load: %d seconds."
-         (time-to-seconds (time-since startup-time)))
+(add-hook 'emacs-startup-hook (lambda ()
+                                (message "Time needed to load: %d seconds."
+                                         (time-to-seconds (time-since startup-time))))
+          'append)

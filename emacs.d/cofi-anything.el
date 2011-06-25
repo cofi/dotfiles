@@ -1,3 +1,6 @@
+(dolist (path '("~/.elisp/vendor/anything"
+                "~/.elisp/vendor/anything/extensions/"))
+  (pushnew path load-path))
 ;; Settings ----------------------------------------
 (setq anything-command-map-prefix-key "<f7>")
 (setq anything-c-boring-file-regexp
@@ -61,13 +64,6 @@
     (remove-hook 'kill-emacs-hook 'anything-c-adaptive-save-history)
 
     ;; Sources ----------------------------------------
-    (defvar anything-c-source-buffer-not-found
-      (anything-c-define-dummy-source
-       "Create buffer"
-       (lambda () (unless (get-buffer anything-input)
-                    (anything-c-dummy-candidate)))
-       '(type . buffer)))
-
     (require-and-exec 'lacarte
       (defvar anything-c-lacarte-current-buffer nil)
       (defvar anything-c-source-current-buffer-lacarte
@@ -102,14 +98,16 @@
         (type . file)))
     ;; --------------------------------------------------
     ;; anythings ----------------------------------------
-    (defun cofi/anything-buffers ()
-      "Enhanced preconfigured `anything' for buffer."
-      (interactive)
-      (anything-other-buffer '(
-                               anything-c-source-buffers+
-                               anything-c-source-buffer-not-found
-                               )
-                               "*anything buffers*"))
+    ;; FIXME: buffer-not-found dummy source not working
+;;     (defun cofi/anything-buffers ()
+;;       "Enhanced preconfigured `anything' for buffer."
+;;       (interactive)
+;;       (anything-other-buffer '(
+;;                                anything-c-source-buffers+
+;;                                anything-c-source-buffer-not-found
+;;                                )
+;;                                "*anything buffers*"))
+    (defalias 'cofi/anything-buffers 'anything-buffers+)
 
      (defun cofi/anything-files ()
       "ffap -> recentf -> buffer -> bookmark -> file-cache -> files-in-current-dir -> locate"

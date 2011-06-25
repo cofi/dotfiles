@@ -71,7 +71,7 @@
      `(diredp-write-priv ((t (:background ,bg :foreground "firebrick"))))
      `(diredp-exec-priv ((t (:background ,bg :foreground "light grey"))))
      `(diredp-no-priv ((t (:background ,bg :foreground "white"))))
-     `(diredp-dir-priv ((t (:foreground "sky blue"))))
+     `(diredp-dir-priv ((t (:foreground "sky blue" :background nil))))
      `(diredp-file-name ((t (:foreground "slate blue"))))
      `(diredp-file-suffix ((t (:foreground "light grey"))))
      `(diredp-compressed-file-suffix ((t (:foreground "gold"))))

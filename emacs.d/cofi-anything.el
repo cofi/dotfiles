@@ -27,7 +27,7 @@
 (setq anything-idle-delay 0.3
       anything-input-idle-delay 0
       anything-quick-update t
-      anything-candidate-number-limit 100
+      anything-candidate-number-limit nil
       anything-su-or-sudo "sudo")
 
 (setq anything-c-locate-db-file (cofi/var-file "locate.db"))

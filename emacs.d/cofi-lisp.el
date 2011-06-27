@@ -11,6 +11,9 @@
 ;;; CL
 (add-major-mode "\\.cl$" 'lisp-mode)
 (setq lisp-indent-function 'common-lisp-indent-function)
+(add-hook 'lisp-mode-hook (lambda () (unless (slime-connected-p)
+                                       (save-excursion (call-interactively #'slime))))
+          'append)
 
 ;;; paredit
 (require 'paredit)

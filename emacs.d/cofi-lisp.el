@@ -17,15 +17,12 @@
 
 ;;; paredit
 (require 'paredit)
-(defvar paredit-mode-hooks '(lisp-mode-hook
-                             clojure-mode-hook
-                             slime-repl-mode-hook))
-
-(add-to-hooks #'enable-paredit-mode paredit-mode-hooks)
+(let ((paredit-mode-hooks '(lisp-mode-hook
+                            clojure-mode-hook
+                            slime-repl-mode-hook)))
+  (add-to-hooks #'enable-paredit-mode paredit-mode-hooks))
 
 ;;; slime
-(add-hook 'slime-repl-mode-hook
-          (gen-fill-keymap-hook slime-repl-mode-map "C-c C-z" 'other-buffer))
 (setq slime-lisp-implementations
       `((sbcl ("sbcl" "--core" ,(expand-file-name "~/var/sbcl.swank-core"))
               :init (lambda (port-file _)

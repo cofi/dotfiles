@@ -311,4 +311,9 @@ See `POUR-MAPPINGS-WITH'."
      (ignore-errors
        ,@body)))
 
+(defmacro p (&rest body)
+  "Create anonymous predicate"
+  `(lambda (x)
+    ,@body))
+
 (provide 'cofi-util)

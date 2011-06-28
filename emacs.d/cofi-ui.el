@@ -157,7 +157,8 @@
   (linum-mode 1))
 (show-paren-mode t)
 (when on-mobile?
-    (display-battery-mode t))
+  (ignore-errors
+    (display-battery-mode 1)))
 
 (setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function
                                         kill-buffer-query-functions))

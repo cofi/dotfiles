@@ -150,9 +150,8 @@
 (global-font-lock-mode t)
 (global-hl-line-mode t)
 (column-number-mode 1)
-(add-hook 'find-file-hook
-          ;; start linum only for real files
-          (lambda () (linum-mode 1)))
+;; start linum only for real files
+(add-hook 'find-file-hook (turn-on linum-mode))
 (defadvice normal-mode (after re-line activate)
   ;; fix normal-mode disabling
   (linum-mode 1))

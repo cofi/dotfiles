@@ -2,6 +2,9 @@
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/contrib/lisp")
 (require 'org-install)
 
+;;; remove bundled org from load path
+(setq load-path (remove-if  (p (string-match "/usr/share/emacs/.*/org" x)) load-path))
+
 (if (file-directory-p "~/Org")
     (setq org-directory "~/Org/"
           org-agenda-files "~/Org/agenda")

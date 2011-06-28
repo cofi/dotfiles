@@ -1,7 +1,3 @@
-(add-to-list 'load-path "~/.elisp/vendor/google-weather-el")
-(require 'org-google-weather)
-(setq org-google-weather-icon-directory "/usr/share/icons/oxygen/16x16/status/")
-
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
 (add-to-list 'load-path "~/.elisp/vendor/org-mode/contrib/lisp")
 (require 'org-install)
@@ -326,6 +322,11 @@ Same arguments as in diary cyclic."
 ;;  ========================================
 ;; Misc ==============================
 (setq org-link-mailto-program '(compose-mail "%a" "%s"))
+
+;;; weather
+(add-to-list 'load-path "~/.elisp/vendor/google-weather-el")
+(require 'org-google-weather)
+(setq org-google-weather-icon-directory "/usr/share/icons/oxygen/16x16/status/")
 ;; ==================================================
 
 (provide 'cofi-org)

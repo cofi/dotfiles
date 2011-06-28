@@ -81,6 +81,7 @@
  "C-<f11>" 'multi-term-next
  ;; scratch
  "<f12>" 'scratch
+ "C-<f12>" (cmd (switch-to-buffer "*scratch*"))
  ;; home-end
  "<home>" 'home-end-home
  "<end>"  'home-end-end

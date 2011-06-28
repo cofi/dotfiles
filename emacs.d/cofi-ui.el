@@ -184,4 +184,12 @@
                                                       )))
                         '(python-mode c-mode java-mode cpp-mode)))
 ;; ========================================
+;;; scratch ====================
+(defun save-a-scratch ()
+  "Prevent *scratch* buffer from being killed.
+Intended as `kill-buffer-query-functions' fun."
+  (not (string= "*scratch*" (buffer-name))))
+
+(push #'save-a-scratch kill-buffer-query-functions)
+;;; ==============================
 (provide 'cofi-ui)

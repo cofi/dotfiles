@@ -296,8 +296,7 @@ Note: This assumes all files are in the org-directory."
   (let ((weekday (if (stringp day)
                      (cdr (assoc day cofi-org-dayname-to-weekday))
                    day)))
-    (cofi-with-sane-calendar
-     (apply #'org-diary-class `(,@term-boundary ,weekday ,@term-pause)))))
+    (apply #'org-class `(,@term-boundary ,weekday ,@term-pause))))
 
 (defun cofi-org-ws-class (day)
   (cofi-org-term-class day cofi-org-ws-boundary cofi-org-ws-pause-weeks))
@@ -306,27 +305,20 @@ Note: This assumes all files are in the org-directory."
   (cofi-org-term-class day cofi-org-ss-boundary cofi-org-ss-pause-weeks))
 
 (defun cofi-org-ws-cyclic (n year month day &optional mark)
-  (cofi-with-sane-calendar
-   (let ((cofi-boundary (apply #'diary-block cofi-org-ws-boundary)))
-     (cofi-org-cyclic n year month day mark))))
+  (let ((cofi-boundary (apply #'org-block cofi-org-ws-boundary)))
+    (cofi-org-cyclic n year month day mark)))
 
 (defun cofi-org-ss-cyclic (n year month day &optional mark)
-  (cofi-with-sane-calendar
-   (let ((cofi-boundary (apply #'diary-block cofi-org-ss-boundary)))
-     (cofi-org-cyclic n year month day mark))))
+  (let ((cofi-boundary (apply #'org-block cofi-org-ss-boundary)))
+    (cofi-org-cyclic n year month day mark)))
 
 (defun cofi-org-cyclic (n year month day &optional mark)
   "Uses `ENTRY' and `COFI-BOUNDARY' from outer scope.
 Same arguments as in diary cyclic."
-    (cofi-with-sane-calendar
-     (when (and
-            (or (not (boundp 'cofi-boundary)) cofi-boundary)
-            (diary-cyclic n year month day mark))
-       entry)))
-
-(defmacro cofi-with-sane-calendar (&rest body)
-  `(let ((calendar-date-style 'iso))
-       ,@body))
+  (when (and
+         (or (not (boundp 'cofi-boundary)) cofi-boundary)
+         (org-cyclic n year month day mark))
+    entry))
 ;; ========================================
 ;; contacts ====================
 (setq org-contacts-files `(,(format "%s/contacts.org" org-directory)))

@@ -1,6 +1,3 @@
-[submodule "elisp/vendor/magit"]
-	path = elisp/vendor/magit
-	url = git://github.com/philjackson/magit.git
 [submodule "elisp/vendor/yasnippet"]
 	path = elisp/vendor/yasnippet
 	url = git://github.com/emacsmirror/yasnippet.git
@@ -67,3 +64,6 @@
 [submodule "elisp/vendor/anything"]
 	path = elisp/vendor/anything
 	url = git://repo.or.cz/anything-config.git
+[submodule "elisp/vendor/magit"]
+	path = elisp/vendor/magit
+	url = git://github.com/magit/magit.git

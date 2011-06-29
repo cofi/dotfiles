@@ -135,60 +135,15 @@
      (define-key wl-draft-mode-map (kbd "C-<tab>") 'completion-at-point)
      ))
 
-(require-and-exec 'mairix
-    (setq mairix-file-path "~/Mail/"
-          mairix-search-file "mairix"
-          mairix-mail-program 'wl
-          mairix-wl-search-folder-prefix ".")
+;;; mu
+(require 'elmo-search)
+(elmo-search-register-engine
+    'mu 'local-file
+    :prog "mu"
+    :args '("find" pattern "--fields" "l")
+    :charset 'utf-8)
 
-    ;; From http://www.emacswiki.org/emacs/hgw-init-wl.el
-    (defun mairix-wl-display (folder)
-      "Display FOLDER using Wanderlust."
-      ;; If Wanderlust is running (Folder buffer exists)...
-      (if (get-buffer wl-folder-buffer-name)
-          ;; Check if we are in the summary buffer, close it and
-          ;; goto the Folder buffer
-          (if (string= (buffer-name) wl-summary-buffer-name)
-              (progn
-                (wl-summary-exit t)
-                (set-buffer (get-buffer wl-folder-buffer-name))))
-        ;; Otherwise Wanderlust is not running so start it
-        (wl))
-      ;; From the Folder buffer goto FOLDER first stripping off mairix-file-path
-      ;; to leave the wl folder name
-      (when (string-match
-             (concat (regexp-quote (expand-file-name mairix-file-path)) "\\(.*\\)")
-             folder)
-        (wl-folder-goto-folder-subr
-         (concat mairix-wl-search-folder-prefix (match-string 1 folder)))))
-
-    (add-to-list 'mairix-display-functions '(wl mairix-wl-display))
-    (add-to-list 'mairix-get-mail-header-functions '(wl mairix-wl-fetch-field))
-
-    (eval-after-load "wl"
-      '(progn
-         (defun mairix-wl-fetch-field (field)
-           "Get mail header FIELD for current message using Wanderlust."
-           (when wl-summary-buffer-elmo-folder
-             (elmo-message-field
-              wl-summary-buffer-elmo-folder
-              (wl-summary-message-number)
-              (intern (downcase field)))))
-         (fill-keymaps `(,wl-folder-mode-map ,wl-summary-mode-map)
-                       "C-/" 'mairix-search)))
-
-    (defkeymap cofi/mairix-keymap
-      "/" 'mairix-search
-      "s" 'mairix-save-search
-      "i" 'mairix-use-saved-search
-      "e" 'mairix-edit-saved-searches
-      "w" 'mairix-widget-search
-      "u" 'mairix-update-database
-      "f" 'mairix-search-from-this-article
-      "t" 'mairix-search-thread-this-article
-      "b" 'mairix-widget-search-based-on-article)
-
-    (global-set-key (kbd "<f9>") cofi/mairix-keymap)
-    )
+;;; you search by `wl-folder-goto-folder' ((kbd "g")) and entering [criterion]
+(setq elmo-search-default-engine 'mu)
 
 (provide 'cofi-mail)

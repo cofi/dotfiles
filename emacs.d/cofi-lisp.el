@@ -25,6 +25,11 @@
                             slime-repl-mode-hook)))
   (add-to-hooks #'enable-paredit-mode paredit-mode-hooks))
 
+(defadvice paredit-newline (before slime-eval-print-in-scratch activate)
+  "Call `SLIME-EVAL-PRINT-LAST-EXPRESSION' in slime scratch."
+  (if (and slime-mode (string= "*slime-scratch*" (buffer-name)))
+      (call-interactively #'slime-eval-print-last-expression)))
+
 ;;; slime
 (setq slime-lisp-implementations
       `((sbcl ("sbcl" "--core" ,(expand-file-name "~/var/sbcl.swank-core"))

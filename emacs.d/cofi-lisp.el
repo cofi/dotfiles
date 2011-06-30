@@ -6,7 +6,9 @@
             (gen-local-fill-keymap-hook
             ;; viper overshadows slime-repl binding
              "C-c M-p" 'slime-repl-set-package
-             "C-c '"   'slime-selector)))
+             "C-c '"   'slime-selector
+             "C-c C-;" 'slime-insert-balanced-comments
+             "C-c M-;" 'slime-remove-balanced-comments)))
 
 ;;; CL
 (add-major-mode "\\.cl$" 'lisp-mode)

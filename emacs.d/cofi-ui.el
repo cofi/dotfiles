@@ -10,9 +10,10 @@
 (require-and-exec 'diminish
   (loop for (file mode lighter) in '(("yasnippet" 'yas/minor-mode " Y")
                                      ("autopair" 'autopair-mode " p")
-                                     ("eldoc" 'eldoc-mode " ED")
+                                     ("eldoc" 'eldoc-mode " elD")
                                      ("highlight-parentheses" 'highlight-parentheses-mode)
-                                     ("undo-tree" 'undo-tree-mode))
+                                     ("undo-tree" 'undo-tree-mode)
+                                     ("paredit" 'paredit-mode " pE"))
         do
         (eval-after-load file
              `(diminish ,mode ,lighter))))

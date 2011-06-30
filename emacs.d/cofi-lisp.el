@@ -46,4 +46,14 @@
 
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 
+;;; from http://bc.tech.coop/blog/070425.html
+(defun slime-new-repl (&optional new-port)
+  "Create additional REPL for the current Lisp connection."
+  (interactive)
+  (if (slime-current-connection)
+      (let ((port (or new-port (slime-connection-port (slime-connection)))))
+        (slime-eval `(swank::create-server :port ,port))
+        (slime-connect slime-lisp-host port))
+    (error "Not connected")))
+
 (provide 'cofi-lisp)

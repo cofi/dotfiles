@@ -89,6 +89,7 @@
                            "\\.ido\\.last"
                            "\\.keychain/.*?-sh\\(-gpg\\)?"
                            ))
+   (add-hook 'kill-emacs-hook #'recentf-cleanup)
    )
 ;;; ========================================
 (provide 'cofi-files)

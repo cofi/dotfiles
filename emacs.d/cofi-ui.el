@@ -27,7 +27,7 @@
                   (add-hook 'find-file-hook 'highlight-parentheses-mode))
 
 (require-and-exec 'uniquify
-                  (setq uniquify-buffer-name-style 'reverse
+                  (setq uniquify-buffer-name-style 'post-forward
                         uniquify-separator "/"
                         uniquify-after-kill-buffer-p t
                         uniquify-ignore-buffers-re "^\\*"))

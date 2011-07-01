@@ -143,7 +143,8 @@
 ;; Default modes ========================================
 (setq autopair-autowrap t)
 (require-and-exec 'autopair
-  (add-hook 'text-mode-hook (turn-on autopair-mode)))
+  (add-to-hooks (turn-on autopair-mode) '(text-mode-hook
+                                          minibuffer-setup-hook)))
 
 (require-and-exec 'saveplace
                   (setq save-place-file (cofi/var-file "emacs/places"))

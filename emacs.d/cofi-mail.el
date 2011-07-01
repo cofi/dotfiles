@@ -145,5 +145,6 @@
 
 ;;; you search by `wl-folder-goto-folder' ((kbd "g")) and entering [criterion]
 (setq elmo-search-default-engine 'mu)
+(setq wl-default-spec "")
 
 (provide 'cofi-mail)

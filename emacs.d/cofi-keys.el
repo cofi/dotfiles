@@ -111,6 +111,14 @@
           (gen-fill-keymap-hook ido-completion-map
                                 "C-h" 'ido-prev-match
                                 "C-l" 'ido-next-match))
+(eval-after-load "doc-view"
+  '(fill-keymap doc-view-mode-map
+                "h"     'image-backward-hscroll
+                "j"     'doc-view-next-line-or-next-page
+                "k"     'doc-view-previous-line-or-previous-page
+                "l"     'image-forward-hscroll
+                "K"     'doc-view-kill-proc-and-buffer
+                "S-SPC" 'doc-view-scroll-down-or-previous-page))
 
 ;;; quick exit for some modes
 (dolist (hook '(diff-mode-hook

@@ -137,7 +137,10 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
                              "zm" 'hide-body
                              "zr" 'show-all
                              "zo" 'show-subtree
-                             "zc" 'hide-subtree)
+                             "zO" 'show-all
+                             "zc" 'hide-subtree
+                             "zC" 'hide-all)
+
   (cofi/vimpulse-define-keys 'org-mode 'insert-state
                              "M-l" 'org-metaright
                              "M-h" 'org-metaleft)

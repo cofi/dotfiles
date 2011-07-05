@@ -7,6 +7,7 @@
   "f" 'auto-fill-mode
   "g" 'glasses-mode
   "h" 'hs-minor-mode
+  "i" 'toggle-input-method
   "l" 'outline-minor-mode
   "o" 'orgstruct++-mode
   "p" 'pretty-mode

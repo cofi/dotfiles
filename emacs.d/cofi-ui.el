@@ -196,4 +196,8 @@ Intended as `kill-buffer-query-functions' fun."
 
 (push #'save-a-scratch kill-buffer-query-functions)
 ;;; ==============================
+;;; input method ====================
+(set-input-method 'german-postfix)
+;;; C-x m i to toggle input-method, see cofi-keys.el
+;;; ==============================
 (provide 'cofi-ui)

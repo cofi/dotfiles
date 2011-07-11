@@ -1,5 +1,6 @@
 (add-hook 'mail-citation-hook 'trivial-cite)
 (setq tc-make-attribution (function tc-simple-attribution-kai))
+(setq offlineimap-command "offlineimap -u MachineUI")
 
 ;; (require 'elscreen-wl)
 

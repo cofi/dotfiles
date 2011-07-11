@@ -7,9 +7,6 @@
 [submodule "elisp/vendor/auto-complete"]
 	path = elisp/vendor/auto-complete
 	url = git://github.com/m2ym/auto-complete.git
-[submodule "elisp/vendor/org-mode"]
-	path = elisp/vendor/org-mode
-	url = git://repo.or.cz/org-mode.git
 [submodule "elisp/vendor/sackspace"]
 	path = elisp/vendor/sackspace
 	url = git://github.com/cofi/sackspace.el
@@ -67,3 +64,9 @@
 [submodule "elisp/vendor/magit"]
 	path = elisp/vendor/magit
 	url = git://github.com/magit/magit.git
+[submodule "elisp/vendor/calfw"]
+	path = elisp/vendor/calfw
+	url = git://github.com/kiwanami/emacs-calfw.git
+[submodule "elisp/vendor/org-mode"]
+	path = elisp/vendor/org-mode
+	url = git://orgmode.org/org-mode.git

@@ -1,9 +1,11 @@
-(add-to-list 'load-path "~/.elisp/vendor/org-mode/lisp")
-(add-to-list 'load-path "~/.elisp/vendor/org-mode/contrib/lisp")
-(require 'org-install)
-
+(add-to-loadpath "~/.elisp/vendor/calfw/"
+                 "~/.elisp/vendor/org-mode/lisp"
+                 "~/.elisp/vendor/org-mode/contrib/lisp")
 ;;; remove bundled org from load path
 (setq load-path (remove-if  (p (string-match "/usr/share/emacs/.*/org" x)) load-path))
+(require 'org-install)
+(require 'calfw-org)
+
 
 (if (file-directory-p "~/Org")
     (setq org-directory "~/Org/"
@@ -54,7 +56,7 @@ Note: This assumes all files are in the org-directory."
     "l" 'org-store-link
     "v" 'cofi/visit-org-agenda-files
     "V" 'cofi/anything-org-files
-    "c" 'calendar
+    "c" 'cfw:open-org-calendar
     "f" 'org-footnote-action)
 
 (defun cofi/anything-org-files ()

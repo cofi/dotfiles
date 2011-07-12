@@ -45,6 +45,7 @@ import Data.List (isPrefixOf)
 import qualified Data.Map as M
 import System.Directory (getHomeDirectory)
 import System.Posix.Unistd (getSystemID, SystemID(..))
+import Text.Printf
 
 main = do
 --   spawn trayer
@@ -348,7 +349,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       ctan = S.searchEngine "ctan" "http://www.ctan.org/search/?search_type=description&search_type=filename&search_type=id&search="
       duck = S.searchEngine "d" "http://duckduckgo.com/?q="
       rfc = S.searchEngine "rfc" "http://www.ietf.org/rfc/rfc"
-      pep = S.searchEngineF "pep" (\s -> "http://www.python.org/dev/peps/pep-" ++ fill s 4 '0')
+      pep = formatSearch "pep" "http://www.python.org/dev/peps/pep-%04s"
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch
@@ -359,7 +360,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                     then site1 $ removeColonPrefix s
                                                     else site2 s)
         where removeColonPrefix = drop 1 . dropWhile (/= ':')
-      fill s l c = replicate (l - length s) c ++ s
+      formatSearch name fstring = S.searchEngineF name (\s -> (printf fstring s) :: String)
 ----------------------------------------
 --  Local Variables:
 --  compile-command: "xmonad --recompile"

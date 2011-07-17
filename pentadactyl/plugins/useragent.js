@@ -145,7 +145,7 @@ group.commands.add(["useragent", "ua"],
                  for (ua in values(useragents))
                  if (!args[0] || ua.name.indexOf(args[0]) >= 0)]));
         else {
-            dactyl.assert(args.bang || !set.has(useragents, args[0]),
+            dactyl.assert(args.bang || !Set.has(useragents, args[0]),
                           "Useragent " + args[0].quote() + " already exists");
             useragents[args[0]] = UserAgent.fromArray(
                 args.concat(opts.slice(1).map(
@@ -188,7 +188,7 @@ group.commands.add(["useragent", "ua"],
 group.commands.add(["deluseragent", "delua"],
     "Deletes a useragent.",
     function (args) {
-        dactyl.assert(set.has(useragents, args[0]), "Invalid argument");
+        dactyl.assert(Set.has(useragents, args[0]), "Invalid argument");
         if (options["useragent"] == args[0])
             options["useragent"] = "default";
         delete useragents[args[0]];

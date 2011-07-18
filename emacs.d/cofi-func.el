@@ -242,8 +242,8 @@ Major mode determines association."
   (interactive "P")
   (if (or (in-mode? 'org-mode)
          orgstruct-mode)
-      (org-cdlatex-mode prefix)
-    (cdlatex-mode prefix)))
+      (call-interactively 'org-cdlatex-mode nil)
+    (call-interactively 'cdlatex-mode nil)))
 
 (defun highlight-80 ()
   (interactive)

@@ -316,4 +316,29 @@ See `POUR-MAPPINGS-WITH'."
   `(lambda (x)
     ,@body))
 
+(defstruct (cofi/ring
+            (:constructor nil)
+            (:constructor cofi/make-ring (vec &key curr))
+            (:conc-name cofi/ring--))
+  "Constant ring buffer."
+  vec curr)
+
+(defun cofi/ring-current (ring)
+  "Current element of `RING'."
+  (let ((curr (cofi/ring--curr ring)))
+    (aref (cofi/ring--vec ring)
+          (or curr 0))))
+
+(defun cofi/ring-next (ring)
+  "Next element of `RING'."
+  (let ((next (mod (1+ (or (cofi/ring--curr ring)
+                           -1))
+                    (cofi/ring-length ring))))
+    (setf (cofi/ring--curr ring) next)
+    (aref (cofi/ring--vec ring) next)))
+
+(defun cofi/ring-length (ring)
+  "Length of `RING'."
+  (length (cofi/ring--vec ring)))
+
 (provide 'cofi-util)

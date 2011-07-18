@@ -19,9 +19,23 @@
 
 (defun mail-subject-check ()
   "Check if subject is missing."
-  (unless (or (> (length (std11-field-body "Subject")) 1)
-          (y-or-n-p "Subject missing. Send? "))
-      (error "Abort.")))
+  (cofi/with-restrict-to-header
+   (goto-char (point-min))
+   (let ((subject-found (re-search-forward "^Subject: \\(\\w+\\)$" nil 'noerror)))
+     (unless (or subject-found
+                 (> (length (match-beginning 1)) 1)
+                 (y-or-n-p "Subject missing. Send? "))
+       (error "Abort.")))))
+
+(defmacro cofi/with-restrict-to-header (&rest body)
+  "Restrict buffer to mail headers of messages before executing body.
+Also wraps in `save-excursion' and `save-restriction'."
+  `(save-excursion
+     (save-restriction
+       (goto-char (point-min))
+       (when (re-search-forward "^--text follows this line--$" nil 'noerror)
+         (narrow-to-region (point-min) (point))
+         ,@body))))
 
 ;; SEMI-PGG files are safe to delete, Hello GPG_AGENT
 (setq pgg-default-scheme 'gpg

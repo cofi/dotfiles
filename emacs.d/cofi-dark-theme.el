@@ -57,6 +57,8 @@
      `(magit-diff-add ((t (:foreground ,vc-added))))
      `(magit-diff-del ((t (:foreground ,vc-removed))))
      `(magit-item-highlight ((t (:inherit hl-line))))
+     `(magit-log-head-label-local ((t (:foreground "LightSkyBlue4" :box 1))))
+     `(magit-log-head-label-remote ((t (:foreground "OliveDrab4" :box 1))))
 
      ;; dired
      `(dired-boring ((t (:foreground "rosy brown"))))

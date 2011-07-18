@@ -1,6 +1,5 @@
-(dolist (path '("~/.elisp/vendor/anything"
-                "~/.elisp/vendor/anything/extensions/"))
-  (pushnew path load-path))
+(add-to-loadpath "~/.elisp/vendor/anything"
+                 "~/.elisp/vendor/anything/extensions/")
 ;; Settings ----------------------------------------
 (setq anything-command-map-prefix-key "<f7>")
 (setq anything-c-boring-file-regexp
@@ -11,7 +10,7 @@
               (or "/" eol))
            ;; files
            (and line-start  (or ".#" "."))
-           (and (or ".class" ".la" ".o" "~") eol)))
+           (and (or ".class" ".la" ".o" "~" ".pyc") eol)))
 
       anything-c-boring-buffer-regexp
       (rx (or
@@ -20,7 +19,6 @@
            "*anything"
            ;; echo area
            " *Echo Area" " *Minibuf"
-           (and line-start (optional " ") "*" (* anything) "*")
            "Map_Sym.txt"
            )))
 
@@ -28,12 +26,17 @@
       anything-input-idle-delay 0
       anything-quick-update t
       anything-candidate-number-limit nil
-      anything-su-or-sudo "sudo")
+      anything-su-or-sudo "sudo"
+      anything-allow-skipping-current-buffer nil)
 
 (setq anything-c-locate-db-file (cofi/var-file "locate.db"))
 (setq anything-c-locate-command (format "locate -d %s -i -r %%s"
                                         anything-c-locate-db-file))
+;;; collect candidates for M-x after startup
 (add-hook 'emacs-startup-hook #'alcs-make-candidates 'append)
+
+(setq anything-c-use-adaptative-sorting t
+      anything-c-adaptive-history-file (cofi/var-file "anything-adaptive-history"))
 ;; --------------------------------------------------
 (require-and-exec 'anything
     (require 'anything-config)
@@ -61,8 +64,6 @@
 
     (require-and-exec 'descbinds-anything
                       (descbinds-anything-install))
-    (remove-hook 'kill-emacs-hook 'anything-c-adaptive-save-history)
-
     ;; Sources ----------------------------------------
     (require-and-exec 'lacarte
       (defvar anything-c-lacarte-current-buffer nil)
@@ -98,29 +99,21 @@
         (type . file)))
     ;; --------------------------------------------------
     ;; anythings ----------------------------------------
-    ;; FIXME: buffer-not-found dummy source not working
-;;     (defun cofi/anything-buffers ()
-;;       "Enhanced preconfigured `anything' for buffer."
-;;       (interactive)
-;;       (anything-other-buffer '(
-;;                                anything-c-source-buffers+
-;;                                anything-c-source-buffer-not-found
-;;                                )
-;;                                "*anything buffers*"))
     (defalias 'cofi/anything-buffers 'anything-buffers+)
 
-     (defun cofi/anything-files ()
+    (defun cofi/anything-files ()
       "ffap -> recentf -> buffer -> bookmark -> file-cache -> files-in-current-dir -> locate"
       (interactive)
-      (anything-other-buffer '( anything-c-source-ffap-line
-                                anything-c-source-ffap-guesser
-                                anything-c-source-recentf
-                                anything-c-source-bookmarks
-                                anything-c-source-file-cache
-                                anything-c-source-files-in-current-dir+
-                                anything-c-source-files-in-all-dired
-                                anything-c-source-locate)
-                             "*anything with files*"))
+      (anything :sources '( anything-c-source-ffap-line
+                            anything-c-source-ffap-guesser
+                            anything-c-source-recentf
+                            anything-c-source-bookmarks
+                            anything-c-source-file-cache
+                            anything-c-source-files-in-current-dir+
+                            anything-c-source-files-in-all-dired
+                            anything-c-source-locate)
+                :buffer "*anything with files*"
+                :keymap anything-find-files-map))
 
      (defvar cofi/anything-uni-sources '())
      (defvar cofi/anything-config-sources '())
@@ -181,19 +174,25 @@
 
      (defun cofi/anything-uni ()
        (interactive)
-       (anything-other-buffer cofi/anything-uni-sources "*anything uni*"))
+       (anything :sources cofi/anything-uni-sources
+                 :buffer "*anything uni*"
+                 :keymap anything-find-files-map))
 
      (defun cofi/anything-config ()
        (interactive)
-       (anything-other-buffer cofi/anything-config-sources "*anything config*"))
+       (anything :sources cofi/anything-config-sources
+                 :buffer "*anything config*"
+                 :keymap anything-find-files-map))
      (defun cofi/anything-make ()
        (interactive)
-       (anything-other-buffer anything-makefile-targets "*anything make*"))
+       (anything :sources anything-makefile-targets
+                 :buffer "*anything make*"))
 
      (when (fboundp 'lacarte-execute-command)
        (defun cofi/anything-lacarte ()
          (interactive)
-         (anything-other-buffer 'anything-c-source-current-buffer-lacarte "*anything lacarte*"))
+         (anything :sources anything-c-source-current-buffer-lacarte
+                   :buffer "*anything lacarte*"))
        (global-set-key (kbd "<f10>") 'cofi/anything-lacarte))
     )
 (provide 'cofi-anything)

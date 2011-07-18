@@ -151,6 +151,7 @@ myKeys home sp = [ ("M-<Backspace>", spawn respawn)
                  ]
                  ++ searchBindings
                  ++ scratchpadBindings
+                 ++ programBindings
 
   where shutdown = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 2 0"
         logout = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 3 0"
@@ -174,6 +175,10 @@ myKeys home sp = [ ("M-<Backspace>", spawn respawn)
         shiftToNext = shiftTo Next EmptyWS
         shiftToPrev = shiftTo Prev EmptyWS
         acPromptConfig = promptConfig { autoComplete = Just 500000 }
+        programBindings = prefixKeymap "M-o" [ ("m", spawn "smplayer")
+                                             , ("t", spawn "tome")
+                                             , ("w", spawn "wesnoth")
+                                             ]
 
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
@@ -278,12 +283,12 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
   where scratchFloat = customFloating size
         size = W.RationalRect (1/4) (1/4) (1/2) (1/2)
 
-scratchpadBindings = [ ("M-; t", namedScratchpadAction scratchpads "term")
-                     , ("M-; h", namedScratchpadAction scratchpads "haskell")
-                     , ("M-; p", namedScratchpadAction scratchpads "python")
-                     , ("M-; c", namedScratchpadAction scratchpads "clojure")
-                     , ("M-; m", namedScratchpadAction scratchpads "monitor")
-                     ]
+scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpads "term")
+                                        , ("h", namedScratchpadAction scratchpads "haskell")
+                                        , ("p", namedScratchpadAction scratchpads "python")
+                                        , ("c", namedScratchpadAction scratchpads "clojure")
+                                        , ("m", namedScratchpadAction scratchpads "monitor")
+                                        ]
 
 -- Search----------------------------------------
 searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- searchList]
@@ -361,6 +366,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                     else site2 s)
         where removeColonPrefix = drop 1 . dropWhile (/= ':')
       formatSearch name fstring = S.searchEngineF name (\s -> (printf fstring s) :: String)
+
+prefixKeymap prefix mapping = map (\ (binding, comm) -> (prefix ++ " " ++ binding, comm)) mapping
 ----------------------------------------
 --  Local Variables:
 --  compile-command: "xmonad --recompile"

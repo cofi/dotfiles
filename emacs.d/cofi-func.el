@@ -212,19 +212,11 @@ Major mode determines association."
   (interactive)
   (count-words (point-min) (point-max)))
 
-(defvar cofi-file-apps-next #'cofi-file-alt)
-
-(defun cofi-toggle-file-apps ()
+(defvar cofi-file-assoc (cofi/make-ring [cofi-file-standard cofi-file-alt]))
+(defun cofi-next-file-assoc ()
+  "Move to next set of file associations."
   (interactive)
-  (let ((next cofi-file-apps-next))
-    (cond
-     ((eq cofi-file-apps-next #'cofi-file-standard) (setq cofi-file-apps-next
-                                                          #'cofi-file-alt))
-     ((eq cofi-file-apps-next #'cofi-file-alt) (setq cofi-file-apps-next
-                                                     #'cofi-file-standard))
-     (t (setq cofi-file-apps-next #'cofi-file-alt)
-        (setq next #'cofi-file-standard)))
-    (funcall next)))
+  (funcall (cofi/ring-next cofi-file-assoc)))
 
 (defun cofi-file-standard ()
   (setq org-file-apps '((auto-mode . emacs)
@@ -257,21 +249,15 @@ Major mode determines association."
   (interactive)
   (column-marker-1 80))
 
-(defvar cofi/current-colorscheme nil)
-(defvar cofi/colorschemes '(cofi-dark cofi-light))
-(defun cofi/toggle-colorscheme (&optional arg)
-  (interactive "p")
-  (let (chosen (car (nthcdr arg cofi/colorschemes))
-               found)
-    (unless chosen
-      (setq chosen (car cofi/colorschemes)))
-    (when cofi/current-colorscheme
-      (disable-theme cofi/current-colorscheme))
-    (load-theme chosen)
-    (setq cofi/colorschemes (append
-                             (remove chosen cofi/colorschemes)
-                             (list chosen)))
-    (setq cofi/current-colorscheme chosen)))
+(defvar cofi/colorschemes (cofi/make-ring [cofi-dark cofi-light]))
+(defun cofi/next-colorscheme (&optional arg)
+  "Move to next colorscheme. If `ARG' is non-nil reload current."
+  (interactive "P")
+  (disable-theme (cofi/ring-current cofi/colorschemes))
+  (load-theme
+   (if arg
+       (cofi/ring-current cofi/colorschemes)
+     (cofi/ring-next cofi/colorschemes))))
 
 (defun cofi/copy-sha1-of-buffer (buffer &optional start end)
   (interactive "b")

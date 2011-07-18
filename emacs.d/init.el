@@ -99,8 +99,8 @@
                                 (when cofi/full-emacs
                                   (mapc #'load cofi/full-settings))
                                 ))
-(cofi-file-standard)
-(load-theme 'cofi-dark)                 ; ensure that colorscheme colors will be used
+(cofi-next-file-assoc)
+(cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Time needed to load: %d seconds."
                                          (time-to-seconds (time-since startup-time))))

@@ -139,7 +139,7 @@ myKeys home sp = [ ("M-<Backspace>", spawn respawn)
                    -- Apps
                  , ("M-e", raiseMaybe (spawn "emacsclient -c") emacsQuery)
                  , ("M-S-e", spawn "emacsclient -c")
-                 , ("M-S-m", raiseMaybe (spawn "emacs --name 'Wanderlust Mail' -wl") wanderlustQuery)
+                 , ("M-S-m", raiseMaybe (spawn "wl") wanderlustQuery)
                  , ("M-f", raiseMaybe (spawnOn sp "2:browse" "firefox") firefoxQuery)
                  , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
                  , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") weechatQuery)

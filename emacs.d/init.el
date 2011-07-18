@@ -88,17 +88,23 @@
              '("wl" . (lambda (&rest ignore)
                         (setq cofi/mail-instance t)
                         (setq cofi/full-emacs nil)
+                        (add-hook 'emacs-startup-hook 'wl 'append)
                         ;; Exit Emacs after quitting WL
                         (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
+
+(add-to-list 'command-switch-alist
+             '("gnus" . (lambda (&rest ignore)
+                        (setq cofi/mail-instance t)
+                        (setq cofi/full-emacs nil)
+                        (add-hook 'emacs-startup-hook 'gnus 'append)
+                        ;; Exit Emacs after quitting gnus
+                        (add-hook 'gnus-after-exiting-gnus-hook 'save-buffers-kill-emacs))))
 
 (add-hook 'emacs-startup-hook (lambda ()
                                 (when cofi/mail-instance
                                   (global-linum-mode -1)
-                                  (wl)
-                                  (add-hook 'emacs-startup-hook 'wl t))
                                 (when cofi/full-emacs
-                                  (mapc #'load cofi/full-settings))
-                                ))
+                                  (mapc #'load cofi/full-settings)))))
 (cofi-next-file-assoc)
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()

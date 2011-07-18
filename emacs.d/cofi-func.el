@@ -273,4 +273,8 @@ Major mode determines association."
                              (list chosen)))
     (setq cofi/current-colorscheme chosen)))
 
+(defun cofi/copy-sha1-of-buffer (buffer &optional start end)
+  (interactive "b")
+  (kill-new (sha1 buffer start end)))
+
 (provide 'cofi-func)

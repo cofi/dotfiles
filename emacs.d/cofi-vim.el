@@ -117,6 +117,7 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
     (push mode viper-emacs-state-mode-list))
 
   (push 'clojure-mode viper-vi-state-mode-list)
+  (delete 'gnus-article-mode viper-vi-state-mode-list)
   ;; ===================================================
 
   ;; Conflicts ========================================

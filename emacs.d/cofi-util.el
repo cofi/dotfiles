@@ -348,4 +348,11 @@ See `POUR-MAPPINGS-WITH'."
   "Length of `RING'."
   (length (cofi/ring--vec ring)))
 
+(defun flatten (xs)
+  "Flattens `XS' into a single list."
+  (cond
+   ((null xs) nil)
+   ((listp xs) (append (flatten (car xs)) (flatten (cdr xs))))
+   (t (list xs))))
+
 (provide 'cofi-util)

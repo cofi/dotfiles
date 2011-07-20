@@ -43,7 +43,7 @@
 
 ;; Settings ========================================
 (setq display-time-24hr-format t
-      display-time-string-forms '(day "." month " " 24-hours ":" minutes)
+      display-time-format "%H:%M %e.%m"
       display-time-mail-file 'none
       display-time-default-load-average nil)
 

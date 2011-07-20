@@ -1,6 +1,5 @@
 (add-hook 'mail-citation-hook 'trivial-cite)
 (setq tc-make-attribution (function tc-simple-attribution-kai))
-(setq offlineimap-command "offlineimap -u MachineUI")
 
 ;; (require 'elscreen-wl)
 
@@ -8,6 +7,10 @@
   "Check if attachment is mentioned but not included"
   (interactive)
   (let ((attachment-regexp "[Aa]ttachment\\|[Aa]ttached\\|[Aa]nbei\\|[Bb]eiliegend\\|[Aa]anhang\\|angeh\\(ae\\|ä\\)ngt"))
+;;; offlineimap
+(setq offlineimap-command "offlineimap -u MachineUI")
+(setq offlineimap-enable-mode-line-p '(member major-mode
+                                              '(offlineimap-mode gnus-group-mode wl-folder-mode)))
     (save-excursion
       (goto-char 0)
       (unless (or (re-search-forward "^Content-Disposition: attachment" nil t)

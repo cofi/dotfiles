@@ -22,9 +22,9 @@
   "Check if subject is missing."
   (cofi/with-restrict-to-header
    (goto-char (point-min))
-   (let ((subject-found (re-search-forward "^Subject: \\(\\w+\\)$" nil 'noerror)))
-     (unless (or subject-found
-                 (> (length (match-beginning 1)) 1)
+   (let ((subject-found (re-search-forward "^Subject: \\(.*\\)$" nil 'noerror)))
+     (unless (or (and subject-found
+                      (> (length (match-string 1)) 1))
                  (y-or-n-p "Subject missing. Send? "))
        (error "Abort.")))))
 

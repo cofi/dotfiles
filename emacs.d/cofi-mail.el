@@ -10,9 +10,10 @@
   (let ((attachment-regexp "[Aa]ttachment\\|[Aa]ttached\\|[Aa]nbei\\|[Bb]eiliegend\\|[Aa]anhang\\|angeh\\(ae\\|ä\\)ngt"))
     (save-excursion
       (goto-char 0)
-      (unless (re-search-forward "^Content-Disposition: attachment" nil t)
-        (when
-            ;; Check for mentioned attachments
+      (unless (or (re-search-forward "^Content-Disposition: attachment" nil t)
+                  (re-search-forward "disposition=attachment" nil t))
+        (goto-char 0)
+        (when ;; Check for mentioned attachments
             (re-search-forward attachment-regexp nil t)
           (unless (y-or-n-p "Attachment maybe missing. Send? ")
             (error "Abort.")))))))

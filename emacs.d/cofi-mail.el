@@ -1,3 +1,6 @@
+(add-to-loadpath "~/.elisp/vendor/gnus/lisp")
+(require 'gnus-load)
+
 (add-hook 'mail-citation-hook 'trivial-cite)
 (setq tc-make-attribution (function tc-simple-attribution-kai))
 
@@ -39,6 +42,8 @@ Also wraps in `save-excursion' and `save-restriction'."
        (when (re-search-forward "^--text follows this line--$" nil 'noerror)
          (narrow-to-region (point-min) (point))
          ,@body))))
+
+(setq mail-user-agent 'gnus-user-agent)
 
 ;;; for manual setting mail config
 (defun cofi/write-mail ()

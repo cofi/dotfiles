@@ -139,7 +139,7 @@ myKeys home sp = [ ("M-<Backspace>", spawn respawn)
                    -- Apps
                  , ("M-e", raiseMaybe (spawn "emacsclient -c") emacsQuery)
                  , ("M-S-e", spawn "emacsclient -c")
-                 , ("M-S-m", raiseMaybe (spawn "wl") wanderlustQuery)
+                 , ("M-S-m", raiseMaybe (spawn "gnus") gnusQuery)
                  , ("M-f", raiseMaybe (spawnOn sp "2:browse" "firefox") firefoxQuery)
                  , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
                  , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") weechatQuery)
@@ -246,6 +246,7 @@ prefixTitle prefix = fmap (prefix `isPrefixOf`) title
 weechatQuery = prefixTitle "weechat"
 emacsQuery = prefixTitle "emacs"
 wanderlustQuery = title =? "Wanderlust Mail"
+gnusQuery = title =? "Gnus Mail"
 newsbeuterQuery = title =? "newsbeuter"
 firefoxQuery = className =? "Firefox"
 
@@ -254,7 +255,7 @@ myManageHook = (composeAll . concat $
                [ [ isFullscreen    --> doFullFloat
                  , isDialog        --> doCenterFloat
                  , weechatQuery    --> doShift "1:comm"
-                 , wanderlustQuery --> doShift "mail"
+                 , gnusQuery       --> doShift "mail"
                  , newsbeuterQuery --> doShift "feeds"
                  ]
                 ,[ className =? f --> doFloat            | f <- floats ]

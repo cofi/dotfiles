@@ -25,13 +25,14 @@
 
 (defun mail-subject-check ()
   "Check if subject is missing."
-  (cofi/with-restrict-to-header
-   (goto-char (point-min))
-   (let ((subject-found (re-search-forward "^Subject: \\(.*\\)$" nil 'noerror)))
-     (unless (or (and subject-found
-                      (> (length (match-string 1)) 1))
-                 (y-or-n-p "Subject missing. Send? "))
-       (error "Abort.")))))
+  (let ((subject-found
+         (cofi/with-restrict-to-header
+          (goto-char (point-min))
+          (re-search-forward "^Subject: \\(.*\\)$" nil 'noerror))))
+    (unless (or (and subject-found
+                     (> (length (match-string 1)) 1))
+                (y-or-n-p "Subject missing. Send? "))
+      (error "Abort."))))
 
 (defmacro cofi/with-restrict-to-header (&rest body)
   "Restrict buffer to mail headers of messages before executing body.

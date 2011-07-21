@@ -98,3 +98,18 @@ command! yank-utm -javascript -desc 'yank utm-trimmed url'
    \}
 
 map -g user <Leader>y -ex yank-utm
+
+command! wide-margin -javascript -desc 'set wide margin on left and right'
+   \ let body = buffer.doc.getElementsByTagName('body')[0];
+   \ body.style.marginLeft = '20%';
+   \ body.style.marginRight = '30%';
+
+command! small-margin -javascript -desc 'set small margin on left and right'
+   \ let body = buffer.doc.getElementsByTagName('body')[0];
+   \ body.style.marginLeft = '10%';
+   \ body.style.marginRight = '15%';
+
+command! no-margin -javascript -desc 'set no margin on left and right'
+   \ let body = buffer.doc.getElementsByTagName('body')[0];
+   \ body.style.marginLeft = '0';
+   \ body.style.marginRight = '0';

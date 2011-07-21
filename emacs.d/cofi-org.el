@@ -217,9 +217,9 @@ Note: This assumes all files are in the org-directory."
          "* %:description\n  %:link\n  %U"
          )
         ("c" "Contacts" entry (file (format "%s/contacts.org" org-directory))
-         "* %(org-contacts-template-wl-name)
+         "* %(org-contacts-template-name)
 :PROPERTIES:
-:EMAIL: %(org-contacts-template-wl-email)
+:EMAIL: %(org-contacts-template-email)
 :END:")
         ))
 ;; ==================================================

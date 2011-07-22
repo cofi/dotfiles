@@ -3,14 +3,14 @@
 
 (defmacro require-and-exec (feature &optional &rest body)
   "Require the feature and execute body if it was successfull loaded."
-  (declare (indent 2))
+  (declare (indent 1))
   `(if (require ,feature nil 'noerror)
         (progn ,@body)
     (message (format "%s not loaded" ,feature))))
 
 (defmacro load-and-exec (file &optional &rest body)
   "Load the file and execute body if it was successfull loaded."
-  (declare (indent 2))
+  (declare (indent 1))
   `(if (load ,file t)
         (progn ,@body)
     (message (format "%s not loaded" ,file))))
@@ -221,7 +221,7 @@ strings."
      (,mode 1)))
 
 (defmacro defkeymap (symbol &rest mappings)
-  (declare (indent 2))
+  (declare (indent 1))
   "Define keymap bound to `SYMBOL'.
 See `POUR-MAPPINGS-WITH'."
   `(setq ,symbol (fill-keymap (make-sparse-keymap) ,@mappings)))
@@ -239,13 +239,13 @@ See `POUR-MAPPINGS-WITH'."
     (pour-mappings-with (lambda (key fun) (define-key keymap key fun)) mappings)))
 
 (defmacro gen-fill-keymap-hook (keymap &rest mappings)
-  (declare (indent 2))
+  (declare (indent 1))
   "Build fun that fills `KEYMAP' with `MAPPINGS'.
 See `POUR-MAPPINGS-WITH'."
   `(lambda () (fill-keymap ,keymap ,@mappings)))
 
 (defmacro gen-local-fill-keymap-hook (&rest mappings)
-  (declare (indent 2))
+  (declare (indent 1))
   "Build fun that fills local keymap with `MAPPINGS'.
 See `POUR-MAPPINGS-WITH'."
   `(lambda () (fill-local-keymap ,@mappings)))
@@ -285,14 +285,14 @@ See `POUR-MAPPINGS-WITH'."
 
 (defmacro cmd (&rest code)
   "Macro for shorter keybindings."
-  (declare (indent 2))
+  (declare (indent 1))
   `(lambda ()
      (interactive)
      ,@code))
 
 (defmacro cmd-arg (args iflag &rest code)
   "Macro for shorter keybindings with argument."
-  (declare (indent 2))
+  (declare (indent 1))
   `(lambda (,@args)
      (interactive iflag)
      ,@code))

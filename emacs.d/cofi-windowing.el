@@ -28,32 +28,8 @@
   "Split the frame into 80-column sub-windows, and make sure no window has
    fewer than 80 columns."
   (interactive)
-  (defun smart-split-helper (w)
-    "Helper function to split a given window into two, the first of which has
-     80 columns."
-    (if (> (window-width w) (* 2 81))
-        (let ((w2 (split-window w 82 t)))
-          (smart-split-helper w2))))
-  (smart-split-helper nil))
-
-(defun frame/fullscreen-toggle (&optional f)
-  "Toggle given or current frame."
-  (interactive)
-  (set-frame-parameter f 'fullscreen (if (frame-parameter f 'fullscreen)
-                                         nil
-                                       'fullboth)))
-
-(defun frame/maximize (&optional f)
-  "Maximize given or current frame. Needs at least Emacs 23.2"
-  (interactive)
-  (set-frame-parameter f 'fullscreen 'maximized))
-
-(defun frame/normal ()
-  "Return to normal frame size."
-  (interactive)
-  (let ((frame (selected-frame)))
-    (set-frame-size frame 90 60)
-    (set-frame-parameter frame 'fullscreen nil)))
+  (do ((w nil (split-window w 81 'below)))
+      ((<= (window-width w) (* 2 81)))))
 
 ;; Windowing
 (defkeymap cofi/window-map
@@ -68,17 +44,12 @@
     "1" 'delete-other-windows
     "d" 'delete-window
 
-    ;; Frame sizing
-    "m" 'frame/maximize
-    "n" 'frame/normal
-    "f" 'frame/fullscreen-toggle
-
     ;; Sizing
     "RET" 'enlarge-window
     "-"   'shrink-window-horizontally
     "+"   'enlarge-window-horizontally
-    "S--" 'shrink-window
-    "S-+" 'enlarge-window
+    "M--" 'shrink-window
+    "M-+" 'enlarge-window
     "="   'balance-windows
 
     ;; Moving
@@ -108,11 +79,6 @@
     "u" 'winner-undo
     "r" 'winner-redo)
 
-(fill-global-keymap
-    "C-w"   cofi/window-map
-    ;; alternative for buffers were C-w is used
-    "C-x w" cofi/window-map)
-
 (setq winner-dont-bind-my-keys t
       winner-boring-buffers '("*anything*"
                               "*anything buffers*"
@@ -125,6 +91,6 @@
                               "*compilation*"))
 
 (require-and-exec 'winner
-                  (winner-mode 1))
+  (winner-mode 1))
 
 (provide 'cofi-windowing)

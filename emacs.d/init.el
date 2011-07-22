@@ -52,8 +52,8 @@
 (defvar hostname (car (split-string system-name "\\." t)))
 (defvar on-mobile? (find hostname '("hitchhiker") :test #'string=))
 
-(require 'cofi-vim)
 (load "private" 'noerror)
+(require 'cofi-vim)
 
 (defvar cofi/standard-settings '("cofi-autoloads"
                                  "cofi-anything"
@@ -74,7 +74,6 @@
                                  "cofi-vcs"
                                  "cofi-rst"
                                  "cofi-shell"
-                                 "cofi-windowing"
                                  "cofi-workgroups"
                                  "cofi-completion"))
 (defvar cofi/full-settings '("cofi-programming"))

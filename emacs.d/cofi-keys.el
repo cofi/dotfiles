@@ -1,4 +1,5 @@
 (require 'cofi-autoloads)
+(require 'cofi-windowing)
 
 ;;; mode keymap
 (defkeymap cofi-minor-mode-map
@@ -92,6 +93,9 @@
  "C-x i" cofi-insert-map
  "C-c b" cofi-breadcrumbs-map
  "C-c a" cofi-anything-map
+ "C-w"   cofi/window-map
+ ;; alternative for buffers were C-w is used
+ "C-c w" cofi/window-map
  )
 
 (if (fboundp 'anything-imenu)

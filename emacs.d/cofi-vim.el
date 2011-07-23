@@ -27,7 +27,10 @@
                "C-t" 'transpose-chars
                "C-e" 'viper-goto-eol)
 
-  (define-key viper-insert-global-user-map (kbd "C-h") 'backward-delete-char)
+  (fill-keymap viper-insert-global-user-map
+               "C-h" 'backward-delete-char
+               "C-y" 'yank
+               "C-e" 'viper-goto-eol)
 
   (when (string< vimpulse-version "0.5")
     (require-and-exec 'goto-last-change

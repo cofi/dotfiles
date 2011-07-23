@@ -6,8 +6,6 @@
 
 ;;; offlineimap
 (setq offlineimap-command "offlineimap -u MachineUI")
-(setq offlineimap-enable-mode-line-p '(member major-mode
-                                              '(offlineimap-mode gnus-group-mode wl-folder-mode)))
 
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"

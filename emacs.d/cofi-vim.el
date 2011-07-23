@@ -17,7 +17,11 @@
 
   ;; Keybindings ==========
   (fill-keymap viper-vi-global-user-map
-               "Y" (kbd "y$") ; oh why are you compatible to THAT?!
+               ;; Oh why are you compatible to that?
+               "Y" (cmd (save-excursion (let ((beg (point))
+                                              (end (progn (end-of-line)
+                                                          (point))))
+                                          (vimpulse-yank beg end))))
                "_" 'viper-bol-and-skip-white
                "+" 'viper-next-line-at-bol
                "C-t" 'transpose-chars

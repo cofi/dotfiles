@@ -42,11 +42,7 @@
                  "~/.elisp/vendor/pylookup"
                  "~/.elisp/vendor/scratch"
                  "~/.elisp/vendor/offlineimap"
-                 "/usr/local/share/emacs/site-lisp/semi/"
-                 "/usr/local/share/emacs/site-lisp/flim/"
-                 "/usr/local/share/emacs/site-lisp/apel/"
-                 "/usr/local/share/emacs/site-lisp/wl/"
-                 )
+                 "~/.elisp/vendor/ace-jump-mode")
 
 (require 'cofi-util)
 (defvar hostname (car (split-string system-name "\\." t)))

@@ -31,8 +31,7 @@
        (define-key viper-vi-basic-map (kbd "C-r") 'undo-tree-redo)))
 
   (fill-keymap viper-vi-global-user-map
-               "SPC" 'viper-scroll-up
-               "S-SPC" 'viper-scroll-down
+               "SPC" 'ace-jump-mode
                "+" 'cofi/inc-at-pt
                "-" 'cofi/dec-at-pt)
   ;; ==================================================

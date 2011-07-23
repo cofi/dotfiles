@@ -73,3 +73,6 @@
 [submodule "elisp/vendor/gnus"]
 	path = elisp/vendor/gnus
 	url = http://git.gnus.org/gnus.git
+[submodule "elisp/vendor/ace-jump-mode"]
+	path = elisp/vendor/ace-jump-mode
+	url = git://github.com/winterTTr/ace-jump-mode.git

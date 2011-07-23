@@ -87,7 +87,10 @@
  ;; home-end
  "<home>" 'home-end-home
  "<end>"  'home-end-end
-
+ ;; imenu
+ "C-c i" (if (fboundp 'anything-imenu)
+             'anything-imenu
+           'idomenu)
  ;; maps
  "C-x m" cofi-minor-mode-map
  "C-x i" cofi-insert-map
@@ -98,17 +101,13 @@
  "C-c w" cofi/window-map
  )
 
-(if (fboundp 'anything-imenu)
-    (global-set-key (kbd "C-c i") 'anything-imenu)
-  (global-set-key (kbd "C-c i") 'idomenu))
-
 (add-hook 'diff-mode-hook '(lambda ()
                             (local-set-key (kbd "q") 'kill-this-buffer)))
 
 (add-hook 'artist-mode-init-hook
-            (gen-fill-keymap-hook artist-mode-map
-                                  "C-c C-a C-o" 'artist-ido-select-operation
-                                  "C-c C-a C-c" 'artist-ido-select-settings))
+          (gen-local-fill-keymap-hook artist-mode-map
+            "C-c C-o" 'artist-ido-select-operation
+            "C-c C-s" 'artist-ido-select-settings))
 
 (define-key isearch-mode-map (kbd "C-h") 'backward-delete-char)
 
@@ -116,17 +115,20 @@
           (gen-fill-keymap-hook ido-completion-map
                                 "C-h" 'ido-prev-match
                                 "C-l" 'ido-next-match))
-(eval-after-load "doc-view"
-  '(fill-keymap doc-view-mode-map
-                "h"     'image-backward-hscroll
-                "j"     'doc-view-next-line-or-next-page
-                "k"     'doc-view-previous-line-or-previous-page
-                "l"     'image-forward-hscroll
-                "K"     'doc-view-kill-proc-and-buffer
-                "S-SPC" 'doc-view-scroll-down-or-previous-page))
+(add-hook 'dov-view-mode
+          (gen-local-fill-keymap-hook
+              "h"     'image-backward-hscroll
+              "j"     'doc-view-next-line-or-next-page
+              "k"     'doc-view-previous-line-or-previous-page
+              "l"     'image-forward-hscroll
+              "K"     'doc-view-kill-proc-and-buffer
+              "S-SPC" 'doc-view-scroll-down-or-previous-page))
 
 ;;; quick exit for some modes
-(dolist (hook '(diff-mode-hook
+(add-to-hooks (gen-local-fill-keymap-hook
+                  "q" 'quit-window
+                  "Q" 'kill-buffer-and-window)
+              '(diff-mode-hook
                 compilation-mode-hook
                 ahg-diff-mode-hook
                 ahg-short-log-mode-hook
@@ -135,8 +137,5 @@
                 ahg-command-mode-hook
                 ahg-status-mode-hook
                 ahg-mq-patches-mode-hook))
-  (add-hook hook (gen-local-fill-keymap-hook
-                  "q" 'quit-window
-                  "Q" 'kill-buffer-and-window)))
 
 (provide 'cofi-keys)

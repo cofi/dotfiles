@@ -40,17 +40,22 @@ map -g user <leader>l -silent -ex tablast
 map -g user <leader>d -silent -ex tabduplicate
 
 " Movement
-inoremap <C-f> <right>
-inoremap <C-b> <left>
-inoremap <A-f> <C-right>
-inoremap <A-b> <C-left>
-inoremap <C-h> <BS>
-inoremap <C-w> <C-BS>
+imap <C-f> <right>
+imap <C-b> <left>
+imap <A-f> <C-right>
+imap <A-b> <C-left>
+imap <C-h> <BS>
+imap <C-w> <C-BS>
 
-nnoremap -count <C-S-d> <scroll-up>
-nnoremap -count <C-S-u> <scroll-down>
-nnoremap -count <C-S-f> <scroll-page-up>
-nnoremap -count <C-S-b> <scroll-page-down>
+cmap <C-f> <right>
+cmap <C-b> <left>
+cmap <A-f> <C-right>
+cmap <A-b> <C-left>
+
+nmap -count <C-S-d> <scroll-up>
+nmap -count <C-S-u> <scroll-down>
+nmap -count <C-S-f> <scroll-page-up>
+nmap -count <C-S-b> <scroll-page-down>
 
 nnoremap j 5j
 nnoremap k 5k

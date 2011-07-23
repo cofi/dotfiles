@@ -113,3 +113,11 @@ command! no-margin -javascript -desc 'set no margin on left and right'
    \ let body = buffer.doc.getElementsByTagName('body')[0];
    \ body.style.marginLeft = '0';
    \ body.style.marginRight = '0';
+
+command! strip-anchor -javascript -desc 'reopen current url with anchor stripped'
+   \ let url = buffer.URL;
+   \ let anchor = url.indexOf('#');
+   \ if (anchor > 0)
+   \   dactyl.open(url.substring(0, anchor));
+
+map -g user <Leader>s -ex strip-anchor

@@ -32,6 +32,8 @@
                "C-y" 'yank
                "C-e" 'viper-goto-eol)
 
+  (vimpulse-imap "jk" 'viper-exit-insert-state)
+
   (when (string< vimpulse-version "0.5")
     (require-and-exec 'goto-last-change
        (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))

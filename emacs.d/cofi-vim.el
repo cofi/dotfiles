@@ -8,6 +8,7 @@
   (setq-default viper-auto-indent t)
   (setq viper-vi-style-in-minibuffer nil)
   (setq viper-ex-style-editing nil)
+  (setq viper-fast-keyseq-timeout 0)
 
   ;; Window keybindings ========================================
   ;; kill vimpulse bindings (new defined in windowing)

@@ -1,7 +1,7 @@
 ;;; remove completions in shell-mode automatically
 ;;; works out of the box from emacs 24
 ;;; from http://snarfed.org/automatically_close_completions_in_emacs_shell_comint_mode
-(when (string< emacs-version "24")
+(when (version< emacs-version "24")
   (defun comint-close-completions ()
     (if comint-dynamic-list-completions-config
         (progn

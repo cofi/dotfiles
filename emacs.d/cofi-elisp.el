@@ -16,7 +16,8 @@
 (require 'eldoc-eval)
 
 (add-to-hooks #'enable-paredit-mode '(lisp-interaction-mode-hook
-                                      emacs-lisp-mode-hook))
+                                      emacs-lisp-mode-hook
+                                      inferior-emacs-lisp-mode))
 
 (defadvice paredit-mode (after subst-autopair activate)
     "Disable autopair when running paredit."

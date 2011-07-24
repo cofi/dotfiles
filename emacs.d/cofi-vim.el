@@ -168,18 +168,17 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
                              "M-l" 'org-metaright
                              "M-h" 'org-metaleft)
 
-  (setq cofi/default-cursor-color       "OliveDrab4"
-        cofi/viper-insert-cursor-color  "dark red"
-        cofi/viper-replace-cursor-color "red"
-        cofi/viper-emacs-cursor-color   "sienna")
-
   (defun cofi/viper-bar ()
     "Change cursor color according to viper-state."
-    (case viper-current-state
-      (insert-state  (set-cursor-color cofi/viper-insert-cursor-color))
-      (emacs-state   (set-cursor-color cofi/viper-emacs-cursor-color))
-      (replace-state (set-cursor-color cofi/viper-replace-cursor-color))
-      (otherwise     (set-cursor-color cofi/default-cursor-color))))
+    (let ((default-color       "OliveDrab4")
+          (viper-insert-color  "dark red")
+          (viper-replace-color "red")
+          (viper-emacs-color   "sienna"))
+      (case viper-current-state
+        (insert-state  (set-cursor-color viper-insert-color))
+        (emacs-state   (set-cursor-color viper-emacs-color))
+        (replace-state (set-cursor-color viper-replace-color))
+        (otherwise     (set-cursor-color default-color)))))
 
   (add-hook 'post-command-hook 'cofi/viper-bar)
 

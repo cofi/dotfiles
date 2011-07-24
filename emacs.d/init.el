@@ -97,9 +97,9 @@
 
 (add-hook 'emacs-startup-hook (lambda ()
                                 (when cofi/mail-instance
-                                  (global-linum-mode -1)
+                                  (global-linum-mode -1))
                                 (when cofi/full-emacs
-                                  (mapc #'load cofi/full-settings)))))
+                                  (mapc #'load cofi/full-settings))))
 (cofi-next-file-assoc)
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()

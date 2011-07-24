@@ -27,7 +27,9 @@
                "_" 'viper-bol-and-skip-white
                "+" 'viper-next-line-at-bol
                "C-t" 'transpose-chars
-               "C-e" 'viper-goto-eol)
+               "C-e" 'viper-goto-eol
+               "C-S-d" 'viper-scroll-up
+               "C-S-f" 'viper-scroll-screen-back)
 
   (fill-keymap viper-insert-global-user-map
                "C-h" 'backward-delete-char

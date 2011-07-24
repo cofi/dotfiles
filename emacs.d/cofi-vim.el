@@ -55,7 +55,8 @@
                "go" 'goto-char)
 
   ;; no need for ex, gimme elisp
-  (define-key viper-vi-basic-map (kbd ":") 'eval-expression)
+  (define-key viper-vi-basic-map (kbd "C-:") 'eval-expression)
+  (define-key viper-vi-basic-map (kbd ":") 'execute-extended-command)
   ;; ==================================================
 
   ;; Mapleader ========================================

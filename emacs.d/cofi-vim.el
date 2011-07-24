@@ -48,6 +48,9 @@
                "SPC" 'ace-jump-mode
                "+" 'cofi/inc-at-pt
                "-" 'cofi/dec-at-pt)
+
+  ;; no need for ex, gimme elisp
+  (define-key viper-vi-basic-map (kbd ":") 'eval-expression)
   ;; ==================================================
 
   ;; Mapleader ========================================

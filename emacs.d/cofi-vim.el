@@ -179,5 +179,17 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
 
   ;; Disable annoying vim compatibilities
   (define-key viper-vi-basic-map (kbd "C-y") nil)
+
+  (defadvice vimpulse-goto-definition (around vimpulse-goto-lisp-def activate)
+    "Make use of emacs' and slime's possibilities for finding definitions."
+    (case major-mode
+      (lisp-mode (if slime-mode
+                     (or (slime-find-definitions (symbol-name (symbol-at-point)))
+                         ad-do-it)
+                   ad-do-it))
+      (emacs-lisp-mode (or  (ignore-errors (find-function (symbol-at-point)))
+                            (ignore-errors (find-variable (symbol-at-point)))
+                            ad-do-it))
+      (otherwise ad-do-it)))
 )
 (provide 'cofi-vim)

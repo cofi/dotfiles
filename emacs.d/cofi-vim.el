@@ -9,6 +9,7 @@
   (setq viper-vi-style-in-minibuffer nil)
   (setq viper-ex-style-editing nil)
   (setq viper-fast-keyseq-timeout 0)
+  (setq viper-ESC-moves-cursor-back nil)
 
   (require-and-exec 'vimpulse-surround)
   (require-and-exec 'goto-chg)

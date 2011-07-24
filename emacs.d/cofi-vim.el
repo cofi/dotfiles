@@ -10,7 +10,9 @@
   (setq viper-ex-style-editing nil)
   (setq viper-fast-keyseq-timeout 0)
 
-  (require 'vimpulse-surround)
+  (require-and-exec 'vimpulse-surround)
+  (require-and-exec 'goto-chg)
+  (require-and-exec 'undo-tree)
 
   ;; Window keybindings ========================================
   ;; kill vimpulse bindings (new defined in windowing)
@@ -39,9 +41,9 @@
   (vimpulse-imap "jk" 'viper-exit-insert-state)
 
   (when (string< vimpulse-version "0.5")
-    (require-and-exec 'goto-last-change
+    (when (featurep 'goto-last-change)
        (define-key viper-vi-global-user-map (kbd "g i") 'goto-last-change))
-    (require-and-exec 'undo-tree
+    (when (featurep 'undo-tree)
        (define-key viper-vi-basic-map (kbd "C-r") 'undo-tree-redo)))
 
   (fill-keymap viper-vi-global-user-map

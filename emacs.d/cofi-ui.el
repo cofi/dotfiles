@@ -72,6 +72,8 @@
                                    (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display")))
               )
 
+(setq default-major-mode 'text-mode)
+
 (setq battery-mode-line-format " [%L %p%%]")
 
 (mouse-avoidance-mode 'cat-and-mouse)

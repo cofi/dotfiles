@@ -10,6 +10,8 @@
   (setq viper-ex-style-editing nil)
   (setq viper-fast-keyseq-timeout 0)
 
+  (require 'vimpulse-surround)
+
   ;; Window keybindings ========================================
   ;; kill vimpulse bindings (new defined in windowing)
   (define-key viper-vi-basic-map "\C-w" nil)

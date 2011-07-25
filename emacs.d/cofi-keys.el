@@ -67,6 +67,9 @@
  "C-s"     'isearch-forward-regexp
  "M-r"     'query-replace-regexp
  "M-R"     'query-replace
+ ;; movement
+ "M-n"     'next-error
+ "M-p"     'previous-error
  ;; editing
  "C-M-h"   'backward-kill-word
  "C-;"     'toggle-comment-on-line-or-region

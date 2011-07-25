@@ -77,7 +77,8 @@
 (add-hook 'gnus-summary-mode-hook
           (gen-local-fill-keymap-hook "M-p" 'gnus-summary-prev-article
                                       "M-n" 'gnus-summary-next-article
-                                      "r"   'gnus-summary-wide-reply-with-original))
+                                      "r"   'gnus-summary-wide-reply-with-original
+                                      "B d" 'gnus-summary-delete-article))
 (add-hook 'gnus-group-mode-hook
           (gen-local-fill-keymap-hook "<f12>" 'offlineimap))
 
@@ -106,8 +107,8 @@
 (gnus-demon-add-handler 'gnus-demon-scan-news 10 t)
 
 (require-and-exec 'gnus-desktop-notify
-    (setq gnus-desktop-notify-function (lambda (groups)
-                                         ;; set urgency hint on news
-                                         (x-urgency-hint (selected-frame) t)
-                                         (gnus-desktop-notify-send groups)))
+  (setq gnus-desktop-notify-function (lambda (groups)
+                                       ;; set urgency hint on news
+                                       (x-urgency-hint (selected-frame) t)
+                                       (gnus-desktop-notify-send groups)))
   (gnus-desktop-notify-mode))

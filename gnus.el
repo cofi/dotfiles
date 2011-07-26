@@ -24,7 +24,7 @@
                  #'cofi/mml-ask-if-send
                  (lambda ()
                    (if (y-or-n-p "Sign message? ")
-                       (mml-secure-message-sign-pgp)))
+                       (mml-secure-message-sign)))
                  #'mail-subject-check
                  #'mail-attachment-check)
 

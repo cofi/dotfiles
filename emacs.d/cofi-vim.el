@@ -48,12 +48,14 @@
        (define-key viper-vi-basic-map (kbd "C-r") 'undo-tree-redo)))
 
   (fill-keymap viper-vi-global-user-map
-               "SPC" 'ace-jump-mode
-               "+" 'cofi/inc-at-pt
-               "-" 'cofi/dec-at-pt
-               "g;" 'goto-last-change
-               "g," 'goto-last-change-reverse
-               "go" 'goto-char)
+               "SPC"   'ace-jump-mode
+               "S-SPC" 'ace-jump-word-mode
+               "C-SPC" 'ace-jump-line-mode
+               "+"     'cofi/inc-at-pt
+               "-"     'cofi/dec-at-pt
+               "g;"    'goto-last-change
+               "g,"    'goto-last-change-reverse
+               "go"    'goto-char)
 
   ;; no need for ex, gimme elisp
   (define-key viper-vi-basic-map (kbd "C-:") 'eval-expression)

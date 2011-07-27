@@ -3,5 +3,5 @@
 git add -A
 for FILE in `git ls-files --deleted`
 {
-    git rm ${FILE}
+    git rm "${FILE}"
 }

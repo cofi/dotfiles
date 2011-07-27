@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-file=$(readlink -f $1)
+file=$(readlink -f "$1")
 directory=$2
 
 if [ -n "$directory" ] ; then
@@ -27,8 +27,8 @@ if [ -f "$file" ]; then
         *.xz)
             unxz -k                 "$file" ;;
         *)
-            echo "'$file' Error. Please go away" ;;
+            echo "$file Error. Please go away" ;;
     esac
 else
-    echo "'$1' is not a valid file"
+    echo "$1 is not a valid file"
 fi

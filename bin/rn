@@ -1,8 +1,8 @@
 #! /bin/zsh -f
 # Rename file, but keep suffix
 
-OLD=$1
-NEW=$2
+OLD="$1"
+NEW="$2"
 
 SUFFIX=${OLD#*.}
 

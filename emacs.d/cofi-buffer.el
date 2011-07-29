@@ -23,13 +23,16 @@
                              (mode . tex-mode)
                              (mode . latex-mode)
                              (mode . rst-mode)
-                             ))
+                             (mode . html-mode)
+                             (mode . nxhtml-mode)
+                             (mode . css-mode)
+                             (mode . nxml-mode)))
 
                  ("Org-Agenda"
                   (or
                    (filename . "Org/")
                    (mode . org-agenda-mode)
-                  ))
+                   ))
                  ("Org" (mode . org-mode))
 
                  ("Dired" (mode . dired-mode))

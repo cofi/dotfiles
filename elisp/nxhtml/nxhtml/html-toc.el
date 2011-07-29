@@ -19,8 +19,6 @@
 ;;  `html-toc-write-toc-file' and `html-toc-write-frames-file' for
 ;;  more info.
 ;;
-;;  To use this you can add (require 'html-toc) to your .emacs.
-;;
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

@@ -48,6 +48,7 @@
 
 ;;; Code:
 (require 'css-color)
+(eval-when-compile (require 'cl))
 
 (defvar gpl-keywords
   '(("^[[:space:]]*\\([a-fA-F[:digit:]]\\{1,3\\}\\)[[:space:]]+\\([a-fA-F[:digit:]]\\{1,3\\}\\)[[:space:]]+\\([a-fA-F[:digit:]]\\{1,3\\}\\)"

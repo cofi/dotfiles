@@ -86,6 +86,9 @@
   "Internal use, set `popcmp-completion-style' to VAL."
   (assert (memq val '(popcmp-popup emacs-default company-mode anything)) t)
   (case val
+    ('popcmp-popup (unless window-system
+                     (message "popcmd-popup style can't be used in terminal mode")
+                     (setq val 'emacs-default)))
     ('company-mode (unless (fboundp 'company-mode)
                      (require 'company-mode nil t))
                    (unless (fboundp 'company-mode)
@@ -120,6 +123,7 @@
 ;;;###autoload
 (defcustom popcmp-completion-style (cond
                                     ;;((and (fboundp 'global-company-mode) 'company-mode) 'company-mode)
+                                    ((null window-system) 'emacs-default)
                                     (t 'popcmp-popup))
   "Completion style.
 The currently available completion styles are:

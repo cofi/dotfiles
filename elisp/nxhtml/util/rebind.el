@@ -72,7 +72,7 @@
 ;; (customize-option-other-window 'rebind-keys)
 ;; (Fetched key bindings from http://www.davidco.com/tips_tools/tip45.html)
 (defcustom rebind-keys
-  '(
+  `(
     ("MS Windows - often used key bindings" t
       (
        (
@@ -81,6 +81,20 @@
         t
         shift
         ourcomments-mark-whole-buffer-or-field)
+       (
+        [(control ?b)]
+        "C-b is often used to make bold, use this in `org-mode'."
+        t
+        nil
+        org-b)
+       (
+        [(control ?i)] ;; Does not work for TAB if orgstruct-mode is on
+        ;; [tab] ;; Does not work for TAB if orgstruct-mode is off
+        ;; "\t" ;; Does not work for TAB is orgstruct-mode is on
+        "C-i is often used to make italic, use this in `org-mode'."
+        t
+        nil
+        org-i)
       (
        [(control ?o)]
        "C-o on w32 normally means 'open file'. In Emacs it is `open-line'."
@@ -135,6 +149,15 @@
        t
        shift
        text-scale-adjust)
+      ;; Fix-me: Keyboard adjustment for different languages
+
+      ;; This stopped cua-mode C-x from working when this keymap was first!
+      (
+       [(control ?x) ?,]
+       "C-x ` for `next-error' is unusable on for example a Swedish keyboard."
+       t
+       nil
+       next-error)
        )))
   "Normal Emacs keys that are remapped to follow some other standard.
 The purpose of this variable is to make it easy to switch between
@@ -148,7 +171,9 @@ on.
         this way.
 *Note:* To get CUA keys you should turn on option `cua-mode'.
 *Note:* To get vi key bindings call function `viper-mode'.
-*Note:* `text-scale-adjust' already have default key bindings."
+*Note:* `text-scale-adjust' already have default key bindings.
+*Note:* I think this could be used for keyboard layout
+        adjustments as well."
   :type '(repeat
           (list
            (string :tag "For what")
@@ -172,6 +197,21 @@ on.
 	 (when (featurep 'rebind)
 	   (rebind-update-keymap)))
   :group 'rebind)
+
+;; fix-me:
+;; (defun temp-rebind-test-key ()
+;;   (interactive)
+;;   (let* (rebind-keys-mode
+;;          (binding (key-binding (this-command-keys-vector) t)))
+;; 	(message "* org-bi.binding=%S, keys-vector=%S" binding (this-command-keys-vector))
+;;         ;; Raw can not be used for tab:
+;;         ;; (setq binding (key-binding (this-single-command-raw-keys) t))
+;; 	;; (message "org-bi.binding=%S, keys.single-raw=%S" binding (this-single-command-raw-keys))
+;;         (setq binding (key-binding (this-command-keys) t))
+;; 	(message "  org-bi.binding=%S, keys=%S" binding (this-command-keys))
+;;         (setq binding (key-binding (this-single-command-keys) t))
+;; 	(message "  org-bi.binding=%S, keys.single=%S" binding (this-single-command-keys))
+;;   ))
 
 (defvar rebind-keys-mode-map nil)
 
@@ -221,17 +261,57 @@ field). There are some predifined keybindings for this."
     (setq emulation-mode-map-alists (delq 'rebind--emul-keymap-alist emulation-mode-map-alists))))
 
 (defun rebind-keys-post-command ()
-  "Make sure we are first in the list when turned on.
+  "Make sure we are last in the list when turned on.
 This is reasonable since we are using this mode to really get the
-key bindings we want!"
+key bindings we want, but we do not want to override emulations!"
   (unless (eq 'rebind--emul-keymap-alist (car emulation-mode-map-alists))
     (setq emulation-mode-map-alists (delq 'rebind--emul-keymap-alist emulation-mode-map-alists))
     (when rebind-keys-mode
-      (add-to-list 'emulation-mode-map-alists 'rebind--emul-keymap-alist))))
+      ;; Fix-me: last! update doc!
+      (add-to-list 'emulation-mode-map-alists 'rebind--emul-keymap-alist t))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Interactive functions for the keymap
+
+;; org-mode specials
+
+(defun org-b ()
+  "Toggle bold if in `org-mode'."
+  (interactive)
+  (org-bi "*"))
+
+(defun org-i ()
+  "Toggle italic if in `org-mode'."
+  (interactive)
+  (org-bi "/"))
+
+(defun org-bi (bi)
+  ;; Fix-me: add removing and check if it fits.
+  (if (not (and mark-active
+                (derived-mode-p 'org-mode)))
+      (let* (rebind-keys-mode
+             (binding (key-binding (this-command-keys-vector) t)))
+	;; (message "* org-bi.binding=%S, keys-vector=%S" binding (this-command-keys-vector))
+        ;; ;; Raw can not be used for tab:
+        ;; ;; (setq binding (key-binding (this-single-command-raw-keys) t))
+	;; ;; (message "org-bi.binding=%S, keys.single-raw=%S" binding (this-single-command-raw-keys))
+        ;; (setq binding (key-binding (this-command-keys) t))
+	;; (message "  org-bi.binding=%S, keys=%S" binding (this-command-keys))
+        ;; (setq binding (key-binding (this-single-command-keys) t))
+	;; (message "  org-bi.binding=%S, keys.single=%S" binding (this-single-command-keys))
+	;; (message "org-bi.single-raw=%S" (this-single-command-raw-keys))
+        (when binding (call-interactively binding)))
+    ;; Fix-me: Maybe adjust region so that it is valid for this op.
+    (let* ((beg (region-beginning))
+           (end (region-end))
+           (here (copy-marker (point))))
+      (goto-char end)
+      (insert bi)
+      (goto-char beg)
+      (insert bi)
+      (goto-char here))))
+
 
 
 

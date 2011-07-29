@@ -53,6 +53,40 @@
 ;;
 ;;; Code:
 
+;; (% 32 10)
+;; (mod 32 10)
+;; (/ 32 10)
+
+;; Mer om OCR-nummer och kontrollsiffror - NyTeknik
+;; http://www.nyteknik.se/popular_teknik/teknikfragan/article3179895.ece
+;; (ocr-control "06707298912")
+;; (ocr-control "07607298912")
+;; fix-me: use
+(defun ocr-control (str)
+  "Return t if STR is a possible OCR-number."
+  (unless (string-match-p "\\`[0-9]+\\'" str)
+    (error "Not only digits: %S" str))
+  (when (and (< 2 (length str))
+             (string-match-p "\\`[0-9]+\\'" str))
+    (let* ((chars (append str nil))
+           (digits (mapcar (lambda (chr)
+                             (- chr 48))
+                           chars))
+           (lendig (nth (- (length digits) 2) digits))
+           (ctldig (nth (- (length digits) 1) digits))
+           (computed-ctldig 0)
+           (ret t)
+           (flip2 t)
+           )
+      (dolist (dig (cdr (reverse digits)))
+        (when flip2 (setq dig (+ dig dig)))
+        (setq flip2 (not flip2))
+        (let ((ten (/ dig 10))
+              (rest (mod dig 10)))
+          (setq computed-ctldig (+ computed-ctldig ten rest))))
+      (setq computed-ctldig (+ computed-ctldig ctldig))
+      (= 0 (mod computed-ctldig 10)))))
+
 (defconst ocr-keywords
   `((
      ,(concat

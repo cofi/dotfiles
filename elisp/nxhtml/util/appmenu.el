@@ -60,6 +60,7 @@
 (eval-when-compile (require 'ourcomments-util nil t))
 (eval-when-compile (require 'mumamo nil t))
 ;;(eval-when-compile (require 'mlinks nil t))
+(declare-function nxhtml-validation-header-mode "nxhtml-mode")
 
 ;;;###autoload
 (defgroup appmenu nil
@@ -206,36 +207,40 @@ point."
 
 (defun appmenu-keymap-map-fun (ev def)
   (if (keymapp def)
-        (progn
-          (add-to-list 'appmenu-funs (list appmenu-level ev))
-          (setq appmenu-events (cons ev appmenu-events))
-          (setq appmenu-level (1+ appmenu-level))
+      (progn
+        (add-to-list 'appmenu-funs (list appmenu-level ev))
+        (setq appmenu-events (cons ev appmenu-events))
+        (setq appmenu-level (1+ appmenu-level))
 
-          (map-keymap 'appmenu-keymap-map-fun def)
+        (map-keymap 'appmenu-keymap-map-fun def)
 
-          (setq appmenu-events (cdr appmenu-events))
-          (setq appmenu-level (1- appmenu-level)))
-      (when (and (symbolp def)
-                 (fboundp def))
-        (let* ((mouse-only (assq def appmenu-mouse-only))
-               (fun (if mouse-only (cadr mouse-only) def))
-               (doc (when fun
-                      (if (not (eq fun 'push-button))
-                          (documentation fun)
-                        (concat
-                         "Button: "
-                         (with-current-buffer (marker-buffer appmenu-this-point)
-                           (or (get-char-property appmenu-this-point 'help-echo)
-                               (let ((action-fun (get-char-property appmenu-this-point 'action)))
-                                 (if action-fun
-                                     (documentation action-fun)
-                                   "No action, ignored"))
-                               "No documentation available")))))))
-          (add-to-list 'appmenu-funs (list appmenu-level (cons ev appmenu-events) def doc))))))
+        (setq appmenu-events (cdr appmenu-events))
+        (setq appmenu-level (1- appmenu-level)))
+    (when (and (symbolp def)
+               (fboundp def))
+      (let* ((mouse-only (assq def appmenu-mouse-only))
+             (fun (if mouse-only (cadr mouse-only) def))
+             (doc (when fun
+                    (if (not (eq fun 'push-button))
+                        (documentation fun)
+                      (concat
+                       "Button: "
+                       (with-current-buffer (marker-buffer appmenu-this-point)
+                         (or (get-char-property appmenu-this-point 'help-echo)
+                             (let ((action-fun (get-char-property appmenu-this-point 'action)))
+                               (if action-fun
+                                   (documentation action-fun)
+                                 "No action, ignored"))
+                             "No documentation available")))))))
+        (add-to-list 'appmenu-funs (list appmenu-level (cons ev appmenu-events) def doc))))))
 
+;; Fix-me: Maybe make this a global minor mode? Use a buffer of its
+;; own. Use dedicated window or a topmost frame. Stop the minor mode
+;; when closing the window. Add tabkey2-mode status through a hook.
+;;
 ;;(appmenu-as-help (point))
 (defun appmenu-as-help (this-point)
-  "Show keybindings specific done current point in buffer.
+  "Show keybindings specific to current point in buffer.
 This shows the binding in the help buffer.
 
 Tip: This may be helpful if you are using `css-color-mode'."
@@ -260,6 +265,10 @@ Tip: This may be helpful if you are using `css-color-mode'."
     ;;(describe-variable 'appmenu-funs)
     ;; Fix-me: collect info first in case we are in help-buffer!
     (with-output-to-temp-buffer (help-buffer)
+      ;; Fix-me: this push a new entry on help-xref-stack. Do not do
+      ;; that if we are already there! I.e. remove the old entry
+      ;; first.  Maybe defadvice help-setup-xref to do that? Then we
+      ;; would not be burried somewhere in the middle.
       (help-setup-xref (list #'appmenu-as-help this-point) (interactive-p))
       (with-current-buffer (help-buffer)
         (let ((fmt " %s%15s     %-30s\n"))
@@ -360,6 +369,9 @@ Tip: This may be helpful if you are using `css-color-mode'."
                        (memq 'down  mod)
                        (memq 'drag  mod))))
     (when is-mouse
+      (let ((win (posn-window (event-start last-input-event))))
+        (unless (eq (selected-window) win)
+          (select-window win)))
       (goto-char (posn-point (event-start last-input-event)))
       (sit-for 0.01))
     (let ((menu (appmenu-map)))
@@ -423,15 +435,17 @@ This feature is only on in `appmenu-mode'."
           ))))
 
 (defsubst appmenu-auto-help-add-wcfg (at-point wcfg)
-  (mumamo-with-buffer-prepared-for-jit-lock
-   (add-text-properties at-point (1+ at-point)
-                        (list 'point-left 'appmenu-auto-help-maybe-remove
-                              'appmenu-auto-help-wcfg wcfg))))
+  ;;(mumamo-with-buffer-prepared-for-jit-lock
+  (with-silent-modifications
+    (add-text-properties at-point (1+ at-point)
+                         (list 'point-left 'appmenu-auto-help-maybe-remove
+                               'appmenu-auto-help-wcfg wcfg))))
 
 (defsubst appmenu-auto-help-remove-wcfg (at-point)
-  (mumamo-with-buffer-prepared-for-jit-lock
-   (remove-list-of-text-properties at-point (1+ at-point)
-                                   '(appmenu-auto-help-wcfg point-left))))
+  ;;(mumamo-with-buffer-prepared-for-jit-lock
+  (with-silent-modifications
+    (remove-list-of-text-properties at-point (1+ at-point)
+                                    '(appmenu-auto-help-wcfg point-left))))
 
 (defun appmenu-auto-help-maybe-remove (at-point new-point)
   "Run in 'point-left property.
@@ -452,7 +466,7 @@ Restores window configuration."
                  (appmenu-on-keymap (point)))
         (let* ((old-help-win (get-buffer-window (help-buffer)))
                (wcfg (unless old-help-win
-                      (current-window-configuration))))
+                       (current-window-configuration))))
           (unless old-help-win
             (display-buffer (help-buffer)))
           (appmenu-auto-help-add-wcfg (point) wcfg)

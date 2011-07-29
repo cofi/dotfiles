@@ -45,8 +45,8 @@
 ;;; Code:
 
 (eval-when-compile (require 'mumamo nil t))
+(eval-when-compile (require 'ourcomments-util nil t))
 
-;;;###autoload (autoload 'command "ourcomments-widgets")
 (define-widget 'command 'restricted-sexp
   "A command function."
   :complete-function (lambda ()
@@ -66,58 +66,7 @@
   :value 'ignore
   :tag "Command")
 
-
 ;;;###autoload
-(defun major-or-multi-majorp (value)
-  "Return t if VALUE is a major or multi major mode function."
-  (or (and (fboundp 'mumamo-multi-major-modep)
-           (fboundp (mumamo-multi-major-modep value)))
-      (major-modep value)))
-
-;; Fix-me: This might in the future be defined in Emacs.
-;;;###autoload
-(defun major-modep (value)
-  "Return t if VALUE is a major mode function."
-  (let ((sym-name (symbol-name value)))
-    ;; Do some reasonable test to find out if it is a major mode.
-    ;; Load autoloaded mode functions.
-    ;;
-    ;; Fix-me: Maybe test for minor modes? How was that done?
-    (when (and (fboundp value)
-               (commandp value)
-               (not (memq value '(flyspell-mode
-                                  isearch-mode
-                                  savehist-mode
-                                  )))
-               (< 5 (length sym-name))
-               (string= "-mode" (substring sym-name (- (length sym-name) 5)))
-               (if (and (listp (symbol-function value))
-                        (eq 'autoload (car (symbol-function value))))
-                   (progn
-                     (message "loading ")
-                     (load (cadr (symbol-function value)) t t))
-                 t)
-               (or (memq value
-                         ;; Fix-me: Complement this table of known major modes:
-                         '(fundamental-mode
-                           xml-mode
-                           nxml-mode
-                           nxhtml-mode
-                           css-mode
-                           javascript-mode
-                           espresso-mode
-                           php-mode
-                           ))
-                   (and (intern-soft (concat sym-name "-hook"))
-                        ;; This fits `define-derived-mode'
-                        (get (intern-soft (concat sym-name "-hook")) 'variable-documentation))
-                   (progn (message "Not a major mode: %s" value)
-                          ;;(sit-for 4)
-                          nil)
-                   ))
-      t)))
-
-;;;###autoload (autoload 'major-mode-function "ourcomments-widgets")
 (define-widget 'major-mode-function 'function
   "A major mode lisp function."
   :complete-function (lambda ()
@@ -133,8 +82,6 @@
                 widget))
   :value 'fundamental-mode
   :tag "Major mode function")
-
-
 
 (provide 'ourcomments-widgets)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

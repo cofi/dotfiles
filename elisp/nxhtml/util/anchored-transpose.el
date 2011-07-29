@@ -118,7 +118,7 @@ prior selection, ie secondary selection."
         (with-selected-window sec-win
           (set-window-buffer (selected-window) sec-buf)
           (goto-char (overlay-start mouse-secondary-overlay)))
-        (if (not (y-or-n-p "Swap between buffers "))
+        (if (not (y-or-n-p "Swap between buffers? "))
             (when sec-new (delete-window sec-win))
           (setq beg2 (overlay-start mouse-secondary-overlay))
           (setq end2 (overlay-end mouse-secondary-overlay))

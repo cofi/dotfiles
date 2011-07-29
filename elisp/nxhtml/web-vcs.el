@@ -2,15 +2,19 @@
 ;;
 ;; Author: Lennart Borgman (lennart O borgman A gmail O com)
 ;; Created: 2009-11-26 Thu
-(defconst web-vcs:version "0.61") ;; Version:
-;; Last-Updated: 2009-12-11 Fri
+(defconst web-vcs:version "0.62") ;; Version:
+;; Last-Updated: 2011-03-12 Sat
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
 ;;
 ;; Features that might be required by this library:
 ;;
-;;   None
+;;   `advice', `advice-preload', `backquote', `bytecomp', `cus-edit',
+;;   `cus-face', `cus-load', `cus-start', `help-fns', `ietf-drums',
+;;   `mail-parse', `mail-prsvr', `mm-bodies', `mm-decode',
+;;   `mm-encode', `mm-util', `rfc2045', `rfc2047', `rfc2231',
+;;   `timer', `web-autoload', `wid-edit'.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -51,6 +55,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+(eval-when-compile (require 'compile))
 (eval-and-compile  (require 'cus-edit))
 (eval-and-compile  (require 'mm-decode))
 (eval-when-compile (require 'url-http))
@@ -69,7 +74,7 @@
 
 (defcustom web-vcs-links-regexp
   `(
-    (lp ;; Id
+    (lp-1-10 ;; Id
      ;; Comment:
      "http://www.launchpad.com/ uses this 2009-11-29 with Loggerhead 1.10 (generic?)"
      ;; Files URL regexp:
@@ -84,44 +89,106 @@
 
      ((time 1)
       (url 2)
-      (patt ,(rx "<td class=\"date\">"
-                 (submatch (regexp "[^<]*"))
-                 "</td>"
-                 (0+ space)
-                 "<td class=\"timedate2\">"
-                 (regexp ".+")
-                 "</td>"
-                 (*? (regexp ".\\|\n"))
-                 "href=\""
-                 (submatch (regexp ".*/download/[^\"]*"))
-                 "\"")))
-
-     ;; ,(rx "href=\""
-     ;;      (submatch (regexp ".*/download/[^\"]*"))
-     ;;      "\"")
-
+      (patt ,(rx-to-string '(and "<td class=\"date\">"
+                                 (submatch (regexp "[^<]*"))
+                                 "</td>"
+                                 (0+ space)
+                                 "<td class=\"timedate2\">"
+                                 (regexp ".+")
+                                 "</td>"
+                                 (*? (regexp ".\\|\n"))
+                                 "href=\""
+                                 (submatch (regexp ".*/download/[^\"]*"))
+                                 "\""))))
      ;; Dirs URL regexp:
-     ,(rx "href=\""
-          (submatch (regexp ".*%3A/[^\"]*/"))
-          "\"")
+     ,(rx-to-string '(and "href=\""
+                          (group (regexp ".*%3A/[^\"]*/"))
+                          "\""))
      ;; File name URL part regexp:
      "\\([^\/]*\\)$"
      ;; Page revision regexp:
-     ,(rx "for revision"
-          (+ whitespace)
-          "<span>"
-          (submatch (+ digit))
-          "</span>")
+     ,(rx-to-string '(and "for revision"
+                          (+ whitespace)
+                          "<span>"
+                          (submatch (+ digit))
+                          "</span>"))
      ;; Release revision regexp:
-     ,(rx "/"
-          (submatch (+ digit))
-          "\"" (+ (not (any ">"))) ">"
-          (optional "Release ")
-          (+ digit) "." (+ digit) "<")
+     ,(rx-to-string '(and "/"
+                          (submatch (+ digit))
+                          "\"" (+ (not (any ">"))) ">"
+                          (optional "Release ")
+                          (+ digit) "." (+ digit) "<"))
+     )
+    (lp ;; Id
+     ;; Comment:
+     "http://www.launchpad.com/ uses this 2010-06-26 with Loggerhead 1.17 (generic?)"
+     ;; Files URL regexp:
+     ;;
+     ;; Extend this format to catch date/time too.
+     ;;
+     ;; ((patt (rx ...))
+     ;;  ;; use subexp numbers
+     ;;  (url 1)
+     ;;  (time 2)
+     ;;  (rev 3))
+     ((time 1)
+      (url 2)
+      (patt ,(rx-to-string '(and "<td class=\"date\">"
+                                 (submatch
+                                  (*\?
+                                   (not (any "<"))))
+                                 "</td>"
+                                 (*? anything)
+                                 "<a href=\""
+                                 (submatch "/~nxhtml/nxhtml/main/download/"
+                                           (*
+                                            (not (any "\"")))
+                                           )
+                                 "\" title=\"Download"
+                                 )
+                           )))
+     ;; Dirs URL regexp:
+     ,(rx-to-string '(and  "<td class=\"autcell\"><a href=\""
+                           (submatch (+? nonl)
+                                     "/files/head:/"
+                                     (+? (not (any "\""))))
+                           "\">")
+                    ;;(and "href=\"" (group (regexp ".*%3A/[^\"]*/")) "\"")
+                    )
+     ;; File name URL part regexp:
+     "\\([^\/]*\\)$"
+     ;; Page revision regexp:
+     ,(rx-to-string '(and "for revision"
+                          (+ whitespace)
+                          "<span>"
+                          (submatch (+ digit))
+                          "</span>"))
+     ;; Release revision regexp:
+     ,(rx-to-string '(and "/"
+                          (submatch (+ digit))
+                          "\"" (+ (not (any ">"))) ">"
+                          (optional "Release ")
+                          (+ digit) "." (+ digit) "<"))
      )
     )
   "Regexp patterns for matching links on a VCS web page.
 The patterns are grouped by VCS web system type.
+
+\\<mozadd-mirror-mode-map>
+To make a new pattern you can do like this:
+
+- Open the file in Firefox.
+- View the buffer source in Emacs in some way.
+- Turn on `mozadd-mirror-mode'.
+- Use the command `mozadd-init-href-patten'.
+- Then start `re-builder' to refine the pattern.
+  (Or, use isearch if you prefer that.)
+- Use `ourcomments-copy-target-region-to-reb' for
+  easy copying from target buffer to re-builder.
+- To see what you patterns matches in the web page
+  use `M-x mozadd-update-mozilla'.
+- If the page looks terrible then add a <base href=...>
+  tag by doing `M-x mozadd-add-href-base'.
 
 *Note: It is always sub match 1 from these patterns that are
        used."
@@ -129,7 +196,10 @@ The patterns are grouped by VCS web system type.
           (list
            (symbol :tag "VCS web system type specifier")
            (string :tag "Description")
-           (regexp :tag "Files URL regexp")
+           (set (list (const time) integer)
+                (list (const url) integer)
+                (list (const patt) regexp))
+           ;;(regexp :tag "Files URL regexp")
            (regexp :tag "Dirs URL regexp")
            (regexp :tag "File name URL part regexp")
            (regexp :tag "Page revision regexp")
@@ -173,11 +243,11 @@ The patterns are grouped by VCS web system type.
   :group 'web-vcs)
 
 (defcustom web-vcs-default-download-directory
-  '~/.emacs.d/
+  "~/.emacs.d/"
   "Default download directory."
-  :type '(choice (const :tag "~/.emacs.d/" '~/.emacs.d/)
-                 (const :tag "Fist site-lisp in `load-path'" 'site-lisp-dir)
-                 (const :tag "Directory where `site-run-file' lives" 'site-run-dir)
+  :type '(choice (const :tag "~/.emacs.d/" "~/.emacs.d/")
+                 (const :tag "Fist site-lisp in `load-path'" site-lisp-dir)
+                 (const :tag "Directory where `site-run-file' lives" site-run-dir)
                  (string :tag "Specify directory"))
   :group 'web-vcs)
 
@@ -185,23 +255,24 @@ The patterns are grouped by VCS web system type.
 ;;;###autoload
 (defun web-vcs-default-download-directory ()
   "Try to find a suitable place.
-Considers site-start.el, site-
-"
-  (let ((site-run-dir (when site-run-file
-			(file-name-directory (locate-library site-run-file))))
-        (site-lisp-dir (catch 'first-site-lisp
-                         (dolist (d load-path)
-                           (let ((dir (file-name-nondirectory (directory-file-name d))))
+Use the choice in `web-vcs-default-download-directory'.
+If this does not fit fall back to \"~/.emacs.d/\"."
+  (let* ((site-run-dir (when site-run-file
+                         (let ((lib (locate-library site-run-file)))
+                           (when lib
+                             (file-name-directory lib)))))
+         (site-lisp-dir (catch 'first-site-lisp
+                          (dolist (d load-path)
+                            (let ((dir (file-name-nondirectory (directory-file-name d))))
                              (when (string= dir "site-lisp")
                                (throw 'first-site-lisp (file-name-as-directory d)))))))
-        )
-    (message "site-run-dir=%S site-lisp-dir=%S" site-run-dir site-lisp-dir)
-    (case web-vcs-default-download-directory
-      ('~/.emacs.d/ "~/.emacs.d/")
-      ('site-lisp-dir site-lisp-dir)
-      ('site-run-dir site-run-dir)
-      (t web-vcs-default-download-directory))
-    ))
+         (dummy (message "site-run-dir=%S site-lisp-dir=%S" site-run-dir site-lisp-dir))
+         (dir (or (case web-vcs-default-download-directory
+                    ;;('~/.emacs.d/ "~/.emacs.d/")
+                    ('site-lisp-dir site-lisp-dir)
+                    ('site-run-dir site-run-dir))
+                  web-vcs-default-download-directory)))
+    (or dir "~/.emacs.d/")))
 
 
 
@@ -271,30 +342,31 @@ Considers site-start.el, site-
 ;;; Finding and downloading files
 
 ;;;###autoload
-(defun web-vcs-get-files-from-root (web-vcs url dl-dir)
+(defun web-vcs-get-files-from-root (web-vcs full-url dl-dir)
   "Download a file tree from VCS system using the web interface.
 Use WEB-VCS entry in variable `web-vcs-links-regexp' to download
-files via http from URL to directory DL-DIR.
+files via http from FULL-URL to directory DL-DIR.
 
-Show URL first and offer to visit the page.  That page will give
-you information about version control system \(VCS) system used
-etc."
+Show FULL-URL first and offer to visit the page.  That page will
+give you information about version control system \(VCS) system
+used etc."
   (unless (web-vcs-contains-moved-files dl-dir)
-    (when (if (not (y-or-n-p (concat "Download files from \"" url "\".\n"
-                                     "You can see on that page which files will be downloaded.\n\n"
-                                     "Visit that page before downloading? ")))
-              t
-            (browse-url url)
-            (if (y-or-n-p "Start downloading? ")
+    (let ((resize-mini-windows (or resize-mini-windows t)))
+      (when (if (not (y-or-n-p (concat "Download files from \"" full-url "\".\n"
+                                       "You can see on that page which files will be downloaded.\n\n"
+                                       "Visit that page before downloading? ")))
                 t
-              (message "Aborted")
-              nil))
-      (message "")
-      (web-vcs-get-files-on-page web-vcs url t (file-name-as-directory dl-dir) nil)
-      t)))
+              (browse-url full-url)
+              (if (y-or-n-p "Start downloading? ")
+                  t
+                (message "Aborted")
+                nil))
+        (message "")
+        (web-vcs-get-files-on-page web-vcs full-url t (file-name-as-directory dl-dir) nil)
+        t))))
 
-(defun web-vcs-get-files-on-page (web-vcs url recursive dl-dir test)
-  "Download files listed by WEB-VCS on web page URL.
+(defun web-vcs-get-files-on-page (web-vcs page-url recursive dl-dir test)
+  "Download files listed by WEB-VCS on web page PAGE-URL.
 WEB-VCS is a specifier in `web-vcs-links-regexp'.
 
 If RECURSIVE go into sub folders on the web page and download
@@ -327,12 +399,12 @@ If TEST is non-nil then do not download, just list the files."
       ;;     (switch-to-buffer-other-window "*Messages*"))
       ;;   (goto-char (point-max))
       ;;   (insert "\n")
-      ;;   (insert (propertize (format "\n\nWeb-Vcs Download: %S\n" url) 'face 'web-vcs-gold))
+      ;;   (insert (propertize (format "\n\nWeb-Vcs Download: %S\n" page-url) 'face 'web-vcs-gold))
       ;;   (insert "\n")
       ;;   (redisplay t)
       ;;   (set-window-point (selected-window) (point-max))
       ;;   (select-window old-win))
-      (web-vcs-message-with-face 'web-vcs-gold "\n\nWeb-Vcs Download: %S\n" url)
+      (web-vcs-message-with-face 'web-vcs-gold "\n\nWeb-Vcs Download: %S\n" page-url)
       (web-vcs-display-messages nil)
       (let* ((rev-file (expand-file-name "web-vcs-revision.txt" dl-dir))
              (rev-buf (find-file-noselect rev-file))
@@ -349,7 +421,7 @@ If TEST is non-nil then do not download, just list the files."
                              (with-current-buffer rev-buf
                                (buffer-substring-no-properties (car old-rev-range)
                                                                (cdr old-rev-range)))))
-             (dl-revision (web-vcs-get-revision-on-page vcs-rec url))
+             (dl-revision (web-vcs-get-revision-on-page vcs-rec page-url))
              ret
              moved)
         (when (and old-revision (string= old-revision dl-revision))
@@ -363,12 +435,14 @@ If TEST is non-nil then do not download, just list the files."
             (delete-region (car old-rev-range) (cdr old-rev-range))
             (basic-save-buffer)))
         (setq ret (web-vcs-get-files-on-page-1
-                   vcs-rec url
+                   vcs-rec page-url
                    dl-dir
                    ""
                    nil
                    (if recursive 0 nil)
-                   dl-revision test))
+                   dl-revision
+                   test
+                   0))
         (setq moved       (nth 1 ret))
         ;; Now we have a revision number again.
         (with-current-buffer rev-buf
@@ -380,7 +454,7 @@ If TEST is non-nil then do not download, just list the files."
           (basic-save-buffer)
           (kill-buffer))
         (message "-----------------")
-        (web-vcs-message-with-face 'web-vcs-gold "Web-Vcs Download Ready: %S" url)
+        (web-vcs-message-with-face 'web-vcs-gold "Web-Vcs Download Ready: %S" page-url)
         (web-vcs-message-with-face 'web-vcs-gold "  Time elapsed: %S"
                                    (web-vcs-nice-elapsed start-time (current-time)))
         (when (> moved 0)
@@ -388,14 +462,14 @@ If TEST is non-nil then do not download, just list the files."
                                      "  %i files updated (old versions renamed to *.moved)"
                                      moved))))))
 
-(defun web-vcs-get-files-on-page-1 (vcs-rec url dl-root dl-relative file-mask recursive dl-revision test)
-  "Download files listed by VCS-REC on web page URL.
+(defun web-vcs-get-files-on-page-1 (vcs-rec page-url dl-root dl-relative file-mask recursive dl-revision test num-files)
+  "Download files listed by VCS-REC on web page page-URL.
 VCS-REC should be an entry like the entries in the list
 `web-vcs-links-regexp'.
 
-If FILE-MASK is non nil then it is used to match a file path.
-Only matching files will be downloaded.  FILE-MASK can have two
-forms, a regular expression or a function.
+If FILE-MASK is non-nil then it is used to match a file relative
+path.  Only matching files will be downloaded.  FILE-MASK can
+have two forms, a regular expression or a function.
 
 If FILE-MASK is a regular expression then each part of the path
 may be a regular expresion \(not containing /).
@@ -412,17 +486,33 @@ files from them too.
 
 Place the files under DL-DIR.
 
-The revision on the page URL should match DL-REVISION if this is non-nil.
+The revision on the page page-URL should match DL-REVISION if this is non-nil.
 
 If TEST is non-nil then do not download, just list the files"
-  ;;(web-vcs-message-with-face 'font-lock-comment-face "web-vcs-get-files-on-page-1 %S %S %S %S" url dl-root dl-relative file-mask)
+  ;;(web-vcs-message-with-face 'font-lock-comment-face "web-vcs-get-files-on-page-1 %S %S %S %S" page-url dl-root dl-relative file-mask)
   (let* ((files-matcher      (nth 2 vcs-rec))
          (dirs-href-regexp   (nth 3 vcs-rec))
          (revision-regexp    (nth 5 vcs-rec))
+         ;; (setq x (url-generic-parse-url "http://somewhere.com/file/path.el"))
+         ;; (setq x (url-generic-parse-url "http://somewhere.com"))
+         ;; (setq x (url-generic-parse-url "/somewhere.com"))
+         ;; (url-type x)
+         ;; (url-host x)
+         ;; (url-filename x)
+         ;; (url-fullness x)
+         ;; (url-port x)
+         ;; (setq y (url-expand-file-name "/suburl/other.el" x))
+         ;; (setq y (url-expand-file-name "http://other.com/suburl/other.el" x))
+         ;;(page-urlobj (url-generic-parse-url page-url))
+         ;;(page-url-fullness (or (url-fullness page-urlobj) (error "Incomplete URL: %S" page-url)))
+         ;;(page-url-host (url-host page-urlobj))
+         ;;(page-url-type (url-type page-urlobj))
+         ;;(page-url-file (url-filename page-urlobj))
+         ;;(page-host-url (concat page-url-type "://" page-url-host))
          (dl-dir (file-name-as-directory (expand-file-name dl-relative dl-root)))
          (lst-dl-relative (web-vcs-file-name-as-list dl-relative))
          (lst-file-mask   (when (stringp file-mask) (web-vcs-file-name-as-list file-mask)))
-         ;;(url-buf (url-retrieve-synchronously url))
+         ;;(url-buf (url-retrieve-synchronously page-url))
          this-page-revision
          files
          suburls
@@ -439,27 +529,33 @@ If TEST is non-nil then do not download, just list the files"
     (unless (file-directory-p dl-dir) (make-directory dl-dir t))
     ;;(message "TRACE: dl-dir=%S" dl-dir)
     (setq temp-list-file (make-temp-name temp-file-base))
-    (setq temp-list-buf (web-vcs-ass-folder-cache url))
+    (setq temp-list-buf (web-vcs-ass-folder-cache page-url))
     (unless temp-list-buf
       ;;(setq temp-list-buf (generate-new-buffer "web-wcs-folder"))
-      ;;(web-vcs-url-copy-file-and-check url temp-list-file nil)
-      (setq folder-res (web-vcs-url-retrieve-synch url))
-      ;; (with-current-buffer temp-list-buf
-      ;;   (insert-file-contents temp-list-file))
-      (unless (memq (cdr folder-res) '(200 201))
-        (web-vcs-message-with-face 'web-vcs-red "Could not get %S" url)
-          (web-vcs-display-messages t)
-        (throw 'command-level nil)))
+      ;;(web-vcs-url-copy-file-and-check page-url temp-list-file nil)
+      (let ((ready nil))
+        (while (not ready)
+          (setq folder-res (web-vcs-url-retrieve-synch page-url))
+          ;; (with-current-buffer temp-list-buf
+          ;;   (insert-file-contents temp-list-file))
+          (if (memq (cdr folder-res) '(200 201))
+              (setq ready t)
+            (web-vcs-message-with-face 'web-vcs-red "Could not get %S" page-url)
+            (web-vcs-display-messages t)
+            (when (y-or-n-p (format "Could not get %S, visit page to see what is wrong? " page-url))
+              (browse-url page-url))
+            (unless (y-or-n-p "Try again? (It is safe to break here and try again later.) ")
+              (throw 'command-level nil))))))
     ;;(with-current-buffer temp-list-buf
     (with-current-buffer (car folder-res)
       ;;(delete-file temp-list-file)
       ;;(find-file-noselect temp-list-file)
       (when dl-revision
-        (setq this-page-revision (web-vcs-get-revision-from-url-buf vcs-rec (current-buffer) url)))
+        (setq this-page-revision (web-vcs-get-revision-from-url-buf vcs-rec (current-buffer) page-url)))
       (when dl-revision
         (unless (string= dl-revision this-page-revision)
           (web-vcs-message-with-face 'web-vcs-red "Revision on %S is %S, but should be %S"
-                                     url this-page-revision dl-revision)
+                                     page-url this-page-revision dl-revision)
           (web-vcs-display-messages t)
           (throw 'command-level nil)))
       ;; Find files
@@ -468,32 +564,40 @@ If TEST is non-nil then do not download, just list the files"
             (url-num           (nth 1 (assq 'url  files-matcher)))
             (time-num          (nth 1 (assq 'time files-matcher))))
         (while (re-search-forward files-href-regexp nil t)
-          (let ((file (match-string url-num))
-                (time (match-string time-num)))
-            (add-to-list 'files (list file time)))))
+          ;; Fix-me: What happened to full url???
+          (let* ((file (match-string url-num))
+                 (time (match-string time-num))
+                 (full-file (url-expand-file-name file page-url)))
+            (add-to-list 'files (list full-file time)))))
+      (when (< (length files) num-files)
+        (message "files-on-page-1: found %d files, expected %d" (length files) num-files))
       ;; Find subdirs
       (when recursive
         (goto-char (point-min))
         (while (re-search-forward dirs-href-regexp nil t)
-          (let ((suburl (match-string 1))
-                (lenurl (length url)))
-            (when (and (> (length suburl) lenurl)
-                       (string= (substring suburl 0 lenurl) url))
-              (add-to-list 'suburls suburl)))))
+          (let* ((suburl (match-string 1))
+                 (lenurl (length page-url))
+                 (full-suburl (url-expand-file-name suburl page-url)))
+	    ;;(message "suburl=%S" suburl)
+            (when (and (> (length full-suburl) lenurl)
+                       (string= (substring full-suburl 0 lenurl) page-url))
+	      ;;(message "...added")
+              (add-to-list 'suburls full-suburl)))))
       (kill-buffer))
     ;; Download files
     ;;(message "TRACE: files=%S" files)
-    (web-vcs-download-files vcs-rec files dl-dir dl-root file-mask)
+    (web-vcs-download-files vcs-rec files dl-dir dl-root)
     ;; Download subdirs
     (when suburls
       (dolist (suburl (reverse suburls))
-        (let* ((dl-sub-dir (substring suburl (length url)))
+        (let* ((dl-sub-dir (substring suburl (length page-url)))
                (full-dl-sub-dir (file-name-as-directory
                                  (expand-file-name dl-sub-dir dl-dir)))
                (rel-dl-sub-dir (file-relative-name full-dl-sub-dir dl-root)))
           ;;(message "web-vcs-get-revision-from-url-buf dir: %S %S" file-mask rel-dl-sub-dir)
           (when (or (not file-mask)
                     (not (stringp file-mask))
+		    (= 1 (length (web-vcs-file-name-as-list file-mask)))
                     (web-vcs-match-folderwise file-mask rel-dl-sub-dir))
             ;;(message "matched dir %S" rel-dl-sub-dir)
             (unless (web-vcs-contains-file dl-dir full-dl-sub-dir)
@@ -505,21 +609,26 @@ If TEST is non-nil then do not download, just list the files"
                                                      file-mask
                                                      (1+ recursive)
                                                      this-page-revision
-                                                     test)))
+                                                     test
+                                                     0)))
               (setq moved (+ moved (nth 1 ret))))))))
     (list this-page-revision moved)))
 
-(defun web-vcs-get-missing-matching-files (web-vcs url dl-dir file-mask)
+(defun web-vcs-get-missing-matching-files (web-vcs url dl-dir file-mask num-files)
   "Download missing files from VCS system using the web interface.
 Use WEB-VCS entry in variable `web-vcs-links-regexp' to download
 files via http from URL to directory DL-DIR.
 
+FILE-MASK is used to match files that should be downloaded.  See
+`web-vcs-get-files-on-page-1' for more information.
+
 Before downloading offer to visit the page from which the
 downloading will be made.
 "
+  (unless file-mask (error "file-mask is nil"))
   (let ((vcs-rec (or (assq web-vcs web-vcs-links-regexp)
                      (error "Does not know web-cvs %S" web-vcs))))
-    (web-vcs-get-files-on-page-1 vcs-rec url dl-dir "" file-mask 0 nil nil)))
+    (web-vcs-get-files-on-page-1 vcs-rec url dl-dir "" file-mask 0 nil nil num-files)))
 
 
 ;; (web-vcs-get-files-on-page 'lp "http://bazaar.launchpad.net/%7Enxhtml/nxhtml/main/files/head%3A/" t "c:/test/temp13/" t)
@@ -535,17 +644,17 @@ downloading will be made.
       (setq web-vcs-folder-cache (cdr web-vcs-folder-cache))
       (kill-buffer (nth 1 ub)))))
 
-(defun web-vcs-url-copy-file-and-check (url dl-file dest-file)
-  "Copy URL to DL-FILE.
+(defun web-vcs-url-copy-file-and-check (file-url dl-file dest-file)
+  "Copy FILE-URL to DL-FILE.
 Log what happened. Use DEST-FILE in the log, not DL-FILE which is
 a temporary file."
   (let ((http-sts nil)
         (file-nonempty nil)
         (fail-reason nil))
-    (when dest-file (web-vcs-log url dest-file nil))
+    (when dest-file (web-vcs-log file-url dest-file nil))
     (web-vcs-display-messages nil)
     ;;(message "before url-copy-file %S" dl-file)
-    (setq http-sts (web-vcs-url-copy-file url dl-file nil t)) ;; don't overwrite, keep time
+    (setq http-sts (web-vcs-url-copy-file file-url dl-file nil t)) ;; don't overwrite, keep time
     ;;(message "after  url-copy-file %S" dl-file)
     (if (and (file-exists-p dl-file)
              (setq file-nonempty (< 0 (nth 7 (file-attributes dl-file)))) ;; file size 0
@@ -557,11 +666,13 @@ a temporary file."
              (http-sts (format "HTTP %s" http-sts))
              (file-nonempty "File looks bad")
              (t "Server did not respond")))
-      (unless dest-file (web-vcs-log url dl-file "TEMP FILE"))
+      (unless dest-file (web-vcs-log file-url dl-file "TEMP FILE"))
       (web-vcs-log nil nil (format "   *Failed:* %s\n" fail-reason))
       ;; Requires user attention and intervention
-      (web-vcs-message-with-face 'web-vcs-red "Download failed: %s, %S" fail-reason url)
+      (web-vcs-message-with-face 'web-vcs-red "Download failed: %s, %S" fail-reason file-url)
       (web-vcs-display-messages t)
+      (when (y-or-n-p (format "Vist page %S to see what is wrong? " file-url))
+        (browse-url file-url))
       (message "\n")
       (web-vcs-message-with-face 'web-vcs-yellow "Please retry what you did before!\n")
       (throw 'command-level nil))))
@@ -572,7 +683,7 @@ a temporary file."
   (and (boundp 'web-autoload-active-file-sub-url)
        web-autoload-active-file-sub-url))
 
-(defun web-vcs-download-files (vcs-rec files dl-dir dl-root file-mask)
+(defun web-vcs-download-files (vcs-rec files dl-dir dl-root)
   (dolist (file (reverse files))
     (let* ((url-file          (nth 0 file))
            (url-file-time-str (nth 1 file))
@@ -589,7 +700,7 @@ a temporary file."
            (temp-file (expand-file-name (concat web-autoload-temp-file-prefix file-name) dl-dir))
            temp-buf)
       (cond
-       ((and file-mask (not (web-vcs-match-folderwise file-mask file-rel-name))))
+       ;;((and file-mask (not (web-vcs-match-folderwise file-mask file-rel-name))))
        ((and dl-file-time
              url-file-time
              (progn
@@ -664,18 +775,21 @@ VCS-REC should be an entry like the entries in the list
   (let ((url-buf (url-retrieve-synchronously url)))
     (web-vcs-get-revision-from-url-buf vcs-rec url-buf url)))
 
-(defun web-vcs-get-revision-from-url-buf (vcs-rec url-buf url)
+(defun web-vcs-get-revision-from-url-buf (vcs-rec url-buf rev-page-url)
   "Get revision number using VCS-REC.
 VCS-REC should be an entry in the list `web-vcs-links-regexp'.
-The buffer URL-BUF should contain the content on page URL."
+The buffer URL-BUF should contain the content on page
+REV-PAGE-URL."
   (let ((revision-regexp    (nth 5 vcs-rec)))
     ;; Get revision number
     (with-current-buffer url-buf
       (goto-char (point-min))
       (if (not (re-search-forward revision-regexp nil t))
           (progn
-            (web-vcs-message-with-face 'web-vcs-red "Can't find revision number on %S" url)
+            (web-vcs-message-with-face 'web-vcs-red "Can't find revision number on %S" rev-page-url)
             (web-vcs-display-messages t)
+            (when (y-or-n-p (format "Coult not find rev no on %S, visit page to see what is wrong? " rev-page-url))
+              (browse-url rev-page-url))
             (throw 'command-level nil))
         (match-string 1)))))
 
@@ -770,7 +884,8 @@ This is used after inspecting downloaded elisp files."
         (with-selected-window msg-win
           (goto-char (point-max)))
         (let ((proceed nil)
-              (web-autoload-active-file-sub-url file-sub-url)) ;; Dyn var, active during file download check
+              (web-autoload-active-file-sub-url file-sub-url) ;; Dyn var, active during file download check
+              (ws (with-current-buffer "*Messages*" (point-marker))))
           (web-vcs-paranoid-state-mode 1)
           (web-vcs-message-with-face
            'secondary-selection
@@ -787,6 +902,8 @@ This is used after inspecting downloaded elisp files."
                    (funcall kf-desc 'web-vcs-log-edit)
                    "\n"))
           (message "")
+          (let ((msg-win (car (get-buffer-window-list "*Messages*" nil nil))))
+            (when msg-win (set-window-start msg-win ws)))
           (while (not proceed)
             (condition-case err
                 (when (eq 'web-autoload-stop
@@ -1047,6 +1164,8 @@ Return an alist with old attributes."
 ;;(web-vcs-file-name-as-list "c:/a/b/c.el")
 ;;(web-vcs-file-name-as-list ".*/a/c/")
 ;;(web-vcs-file-name-as-list "[^/]*/a/c/") ;; Just avoid this.
+;;(web-vcs-file-name-as-list "\\(?:\\.\\.?\\|README\\.txt\\(?:\\.moved\\)?\\|a\\(?:lts\\|utostart\\(?:\\.elc?\\|22\\.elc?\\)\\)\\|e\\(?:macs22\\.cmd\\|tc\\)\\|nxhtml\\(?:-\\(?:base\\.elc?\\|loaddefs\\.el\\(?:\\.moved\\|c\\)?\\|web-vcs\\.el\\(?:\\.moved\\|c\\)?\\)\\|maint\\.elc?\\)?\\|related\\|tests\\|util\\|web-\\(?:autoload\\.elc?\\|vcs\\.el\\(?:\\.moved\\|c\\)?\\)\\)")
+
 (defun web-vcs-file-name-as-list (filename)
   "Split file name FILENAME into a list with file names."
   ;; We can't use the primitives since they converts \ to / and
@@ -1080,6 +1199,11 @@ Return an alist with old attributes."
   ;;(message "folderwise %S %S" regex file)
   (let ((lst-regex (web-vcs-file-name-as-list regex))
         (lst-file  (web-vcs-file-name-as-list file)))
+    ;; Called from web-vcs-download-files for tree?
+    (when (= 1 (length lst-regex))
+      (setq lst-file (last lst-file))
+      (message "lst-file => %S" lst-file)
+      )
     (when (>= (length lst-regex) (length lst-file))
       (catch 'match
         (while lst-file
@@ -1243,12 +1367,18 @@ If LOAD"
          ;; Fix-me: name of compile log buffer. When should it be
          ;; deleted? How do I bind it to byte-compile-file? Or do I?
          (file-buf (find-buffer-visiting file))
-         (out-buf (get-buffer-create "*Compile-Log*"))
+         (old-out-buf (get-buffer "*Compile-Log*"))
+         (default-directory (or (when old-out-buf
+                                  (with-current-buffer old-out-buf
+                                    default-directory))
+                                comp-dir
+                                (and (boundp 'nxhtml-install-dir) nxhtml-install-dir)
+                                default-directory))
+         (out-buf (or old-out-buf (get-buffer-create "*Compile-Log*")))
          (elc-file (byte-compile-dest-file file))
          (this-emacs-exe (locate-file invocation-name
                                       (list invocation-directory)
                                       exec-suffixes))
-         (default-directory (or comp-dir default-directory))
          (debug-on-error t)
          start)
     ;; (when (and file-buf
@@ -1317,9 +1447,15 @@ If LOAD"
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Temporary helpers, possibly included in Emacs
 
+;; Fix-me: Doing (require 'url-http) in the functions below led to
+;; that url-show-status is void.  So I require it here instead.
+;;(require 'url-http)
+
 ;; (setq x (web-vcs-url-retrieve-synch "http://emacswiki.org/"))
+;;;###autoload
 (defun web-vcs-url-retrieve-synch (url)
   "Retrieve URL, return cons with buffer and http status."
+  (require 'url-http)
   (let* ((url-show-status nil) ;; just annoying showing status here
          (buffer (url-retrieve-synchronously url))
          (handle nil)
@@ -1331,7 +1467,6 @@ If LOAD"
           (progn
             (kill-buffer)
             nil)
-        (require 'url-http)
         (setq http-status (url-http-parse-response))
         (if (memq http-status '(200 201))
             (progn
@@ -1346,6 +1481,7 @@ If LOAD"
     (cons buffer http-status)))
 
 ;; Modified just to return http status
+;;;###autoload
 (defun web-vcs-url-copy-file (url newname &optional ok-if-already-exists
                                   keep-time preserve-uid-gid)
   "Copy URL to NEWNAME.  Both args must be strings.
@@ -1360,6 +1496,7 @@ A prefix arg makes KEEP-TIME non-nil."
   (if (and (file-exists-p newname)
 	   (not ok-if-already-exists))
       (error "Opening output file: File already exists, %s" newname))
+  (require 'url-http)
   (let ((buffer (url-retrieve-synchronously url))
 	(handle nil)
         (ret nil))
@@ -1370,7 +1507,6 @@ A prefix arg makes KEEP-TIME non-nil."
           (progn
             (kill-buffer)
             nil)
-        (require 'url-http)
         (setq ret (url-http-parse-response))
         (setq handle (mm-dissect-buffer t))
         (mm-save-part-to-file handle newname)
@@ -1380,7 +1516,8 @@ A prefix arg makes KEEP-TIME non-nil."
 
 (defun web-vcs-read-and-accept-key (prompt accepted &optional reject-message help-function)
   (let ((key nil)
-        rejected)
+        rejected
+        (resize-mini-windows (or resize-mini-windows t)))
     (while (not (member key accepted))
       (if (and help-function
                (or (member key help-event-list)
@@ -1466,7 +1603,7 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
     ;;(web-vcs-message-with-face 'hi-blue "this-rel=%S  %S %S" this-rel  dl-dir this-dir)
     (setq file-mask (concat this-rel (regexp-opt files)))
     ;;(web-vcs-message-with-face 'hi-blue "r=%S" file-mask)
-    (web-vcs-get-missing-matching-files vcs base-url dl-dir file-mask)
+    (web-vcs-get-missing-matching-files vcs base-url dl-dir file-mask (length files))
     (dolist (d dirs)
       (web-vcs-update-existing-files vcs base-url dl-dir
                                        (file-name-as-directory
@@ -1484,8 +1621,9 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
           (end   (point-max)))
       (cond ((and (boundp 'jit-lock-mode) (symbol-value 'jit-lock-mode))
              (jit-lock-fontify-now start end))
-            ((and (boundp 'lazy-lock-mode) (symbol-value 'lazy-lock-mode))
-             (lazy-lock-fontify-region start end))))))
+            ;; ((and (boundp 'lazy-lock-mode) (symbol-value 'lazy-lock-mode))
+            ;;  (lazy-lock-fontify-region start end))
+            ))))
 
 
 ;;(web-vcs-get-fun-details 'describe-function)
@@ -1555,6 +1693,41 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
     (list errtype advised file-name string)
     ))
 
+;; (setq next-error-function 'web-vcs-investigate-next-error)
+;; fix-me:
+;; (defvar web-vcs-investigate-header-str "Found these possible problems when reading the file:\n")
+;; (defun web-vcs-investigate-next-error (argp reset)
+;;   (interactive "p")
+;;   ;; Search from within the investigate output buffer
+;;   (with-current-buffer
+;;       ;; Choose the buffer and make it current.
+;;       (if (next-error-buffer-p (current-buffer))
+;; 	  (current-buffer)
+;; 	(next-error-find-buffer nil nil
+;; 				(lambda ()
+;;                                   (let ((here (point)))
+;;                                     (save-restriction
+;;                                       (widen)
+;;                                       (goto-char (point-min))
+;;                                       (string= (buffer-substring-no-properties
+;;                                                 0 (length web-vcs-investigate-header-str))
+;;                                                web-vcs-investigate-header-str))))))
+
+;;     (goto-char (cond (reset (point-min))
+;; 		     ((< argp 0) (line-beginning-position))
+;; 		     ((> argp 0) (line-end-position))
+;; 		     ((point))))
+;;     (occur-find-match
+;;      (abs argp)
+;;      (if (> 0 argp)
+;; 	 #'previous-single-property-change
+;;        #'next-single-property-change)
+;;      "No more matches")
+;;     ;; In case the *Occur* buffer is visible in a nonselected window.
+;;     (let ((win (get-buffer-window (current-buffer) t)))
+;;       (if win (set-window-point win (point))))
+;;     (occur-mode-goto-occurrence)))
+
 ;;(web-vcs-investigate-read "c:/emacsw32/nxhtml/nxhtml/nxhtml-autoload.el" "*Messages*")
 (defun web-vcs-investigate-read (elisp out-buf)
   "Check forms in buffer by reading it."
@@ -1587,7 +1760,8 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
                                 (functionp sym)
                                 (symbol-function sym)))
                  (form-var (boundp sym))
-                 (safe-forms '( defun defmacro
+                 (safe-forms '( declare-function
+                                defun defmacro defsubst
                                 define-minor-mode define-globalized-minor-mode
                                 defvar defconst
                                 defcustom
@@ -1626,7 +1800,7 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
         (goto-char (point-max))
         (unless (bobp) (insert "\n\n"))
         (insert (propertize "Found these possible problems when reading the file:\n"
-                            'face '(:height 1.5)))
+                            'font-lock-face '(:height 1.5)))
         (or unsafe-eval
             re-fun
             (insert "\n"
@@ -1635,29 +1809,34 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
 
         ;; Fix-me: Link
         (when unsafe-eval
-          (insert (propertize
-                   (format "\n* Forms that are executed when loading the file (found %s):\n\n"
+          (insert "\n"
+                  (propertize
+                   (format "* Forms that are executed when loading the file (found %s):"
                           (length unsafe-eval))
-                   'face '(:height 1.2)))
-          (dolist (u unsafe-eval)
-            (insert-text-button "Go to form below"
-                                'action
-                                `(lambda (button)
-                                   (let* ((marker ,(nth 1 u))
-                                          (buf (marker-buffer marker)))
-                                     (switch-to-buffer-other-window buf)
-                                     (unless (and (< marker (point-max))
-                                                  (> marker (point-min)))
-                                       (widen))
-                                     (goto-char marker))))
-            (insert "\n")
+                   'font-lock-face '(:background "yellow" :height 1.2))
+                  "\n\n")
+          (dolist (u (reverse unsafe-eval))
+            (insert (format "Line %s\n"
+                            (with-current-buffer elisp
+                              (line-number-at-pos (marker-position (nth 1 u))))))
+            ;; (insert-text-button (format "Go to form below, line %s" (marker-position (nth 1 u)))
+            ;;                     'font-lock-face '(compilation-info underline)
+            ;;                     'action
+            ;;                     `(lambda (button)
+            ;;                        (let* ((marker ,(nth 1 u))
+            ;;                               (buf (marker-buffer marker)))
+            ;;                          (switch-to-buffer-other-window buf)
+            ;;                          (unless (and (< marker (point-max))
+            ;;                                       (> marker (point-min)))
+            ;;                            (widen))
+            ;;                          (goto-char marker))))
             (insert (nth 2 u) "\n\n"))
           (insert "\n"))
         (when re-fun
           (insert (propertize
-                   (format "\n* The file will possibly redefine these functions that are currently defined (%s):\n"
+                   (format "\n* The file perhaps redefines these functions that are defined now (%s):\n"
                           (length re-fun))
-                   'face '(:height 1.2)))
+                   'font-lock-face '(:background "yellow" :height 1.2)))
           (setq re-fun (sort re-fun (lambda (a b) (string< (symbol-name (car a)) (symbol-name (car b))))))
           (let ((row 0)
                 (re-fun-with-info (mapcar (lambda (fun)
@@ -1682,7 +1861,7 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
             (when (< 0 n-same)
               (insert "\n  "
                       (propertize (format "%s functions alreay defined by this file (which seems ok)" n-same)
-                                  'face 'web-vcs-green)
+                                  'font-lock-face 'web-vcs-green)
                       "\n"))
 
             (dolist (info re-fun-other-files)
@@ -1712,25 +1891,25 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
                                          ;; Fix-me: maybe a bit more informative ... ;-)
                                          (message "%S" ',fun-web-auto))))
                 (insert ")")
-                (when advised (insert ", " (propertize "adviced" 'face 'font-lock-warning-face)))
+                (when advised (insert ", " (propertize "adviced" 'font-lock-face 'font-lock-warning-face)))
                 (insert ", "
                         (cond
                          ((funcall is-same-file file-name)
-                          (propertize "defined in this file" 'face 'web-vcs-green)
+                          (propertize "defined in this file" 'font-lock-face 'web-vcs-green)
                           )
                          (fun-web-auto
                           (if (not (web-autoload-acvtive))
-                              (propertize "web download not active" 'face 'web-vcs-yellow)
+                              (propertize "web download not active" 'font-lock-face 'web-vcs-yellow)
                             ;; See if file matches
                             (let ((active-sub-url web-autoload-active-file-sub-url)
                                   (fun-sub-url (nth 2 fun-web-auto)))
                               (setq active-sub-url (file-name-sans-extension active-sub-url))
                               (if (string-match-p fun-sub-url active-sub-url)
-                                  (propertize "web download, matches" 'face 'web-vcs-yellow)
-                                (propertize "web download, doesn't matches" 'face 'web-vcs-red)
+                                  (propertize "web download, matches" 'font-lock-face 'web-vcs-yellow)
+                                (propertize "web download, doesn't matches" 'font-lock-face 'web-vcs-red)
                                 ))))
                          (t
-                          (propertize "defined in other file" 'face 'web-vcs-red))))
+                          (propertize "defined in other file" 'font-lock-face 'web-vcs-red))))
                 (unless (funcall is-same-file file-name)
                   (insert " (")
                   (insert-text-button "go to new definition"
@@ -1743,7 +1922,63 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
                                            (goto-char m-pos))))
                   (insert ")"))
                 (insert "\n")
-                ))))))))
+                )))))
+      (web-vcs-investigate-output-mode)
+      )))
+
+(defvar web-vcs-investigate-current-file nil)
+(make-variable-buffer-local 'web-vcs-investigate-current-file)
+(put 'web-vcs-investigate-current-file 'permanent-local t)
+
+(defun web-vcs-investigate-current-file ()
+  `(,web-vcs-investigate-current-file))
+
+;; (defun web-vcs-investigate-fontification-fun (bound)
+;;   ;;(compilation-error-properties (file line end-line col end-col type fmt)
+;;   (while (re-search-forward "^Line \\([0-9]+\\)$" bound t)
+;;     (put-text-property (match-beginning 1) (match-end 1)
+;;                        'face 'highlight)
+;;     (let ((line (string-to-number (match-string-no-properties 1))))
+;;       (compilation-error-properties 'web-vcs-investigate-current-file line line nil nil nil nil))
+;;     )
+;;   nil)
+
+
+;; (defvar web-vcs-investigate-output-font-lock-keywords
+;;   ;; '(("^\\*\\*\\* \\(.+\\.el\\): \\([^ \n]+\\)"
+;;   ;; '(("^\\*\\*\\* \\(.+\\.el\\): \\([^ \n]+\\)"
+;;   ;;    (1 font-lock-function-name-face)
+;;   ;;    (2 font-lock-comment-face)))
+;;   ;; "Keywords used to highlight a checkdoc diagnostic buffer.")
+;;   nil)
+;;   ;;'(("^\\(Line\\) \\([0-9]+\\)$" 1 2)))
+;;   ;;'(web-vcs-investigate-fontification-fun))
+
+(defvar web-vcs-investigate-output-error-regex-alist
+  '(
+    ("^Line \\([0-9]+\\)$" web-vcs-investigate-current-file 1
+     ;; column type
+     nil 1)
+    ;; Fix-me: This is just a terrible hack making the hit into a
+    ;; compilation error point with # as the link and the rest as the
+    ;; action for that line. And it even does not work... - Only the
+    ;; first line becomes an error line. No idea why at the moment.
+    ("\\(#\\)Eval the file with all" web-vcs-investigate-current-file nil nil nil 1)
+    ("\\(#\\)Eval the file with just" web-vcs-investigate-current-file nil nil nil 1)
+    ("\\(#\\)Eval the file with no" web-vcs-investigate-current-file nil nil nil 1)
+    ))
+
+;; (defvar checkdoc-pending-errors nil
+;;   "Non-nil when there are errors that have not been displayed yet.")
+
+(define-compilation-mode web-vcs-investigate-output-mode "Investigate Elisp"
+  "Set up the major mode for the buffer containing the list of errors."
+  (set (make-local-variable 'compilation-error-regexp-alist)
+       web-vcs-investigate-output-error-regex-alist)
+  ;;(set (make-local-variable 'compilation-error-face) grep-hit-face)
+  ;; (set (make-local-variable 'compilation-mode-font-lock-keywords)
+  ;;      web-vcs-investigate-output-font-lock-keywords)
+  )
 
 ;; I am quite tired of doing this over and over again. Why is this not
 ;; in Emacs?
@@ -1757,8 +1992,11 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
   :lighter nil)
 
 (defvar web-vcs-eval-output-start nil)
+(make-variable-buffer-local 'web-vcs-eval-output-start)
+(defvar web-vcs-eval-output-end   nil)
+(make-variable-buffer-local 'web-vcs-eval-output-end)
 
-;;(web-vcs-investigate-file)
+;;(web-vcs-investigate-elisp-file)
 ;;;###autoload
 (defun web-vcs-investigate-elisp-file (file-or-buffer)
   (interactive (list
@@ -1769,33 +2007,22 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
                     file-or-buffer
                   (find-file-noselect file-or-buffer)))
          (elisp-file (with-current-buffer elisp (buffer-file-name)))
-         (out-buf (get-buffer-create "Web VCS Sec Inv")))
+         (out-buf-name "Web VCS Sec Inv")
+         (out-buf (let ((old-buf (get-buffer out-buf-name)))
+                    (when old-buf (kill-buffer old-buf))
+                    (get-buffer-create out-buf-name))))
     (if (not (with-current-buffer elisp (derived-mode-p 'emacs-lisp-mode)))
         (progn
           (unless (eq (current-buffer) elisp)
             (display-buffer elisp))
           (message "Buffer %s is not in emacs-lisp-mode" (buffer-name elisp)))
       (switch-to-buffer-other-window out-buf)
+      (setq web-vcs-investigate-current-file elisp-file)
       (let ((inhibit-read-only t))
         (erase-buffer)
         (setq buffer-read-only t)
         (web-vcs-button-mode 1)
-        (insert "A quick look for problems in ")
-        (if elisp-file
-            (progn
-              (insert "file\n    ")
-              (insert-text-button elisp-file
-                                  'action
-                                  `(lambda (button)
-                                     (interactive)
-                                     (find-file-other-window ,elisp-file))))
-          (insert "buffer ")
-          (insert-text-button (buffer-name elisp)
-                              'action
-                              `(lambda (button)
-                                 (interactive)
-                                 (switch-to-buffer-other-window ,elisp))))
-        (insert "\n")
+        (insert (propertize "A quick look for problems" 'font-lock-face '(:height 1.5)))
         (let ((here (point)))
           (insert
            "\n"
@@ -1805,52 +2032,86 @@ some sort of escape sequence, the ambiguity is resolved via `web-vcs-read-key-de
                     " (or be sure someone else has done it for you)."
                     " The following are checked for here:"
                     "\n")
-            'face font-lock-comment-face))
+            'font-lock-face font-lock-comment-face))
           (fill-region here (point)))
         (insert
          (propertize
           (concat
            "- Top level forms that might be executed when loading the file.\n"
            "- Redefinition of functions.\n")
-          'face font-lock-comment-face))
+          'font-lock-face font-lock-comment-face))
+
+        (insert "\n")
+        (if elisp-file
+            (progn
+              (insert "File ")
+              (insert-text-button elisp-file
+                                  'action
+                                  `(lambda (button)
+                                     (interactive)
+                                     (find-file-other-window ,elisp-file))))
+          (insert "Buffer ")
+          (insert-text-button (buffer-name elisp)
+                              'action
+                              `(lambda (button)
+                                 (interactive)
+                                 (switch-to-buffer-other-window ,elisp))))
+
         (web-vcs-investigate-read elisp out-buf)
         (when elisp-file
           (insert "\n\n\n")
+          (insert (propertize "* Investigate what the file loads and redefines\n"
+                              'font-lock-face '(:background "yellow" :height 1.2)))
           (let ((here (point)))
-            (insert "If you want to see what will actually be added to `load-history'"
-                    " and which functions will be defined you can\n")
-            (insert-text-button "click here to try to eval the file"
-                                'action `(lambda (button) (interactive)
-                                           (if (y-or-n-p "Load the file in a batch Emacs session? ")
-                                               (web-vcs-investigate-eval ,elisp-file ,out-buf)
-                                             (message "Aborted"))))
-            (insert ".\n\nThis will load the file in a batch Emacs"
-                    " which runs the same init files as you have run now"
-                    (cond
-                     ((not init-file-user) " (with -Q, ie no init files will run)")
-                     ((not site-run-file) " (with -q, ie .emacs will not furn)")
-                     (t " (your normal setup files will be run)"
-                      ))
-                    " and send back that information."
-                    " The variable `load-path' is set to match the downloading"
-                    " to make the loading possible before your setup is ready."
-                    "\n\nYour current Emacs will not be affected by the loading,"
-                    " but please be aware that this does not mean your computer can not be."
-                    " So please look at the file first.")
+            (insert "\nIf you want to see what will actually be added to `load-history'"
+                    " and which functions will be defined you can"
+                    " load the file in a batch Emacs session"
+                    " and show the result here."
+                    " (`load-path' will be set to your current value for the loading.)"
+                    "\n"
+                    )
             (fill-region here (point))
+
+            (setq here (point))
+            (insert "\nYour current Emacs will not be affected by the loading,"
+                    " but please be aware that this does not mean your computer can not be."
+                    "\n"
+                    )
+            (fill-region here (point))
+
+            (insert (propertize "\n  Note: Click the part after #.\n" 'font-lock-face 'italic))
+            (when t ;init-file-user
+              (insert "  ")
+              (insert-text-button "#Load the file with all your current init files"
+                                  'action `(lambda (button) (interactive)
+                                             (web-vcs-investigate-eval ,elisp-file ,out-buf "--debug-init")))
+              (insert "\n"))
+            (when t ;(and site-run-file (not init-file-user))
+              (insert "  ")
+              (insert-text-button "#Load the file with just your site init file (i.e. -q)"
+                                  'action `(lambda (button) (interactive)
+                                             (web-vcs-investigate-eval ,elisp-file ,out-buf "-q")))
+              (insert "\n"))
+            (when t ;(not site-run-file)
+              (insert "  ")
+              (insert-text-button "#Load the file with no init file (i.e. -Q)"
+                                  'action `(lambda (button) (interactive)
+                                             (web-vcs-investigate-eval ,elisp-file ,out-buf "-Q")))
+              (insert "\n"))
+
             (setq web-vcs-eval-output-start (point))
+            (setq web-vcs-eval-output-end (point-max))
             ))
         (set-buffer-modified-p nil)
         (goto-char (point-min))))))
 
-(make-variable-buffer-local 'web-vcs-eval-output-start)
 
 ;;(web-vcs-investigate-eval "c:/emacsw32/nxhtml/nxhtml/nxhtml-autoload.el" "*Messages*")
 ;;(web-vcs-investigate-eval "c:/emacsw32/nxhtml/autostart.el" "*Messages*")
-(defun web-vcs-investigate-eval (elisp-file out-buf)
+(defun web-vcs-investigate-eval (elisp-file out-buf init)
   "Get compile loads when evaling buffer.
-For security reasons do this in a fresh Emacs and return the
-resulting load-history entry."
+Eval the buffer in a fresh Emacs and return the resulting
+load-history entries with comments about what is new etc."
   (let* ((emacs-exe (locate-file invocation-name
                                  (list invocation-directory)
                                  exec-suffixes))
@@ -1883,13 +2144,14 @@ resulting load-history entry."
          batch-error
          result)
     (with-current-buffer out-buf
-      (let ((here (point))
-            (inhibit-read-only t))
-        (save-restriction
-          (widen)
-          (goto-char (point-max))
-          (delete-region web-vcs-eval-output-start (point)))
-        (goto-char here)))
+      (when web-vcs-eval-output-start
+        (let ((here (point))
+              (inhibit-read-only t))
+          (save-restriction
+            (widen)
+            ;;(goto-char web-vcs-eval-output-start)
+            (delete-region web-vcs-eval-output-start web-vcs-eval-output-end))
+          (goto-char here))))
     ;; Fix-me: do not use temp buffer so we can check errors
     (with-temp-buffer
       (let ((old-loadpath (getenv "EMACSLOADPATH"))
@@ -1905,10 +2167,14 @@ resulting load-history entry."
                             ;; fix-me: "-Q" - should be run in the users current environment.
                             ;; init-file-user nil => -Q
                             ;; site-run-file nil => -q
-                            (cond
-                             ((not init-file-user) "-Q")
-                             ((not site-run-file) "-q")
-                             (t "--debug-init")) ;; have to have something here...
+
+                            ;; (cond
+                            ;;  ((not init-file-user) "-Q")
+                            ;;  ((not site-run-file) "-q")
+                            ;;  (t "--debug-init")) ;; have to have something here...
+                            init
+
+                            "-eval" (format "(setq load-path '%S)" load-path)
                             "-l" elisp-file
                             elisp-file
                             "-eval" (format "%S" get-lhe)))
@@ -1940,13 +2206,14 @@ resulting load-history entry."
             (inhibit-read-only t))
         (save-restriction
           (widen)
-          (goto-char (point-max))
+          ;;(goto-char (point-max))
+          (goto-char web-vcs-eval-output-start)
           (if batch-error
               (progn
                 (insert "\n\n")
-                (insert (propertize batch-error 'face 'web-vcs-red)))
-          (insert (propertize "\n\nThis file added the following to `load-history':\n\n"
-                              'face '(:height 1.5)))
+                (insert (propertize batch-error 'font-lock-face 'web-vcs-red)))
+          (insert (propertize (format "\n\nLoading file (%s) added to `load-history':\n\n" init)
+                              'font-lock-face '(:height 1.5)))
           (insert "   (\"" (car result) "\"\n")
           (dolist (e (cdr result))
             (insert (format "    %S" e))
@@ -1955,18 +2222,18 @@ resulting load-history entry."
                   ((symbolp e)
                    (insert "  - ")
                    (insert (if (not (boundp e))
-                               (propertize "New" 'face 'web-vcs-yellow)
+                               (propertize "New" 'font-lock-face 'web-vcs-yellow)
                              (let ((e-file (symbol-file e)))
                                (if (funcall is-same-file e-file)
-                                   (propertize "Same file now" 'face 'web-vcs-green)
+                                   (propertize "Same file now" 'font-lock-face 'web-vcs-green)
                                  (let* ((fun-web-auto (get e 'web-autoload))
                                         (fun-sub-url (nth 2 fun-web-auto)))
                                    (if (and fun-sub-url
                                             (string= fun-sub-url active-sub-url))
                                        (propertize "Web download, matches current download"
-                                                   'face 'web-vcs-yellow)
+                                                   'font-lock-face 'web-vcs-yellow)
                                      (propertize (format "Loaded from %S now" e-file)
-                                                 'face 'web-vcs-red))))))))
+                                                 'font-lock-face 'web-vcs-red))))))))
                   ;; provide
                   ((eq (car e) 'provide)
                    (insert "  - ")
@@ -1976,21 +2243,21 @@ resulting load-history entry."
                               ((not (featurep feat))
                                (if (or (string= elisp-feature-name
                                                 (symbol-name (cdr e))))
-                                   (propertize "Web download, matches file name" 'face 'web-vcs-green)
-                                 (propertize "Does not match file name" 'face 'web-vcs-red)))
+                                   (propertize "Web download, matches file name" 'font-lock-face 'web-vcs-green)
+                                 (propertize "Does not match file name" 'font-lock-face 'web-vcs-red)))
                               (t
                                ;; symbol-file will be where it is loaded
                                ;; so check load-path instead.
                                (let ((file (locate-library feat-name)))
                                  (if (funcall is-same-file file)
-                                     (propertize "Probably loaded from same file now" 'face 'web-vcs-yellow)
+                                     (propertize "Probably loaded from same file now" 'font-lock-face 'web-vcs-yellow)
                                    (propertize (format "Probably loaded from %S now" file)
-                                               'face 'web-vcs-yellow))))))))
+                                               'font-lock-face 'web-vcs-yellow))))))))
                   ;; require
                   ((eq (car e) 'require)
                    (if (featurep (cdr e))
-                       (insert "  - " (propertize "Loaded now" 'face 'web-vcs-green))
-                     (insert "  - " (propertize "Not loaded now" 'face 'web-vcs-yellow))))
+                       (insert "  - " (propertize "Loaded now" 'font-lock-face 'web-vcs-green))
+                     (insert "  - " (propertize "Not loaded now" 'font-lock-face 'web-vcs-yellow))))
                   ;; Functions
                   ((memq (car e) '( defun macro))
                    (insert "  - ")
@@ -1998,19 +2265,20 @@ resulting load-history entry."
                      (insert (if (functionp fun)
                                  (let ((e-file (symbol-file e)))
                                    (if (funcall is-same-file e-file)
-                                       (propertize "Same file now" 'face 'web-vcs-green)
+                                       (propertize "Same file now" 'font-lock-face 'web-vcs-green)
                                      (let* ((fun-web-auto (get fun 'web-autoload))
                                             (fun-sub-url (nth 2 fun-web-auto)))
                                        ;; Fix-me: check for temp download file.
                                        (if (string= fun-sub-url active-sub-url)
                                            (propertize "Web download, matches current download"
-                                                       'face 'web-vcs-yellow)
+                                                       'font-lock-face 'web-vcs-yellow)
                                          (propertize (format "Loaded from %S now" e-file)
-                                                     'face 'web-vcs-yellow)))))
+                                                     'font-lock-face 'web-vcs-yellow)))))
                                ;; Note that web autoloaded functions are already defined.
-                               (propertize "New" 'face 'web-vcs-yellow))))))
+                               (propertize "New" 'font-lock-face 'web-vcs-yellow))))))
             (insert "\n"))
           (insert "    )\n")
+          (setq web-vcs-eval-output-end (point-max))
           (goto-char here))))
       (set-buffer-modified-p nil))))
 
@@ -2018,13 +2286,17 @@ resulting load-history entry."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Specific for nXhtml
 
-(defvar nxhtml-web-vcs-base-url "http://bazaar.launchpad.net/%7Enxhtml/nxhtml/main/")
+;;(defvar nxhtml-web-vcs-base-url "http://bazaar.launchpad.net/%7Enxhtml/nxhtml/main/")
+(defvar nxhtml-web-vcs-base-url "http://bazaar.launchpad.net/~nxhtml/nxhtml/main/")
 
 ;; Fix-me: make gen for 'lp etc
 (defun nxhtml-download-root-url (revision)
   (let* ((base-url nxhtml-web-vcs-base-url)
          (files-url (concat base-url "files/"))
-         (rev-part (if revision (number-to-string revision) "head%3A/")))
+         (rev-part (if revision (number-to-string revision)
+                     ;; "head%3A/"
+                     "head:/"
+                     )))
     (concat files-url rev-part)))
 
 (defun web-vcs-nxhtml ()
@@ -2049,7 +2321,8 @@ Download and install nXhtml."
                (concat "Welcome to install nXhtml."
                        "\nFirst the nXhtml specific web install file must be downloaded."
                        "\nYou will get a chance to review it before it is used."
-                       "\n\nDo you want to continue? ")))
+                       "\n\nDo you want to continue? "))
+              (resize-mini-windows (or resize-mini-windows t)))
           (unless (y-or-n-p prompt)
             (message "Aborted")
             (throw 'command-level nil))))
@@ -2059,7 +2332,7 @@ Download and install nXhtml."
         (delete-other-windows))
       (dolist (file files2)
         (unless (file-exists-p (cdr file))
-          (web-vcs-get-missing-matching-files 'lp root-url this-dir (car file))))
+          (web-vcs-get-missing-matching-files 'lp root-url this-dir (car file) 0)))
       (load (cdr (car files2))))
     (call-interactively 'nxhtml-setup-install)))
 

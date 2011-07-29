@@ -44,6 +44,8 @@
 ;;
 ;;; Code:
 
+(require 'rx)
+
 (defvar rxi-read-hist nil)
 
 (defun rxi-find-definition (rx-sym)

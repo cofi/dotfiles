@@ -54,7 +54,7 @@
 (eval-when-compile (require 'nxhtml-base))
 (eval-when-compile (require 'nxhtml-web-vcs nil t))
 (eval-when-compile (require 'web-vcs nil t))
-(eval-when-compile (require 'ourcomments-util))
+;;(eval-when-compile (require 'ourcomments-util))
 
 (defvar nxhtmlmaint-dir
   ;;(file-name-directory (if load-file-name load-file-name buffer-file-name))
@@ -271,19 +271,19 @@ Update nXhtml autoload file with them."
   "Advice to return relative file name."
   (setq ad-return-value (nxhtmlmaint-autoload-file-load-name (ad-get-arg 0))))
 
-(defun nxhtmlmaint-make-autoload (form file)
-  "Make autoload for multi major modes."
-  ;;(message "form=%S" form)
-  (if (or (not (listp form))
-          (not (eq 'define-mumamo-multi-major-mode (car form))))
-      ad-return-value
-    (if ad-return-value
-        ad-return-value
-      ;; Fix-me: Maybe expand??
-      (let ((name (nth 1 form))
-            (doc  (nth 2 form)))
-        `(autoload ',name ,file ,doc t)
-        ))))
+;; (defun nxhtmlmaint-make-autoload (form file)
+;;   "Make autoload for multi major modes."
+;;   ;;(message "form=%S" form)
+;;   (if (or (not (listp form))
+;;           (not (eq 'define-mumamo-multi-major-mode (car form))))
+;;       ad-return-value
+;;     (if ad-return-value
+;;         ad-return-value
+;;       ;; Fix-me: Maybe expand??
+;;       (let ((name (nth 1 form))
+;;             (doc  (nth 2 form)))
+;;         `(autoload ',name ,file ,doc t)
+;;         ))))
 
 (defadvice make-autoload (after
                           nxhtmlmaint-advice-make-autoload
@@ -291,8 +291,20 @@ Update nXhtml autoload file with them."
                           compile)
   "Make autoload for multi major modes."
   (setq ad-return-value
-        (nxhtmlmaint-make-autoload (ad-get-arg 0)
-                                   (ad-get-arg 1))))
+        ;; (nxhtmlmaint-make-autoload (ad-get-arg 0)
+        ;;                            (ad-get-arg 1))))
+        (let ((form (ad-get-arg 0))
+              (file (ad-get-arg 1)))
+          (if (or (not (listp form))
+                  (not (eq 'define-mumamo-multi-major-mode (car form))))
+              ad-return-value
+            (if ad-return-value
+                ad-return-value
+              ;; Fix-me: Maybe expand??
+              (let ((name (nth 1 form))
+                    (doc  (nth 2 form)))
+                `(autoload ',name ,file ,doc t)
+                ))))))
 
 ;; (defun nxhtmlmaint-generate-library-autoloads (library)
 ;;   "Insert at point autoloads for Emacs library LIBRARY.
@@ -316,7 +328,9 @@ This will also update the file nxhtml-loaddefs.el.
 You must restart Emacs to use the byte compiled files.
 
 If for some reason the byte compiled files does not work you can
-remove then with `nxhtmlmaint-byte-uncompile-all'."
+remove then with `nxhtmlmaint-byte-uncompile-all'.
+
+See also `nxhtmlmaint-byte-recompile'"
   (interactive)
   ;; Fix-me: This message and redisplay seems only necessary sometimes.
   (message "Preparing byte compilation of nXhtml ...") (redisplay t)
@@ -385,8 +399,12 @@ remove then with `nxhtmlmaint-byte-uncompile-all'."
 
 ;;;###autoload
 (defun nxhtmlmaint-byte-recompile ()
-  "Recompile or compile all nXhtml files in current Emacs."
+  "Recompile or compile all nXhtml files in current Emacs.
+Byte compile all elisp libraries whose .el files are newer their
+.elc files."
   (interactive)
+  (message "Starting checking if anything in nXhtml should be recompiled...")
+  (redisplay t)
   (nxhtmlmaint-byte-compile-dir nxhtmlmaint-dir nil nil t)
   (web-vcs-message-with-face 'web-vcs-gold "Byte recompiling nXhtml ready"))
 

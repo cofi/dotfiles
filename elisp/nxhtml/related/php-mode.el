@@ -274,6 +274,10 @@ See `php-beginning-of-defun'."
         (here (point)))
     (goto-char (line-beginning-position))
     (if (or (when (boundp 'mumamo-multi-major-mode) mumamo-multi-major-mode)
+            (let ((stat (syntax-ppss (point))))
+              ;; like parse-partial-sexp, but not 2nd or 6th so
+              ;; testing 8th is ok. Non-nil means in comment or string.
+              (nth 8 stat))
             ;; Fix-me: no idea how to check for mmm or multi-mode
             (save-match-data
               (not (or (re-search-forward html-tag-re (line-end-position) t)
@@ -419,6 +423,11 @@ This is was done due to the problem reported here:
 (define-derived-mode php-mode c-mode "PHP"
   "Major mode for editing PHP code.\n\n\\{php-mode-map}"
   (c-add-language 'php-mode 'c-mode)
+
+  ;; fix-me: testing, adding these for nXhtml bug#336041
+  (c-initialize-cc-mode t)
+  (c-init-language-vars php-mode)
+  (c-common-init 'php-mode)
 
 ;; PHP doesn't have C-style macros.
 ;; HACK: Overwrite this syntax with rules to match <?php and others.

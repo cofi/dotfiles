@@ -3,7 +3,7 @@
 ;; Author: By: Lennart Borgman
 ;; Created: Fri Dec 15 2006
 ;; Version:
-;; Last-Updated: 2009-04-30 Thu
+;; Last-Updated: 2011-03-12 Sat
 ;; Keywords:
 ;; Compatibility:
 ;;
@@ -11,7 +11,8 @@
 ;;
 ;;; Commentary:
 ;;
-;;
+;; This file loads nXhtml, i.e. it loads some basic files and set up
+;; to autoload the rest.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -47,9 +48,14 @@
 
 (message "Nxml/Nxhtml Autostart.el loading ...")
 
-(defconst nxhtml-autostart-trace nil)
+(defconst nxhtml-autostart-trace t)
+(when (and nil nxhtml-autostart-trace)
+  (setq trace-buffer "*Messages*")
+  (trace-function-background 'require))
 (defsubst nxhtml-autostart-trace (format-string &rest args)
   (when nxhtml-autostart-trace
+    (when (fboundp 'gdb-deb-print)
+      (apply 'gdb-deb-print format-string args))
     (apply 'message format-string args)))
 
 (defconst nxhtml-load-time-start (float-time))
@@ -61,9 +67,13 @@
                                       buffer-file-name)))
 
 (require 'nxhtml-base)
+;; Fix-me: How to I tell the compile that `nxhtml-menu-mode' is there?
+;;(declare-function 'nxhtml-menu-mode (expand-file-name "nxhtml/nxhtml-menu" nxhtml-install-dir) t t)
+
 (eval-and-compile (when (fboundp 'nxml-mode)
-                     (load (expand-file-name "etc/schema/schema-path-patch"
-                                             nxhtml-install-dir))))
+                    (let ((patching-file "etc/schema/schema-path-patch"))
+                      (unless (load (expand-file-name patching-file nxhtml-install-dir) t)
+                        (message "File %S not found (OK during download)" patching-file)))))
 
 ;; (defun nxhtml-custom-load-and-get-value (symbol)
 ;;   (custom-load-symbol symbol)
@@ -152,31 +162,52 @@
   ;;         nil)
   ;;   (nxhtml-setup-auto-download nxhtml-install-dir))
 
+  (unless (featurep 'ourcomments-widgets)
+    (nxhtml-autostart-trace "... trying to load ourcomments-widgets")
+    (let ((ow-file (expand-file-name "ourcomments-widgets" util-dir)))
+      ;; This may not be there yet when loading part by part from the web.
+      (when (file-exists-p ow-file)
+        (load ow-file)
+        (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..."
+                                (- (float-time) nxhtml-load-time-start)))))
+
   (unless (featurep 'web-autoload)
-    (load (expand-file-name "web-autoload" nxhtml-install-dir) (not nxhtml-autoload-web)))
+    (nxhtml-autostart-trace "... loading web-autoload")
+    (load (expand-file-name "web-autoload" nxhtml-install-dir) (not nxhtml-autoload-web))
+    (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..."
+                            (- (float-time) nxhtml-load-time-start)))
 
   (when nxhtml-autoload-web
-    (ad-activate 'require t))
+    (nxhtml-autostart-trace "... advicing require")
+    (ad-activate 'require t)
+    (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..."
+                            (- (float-time) nxhtml-load-time-start)))
 
   ;; Fix-me: Why must as-external be loaded? Why doesn't it work in batch?
   ;;(unless noninteractive (require 'as-external))
 
   (unless (featurep 'nxhtml-loaddefs)
-    (load (expand-file-name "nxhtml-loaddefs" nxhtml-install-dir) nxhtml-autoload-web))
-  (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..." (- (float-time) nxhtml-load-time-start))
+    (load (expand-file-name "nxhtml-loaddefs" nxhtml-install-dir) nxhtml-autoload-web)
+    (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..."
+                            (- (float-time) nxhtml-load-time-start))))
 
-  ;; Turn on `nxhtml-menu-mode' unconditionally
-  (nxhtml-autostart-trace "Turn on `nxhtml-menu-mode' unconditionally")
+;; Turn on `nxhtml-menu-mode' unconditionally
+(nxhtml-autostart-trace "Turn on `nxhtml-menu-mode' unconditionally")
+(require 'nxhtml-menu nil t)
+(if (not (featurep 'nxhtml-menu))
+    (nxhtml-autostart-trace "... Not loaded yet? Downloading?")
   (nxhtml-menu-mode 1)
-  (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..." (- (float-time) nxhtml-load-time-start))
+  (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..." (- (float-time) nxhtml-load-time-start)))
 
-  ;; Patch the rnc include paths
-  (when (fboundp 'rncpp-patch-xhtml-loader) (rncpp-patch-xhtml-loader))
-  (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..." (- (float-time) nxhtml-load-time-start))
+;; Patch the rnc include paths
+(when (fboundp 'rncpp-patch-xhtml-loader) (rncpp-patch-xhtml-loader))
+(nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..." (- (float-time) nxhtml-load-time-start))
 
-  ;; Load nXhtml
-  (unless (featurep 'nxhtml-autoload)
-    (load (expand-file-name "nxhtml/nxhtml-autoload" nxhtml-install-dir))))
+;; Load nXhtml
+(unless (featurep 'nxhtml-autoload)
+  (unless (load (expand-file-name "nxhtml/nxhtml-autoload" nxhtml-install-dir) t)
+    (nxhtml-autostart-trace "Could not load nxhtml-autoload. Downloading?")))
+
 (nxhtml-autostart-trace "... nXhtml loading %.1f seconds elapsed ..." (- (float-time) nxhtml-load-time-start))
 
 
@@ -187,8 +218,35 @@
   ;; Tell what have been loaded of nXhtml:
   (when nxhtml-autostart-trace (nxhtml-list-loaded-features nil))
 
+  ;; Should be moved to Emacs some day:
+  (unless (lookup-key global-map [(meta ?s) ?x])
+    (define-key global-map [(meta ?s) ?x] 'idxsearch))
+
   ;; How long time did it all take?
   (message "Nxml/Nxhtml Autostart.el loaded in %.1f seconds" (- (float-time) nxhtml-load-time-start)))
+
+(defcustom nxhtml-flymake-setup t
+  "Let nXhtml add some addtions to flymake.
+This adds support for some new file types.
+
+There is a new function `flymake-global-mode' which turn on
+flymake when you enter a buffer where it can be supported.
+
+It also adds showing the flymake message in minibuffer when point
+is on the flymake marking.  \(This is in addition to mouse over
+which works as before.)
+
+This global minor mode exists just for the convinient loading of
+the features above.  If you turn this global minor mode off you
+must restart Emacs for it to take effect."
+  :group 'nxhtml
+  :group 'flymake
+  :set (lambda (sym val)
+         (set-default sym val)
+         (when val
+           (message "trace: loading flymake-files")
+           (require 'flymake-files))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; autostart.el ends here

@@ -71,6 +71,22 @@
 (eval-and-compile (require 'typesetter nil t))
 (eval-when-compile (require 'xhtml-help nil t))
 (eval-when-compile (require 'popcmp nil t))
+
+;; Fix-me: The byte compile complaints about these autoloaded functions.
+;; Warning: the following functions might not be defined at
+;;     runtime:
+(declare-function rng-validate-mode "rng-valid")
+(declare-function rng-clear-overlays "rng-valid")
+(declare-function rng-process-encoding-name "rng-valid")
+(declare-function rng-clear-conditional-region "rng-valid")
+(declare-function rng-forward "rng-valid")
+(declare-function rng-state-matches-current "rng-valid")
+(declare-function rng-clear-cached-state "rng-valid")
+(declare-function rng-mark-xmltok-errors "rng-valid")
+(declare-function rng-mark-xmltok-dependent-regions "rng-valid")
+(declare-function rng-cache-state "rng-valid")
+(declare-function rng-process-end-document "rng-valid")
+
 ;; (eval-when-compile
 ;;   (unless (or (< emacs-major-version 23)
 ;;               (boundp 'nxhtml-menu:version)
@@ -88,13 +104,15 @@
 
 (require 'button)
 (require 'loadhist)
+(require 'rng-valid nil t)
 (require 'nxml-mode nil t)
 (require 'rng-nxml nil t)
-(require 'rng-valid nil t)
 
 ;; Require nxml things conditionally to silence byte compiler under
 ;; Emacs 22.
-(eval-and-compile (require 'rngalt nil t))
+(eval-and-compile
+  (when (version< emacs-version "23")
+    (require 'rngalt nil t)))
 
 (require 'url-parse)
 (require 'url-expand)
@@ -203,7 +221,7 @@ You can add additional elisp code for completing to
   (put 'hs-set-up-overlay 'permanent-local t)
   (when (featurep 'appmenu-fold)
     (appmenu-fold-setup))
-  (foldit-mode 1))
+  (when (fboundp 'foldit-mode) (foldit-mode 1)))
 
 (defun nxhtml-hs-start-tag-end (beg)
   (save-excursion
@@ -327,8 +345,7 @@ You can add additional elisp code for completing to
 
 
 ;; FIX-ME: When should this be done? Get tidy-menu-symbol:
-(when (featurep 'tidy-xhtml)
-  (tidy-build-menu))
+;; (when (featurep 'tidy-xhtml) (tidy-build-menu))
 
 
 ;; (eval-after-load 'css-mode
@@ -347,24 +364,54 @@ You can add additional elisp code for completing to
 ;;   (when (fboundp 'mlinks-mode)
 ;;     (mlinks-mode 0)))
 
-(when (< emacs-major-version 23)
-  (defun nxml-change-mode ()
-    ;; Remove overlays used by nxml-mode.
-    (save-excursion
-      (save-restriction
-        (widen)
-        (rng-validate-mode -1)
-        (let ((inhibit-read-only t)
-              (buffer-undo-list t)
-              (modified (buffer-modified-p)))
-          (nxml-with-invisible-motion
-            (remove-text-properties (point-min) (point-max) '(face nil)))
-          (set-buffer-modified-p modified))))))
+(eval-and-compile
+  (when (< emacs-major-version 23)
+    (defun nxml-change-mode ()
+      ;; Remove overlays used by nxml-mode.
+      (save-excursion
+        (save-restriction
+          (widen)
+          (rng-validate-mode -1)
+          (let ((inhibit-read-only t)
+                (buffer-undo-list t)
+                (modified (buffer-modified-p)))
+            (nxml-with-invisible-motion
+              (remove-text-properties (point-min) (point-max) '(face nil)))
+            (set-buffer-modified-p modified)))))))
 
 (defcustom nxhtml-heading-element-name-regexp "[a-z]*"
   "Used for `nxml-heading-element-name-regexp."
   :type 'regexp
   :group 'nxhtml)
+
+
+(defvar nxhtml-mode-map
+  (let ((map (make-sparse-keymap)))
+    ;; Replace the Insert End Tag function:
+    (define-key map [(control ?c) (control ?f)] 'rngalt-finish-element)
+
+    ;; Put completion on the normal key?
+    (define-key map [(meta tab)] 'nxml-complete)
+    ;; Paragraphs (C-p mnemonic for paragraph)
+    (define-key map [(control ?c) (control ?p) ?l] 'longlines-mode)
+    (define-key map [(control ?c) (control ?p) ?f] 'fill-paragraph)
+    (define-key map [(control ?c) (control ?p) ?u] 'unfill-paragraph)
+    ;; Html related (C-h mnemonic for html)
+    (define-key map [(control ?c) (control ?h) ?c] 'nxhtml-save-link-to-here)
+    (define-key map [(control ?c) (control ?h) ?v] 'nxhtml-paste-link-as-a-tag)
+    (define-key map [(control ?c) (control ?h) ?b] 'nxhtml-browse-file)
+    (define-key map [(control ?c) ?<] 'nxml-untag-element)
+    (when (featurep 'html-quote)
+      (define-key map [(control ?c) (control ?q)] 'nxhtml-quote-html)
+      )
+
+    ;; Fix-me: Is pagetoc really that important to have its own keybindings?
+    (when (featurep 'html-pagetoc)
+      (define-key map [(control ?c) (control ?h) ?t ?i] 'html-pagetoc-insert-toc)
+      (define-key map [(control ?c) (control ?h) ?t ?r] 'html-pagetoc-rebuild-toc)
+      (define-key map [(control ?c) (control ?h) ?t ?s] 'html-pagetoc-insert-style-guide)
+      )
+    map))
 
 ;; Fix-me: Put this is a separate file and load it only if nxml is
 ;; availabe.
@@ -433,33 +480,6 @@ point in the mumamo chunk you want to know the key bindings in."
     (set (make-local-variable 'rngalt-complete-first-try) 'nxhtml-complete-first-try)
     (set (make-local-variable 'rngalt-complete-last-try) 'nxhtml-complete-last-try)
     ))
-
-;; Fix-me: The nxhtml-mode-map is define by define-derived-mode, but
-;; how should keys be added?
-
-;; Replace the Insert End Tag function:
-(define-key nxhtml-mode-map [(control ?c) (control ?f)] 'rngalt-finish-element)
-
-;; Put completion on the normal key?
-(define-key nxhtml-mode-map [(meta tab)] 'nxml-complete)
-;; Paragraphs (C-p mnemonic for paragraph)
-(define-key nxhtml-mode-map [(control ?c) (control ?p) ?l] 'longlines-mode)
-(define-key nxhtml-mode-map [(control ?c) (control ?p) ?f] 'fill-paragraph)
-(define-key nxhtml-mode-map [(control ?c) (control ?p) ?u] 'unfill-paragraph)
-;; Html related (C-h mnemonic for html)
-(define-key nxhtml-mode-map [(control ?c) (control ?h) ?c] 'nxhtml-save-link-to-here)
-(define-key nxhtml-mode-map [(control ?c) (control ?h) ?v] 'nxhtml-paste-link-as-a-tag)
-(define-key nxhtml-mode-map [(control ?c) (control ?h) ?b] 'nxhtml-browse-file)
-(define-key nxhtml-mode-map [(control ?c) ?<] 'nxml-untag-element)
-(when (featurep 'html-quote)
-  (define-key nxhtml-mode-map [(control ?c) (control ?q)] 'nxhtml-quote-html)
-  )
-;; Fix-me: Is pagetoc really that important to have its own keybindings?
-(when (featurep 'html-pagetoc)
-  (define-key nxhtml-mode-map [(control ?c) (control ?h) ?t ?i] 'html-pagetoc-insert-toc)
-  (define-key nxhtml-mode-map [(control ?c) (control ?h) ?t ?r] 'html-pagetoc-rebuild-toc)
-  (define-key nxhtml-mode-map [(control ?c) (control ?h) ?t ?s] 'html-pagetoc-insert-style-guide)
-  )
 
 (defun nxhtml-quote-html()
   "Quote character(s) unsafe in html text parts.
@@ -1927,10 +1947,12 @@ This mode may be turned on automatically in two ways:
   )
 
 
-(when (featurep 'typesetter)
-  (defun typesetter-init-nxhtml-mode ()
-    (typesetter-init-html-mode))
-  )
+(eval-and-compile
+  (when (featurep 'typesetter)
+    (defun typesetter-init-nxhtml-mode ()
+      (when (fboundp 'typesetter-init-html-mode)
+        (typesetter-init-html-mode)))
+    ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Validation start state
@@ -2074,7 +2096,7 @@ This guess is made by matching the entries in
               key
               (guesses nxhtml-guess-validation-header-alist))
           (goto-char (point-min))
-          (if (not (search-forward "</" 2000 t))
+          (if (not (search-forward "<" 2000 t))
               (progn
                 (setq rec (car guesses))
                 (setq key (cdr rec)))
@@ -2084,23 +2106,11 @@ This guess is made by matching the entries in
               (setq guesses (cdr guesses))
               (setq regexp (car rec))
               (goto-char (point-min))
-              ;; Fix-me: check for chunk and check if in string.
               (let (found)
                 (while (and (not found)
                             (re-search-forward regexp nil t))
-                  ;; ensure fontified, but how?
-                  (when (and (boundp 'mumamo-multi-major-mode) mumamo-multi-major-mode)
-                    (let ((mumamo-just-changed-major nil))
-                      ;;(unless (and (mumamo-get-existing-chunk-at (point))
-                      (unless (and (mumamo-find-chunks (point) "guess-validation-header")
-                                   (eq t (get-text-property (point) 'fontified)))
-                        (mumamo-fontify-region (point-min) (+ 1000 (point))))))
-                  (unless (memq (get-text-property (point) 'face)
-                                '(font-lock-comment-face
-                                  font-lock-comment-delimiter-face
-                                  font-lock-doc-face
-                                  font-lock-string-face
-                                  ))
+                  ;; check if in string or comment
+                  (when (mumamo-end-in-code 1 (point) (mumamo-main-major-mode))
                     (setq found t)))
                 (unless found
                   (setq key (cdr rec))))))

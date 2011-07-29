@@ -143,6 +143,11 @@
 ;; 1.4 Removed nxml-mode style folding (Lennart Borgman)
 ;;     + some functions used by nXhtml.
 
+(eval-when-compile (require 'foldit))
+(eval-when-compile (require 'html-write))
+(eval-when-compile (require 'inlimg))
+(eval-when-compile (require 'org))
+(eval-when-compile (require 'tex-mode))
 (require 'outline)
 (require 'hideshow)
 

@@ -1,0 +1,11 @@
+{% extends "site.html" %}
+ {% block title %}{{ object.title }}{% endblock %}
+  {% block content %}
+  {% load comments %}
+  <div class="content">
+  </div>
+{% endblock %}
+
+{% custom_for_tag %}
+{% custom_tag_with_comment_word %}
+comment

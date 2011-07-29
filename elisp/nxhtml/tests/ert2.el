@@ -205,6 +205,7 @@ Run the hook `ert-simulate-command-post-hook' at the very end."
   (message "command=%s" command)
   (ert-should (listp command))
   (ert-should (commandp (car command)))
+  (message "unread-command-events=%S" unread-command-events)
   (ert-should (not unread-command-events))
   (let (return-value
         (font-lock-mode t))
@@ -251,6 +252,10 @@ Run the hook `ert-simulate-command-post-hook' at the very end."
     (run-hooks 'ert-simulate-command-post-hook)
     return-value))
 
+(defun ert-simulate-self-insert (char)
+  (let ((last-command-event char))
+    (ert-simulate-command '(self-insert-command 1) t)))
+  
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Misc

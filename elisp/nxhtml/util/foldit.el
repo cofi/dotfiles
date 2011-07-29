@@ -57,7 +57,7 @@
 
 (eval-when-compile (require 'cl))
 (eval-when-compile (require 'hideshow))
-(eval-when-compile (require 'mumamo nil t))
+;;(eval-when-compile (require 'mumamo nil t))
 (eval-when-compile (require 'outline))
 
 (defsubst foldit-overlay-priority ()
@@ -180,11 +180,12 @@ Run this in `outline-view-change-hook'."
         (overlay-put ovl 'help-echo "Press RET to show hidden part")
         (overlay-put ovl 'mlinks-link t)
         (overlay-put ovl 'priority (foldit-overlay-priority))
-        (mumamo-with-buffer-prepared-for-jit-lock
-         (let* ((start-tag-beg (overlay-start ovl))
-                (start-tag-end start-tag-beg))
-           (put-text-property start-tag-beg (+ start-tag-beg 1)
-                              'foldit-tag-end (copy-marker start-tag-end))))
+        ;;(mumamo-with-buffer-prepared-for-jit-lock
+        (with-silent-modifications
+          (let* ((start-tag-beg (overlay-start ovl))
+                 (start-tag-end start-tag-beg))
+            (put-text-property start-tag-beg (+ start-tag-beg 1)
+                               'foldit-tag-end (copy-marker start-tag-end))))
         ))))
 
 (defvar foldit-outline-hide-again-keymap
@@ -201,8 +202,9 @@ Run this in `outline-view-change-hook'."
   (interactive)
   (let ((tag-end (get-text-property (point) 'foldit-tag-end)))
     (show-entry)
-    (mumamo-with-buffer-prepared-for-jit-lock
-     (set-text-properties (point) (+ (point) 2) 'foldit-tag-end))
+    ;;(mumamo-with-buffer-prepared-for-jit-lock
+    (with-silent-modifications
+      (set-text-properties (point) (+ (point) 2) 'foldit-tag-end))
     (when tag-end (goto-char tag-end))
     (foldit-add-temp-at-point-overlay "-"
                                       foldit-outline-hide-again-keymap
@@ -269,21 +271,23 @@ Run this in `outline-view-change-hook'."
     (overlay-put ovl 'help-echo "Press RET to show hidden part")
     (overlay-put ovl 'mlinks-link t)
     (overlay-put ovl 'priority (foldit-overlay-priority))
-    (mumamo-with-buffer-prepared-for-jit-lock
-     (put-text-property start-tag-beg (+ start-tag-beg 1)
-                        'foldit-tag-end (copy-marker start-tag-end)))))
+    ;;(mumamo-with-buffer-prepared-for-jit-lock
+    (with-silent-modifications
+      (put-text-property start-tag-beg (+ start-tag-beg 1)
+                         'foldit-tag-end (copy-marker start-tag-end)))))
 
 (defun foldit-hs-show-block ()
   "Show hidden block."
   (interactive)
   (let ((tag-end (get-text-property (point) 'foldit-tag-end)))
     (hs-show-block)
-    (mumamo-with-buffer-prepared-for-jit-lock
-     (set-text-properties (point) (+ (point) 2) 'foldit-tag-end))
+    ;;(mumamo-with-buffer-prepared-for-jit-lock
+    (with-silent-modifications
+      (set-text-properties (point) (+ (point) 2) 'foldit-tag-end))
     (when tag-end (goto-char tag-end))
     (foldit-add-temp-at-point-overlay "-"
                                       foldit-hs-hide-again-keymap
-                                    "Press RET to hide again")))
+                                      "Press RET to hide again")))
 
 (defun foldit-hs-hide-again ()
   "Hide hide/show block again."

@@ -1,0 +1,22 @@
+
+* this is a simple test
+  From http://gist.github.com/271820
+
+#+begin_src emacs-lisp
+  (require 'mmm-mode)
+#+end_src
+
+#+begin_src css
+  #name {
+    float: center;
+    font-size: 12pt;
+  }
+#+end_src
+
+#+begin_src ruby
+  class Schulte
+    def say
+      puts :eric
+    end
+  end
+#+end_src

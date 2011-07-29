@@ -118,7 +118,7 @@ active.)"
     undo
     save-buffer
     ;;
-    ;orgpan-occur
+                                        ;orgpan-occur
     orgpan-find-org-file
     ;;
     org-cycle
@@ -253,9 +253,9 @@ There can be only one such buffer at any time.")
   (interactive)
   (let ((buf (window-buffer orgpan-org-window))
         (last-buf orgpan-last-org-buffer))
-;;     (when (with-current-buffer buf
-;;             (derived-mode-p 'org-mode))
-;;       (setq orgpan-last-org-buffer buf))
+    ;;     (when (with-current-buffer buf
+    ;;             (derived-mode-p 'org-mode))
+    ;;       (setq orgpan-last-org-buffer buf))
     (when (eq last-buf buf)
       (setq last-buf nil))
     (if (not last-buf)
@@ -303,7 +303,8 @@ This refers to the functions `orgpan-paste-subtree',
   (let ((heading (progn
                    (org-back-to-heading)
                    (buffer-substring (point) (line-end-position))
-                   )))
+                   ))
+        (resize-mini-windows (or resize-mini-windows t)))
     (if orgpan-cautious-cut-copy-paste
         (if (y-or-n-p (format "Do you want to cut the subtree\n%s\n? " heading))
             (org-cut-subtree)
@@ -314,8 +315,8 @@ This refers to the functions `orgpan-paste-subtree',
   (interactive)
   (let ((heading (progn
                    (org-back-to-heading)
-                   (buffer-substring (point) (line-end-position))
-                   )))
+                   (buffer-substring (point) (line-end-position))))
+        (resize-mini-windows (or resize-mini-windows t)))
     (if orgpan-cautious-cut-copy-paste
         (if (y-or-n-p (format "Do you want to copy the subtree\n%s\n? " heading))
             (org-copy-subtree)

@@ -51,8 +51,9 @@
 (defvar jit-lock-start)
 (defvar jit-lock-end)
 
-(eval-when-compile (require 'mumamo)) ;; Just for the defmacro ...
 (eval-when-compile (require 'mlinks nil t))
+;;(eval-when-compile (require 'mumamo)) ;; Just for the defmacro ...
+;;;;(declare-function nxhtml-validation-header-mode "nxhtml-mode")
 
 ;;;###autoload
 (defgroup html-write nil
@@ -190,8 +191,9 @@ OVERLAY is the overlay added by `html-write-mode' for this tag."
           (dolist (range hiding-ranges)
             (let ((start (car range))
                   (end   (cdr range)))
-              (mumamo-with-buffer-prepared-for-jit-lock
-               (put-text-property start end 'invisible nil)))))
+              ;;(mumamo-with-buffer-prepared-for-jit-lock
+              (with-silent-modifications
+                (put-text-property start end 'invisible nil)))))
       (delete-overlay ovl)
       (html-write-hide-tags ovl-start ovl-end))))
 
@@ -297,14 +299,15 @@ OVERLAY is the overlay added by `html-write-mode' for this tag."
                     (list (cons (1- (match-beginning 1)) (match-beginning 3))
                           (cons (match-beginning 2) (match-end 2))))
               (overlay-put ovl 'html-write hiding-ranges)
-              (mumamo-with-buffer-prepared-for-jit-lock
-               (dolist (range hiding-ranges)
-                 (let ((start (car range))
-                       (end   (cdr range)))
-                   (put-text-property start end 'invisible 'html-write)
-                   ;; Fix-me: more careful rear-nonsticky?
-                   (put-text-property (1- end) end
-                                      'rear-nonsticky '(invisible)))))
+              ;;(mumamo-with-buffer-prepared-for-jit-lock
+              (with-silent-modifications
+                (dolist (range hiding-ranges)
+                  (let ((start (car range))
+                        (end   (cdr range)))
+                    (put-text-property start end 'invisible 'html-write)
+                    ;; Fix-me: more careful rear-nonsticky?
+                    (put-text-property (1- end) end
+                                       'rear-nonsticky '(invisible)))))
               ;; Let tag-fun override
               (when tag-fun
                 (funcall tag-fun (match-end 1) (match-beginning 3) ovl))
@@ -318,10 +321,11 @@ OVERLAY is the overlay added by `html-write-mode' for this tag."
       (widen)
       (goto-char (point-min))
       (save-match-data
-        (mumamo-with-buffer-prepared-for-jit-lock
-         (remove-text-properties start
-                                 end
-                                 '(invisible html-write))
+        ;;(mumamo-with-buffer-prepared-for-jit-lock
+        (with-silent-modifications
+          (remove-text-properties start
+                                  end
+                                  '(invisible html-write))
          (dolist (ovl (overlays-in start end))
            (when (overlay-get ovl 'html-write)
              (let ((end (overlay-end ovl)))
@@ -376,8 +380,8 @@ Should be on `jit-lock-after-change-extend-region-functions'.
 START, END and OLD-LEN are the parameters from after change."
   (let ((our-ovls nil))
     (dolist (ovl (append (overlays-in start end)
-                        (overlays-at start)
-                        nil))
+                         (overlays-at start)
+                         nil))
       ;; Leave the overlays until re-fontification time, but note their extent.
       (when (overlay-get ovl 'html-write)
         (setq jit-lock-start (min jit-lock-start (overlay-start ovl)))
@@ -388,50 +392,52 @@ START, END and OLD-LEN are the parameters from after change."
   ;;(message "html-write-fontify %s" bound)
   (let (tag-ovl)
     ;;(save-match-data
-      (let* ((hide-tags-regexp (html-write-make-hide-tags-regexp))
-             (next-tag (re-search-forward hide-tags-regexp bound t))
-             (tag-beg (when next-tag (match-beginning 0)))
-             (tag-end (when next-tag (match-end 0)))
-             (tag-nam (when next-tag (match-string-no-properties 1)))
-             (tag-fun (when next-tag (cadr (assoc tag-nam html-write-tag-list))))
-             tag-hid
-             (old-start (next-single-char-property-change (max (point-min) (1- (point))) 'html-write nil bound)))
-        ;;(message "here a old-start=%s, tag-beg/end=%s/%s" old-start tag-beg tag-end)
-        (setq tag-ovl (when next-tag (make-overlay tag-beg tag-end)))
-        (when old-start
-          ;; Fix-me: maybe valid, perhaps better keep it then?
-          (let ((ovl (catch 'ovl
-                       (dolist (o (append (overlays-at old-start)
-                                          (overlays-in old-start (1+ old-start))
-                                          nil))
-                         (when (overlay-get o 'html-write)
-                           (throw 'ovl o))))))
-            (when ovl ;; fix-me: there should be one...
-              ;;(message "here b")
-              (mumamo-with-buffer-prepared-for-jit-lock
-               (remove-list-of-text-properties (overlay-start ovl) (overlay-end ovl) '(invisible html-write)))
-              (delete-overlay ovl))))
-        ;;(html-write-hide-tags start end)
-        ;;(message "here d, tag-ovl=%s" tag-ovl)
-        (when tag-ovl
-          (overlay-put tag-ovl 'face 'font-lock-variable-name-face)
-          (overlay-put tag-ovl 'keymap html-write-keymap)
-          (setq tag-hid
-                (list (cons (1- (match-beginning 1)) (match-beginning 3))
-                      (cons (match-beginning 2) (match-end 2))))
-          (overlay-put tag-ovl 'html-write tag-hid)
-          (when tag-fun
-            (funcall tag-fun (match-end 1) (match-beginning 3) tag-ovl))
-          (mumamo-with-buffer-prepared-for-jit-lock
-           (dolist (range tag-hid)
-             (let ((start (car range))
-                   (end   (cdr range)))
-               (put-text-property start end 'invisible 'html-write)
-               ;;(put-text-property start end 'html-write t)
-               ;; Fix-me: more careful rear-nonsticky?
-               (put-text-property (1- end) end
-                                  'rear-nonsticky '(invisible)))))))
-      ;;)
+    (let* ((hide-tags-regexp (html-write-make-hide-tags-regexp))
+           (next-tag (re-search-forward hide-tags-regexp bound t))
+           (tag-beg (when next-tag (match-beginning 0)))
+           (tag-end (when next-tag (match-end 0)))
+           (tag-nam (when next-tag (match-string-no-properties 1)))
+           (tag-fun (when next-tag (cadr (assoc tag-nam html-write-tag-list))))
+           tag-hid
+           (old-start (next-single-char-property-change (max (point-min) (1- (point))) 'html-write nil bound)))
+      ;;(message "here a old-start=%s, tag-beg/end=%s/%s" old-start tag-beg tag-end)
+      (setq tag-ovl (when next-tag (make-overlay tag-beg tag-end)))
+      (when old-start
+        ;; Fix-me: maybe valid, perhaps better keep it then?
+        (let ((ovl (catch 'ovl
+                     (dolist (o (append (overlays-at old-start)
+                                        (overlays-in old-start (1+ old-start))
+                                        nil))
+                       (when (overlay-get o 'html-write)
+                         (throw 'ovl o))))))
+          (when ovl ;; fix-me: there should be one...
+            ;;(message "here b")
+            ;;(mumamo-with-buffer-prepared-for-jit-lock
+            (with-silent-modifications
+              (remove-list-of-text-properties (overlay-start ovl) (overlay-end ovl) '(invisible html-write)))
+            (delete-overlay ovl))))
+      ;;(html-write-hide-tags start end)
+      ;;(message "here d, tag-ovl=%s" tag-ovl)
+      (when tag-ovl
+        (overlay-put tag-ovl 'face 'font-lock-variable-name-face)
+        (overlay-put tag-ovl 'keymap html-write-keymap)
+        (setq tag-hid
+              (list (cons (1- (match-beginning 1)) (match-beginning 3))
+                    (cons (match-beginning 2) (match-end 2))))
+        (overlay-put tag-ovl 'html-write tag-hid)
+        (when tag-fun
+          (funcall tag-fun (match-end 1) (match-beginning 3) tag-ovl))
+        ;;(mumamo-with-buffer-prepared-for-jit-lock
+        (with-silent-modifications
+          (dolist (range tag-hid)
+            (let ((start (car range))
+                  (end   (cdr range)))
+              (put-text-property start end 'invisible 'html-write)
+              ;;(put-text-property start end 'html-write t)
+              ;; Fix-me: more careful rear-nonsticky?
+              (put-text-property (1- end) end
+                                 'rear-nonsticky '(invisible)))))))
+    ;;)
     (when tag-ovl
       (set-match-data (list (copy-marker (overlay-start tag-ovl))
                             (copy-marker (overlay-end tag-ovl))))

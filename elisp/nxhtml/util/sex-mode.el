@@ -72,10 +72,13 @@
 ;;
 ;;; Code:
 
+(defconst sex-mode-load-time-start (float-time))
+;;(message " sex-mode a %.1f seconds elapsed" (- (float-time) sex-mode-load-time-start))
 ;;(org-open-file "c:/EmacsW32/nxhtml/nxhtml/doc/nxhtml-changes.html")
 (eval-when-compile (require 'cl))
 (eval-when-compile (require 'org))
 (eval-when-compile (require 'mailcap))
+;;(message " sex-mode b %.1f seconds elapsed" (- (float-time) sex-mode-load-time-start))
 
 (defcustom sex-file-apps
   '(
@@ -103,6 +106,7 @@ See `sex-get-file-open-cmd'."
 (defvar sex-with-temporary-file-apps nil)
 
 (defun sex-get-apps ()
+  (require 'org)
   (or sex-with-temporary-file-apps
       (append sex-file-apps org-file-apps (org-default-apps))))
 
@@ -135,6 +139,7 @@ variables above).
 Return the cdr of the found entry.
 
 If no entry was found return `emacs' for opening inside Emacs."
+  (require 'org)
   (let* ((apps (sex-get-apps))
          (key (if (org-file-remote-p path)
                   'remote
@@ -394,7 +399,6 @@ handled is governed by `sex-keep-dummy-buffer'."
   ;; fix-me: better list handling
   (if sex-mode
       (progn
-        (require 'org)
         (dolist (rec (sex-get-apps))
           (let* ((ext (car rec))
                  (app (cdr rec))
@@ -458,6 +462,7 @@ If OPEN-ALIST is not t it replaces the list normally used by
 ;; (with-sex t (find-file "c:/emacs-lisp/gimp-mode-v1.40/gimpmode.pdf"))
 ;; (with-sex nil (find-file "c:/emacs-lisp/gimp-mode-v1.40/gimpmode.pdf"))
 
+(message " sex-mode fin %.1f seconds elapsed" (- (float-time) sex-mode-load-time-start))
 (provide 'sex-mode)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; sex-mode.el ends here

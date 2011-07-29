@@ -44,7 +44,9 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'nxhtml-menu nil t))
+(require 'nxhtml-base)
+(eval-and-compile (require 'nxhtml-menu nil t))
+(declare-function nxhtml-validation-header-mode "nxhtml-mode")
 
 (require 'sendmail)
 
@@ -146,13 +148,13 @@
          "  This requires PGP signing the email\n"
          "  and that you have told your PGP key to Launchpad.\n")
         (fill-region here (point))
-        (setq here (point))
-        (insert
-         "- The above ways are best since the bug get into the database,\n"
-         "  and it is easy to communicate about it, but if they does\n"
-         "  not work for you please go to \n"
-         "  URL `http://www.emacswiki.org/cgi-bin/wiki/NxhtmlMode'.\n")
-        (fill-region here (point))
+        ;; (setq here (point))
+        ;; (insert
+        ;;  "- The above ways are best since the bug get into the database,\n"
+        ;;  "  and it is easy to communicate about it, but if they does\n"
+        ;;  "  not work for you please go to \n"
+        ;;  "  URL `http://www.emacswiki.org/cgi-bin/wiki/NxhtmlMode'.\n")
+        ;; (fill-region here (point))
         (setq here (point))
         )
       (with-no-warnings (print-help-return-message)))))

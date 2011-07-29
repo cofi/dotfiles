@@ -48,6 +48,7 @@
 
 (require 'fold-dwim nil t)
 (eval-when-compile (require 'appmenu))
+(declare-function nxhtml-validation-header-mode "nxhtml-mode")
 
 (when (featurep 'fold-dwim)
 

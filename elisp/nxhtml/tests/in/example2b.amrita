@@ -1,0 +1,11 @@
+fold::python { Python outside
+   print "A riddle, ";
+   fold::perl { Perl inside Python
+      $| = 1;
+      print "wrapped in a mystery, ";
+      fold::ruby { Ruby inside Perl inside Python
+         print "inside an enigma!\n";
+      }
+   }
+}
+Some more text

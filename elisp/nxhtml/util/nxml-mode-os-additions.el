@@ -52,6 +52,7 @@
 ;;   * Initial public release
 
 ;; Added require rng-valid (Lennart Borgman)
+;; Added autoloads (Lennart Borgman)
 
 ;;; Code:
 
@@ -83,16 +84,19 @@
       (error "This file is not associated with a schema file."))
     (funcall fn schema-filename)))
 
+;;;###autoload
 (defun rng-find-schema-file ()
   "Edit the current schema file."
   (interactive)
   (rng-apply-find-schema-file 'find-file))
 
+;;;###autoload
 (defun rng-find-schema-file-other-frame ()
   "Edit the current schema in another frame."
   (interactive)
   (rng-apply-find-schema-file 'find-file-other-frame))
 
+;;;###autoload
 (defun rng-find-schema-file-other-window ()
   "Edit the current schema in another window."
   (interactive)

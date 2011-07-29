@@ -154,6 +154,9 @@
 
 (eval-when-compile (require 'cl))
 (eval-and-compile (require 'desktop))
+(defvar ecb-layout-name)
+(defvar ecb-frame)
+(declare-function ecb-minor-mode "ecb")
 
 ;; (defun winsav-upper-left-window(&optional frame w)
 ;;   (let* ((tree (if w w (car (window-tree frame))))
@@ -315,7 +318,7 @@ debugging by tells how far down we are in the call chain."
             (misbuf  " *Winsav information: Buffer is gone*"))
         (or (windowp ovlwin)
             (not ovlwin)
-          (error "Parameter mismatch, ovlwin not window: %s" ovlwin))
+            (error "Parameter mismatch, ovlwin not window: %s" ovlwin))
         (when first-call
           (add-to-list 'winsav-put-return (list ovlwin window))
           (when (eq 'buffer buffer)
@@ -371,7 +374,7 @@ debugging by tells how far down we are in the call chain."
             (goto-char point))
           (set-window-point window point)
           ;;(unless (buffer-live-p buffer) (setq point 1) (setq start 1))
-          (set-window-start window start)
+          (when start (set-window-start window start))
           ;; Maybe point got off screen?
           (when (/= point (window-point window))
             (set-window-point window point)))
@@ -816,7 +819,8 @@ Parameters are those returned by `frame-parameters'."
   "Return t if FRAME is visible.
 This tries to be more corrent on w32 than `frame-visible-p'."
   (cond ((fboundp 'w32-frame-placement)
-         (< 0 (nth 4 (w32-frame-placement frame))))
+         (< 0 (or (nth 4 (w32-frame-placement frame))
+                  -1)))
         (t
          (frame-visible-p frame))))
 
@@ -875,7 +879,7 @@ whose minibuffer should be used."
          (placement (when (fboundp 'w32-frame-placement) (w32-frame-placement frame)))
          ;; (was-max (and frm-size-rst
          ;;               (not (equal frm-size-now frm-size-rst))))
-         (window-state (abs (nth 4 placement)))
+         (window-state (when placement (abs (nth 4 placement))))
          ;; (frm-size-rst (when (winsav-set-restore-size frame)
          ;;                   (cons (frame-pixel-height frame)
          ;;                         (frame-pixel-width frame))))
@@ -971,7 +975,13 @@ backward compatibility.")
 Give it the name NAME."
   (let* ((fbuf (find-file-noselect file)))
     (when fbuf
-      (make-indirect-buffer fbuf name))))
+      (let ((newname (if (not (get-buffer name))
+                         name
+                       (save-match-data
+                         (when (string-match "<[0-9]+>\\'" name)
+                           (setq name (substring name 0 (match-beginning 0)))))
+                       (generate-new-buffer-name name))))
+        (make-indirect-buffer fbuf newname)))))
 
 (defun winsav-save-indirect-buffers (to-buffer)
   "Save information about indirect buffers.
@@ -1201,7 +1211,7 @@ Fix-me: RELEASE is not implemented."
         (message "winsav-save-config:here g")
         ;;(save-buffer 0) ;; No backups
         ;;(kill-buffer)
-        
+
         ;;(with-current-buffer (find-file-noselect file)
         (let ((coding-system-for-write 'utf-8))
           (write-region (point-min) (point-max) conf-file nil 'nomessage))
@@ -1259,7 +1269,7 @@ Delete the frames that were used before."
                   (setq num-old-deleted (1+ num-old-deleted))
                   (delete-frame old)))
               )
-            (message "winsav-after-restore-hook =%S" winsav-after-restore-hook)
+            ;;(message "winsav-after-restore-hook =%S" winsav-after-restore-hook)
             (run-hooks 'winsav-after-restore-hook)
             (message "Winsav: %s frame(s) restored" (length winsav-loaded-frames))
             t)

@@ -1,12 +1,16 @@
 ;;; csharp-mode.el --- C# mode derived mode
 
-;; Author:     Dylan R. E. Moonfire
-;; Maintainer: Dylan R. E. Moonfire <contact@mfgames.com>
-;; Created:    Feburary 2005
-;; Modified:   February 2010
-;; Version:    0.7.4  - Dino Chiesa <dpchiesa@hotmail.com>
-;; Keywords:   c# languages oop mode
+;; Author     : Dylan R. E. Moonfire (original)
+;; Maintainer : Dino Chiesa <dpchiesa@hotmail.com>
+;; Created    : Feburary 2005
+;; Modified   : April 2010
+;; Version    : 0.7.6
+;; Keywords   : c# languages oop mode
+;; X-URL      : http://code.google.com/p/csharpmode/
+;; Last-saved : <2010-May-24 21:53:58>
+;; Modified by Lennart Borgman
 
+;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2 of the License, or
@@ -50,7 +54,6 @@
 ;;
 ;;
 
-
 ;;; To use:
 ;;
 ;; put this in your .emacs:
@@ -75,16 +78,15 @@
 ;;
 ;;
 
-
-;;; Bugs:
+;;; Known Bugs:
 ;;
-;;   Namespaces in the using statements are not fontified. Should do in
-;;   c-basic-matchers-before or c-basic-matchers-after.
+;;   Leading identifiers are no longer being fontified, for some reason.
+;;   See matchers-before.
 ;;
 ;;   Method names with a preceding attribute are not fontified.
 ;;
-;;   Field/Prop names inside object initializers are fontified only
-;;   if the null constructor is used, with no parens.
+;;   The symbol followng #if is not fontified.  It should be treated like
+;;   define and get font-lock-variable-name-face .
 ;;
 ;;   This code doesn't seem to work when you compile it, then
 ;;   load/require in the emacs file. You will get an error (error
@@ -106,7 +108,8 @@
 ;;  Acknowledgements:
 ;;
 ;;    Thanks to Alan Mackenzie and Stefan Monnier for answering questions
-;;    and making suggestions.
+;;    and making suggestions. And to Trey Jackson for sharing his
+;;    knowledge of emacs lisp.
 ;;
 ;;
 
@@ -159,11 +162,25 @@
 ;;          - code cleanup and organization; removed the linefeed.
 ;;          - intelligent curly-brace insertion
 ;;    0.7.4 - added a C# style
-;;          - using is now a keyword and gets fontified
+;;          - using is now a keyword and gets fontified correctly
 ;;          - fixed a bug that had crept into the codedoc insertion
+;;    0.7.5 - now fontify namespaces in the using statements. This is
+;;            done in the csharp value for c-basic-matchers-before .
+;;          - also fontify the name following namespace decl.
+;;            This is done in the csharp value for c-basic-matchers-after .
+;;          - turn on recognition of generic types. They are now
+;;            fontified correctly.
+;;          - <> are now treated as syntactic parens and can be jumped
+;;            over with c-forward-sexp.
+;;          - Constructors are now fontified.
+;;          - Field/Prop names inside object initializers are now fontified.
 ;;
 
 
+;;
+
+(eval-when-compile (require 'cl))
+(eval-when-compile (require 'compile))
 (require 'cc-mode)
 
 (message  (concat "Loading " load-file-name))
@@ -243,10 +260,80 @@
 ;; csharp-mode utility and feature defuns
 ;; ==================================================================
 
-;; Indention: csharp-mode follows normal indention rules except for
-;; when indenting the #region and #endregion blocks. This function
-;; defines a custom indention to indent the #region blocks properly
-;;
+
+(defun csharp-at-vsemi-p (&optional pos)
+  "Determines if there is a virtual semicolon at POS or point.
+This is the C# version of the function.
+
+A vsemi is a cc-mode concept implying end-of-statement, without
+a semicolon or close-brace. This happens in 2 cases in C#:
+
+ - after an attribute that decorates a class, method, field, or
+   property.
+
+ - after an ASPNET directive, that appears in a aspx/ashx/ascx file
+
+An example of the former is  [WebMethod] or [XmlElement].
+An example of the latter is something like this:
+
+    <%@ WebHandler Language=\"C#\" Class=\"Handler\" %>
+
+Providing this function allows the indenting in csharp-mode
+to work properly with code that includes attributes and ASPNET
+directives.
+
+Returns t if at a position where a virtual-semicolon is.
+Otherwise nil.
+"
+
+  (save-excursion
+    (let ((pos-or-point (progn (if pos (goto-char pos)) (point))))
+
+      (cond
+
+       ;; put a vsemi after an ASPNET directive, like
+       ;; <%@ WebHandler Language="C#" Class="Handler" %>
+       ((looking-back (concat csharp-aspnet-directive-re "$") nil t)
+        t)
+
+       ;; put a vsemi after an attribute, as with
+       ;;   [XmlElement]
+       ((c-safe (backward-sexp) t)
+        (cond
+           ((re-search-forward
+             (concat
+              "\\(\\["
+              "[ \t\n\r\f\v]*"
+              "\\("
+              "\\(?:[A-Za-z_][[:alnum:]]*\\.\\)*"
+              "[A-Za-z_][[:alnum:]]*"
+              "\\)"
+              "[^]]*\\]\\)"
+              )
+             (1+ pos-or-point) t)
+
+             (c-safe (backward-sexp))
+             (c-backward-syntactic-ws)
+             (cond
+
+              ((eq (char-before) 93) ;; close sq brace
+               (csharp-at-vsemi-p (point)))
+
+              ((or
+                (eq (char-before) 59) ;; semicolon
+                (eq (char-before) 123) ;; open curly
+                (eq (char-before) 125)) ;; close curly
+               t)
+
+              (t nil)))
+
+           (t nil)))
+
+        (t nil))
+      )))
+
+
+
 
 (defun csharp-lineup-region (langelem)
   "Indent all #region and #endregion blocks inline with code while
@@ -287,30 +374,33 @@ Another option is to use `csharp-lineup-region'.
 
 (defun csharp-insert-open-brace ()
   "Intelligently insert a pair of curly braces. This fn is most
-often bound to the open-curly brace, with
+    often bound to the open-curly brace, with
 
     (local-set-key (kbd \"{\") 'csharp-insert-open-brace)
 
-The default binding for an open curly brace in cc-modes is often
-`c-electric-brace' or `skeleton-pair-insert-maybe'.  The former
-can be configured to insert newlines around braces in various
-syntactic positions.  The latter inserts a pair of braces and
-then does not insert a newline, and does not indent.
+    The default binding for an open curly brace in cc-modes is often
+    `c-electric-brace' or `skeleton-pair-insert-maybe'.  The former
+    can be configured to insert newlines around braces in various
+    syntactic positions.  The latter inserts a pair of braces and
+    then does not insert a newline, and does not indent.
 
-This fn provides another option, with some additional
-intelligence for csharp-mode.  When you type an open curly, the
-appropriate pair of braces appears, with spacing and indent set
-in a context-sensitive manner.
+    This fn provides another option, with some additional
+    intelligence for csharp-mode.  When you type an open curly, the
+    appropriate pair of braces appears, with spacing and indent set
+    in a context-sensitive manner.
 
-Within a string literal, you just get a pair of braces, and point
-is set between them. Following an equals sign, you get a pair of
-braces, with a semincolon appended. Otherwise, you
-get the open brace on a new line, with the closing brace on the
-line following.
+    Within a string literal, you just get a pair of braces, and
+    point is set between them. Following an equals sign, you get
+    a pair of braces, with a semincolon appended. Otherwise, you
+    get the open brace on a new line, followed by an empty line
+    and the closing brace on the line following, with point on
+    the empty line.
 
-There may be another way to get this to happen appropriately just within emacs,
-but I could not figure out how to do it.  So I wrote this alternative.
-"
+    There may be another way to get this to happen appropriately just
+    within emacs, but I could not figure out how to do it.  So I
+    wrote this alternative.
+
+    "
   (interactive)
   (let
       (tpoint
@@ -318,7 +408,7 @@ but I could not figure out how to do it.  So I wrote this alternative.
        (preceding3
         (save-excursion
           (and
-           (skip-chars-backward " ")
+           (skip-chars-backward " \t")
            (> (- (point) 2) (point-min))
            (buffer-substring-no-properties (point) (- (point) 3)))))
        (one-word-back
@@ -343,8 +433,8 @@ but I could not figure out how to do it.  So I wrote this alternative.
      ;; When the last non-space was an equals sign or square brackets,
      ;; then it's an initializer.
      ((save-excursion
-        (backward-sexp)
-        (looking-at "\\(\\w+\\b *=\\|[[]]+\\)"))
+        (and (c-safe (backward-sexp) t)
+             (looking-at "\\(\\w+\\b *=\\|[[]]+\\)")))
       (self-insert-command 1)
       (insert "  };")
       (backward-char 3))
@@ -362,7 +452,7 @@ but I could not figure out how to do it.  So I wrote this alternative.
         (newline)
         (insert "};")
         (c-indent-region tpoint (point))
-        (previous-line)
+        (forward-line -1)
         (indent-according-to-mode)
         (end-of-line)
         (setq tpoint (point)))
@@ -386,8 +476,9 @@ but I could not figure out how to do it.  So I wrote this alternative.
         (if (save-excursion
               (let ((curline (line-number-at-pos))
                     (aftline (progn
-                               (backward-sexp)
-                               (line-number-at-pos))))
+                               (if (c-safe (backward-sexp) t)
+                                   (line-number-at-pos)
+                                 -1))))
                 (= curline aftline)))
             (newline-and-indent))
         (self-insert-command 1)
@@ -397,15 +488,13 @@ but I could not figure out how to do it.  So I wrote this alternative.
         (insert "}")
         ;;(c-indent-command) ;; not sure of the difference here
         (c-indent-line-or-region)
-        (previous-line)
+        (forward-line -1)
         (end-of-line)
         (newline-and-indent)
         ;; point ends up on an empty line, within the braces, properly indented
         (setq tpoint (point)))
 
       (goto-char tpoint)))))
-
-
 
 
 ;; ==================================================================
@@ -431,9 +520,198 @@ but I could not figure out how to do it.  So I wrote this alternative.
 ;; the Java regex and formatting produces very wrong results in C#.
 ;;(error (byte-compile-dest-file))
 ;;(error (c-get-current-file))
+
+(defconst csharp-aspnet-directive-re
+  "<%@.+?%>"
+  "Regex for matching directive blocks in ASP.NET files (.aspx, .ashx, .ascx)")
+
+(eval-and-compile
+(defconst csharp-enum-decl-re
+  (concat
+   "\\<enum[ \t\n\r\f\v]+"
+   "\\([[:alpha:]_][[:alnum:]_]*\\)"
+   "[ \t\n\r\f\v]*"
+   "\\(:[ \t\n\r\f\v]*"
+   "\\("
+   (c-make-keywords-re nil
+     (list "sbyte" "byte" "short" "ushort" "int" "uint" "long" "ulong"))
+   "\\)"
+   "\\)?")
+  "Regex that captures an enum declaration in C#"
+  )
+)
+
+
+
+;; X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+
+
+;; vsemi's allow proper indentation of code that includes inline
+;; attributes and ASPNET directives. These are c#-specific things that
+;; need custom treatment.
+(c-lang-defconst c-at-vsemi-p-fn
+  csharp 'csharp-at-vsemi-p)
+
+
+;; This c-opt-after-id-concat-key is a regexp that matches
+;; dot.  In other words: "\\(\\.\\)"
+;; Not sure why this needs to be so complicated.
+;; This const is now internal (obsolete); need to move to
+;; c-after-id-concat-ops.  I don't yet understand the meaning
+;; of that variable, so for now. . .  .
 (c-lang-defconst c-opt-after-id-concat-key
   csharp (if (c-lang-const c-opt-identifier-concat-key)
              (c-lang-const c-symbol-start)))
+
+
+
+;; The matchers elements can be of many forms.  It gets pretty
+;; complicated.  Do a describe-variable on font-lock-keywords to get a
+;; description.  (Why on font-lock-keywords? I don't know, but that's
+;; where you get the help.)
+;;
+;; Aside from the provided documentation, the other option of course, is
+;; to look in the source code as an example for what to do.  The source
+;; in cc-fonts uses a defun c-make-font-lock-search-function to produce
+;; most of the matchers.  Called this way:
+;;
+;;   (c-make-font-lock-search-function  regexp '(A B c))
+;;
+;; The REGEXP is used in re-search-forward, and if there's a match, the
+;; A B and C are three forms that are called in a weird combination.
+;;
+;; Anyway the c-make-font-lock-search-function works for a single regex,
+;; but more complicated scenarios such as those intended to match and
+;; fontify object initializers, call for a hand-crafted lambda.
+;;
+;; The object initializer is special because, matching on it must
+;; allow nesting.
+;;
+;; In c#, the object initializer block is used directly after a
+;; constructor, like this:
+;;
+;;     new MyType {
+;;        Prop1 = "foo"
+;;     }
+;;
+;; csharp-mode needs to fontify the properties in the
+;; initializer block in font-lock-variable-name-face. The key thing is
+;; to set the text property on the open curly, using type c-type and
+;; value c-decl-id-start. This apparently allows `parse-partial-sexp' to
+;; do the right thing, later.
+;;
+;; This simple case is easy to handle in a regex, using the basic
+;; `c-make-font-lock-search-function' form.  But the general syntax for a
+;; constructor + object initializer in C# is more complex:
+;;
+;;     new MyType(..arglist..) {
+;;        Prop1 = "foo"
+;;     }
+;;
+;; A simple regex match won't satisfy here, because the ..arglist.. can
+;; be anything, including calls to other constructors, potentially with
+;; object initializer blocks. This may nest arbitrarily deeply, and the
+;; regex in emacs doesn't support balanced matching.  Therefore there's
+;; no way to match on the "outside" pair of parens, to find the relevant
+;; open curly.  What's necessary is to do the match on "new MyType" then
+;; skip over the sexp defined by the parens, then set the text property on
+;; the appropriate open-curly.
+;;
+;; To make that happen, it's good to have insight into what the matcher
+;; really does.  The output of `c-make-font-lock-search-function' before
+;; byte-compiling, is:
+;;
+;; (lambda (limit)
+;;   (let ((parse-sexp-lookup-properties
+;;          (cc-eval-when-compile
+;;            (boundp 'parse-sexp-lookup-properties))))
+;;     (while (re-search-forward REGEX limit t)
+;;       (unless
+;;           (progn
+;;             (goto-char (match-beginning 0))
+;;             (c-skip-comments-and-strings limit))
+;;         (goto-char (match-end 0))
+;;         (progn
+;;           B
+;;           (save-match-data A)
+;;           C ))))
+;;   nil)
+;;
+;; csharp-mode uses this hand-crafted form of a matcher to handle the
+;; general case for constructor + object initializer, within
+;; `c-basic-matchers-after' .
+;;
+
+
+
+
+;; (defun c-make-font-lock-search-function (regexp &rest highlights)
+;;     ;; This function makes a byte compiled function that works much like
+;;     ;; a matcher element in `font-lock-keywords'.  It cuts out a little
+;;     ;; bit of the overhead compared to a real matcher.  The main reason
+;;     ;; is however to pass the real search limit to the anchored
+;;     ;; matcher(s), since most (if not all) font-lock implementations
+;;     ;; arbitrarily limits anchored matchers to the same line, and also
+;;     ;; to insulate against various other irritating differences between
+;;     ;; the different (X)Emacs font-lock packages.
+;;     ;;
+;;     ;; REGEXP is the matcher, which must be a regexp.  Only matches
+;;     ;; where the beginning is outside any comment or string literal are
+;;     ;; significant.
+;;     ;;
+;;     ;; HIGHLIGHTS is a list of highlight specs, just like in
+;;     ;; `font-lock-keywords', with these limitations: The face is always
+;;     ;; overridden (no big disadvantage, since hits in comments etc are
+;;     ;; filtered anyway), there is no "laxmatch", and an anchored matcher
+;;     ;; is always a form which must do all the fontification directly.
+;;     ;; `limit' is a variable bound to the real limit in the context of
+;;     ;; the anchored matcher forms.
+;;     ;;
+;;     ;; This function does not do any hidden buffer changes, but the
+;;     ;; generated functions will.  (They are however used in places
+;;     ;; covered by the font-lock context.)
+;;
+;;     ;; Note: Replace `byte-compile' with `eval' to debug the generated
+;;     ;; lambda easier.
+;;     (byte-compile
+;;      `(lambda (limit)
+;;         (let (;; The font-lock package in Emacs is known to clobber
+;;               ;; `parse-sexp-lookup-properties' (when it exists).
+;;               (parse-sexp-lookup-properties
+;;                (cc-eval-when-compile
+;;                  (boundp 'parse-sexp-lookup-properties))))
+;;           (while (re-search-forward ,regexp limit t)
+;;             (unless (progn
+;;                       (goto-char (match-beginning 0))
+;;                       (c-skip-comments-and-strings limit))
+;;               (goto-char (match-end 0))
+;;               ,@(mapcar
+;;                  (lambda (highlight)
+;;                    (if (integerp (car highlight))
+;;                        (progn
+;;                          (unless (eq (nth 2 highlight) t)
+;;                            (error
+;;                             "The override flag must currently be t in %s"
+;;                             highlight))
+;;                          (when (nth 3 highlight)
+;;                            (error
+;;                             "The laxmatch flag may currently not be set in %s"
+;;                             highlight))
+;;                          `(save-match-data
+;;                             (c-put-font-lock-face
+;;                              (match-beginning ,(car highlight))
+;;                              (match-end ,(car highlight))
+;;                              ,(elt highlight 1))))
+;;                      (when (nth 3 highlight)
+;;                        (error "Match highlights currently not supported in %s"
+;;                               highlight))
+;;                      `(progn
+;;                         ,(nth 1 highlight)
+;;                         (save-match-data ,(car highlight))
+;;                         ,(nth 2 highlight))))
+;;                  highlights))))
+;;         nil))
+;;     )
+
 
 (c-lang-defconst c-basic-matchers-before
   csharp `(
@@ -454,6 +732,7 @@ but I could not figure out how to do it.  So I wrote this alternative.
              (concat ".\\(" c-string-limit-regexp "\\)")
              '((c-font-lock-invalid-string)))
 
+
            ;; Fontify keyword constants.
            ,@(when (c-lang-const c-constant-kwds)
                (let ((re (c-make-keywords-re nil
@@ -461,9 +740,17 @@ but I could not figure out how to do it.  So I wrote this alternative.
                  `((eval . (list ,(concat "\\<\\(" re "\\)\\>")
                                  1 c-constant-face-name)))))
 
+
+           ;; Fontify the namespaces that follow using statements.
+           ;; This regex handles the optional alias, but does not fontify it.
+           ,`("\\<\\(using\\)\s+\\(?:[A-Za-z_][[:alnum:]]*\s*=\s*\\)?\\(\\(?:[A-Za-z_][[:alnum:]]*\\.\\)*[A-Za-z_][[:alnum:]]*\\)\s*;"
+               2 font-lock-constant-face)
+
+
            ;; Fontify all keywords except the primitive types.
            ,`(,(concat "\\<" (c-lang-const c-regular-keywords-regexp))
               1 font-lock-keyword-face)
+
 
            ;; Fontify leading identifiers in fully qualified names like
            ;; "Foo.Bar".
@@ -477,7 +764,7 @@ but I could not figure out how to do it.  So I wrote this alternative.
                                         "[ \t\n\r\f\v]*"
                                         (c-lang-const
                                          c-opt-identifier-concat-key)
-                                        "[ \t\n\r\f\v]*"
+                                        "[ \t\n\r\f\v]+"
                                         "\\)"
                                         "\\("
                                         (c-lang-const
@@ -492,23 +779,538 @@ but I could not figure out how to do it.  So I wrote this alternative.
                                                      (match-end 2)
                                                      c-reference-face-name))
                            (goto-char (match-end 1)))))))))
+
            ))
 
 
 
-;; C# does not allow a leading qualifier operator. It also doesn't
-;; allow the ".*" construct of Java. So, we redo this regex without
-;; the "\\|\\*" regex.
+(c-lang-defconst c-basic-matchers-after
+  csharp `(
+
+           ;; option 1:
+           ;;            ,@(when condition
+           ;;                `((,(byte-compile
+           ;;                     `(lambda (limit) ...
+           ;;
+           ;; option 2:
+           ;;            ,`((lambda (limit) ...
+           ;;
+           ;; I don't know how to avoid the (when condition ...) in the
+           ;; byte-compiled version.
+           ;;
+           ;; X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+X+
+
+           ;; Case 1: invocation of constructor + maybe an object
+           ;; initializer.  Some possible examples that satisfy:
+           ;;
+           ;;   new Foo ();
+           ;;
+           ;;   new Foo () { };
+           ;;
+           ;;   new Foo {  };
+           ;;
+           ;;   new Foo { Prop1= 7 };
+           ;;
+           ;;   new Foo {
+           ;;     Prop1= 7
+           ;;   };
+           ;;
+           ;;   new Foo {
+           ;;     Prop1= 7,
+           ;;     Prop2= "Fred"
+           ;;   };
+           ;;
+           ;;   new Foo {
+           ;;      Prop1= new Bar()
+           ;;   };
+           ;;
+           ;;   new Foo {
+           ;;      Prop1= new Bar { PropA = 5.6F }
+           ;;   };
+           ;;
+
+           ,@(when t
+               `((,(byte-compile
+                    `(lambda (limit)
+                        (let ((parse-sexp-lookup-properties
+                               (cc-eval-when-compile
+                                 (boundp 'parse-sexp-lookup-properties))))
+
+                          (while (re-search-forward
+                                  ,(concat "\\<new"
+                                           "[ \t\n\r\f\v]+"
+                                           "\\(\\(?:"
+                                           (c-lang-const c-symbol-key)
+                                           "\\.\\)*"
+                                           (c-lang-const c-symbol-key)
+                                           "\\)"
+                                           )
+                                  limit t)
+                            (unless
+                                (progn
+                                  (goto-char (match-beginning 0))
+                                  (c-skip-comments-and-strings limit))
+
+                              (csharp-log 3 "ctor candidate at %d" (match-beginning 1))
+
+                              (save-match-data
+                                ;; next thing could be: [] () <> or {} or nothing (semicolon, comma).
+
+                                ;; fontify the typename
+                                (c-put-font-lock-face (match-beginning 1)
+                                                      (match-end 1)
+                                                      'font-lock-type-face)
+
+                                (goto-char (match-end 0))
+                                (c-forward-syntactic-ws)
+                                (if (eq (char-after) ?<) ;; ctor for generic type
+                                    (progn
+                                      (csharp-log 3 " - generic ctor")
+                                      ;; skip over <> safely
+                                      (c-safe (c-forward-sexp 1) t)
+                                      (c-forward-syntactic-ws)))
+
+                                ;; now, could be [] or (..) or {..} or semicolon.
+
+                                (csharp-log 3 " - looking for sexp")
+
+                                (if (or
+                                     (eq (char-after) ?{) ;; open curly
+                                     (and (eq (char-after) 91) ;; open square
+                                          (while (eq (char-after) 91)
+                                            (c-safe (c-forward-sexp 1)))
+                                          (eq (char-before) 93)) ;; close square
+                                     (and (eq (char-after) 40) ;; open paren
+                                          (c-safe (c-forward-sexp 1) t)))
+
+                                    (progn
+                                      ;; at this point we've jumped over any intervening s-exp
+                                      (c-forward-syntactic-ws)
+                                      (csharp-log 3 " - after fwd-syn-ws point(%d)" (point))
+                                      (csharp-log 3 " - next char:  %c" (char-after))
+                                      (if (eq (char-after) ?{)
+                                          (let ((start (point))
+                                                (end (if (c-safe (c-forward-sexp 1) t)
+                                                         (point) 0)))
+                                            (csharp-log 3 " - put c-decl-id-start on the open-curly at %d" start)
+                                            (c-put-char-property start
+                                                                 'c-type
+                                                                 'c-decl-id-start)
+                                            (goto-char start)
+                                            (if (> end start)
+                                                (progn
+                                                  (forward-char 1) ;; step over open curly
+                                                  (c-forward-syntactic-ws)
+                                                  (while (> end (point))
+                                                    ;; now, try to fontify/assign variables to any properties inside the curlies
+                                                    (csharp-log 3 " - inside open curly  point(%d)" (point))
+                                                    (csharp-log 3 " -   next char:  %c" (char-after))
+                                                    ;; fontify each property assignment
+                                                    (if (re-search-forward
+                                                         (concat "\\(" (c-lang-const c-symbol-key) "\\)\s*=")
+                                                         end t)
+                                                        (progn
+                                                          (csharp-log 3 " -   found variable  %d-%d"
+                                                                      (match-beginning 1)
+                                                                      (match-end 1))
+                                                          (c-put-font-lock-face (match-beginning 1)
+                                                                                (match-end 1)
+                                                                                'font-lock-variable-name-face)
+                                                          (goto-char (match-end 0))
+                                                          (c-forward-syntactic-ws)
+                                                          ;; advance to the next assignment, if possible
+                                                          (if (eq (char-after) ?@)
+                                                              (forward-char 1))
+
+                                                          (if (c-safe (c-forward-sexp 1) t)
+                                                              (progn
+                                                                (forward-char 1)
+                                                                (c-forward-syntactic-ws))))
+
+                                                      ;; else
+                                                      (csharp-log 3 " -   no more assgnmts found")
+                                                      (goto-char end)))))
+                                            )))))
+
+                              (goto-char (match-end 0))
+                              )))
+                        nil))
+                    )))
+
+
+           ;; Case 2: declaration of enum with or without an explicit
+           ;; base type.
+           ;;
+           ;; Examples:
+           ;;
+           ;;  public enum Foo { ... }
+           ;;
+           ;;  public enum Foo : uint { ... }
+           ;;
+           ,@(when t
+               `((,(byte-compile
+                    `(lambda (limit)
+                       (let ((parse-sexp-lookup-properties
+                              (cc-eval-when-compile
+                                (boundp 'parse-sexp-lookup-properties))))
+                         (while (re-search-forward
+                                 ,(concat csharp-enum-decl-re
+                                          "[ \t\n\r\f\v]*"
+                                          "{")
+                                 limit t)
+
+                           (csharp-log 3 "enum candidate at %d" (match-beginning 0))
+
+                           (unless
+                               (progn
+                                 (goto-char (match-beginning 0))
+                                 (c-skip-comments-and-strings limit))
+                             (progn
+                               (save-match-data
+                                 (goto-char (match-end 0))
+                                 (c-put-char-property (1- (point))
+                                                      'c-type
+                                                      'c-decl-id-start)
+                                 (c-forward-syntactic-ws))
+                               (save-match-data
+                                 (c-font-lock-declarators limit t nil))
+                               (goto-char (match-end 0))
+                               )
+                             )))
+                       nil))
+                  )))
+
+
+           ;; Case 3: declaration of constructor
+           ;;
+           ;; Example:
+           ;;
+           ;; private Foo(...) {...}
+           ;;
+           ,@(when t
+               `((,(byte-compile
+                    `(lambda (limit)
+                       (let ((parse-sexp-lookup-properties
+                              (cc-eval-when-compile
+                                (boundp 'parse-sexp-lookup-properties)))
+                             (found-it nil))
+                         (while (re-search-forward
+                                 ,(concat
+                                   "^[ \t\n\r\f\v]*"
+                                   "\\(\\<\\(public\\|private\\|protected\\)\\)?[ \t\n\r\f\v]+"
+                                   "\\(@?[[:alpha:]_][[:alnum:]_]*\\)" ;; name of constructor
+                                   "[ \t\n\r\f\v]*"
+                                   "\\("
+                                   "("
+                                   "\\)")
+                                 limit t)
+                           (unless
+                               (progn
+                                 (goto-char (match-beginning 0))
+                                 (c-skip-comments-and-strings limit))
+
+                             (goto-char (match-end 0))
+
+                             (csharp-log 3 "ctor decl candidate ending at %d" (point))
+
+                             (backward-char 1) ;; just left of the open paren
+                             (save-match-data
+                               ;; Jump over the parens, safely.
+                               ;; If it's an unbalanced paren, no problem,
+                               ;; do nothing.
+                               (if (c-safe (c-forward-sexp 1) t)
+                                   (progn
+                                     (c-forward-syntactic-ws)
+                                     (cond
+
+                                      ;; invokes base or this constructor.
+                                      ((re-search-forward
+                                        ,(concat
+                                          "\\(:[ \t\n\r\f\v]*\\(base\\|this\\)\\)"
+                                          "[ \t\n\r\f\v]*"
+                                          "("
+                                          )
+                                        limit t)
+                                       (csharp-log 3 " - ctor with dependency?")
+
+                                       (goto-char (match-end 0))
+                                       (backward-char 1) ;; just left of the open paren
+                                       (csharp-log 3 " - before paren at %d" (point))
+
+                                       (if (c-safe (c-forward-sexp 1) t)
+                                           (progn
+                                             (c-forward-syntactic-ws)
+                                             (csharp-log 3 " - skipped over paren pair %d" (point))
+                                             (if (eq (char-after) ?{)
+                                                 (setq found-it t)))))
+
+                                      ;; open curly. no depedency on other ctor.
+                                      ((eq (char-after) ?{)
+                                       (csharp-log 3 " - ctor with no dependency? at %d" (point))
+                                       (setq found-it t)))
+
+                                     )))
+
+                             (if found-it
+                                 ;; fontify the constructor symbol
+                                 (c-put-font-lock-face (match-beginning 3)
+                                                       (match-end 3)
+                                                       'font-lock-function-name-face))
+                             (goto-char (match-end 0))
+                             )
+                           ))
+                       nil))
+                  )))
+
+
+           ;; Case 4: using clause. Without this, using (..) gets fontified as a fn.
+           ,@(when t
+               `((,(byte-compile
+                    `(lambda (limit)
+                       (let ((parse-sexp-lookup-properties
+                              (cc-eval-when-compile
+                                (boundp 'parse-sexp-lookup-properties))))
+                         (while (re-search-forward
+                                 ,(concat "\\<\\(using\\)"
+                                          "[ \t\n\r\f\v]*"
+                                          "(")
+                                 limit t)
+
+                           (csharp-log 3 "using clause at %d" (match-beginning 0))
+
+                           (unless
+                               (progn
+                                 (goto-char (match-beginning 0))
+                                 (c-skip-comments-and-strings limit))
+
+                             (save-match-data
+                               (c-put-font-lock-face (match-beginning 1)
+                                                     (match-end 1)
+                                                     'font-lock-keyword-face)
+                               (goto-char (match-end 0))))))
+                       nil))
+                  )))
+
+           ;; Case 5: attributes
+           ,`((lambda (limit)
+                (let ((parse-sexp-lookup-properties
+                       (cc-eval-when-compile
+                         (boundp 'parse-sexp-lookup-properties))))
+
+                  (while (re-search-forward
+                          ,(concat "[ \t\n\r\f\v]+"
+                                   "\\(\\["
+                                   "[ \t\n\r\f\v]*"
+                                   "\\(?:\\(?:return\\|assembly\\)[ \t]*:[ \t]*\\)?"
+                                   "\\("
+                                   "\\(?:[A-Za-z_][[:alnum:]]*\\.\\)*"
+                                   "[A-Za-z_][[:alnum:]]*"
+                                   "\\)"
+                                   "[^]]*\\]\\)"
+                                   )
+                          limit t)
+
+                    (csharp-log 3 "attribute? - %d limit(%d)" (match-beginning 1)
+                                limit)
+
+                    (unless
+                        (progn
+                          (goto-char (match-beginning 1))
+                          (c-skip-comments-and-strings limit))
+
+                      (let ((b2 (match-beginning 2))
+                            (e2 (match-end 2))
+                            (is-attr nil))
+                        (csharp-log 3 " - type match: %d - %d"
+                                    b2 e2)
+                        (save-match-data
+                          (c-backward-syntactic-ws)
+                          (setq is-attr (or
+                                         (eq (char-before) 59) ;; semicolon
+                                         (eq (char-before) 93) ;; close square brace
+                                         (eq (char-before) 123) ;; open curly
+                                         (eq (char-before) 125) ;; close curly
+                                         (save-excursion
+                                           (c-beginning-of-statement-1)
+                                           (looking-at
+                                            "#\\(pragma\\|endregion\\|region\\|if\\|else\\|endif\\)"))
+                                         )))
+
+                        (if is-attr
+                            (progn
+                              (csharp-log 3 " - attribute seems likely. type: %d - %d"
+                                          b2 e2)
+                              (c-put-font-lock-face b2 e2 'font-lock-type-face)))))
+                    (goto-char (match-end 0))
+                    ))
+                nil))
+
+
+           ;; Case 6: directive blocks for .aspx/.ashx/.ascx
+           ,`((lambda (limit)
+                (let ((parse-sexp-lookup-properties
+                       (cc-eval-when-compile
+                         (boundp 'parse-sexp-lookup-properties))))
+
+                  (while (re-search-forward csharp-aspnet-directive-re limit t)
+                    (csharp-log 3 "aspnet template? - %d limit(%d)" (match-beginning 1)
+                                limit)
+
+                    (unless
+                        (progn
+                          (goto-char (match-beginning 0))
+                          (c-skip-comments-and-strings limit))
+
+                        (save-match-data
+                          (let ((end-open (+ (match-beginning 0) 3))
+                                (beg-close (- (match-end 0) 2)))
+                            (c-put-font-lock-face (match-beginning 0)
+                                                  end-open
+                                                  'font-lock-preprocessor-face)
+
+                            (c-put-font-lock-face beg-close
+                                                  (match-end 0)
+                                                  'font-lock-preprocessor-face)
+
+                            ;; fontify within the directive
+                            (while (re-search-forward
+                                    ,(concat
+                                      "\\("
+                                      (c-lang-const c-symbol-key)
+                                      "\\)"
+                                      "=?"
+                                      )
+                                    beg-close t)
+
+                            (c-put-font-lock-face (match-beginning 1)
+                                                  (match-end 1)
+                                                  'font-lock-keyword-face)
+                            (c-skip-comments-and-strings beg-close))
+                            ))
+                        (goto-char (match-end 0)))))
+                nil))
+
+
+;;            ;; Case 5: #if
+;;            ,@(when t
+;;                `((,(byte-compile
+;;                     `(lambda (limit)
+;;                        (let ((parse-sexp-lookup-properties
+;;                               (cc-eval-when-compile
+;;                                 (boundp 'parse-sexp-lookup-properties))))
+;;                          (while (re-search-forward
+;;                                  "\\<\\(#if\\)[ \t\n\r\f\v]+\\([A-Za-z_][[:alnum:]]*\\)"
+;;                                  limit t)
+;;
+;;                            (csharp-log 3 "#if directive - %d" (match-beginning 1))
+;;
+;;                            (unless
+;;                                (progn
+;;                                  (goto-char (match-beginning 0))
+;;                                  (c-skip-comments-and-strings limit))
+;;
+;;                              (save-match-data
+;;                                (c-put-font-lock-face (match-beginning 2)
+;;                                                      (match-end 2)
+;;                                                      'font-lock-variable-name-face)
+;;                                (goto-char (match-end 0))))))
+;;                        nil))
+;;                   )))
+
+
+ ;;           ,`(,(c-make-font-lock-search-function
+ ;;                (concat "\\<new"
+ ;;                        "[ \t\n\r\f\v]+"
+ ;;                        "\\(\\(?:"
+ ;;                        (c-lang-const c-symbol-key)
+ ;;                        "\\.\\)*"
+ ;;                        (c-lang-const c-symbol-key)
+ ;;                        "\\)"
+ ;;                        "[ \t\n\r\f\v]*"
+ ;;                        "\\(?:"
+ ;;                        "( *)[ \t\n\r\f\v]*"          ;; optional ()
+ ;;                        "\\)?"
+ ;;                        "{")
+ ;;                '((c-font-lock-declarators limit t nil)
+ ;;                  (save-match-data
+ ;;                    (goto-char (match-end 0))
+ ;;                    (c-put-char-property (1- (point)) 'c-type
+ ;;                                         'c-decl-id-start)
+ ;;                    (c-forward-syntactic-ws))
+ ;;                  (goto-char (match-end 0)))))
+
+
+
+
+           ;; Fontify labels after goto etc.
+           ,@(when (c-lang-const c-before-label-kwds)
+               `( ;; (Got three different interpretation levels here,
+                 ;; which makes it a bit complicated: 1) The backquote
+                 ;; stuff is expanded when compiled or loaded, 2) the
+                 ;; eval form is evaluated at font-lock setup (to
+                 ;; substitute c-label-face-name correctly), and 3) the
+                 ;; resulting structure is interpreted during
+                 ;; fontification.)
+                 (eval
+                  . ,(let* ((c-before-label-re
+                             (c-make-keywords-re nil
+                               (c-lang-const c-before-label-kwds))))
+                       `(list
+                         ,(concat "\\<\\(" c-before-label-re "\\)\\>"
+                                  "\\s *"
+                                  "\\(" ; identifier-offset
+                                  (c-lang-const c-symbol-key)
+                                  "\\)")
+                         (list ,(+ (regexp-opt-depth c-before-label-re) 2)
+                               c-label-face-name nil t))))))
+
+
+
+           ;; Fontify the clauses after various keywords.
+           ,@(when (or (c-lang-const c-type-list-kwds)
+                       (c-lang-const c-ref-list-kwds)
+                       (c-lang-const c-colon-type-list-kwds)
+                       (c-lang-const c-paren-type-kwds))
+               `((,(c-make-font-lock-search-function
+                    (concat "\\<\\("
+                            (c-make-keywords-re nil
+                              (append (c-lang-const c-type-list-kwds)
+                                      (c-lang-const c-ref-list-kwds)
+                                      (c-lang-const c-colon-type-list-kwds)
+                                      (c-lang-const c-paren-type-kwds)))
+                            "\\)\\>")
+                    '((c-fontify-types-and-refs ((c-promote-possible-types t))
+                        (c-forward-keyword-clause 1)
+                        (if (> (point) limit) (goto-char limit))))))))
+
+
+           ;; Fontify the name that follows each namespace declaration
+           ;; this needs to be done in the matchers-after because
+           ;; otherwise the namespace names get the font-lock-type-face,
+           ;; due to the energetic efforts of c-forward-type.
+           ,`("\\<\\(namespace\\)[ \t\n\r\f\v]+\\(\\(?:[A-Za-z_][[:alnum:]]*\\.\\)*[A-Za-z_][[:alnum:]]*\\)"
+              2 font-lock-constant-face t)
+
+
+           ))
+
+
+;; C# does generics.  Setting this to t tells the parser to put
+;; parenthesis syntax on angle braces that surround a comma-separated
+;; list.
+(c-lang-defconst c-recognize-<>-arglists
+  csharp t)
+
+
+
 (c-lang-defconst c-identifier-key
-  csharp (concat "\\(" (c-lang-const c-symbol-key) "\\)" ; 1
-                 (concat "\\("
-                         "[ \t\n\r\f\v]*"
-                         (c-lang-const c-opt-identifier-concat-key)
-                         "[ \t\n\r\f\v]*"
-                         (concat "\\("
-                                 "\\(" (c-lang-const c-symbol-key) "\\)"
-                                 "\\)")
-                         "\\)*")))
+  csharp (concat "\\([[:alpha:]_][[:alnum:]_]*\\)" ; 1
+                 "\\("
+                 "[ \t\n\r\f\v]*"
+                 "\\(\\.\\)"             ;;(c-lang-const c-opt-identifier-concat-key)
+                 "[ \t\n\r\f\v]*"
+                 "\\(\\([[:alpha:]_][[:alnum:]_]*\\)\\)"
+                 "\\)*"))
 
 ;; C# has a few rules that are slightly different than Java for
 ;; operators. This also removed the Java's "super" and replaces it
@@ -578,7 +1380,7 @@ but I could not figure out how to do it.  So I wrote this alternative.
 
 
 ;; Tue, 20 Apr 2010  16:02
-;; need to vverify that this works for lambdas...
+;; need to verify that this works for lambdas...
 (c-lang-defconst c-special-brace-lists
   csharp '((?{ . ?}) ))
 
@@ -833,7 +1635,7 @@ your `csharp-mode-hook' function:
   ;;(message "csharp-maybe-insert-codedoc")
   (let (
         (cur-point (point))
-        (char last-command-char)
+        (char last-command-event)
         (cb0 (char-before (- (point) 0)))
         (cb1 (char-before (- (point) 1)))
         is-first-non-whitespace
@@ -865,8 +1667,7 @@ your `csharp-mode-hook' function:
                     (preceding-line-is-empty (or
                                               (= (line-number-at-pos) 1)
                                               (save-excursion
-                                               (previous-line)
-                                               (beginning-of-line)
+                                               (forward-line -1)
                                                (looking-at "[ \t]*$\\|[ \t]*{[ \t]*$"))))
                     (flavor 0) ;; used only for diagnostic purposes
                     )
@@ -1016,7 +1817,8 @@ your `csharp-mode-hook' function:
                           ;; and a blank line in between them where the point should be.
                           ;; A more intelligent implementation would use a specific
                           ;; marker string, like @@DOT, to note the desired point.
-                          (previous-line (/ newline-count 2))
+                          ;;(previous-line (/ newline-count 2))
+                          (forward-line (- (/ newline-count 2)))
                           (end-of-line)))))))))
 
     (if (not did-auto-insert)
@@ -1070,8 +1872,8 @@ your `csharp-mode-hook' function:
 
 
 
-;; Allow this:
-;;    (csharp-log 3 "csharp: scan...'%s'" state)
+;; The following fn allows this:
+;;    (csharp-log 3 "scan result...'%s'" state)
 
 (defvar csharp-log-level 0
   "The current log level for CSharp-specific operations.
@@ -1089,8 +1891,8 @@ TEXT is a format control string, and the remaining arguments ARGS
 are the string substitutions (see `format')."
   (if (<= level csharp-log-level)
       (let* ((msg (apply 'format text args)))
-        (message "%s" msg)
-        )))
+        (message "C#: %s" msg))
+    t))
 
 
 
@@ -1107,11 +1909,11 @@ these methods are necessary or why they differ. But they do."
     ;; Calling c-beginning-of-statement-1 resets the point!
 
     (setq dash (progn (c-beginning-of-statement-1) (point)))
-    (csharp-log 3 "C#: max-bostmt dash(%d)" dash)
+    (csharp-log 3 "max-bostmt dash(%d)" dash)
     (goto-char curpos)
 
     (setq nodash (progn (c-beginning-of-statement 1) (point)))
-    (csharp-log 3 "C#: max-bostmt nodash(%d)" nodash)
+    (csharp-log 3 "max-bostmt nodash(%d)" nodash)
     (goto-char curpos)
 
     (max dash nodash)))
@@ -1138,13 +1940,13 @@ comment at the start of cc-engine.el for more info."
                                 (c-beginning-of-syntax)
                                 (point))))
                  (state (parse-partial-sexp lim pos)))
-            (csharp-log 4 "C#: parse lim(%d) state: %s" lim (prin1-to-string state))
+            (csharp-log 4 "parse lim(%d) state: %s" lim (prin1-to-string state))
             (cond
              ((elt state 3)
-              (csharp-log 4 "C#: in literal string (%d)" pos)
+              (csharp-log 4 "in literal string (%d)" pos)
               'string)
              ((elt state 4)
-              (csharp-log 4 "C#: in literal comment (%d)" pos)
+              (csharp-log 4 "in literal comment (%d)" pos)
               (if (elt state 7) 'c++ 'c))
              ((and detect-cpp (c-beginning-of-macro lim)) 'pound)
              (t nil))))))
@@ -1167,7 +1969,7 @@ for the list of syntax table numeric codes.
 
 "
 
-  (csharp-log 3 "C#: set-vlit-syntax-table:  beg(%d) end(%d)" beg end)
+  (csharp-log 3 "set-vlit-syntax-table:  beg(%d) end(%d)" beg end)
 
   (if (and (> beg 0) (> end 0))
 
@@ -1182,8 +1984,8 @@ for the list of syntax table numeric codes.
            ((= state 0)
             (if (= (char-after curpos) ?@)
                 (progn
-                  (c-put-char-property curpos 'syntax-table '(3)) ; (6) = expression prefix, (3) = symbol
-                  ;;(message (format "C#: set-s-t: prefix pos(%d) chr(%c)" beg (char-after beg)))
+                  (c-put-char-property curpos 'syntax-table '(6)) ; (6) = expression prefix, (3) = symbol
+                  ;;(message (format "set-s-t: prefix pos(%d) chr(%c)" beg (char-after beg)))
                   )
               )
             (setq state (+ 1 state)))
@@ -1192,17 +1994,17 @@ for the list of syntax table numeric codes.
             (if (= (char-after curpos) ?\")
                 (progn
                   (c-put-char-property curpos 'syntax-table '(7)) ; (7) = string quote
-                  ;;(message (format "C#: set-s-t: open quote pos(%d) chr(%c)"
+                  ;;(message (format "set-s-t: open quote pos(%d) chr(%c)"
                   ;; curpos (char-after curpos)))
                   ))
             (setq state (+ 1 state)))
 
            ((= state 2)
             (cond
-             ;; handle backslash
+             ;; handle backslash inside the string
              ((= (char-after curpos) ?\\)
               (c-put-char-property curpos 'syntax-table '(2)) ; (1) = punctuation, (2) = word
-              ;;(message (format "C#: set-s-t: backslash word pos(%d) chr(%c)" curpos (char-after curpos)))
+              ;;(message (format "set-s-t: backslash word pos(%d) chr(%c)" curpos (char-after curpos)))
               )
 
              ;; doubled double-quote
@@ -1211,20 +2013,20 @@ for the list of syntax table numeric codes.
                (= (char-after (+ 1 curpos)) ?\"))
               (c-put-char-property curpos 'syntax-table '(2)) ; (1) = punctuation, (2) = word
               (c-put-char-property (+ 1 curpos) 'syntax-table '(2)) ; (1) = punctuation
-              ;;(message (format "C#: set-s-t: double doublequote pos(%d) chr(%c)" curpos (char-after curpos)))
+              ;;(message (format "set-s-t: double doublequote pos(%d) chr(%c)" curpos (char-after curpos)))
               (setq curpos (+ curpos 1))
               )
 
              ;; a single double-quote, which should be a string terminator
              ((= (char-after curpos) ?\")
               (c-put-char-property curpos 'syntax-table '(7)) ; (7) = string quote
-              ;;(message (format "C#: set-s-t: close quote pos(%d) chr(%c)" curpos (char-after curpos)))
+              ;;(message (format "set-s-t: close quote pos(%d) chr(%c)" curpos (char-after curpos)))
               ;;go no further
               (setq state (+ 1 state)))
 
              ;; everything else
              (t
-              ;;(message (format "C#: set-s-t: none pos(%d) chr(%c)" curpos (char-after curpos)))
+              ;;(message (format "set-s-t: none pos(%d) chr(%c)" curpos (char-after curpos)))
               nil))))
           ;; next char
           (setq curpos (+ curpos 1))))))
@@ -1240,7 +2042,7 @@ This function ignores text properties. In fact it is the
 underlying scanner used to set the text properties in a C# buffer.
 "
 
-  (csharp-log 3 "C#: end-of-vlit-string: point(%d) c(%c)" (point) (char-after))
+  (csharp-log 3 "end-of-vlit-string: point(%d) c(%c)" (point) (char-after))
 
   (let (curpos
         (max (or lim (point-max))))
@@ -1303,7 +2105,7 @@ scan.
            (state 0) (start 0) (cycle 0)
            literal eos limits)
 
-        (csharp-log 3 "C#: scan")
+        (csharp-log 3 "scan")
         (goto-char curpos)
 
         (while (and (< curpos lastpos) (< cycle 10000))
@@ -1347,7 +2149,7 @@ scan.
               ;; advance to the end of the comment
               (if limits
                   (progn
-                    (csharp-log 4 "C#: scan: jump end comment A (%d)" (cdr limits))
+                    (csharp-log 4 "scan: jump end comment A (%d)" (cdr limits))
                     (setq curpos (cdr limits)))))
 
 
@@ -1364,7 +2166,7 @@ scan.
               ;; set override syntax properties on the verblit string
               (csharp-set-vliteral-syntax-table-properties curpos eos)
 
-              (csharp-log 4 "C#: scan: jump end verblit string (%d)" eos)
+              (csharp-log 4 "scan: jump end verblit string (%d)" eos)
               (setq curpos eos))))
 
 
@@ -1403,7 +2205,7 @@ scan.
               (if limits
                   (progn
                     (setq curpos (cdr limits))
-                    (csharp-log 3 "C#: scan: jump end comment B (%s)" curpos))))
+                    (csharp-log 3 "scan: jump end comment B (%s)" curpos))))
 
 
              ;; Case 2.C: Not in a comment, and not in a string.
@@ -1413,7 +2215,7 @@ scan.
               (forward-char 1) ;; pass up the quote
               (if (consp (setq limits (c-literal-limits)))
                   (progn
-                    (csharp-log 4 "C#: scan: jump end literal (%d)" (cdr limits))
+                    (csharp-log 4 "scan: jump end literal (%d)" (cdr limits))
                     (setq curpos (cdr limits))))))))
 
           (setq cycle (+ 1 cycle))
@@ -1462,18 +2264,8 @@ The return value is meaningless, and is ignored by cc-mode.
 ;; ==================================================================
 
 
-;; There's never a need to check for C-style macro definitions in
-;; a C# buffer.
-(defadvice c-beginning-of-macro (around
-                                 csharp-mode-advice-1
-                                 compile activate)
-  (if (c-major-mode-is 'csharp-mode)
-      nil
-    ad-do-it)
-  )
 
-
-;; There's never a need to move over an Obj-C directive in csharp mode
+;; There's never a need to move over an Obj-C directive in csharp-mode.
 (defadvice c-forward-objc-directive (around
                                  csharp-mode-advice-2
                                  compile activate)
@@ -1497,11 +2289,11 @@ The return value is meaningless, and is ignored by cc-mode.
 ;; c# - monkey-patching of basic parsing logic
 ;; ==================================================================
 ;;
-;; Here, the model redefines two defuns to add special cases for csharp
-;; mode.  These primarily deal with indentation of instance
-;; initializers, which are somewhat unique to C#.  I couldn't figure out
-;; how to get cc-mode to do what C# needs, without modifying these
-;; defuns.
+;; The following 2 defuns redefine functions from cc-mode, to add
+;; special cases for C#.  These primarily deal with indentation of
+;; instance initializers, which are somewhat unique to C#.  I couldn't
+;; figure out how to get cc-mode to do what C# needs, without modifying
+;; these defuns.
 ;;
 
 (defun c-looking-at-inexpr-block (lim containing-sexp &optional check-at-end)
@@ -1620,17 +2412,6 @@ The return value is meaningless, and is ignored by cc-mode.
 
 
 
-(defconst csharp-enum-decl-re
-  (concat
-   "\\<enum\\>\s+\\([[:alnum:]_]+\\)\s*:\s*"
-   "\\("
-   (c-make-keywords-re nil
-     (list "sbyte" "byte" "short" "ushort" "int" "uint" "long" "ulong"))
-   "\\)")
-  "Regex that captures an enum declaration in C#"
-  )
-
-
 
 (defun c-inside-bracelist-p (containing-sexp paren-state)
   ;; return the buffer position of the beginning of the brace list
@@ -1649,12 +2430,13 @@ The return value is meaningless, and is ignored by cc-mode.
    (c-safe
     (save-excursion
       (goto-char containing-sexp)
-      (c-forward-sexp -1)
+      (c-safe (c-forward-sexp -1))
       (let (bracepos)
         (if (and (or (looking-at c-brace-list-key)
 
-                     (progn (c-forward-sexp -1)
-                            (looking-at c-brace-list-key))
+                     (progn
+                       (c-safe (c-forward-sexp -1))
+                       (looking-at c-brace-list-key))
 
                      ;; dinoch Thu, 22 Apr 2010  18:20
                      ;; ============================================
@@ -1664,13 +2446,14 @@ The return value is meaningless, and is ignored by cc-mode.
 
                      (and (c-major-mode-is 'csharp-mode)
                           (progn
-                            (c-forward-sexp -1)
+                            (c-safe (c-forward-sexp -1))
                             (looking-at csharp-enum-decl-re))))
 
                  (setq bracepos (c-down-list-forward (point)))
                  (not (c-crosses-statement-barrier-p (point)
                                                      (- bracepos 2))))
             (point)))))
+
    ;; this will pick up array/aggregate init lists, even if they are nested.
    (save-excursion
      (let ((class-key
@@ -1865,7 +2648,7 @@ The return value is meaningless, and is ignored by cc-mode.
        (substatement-open     . 0)
        (template-args-cont c-lineup-template-args +)
        (topmost-intro         . 0)
-       (topmost-intro-cont    . 0)
+       (topmost-intro-cont    . +)
        ))
    ))
 
@@ -1890,8 +2673,9 @@ support C#.
 The hook `c-mode-common-hook' is run with no args at mode
 initialization, then `csharp-mode-hook'.
 
-This mode will automatically add a regexp for Csc.exe error and warning
-messages to the `compilation-error-regexp-alist'.
+This mode will automatically add a symbol and regexp to the
+`compilation-error-regexp-alist' and `compilation-error-regexp-alist-alist'
+respectively, for Csc.exe error and warning messages.
 
 Key bindings:
 \\{csharp-mode-map}"
@@ -1927,25 +2711,24 @@ Key bindings:
   ;; analysis and similar things working.
   (c-common-init 'csharp-mode)
 
-
   ;; csc.exe, the C# Compiler, produces errors like this:
-  ;; file.cs(6,18): error SC1006: Name of constructor must match name of class
+  ;; file.cs(6,18): error CS1006: Name of constructor must match name of class
+  (if (boundp 'compilation-error-regexp-alist-alist)
+      (progn
+        (add-to-list
+         'compilation-error-regexp-alist-alist
+         '(ms-csharp "^[ \t]*\\([A-Za-z0-9_][^(]*\\.cs\\)(\\([0-9]+\\)[,]\\([0-9]+\\)) ?: \\(error\\|warning\\) CS[0-9]+:" 1 2 3))
+        (add-to-list
+         'compilation-error-regexp-alist
+         'ms-csharp)))
 
-  (add-hook 'compilation-mode-hook
-            (lambda ()
-              (setq compilation-error-regexp-alist
-                    (cons ' ("^[ \t]*\\([A-Za-z0-9][^(]+\\.cs\\)(\\([0-9]+\\)[,]\\([0-9]+\\)) ?: \\(error\\|warning\\) CS[0-9]+:" 1 2 3)
-                            compilation-error-regexp-alist))))
 
   ;; to allow next-error to work with csc.exe:
   (setq compilation-scroll-output t)
 
-  ;; allow fill-paragraph to work on xml code doc
-  (set (make-local-variable 'paragraph-separate)
-       "[ \t]*\\(//+\\|\\**\\)\\([ \t]+\\|[ \t]+<.+?>\\)$\\|^\f")
 
-
-  (c-run-mode-hooks 'c-mode-common-hook 'csharp-mode-hook)
+  (local-set-key (kbd "/") 'csharp-maybe-insert-codedoc)
+  (local-set-key (kbd "{") 'csharp-insert-open-brace)
 
 
   ;; Need the following for parse-partial-sexp to work properly with
@@ -1960,9 +2743,20 @@ Key bindings:
   ;; scan the entire buffer for verblit strings
   (csharp-scan-for-verbatim-literals-and-set-props nil nil)
 
+  (c-run-mode-hooks 'c-mode-common-hook 'csharp-mode-hook)
 
-  (local-set-key (kbd "/") 'csharp-maybe-insert-codedoc)
-  (local-set-key (kbd "{") 'csharp-insert-open-brace)
+  ;; Allow fill-paragraph to work on xml code doc
+  ;; This setting gets overwritten quietly by c-run-mode-hooks,
+  ;; so I put it afterwards to make it stick.
+  (make-local-variable 'paragraph-separate)
+  (setq paragraph-separate
+       "[ \t]*\\(//+\\|\\**\\)\\([ \t]+\\|[ \t]+<.+?>\\)$\\|^\f")
+
+  ;;(message "C#: set paragraph-separate")
+
+  ;; Speedbar handling
+  (if (fboundp 'speedbar-add-supported-extension)
+      (speedbar-add-supported-extension '(".cs"))) ;; idempotent
 
   (c-update-modeline))
 
@@ -1974,4 +2768,3 @@ Key bindings:
 (provide 'csharp-mode)
 
 ;;; csharp-mode.el ends here
-;;MD5: 4EDCB2ECE38841F407C7ED3DA8354E15

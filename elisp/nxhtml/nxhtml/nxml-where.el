@@ -51,7 +51,9 @@
 (eval-when-compile (require 'cl))
 (eval-when-compile (require 'mumamo nil t))
 (eval-when-compile (require 'nxml-mode nil t))
-(eval-when-compile (require 'ourcomments-util nil t))
+;;(eval-when-compile (require 'ourcomments-util nil t))
+(declare-function nxhtml-validation-header-mode "nxhtml-mode")
+
 ;; (eval-when-compile
 ;;   (unless (featurep 'nxhtml-autostart)
 ;;     (let ((efn (expand-file-name "../autostart.el")))
@@ -233,19 +235,49 @@ If nil show only tag names."
   ;;(nxml-where-restart-update)
   (add-hook 'post-command-hook 'nxml-where-restart-update nil t))
 
+(defcustom nxml-where-mozadd-outline-style "1px solid green"
+  "CSS style for `nxml-where-mode' path when shown in Firefox.
+`mozadd-send-buffer
+This is added as
+
+  style=\"outline: THIS-STYLE\""
+  :type 'string
+  :group 'mozadd)
+
+(defun nxml-where-mozadd-send-buffer-hook-fun (mozadd-points)
+  "Add outlines to Firefox.
+Added to `mozadd-send-buffer-hook' by `nxml-where-mode'."
+  (let ((my-points (symbol-value mozadd-points)))
+    ;; If nxml-where-mode is on add corresponding outline style.
+    (when (and (boundp 'nxml-where-mode) nxml-where-mode)
+      (mapc (lambda (rec)
+              (let ((ovl (nth 3 rec)))
+                (when (/= ?/ (1+ (char-after (overlay-start ovl))))
+                  (let ((new-rec `(,(1- (overlay-end ovl))
+                                   ,nxml-where-mozadd-outline-style)))
+                    (setq my-points (cons new-rec my-points))))))
+            nxml-where-path)
+      (set mozadd-points my-points)
+      )))
+
 (defun nxml-where-mode-start ()
   ;;(message "START")
-  (unless (nxml-where-is-nxml)
-    (error "Can't display XML path since major mode is not nxml-mode child."))
-  (add-hook 'after-change-major-mode-hook 'nxml-where-turn-off-unless-nxml nil t)
-  (add-hook 'after-change-functions 'nxml-where-after-change nil t)
-  (nxml-where-save-header-line-format)
-  (nxml-where-setup-updating))
+  (if (not (nxml-where-is-nxml))
+      (progn
+        (message "Can't display XML path since major mode is not nxml-mode child.")
+        nil)
+    (add-hook 'after-change-major-mode-hook 'nxml-where-turn-off-unless-nxml nil t)
+    (add-hook 'after-change-functions 'nxml-where-after-change nil t)
+    (add-hook 'mozadd-send-buffer-hook 'nxml-where-mozadd-send-buffer-hook-fun nil t)
+    (nxml-where-save-header-line-format)
+    (nxml-where-setup-updating)
+    t))
 
 (defun nxml-where-mode-stop ()
   ;;(message "STOP")
   (remove-hook 'after-change-major-mode-hook 'nxml-where-turn-off-unless-nxml t)
   (remove-hook 'after-change-functions 'nxml-where-after-change t)
+  (remove-hook 'mozadd-send-buffer-hook 'nxml-where-mozadd-send-buffer-hook-fun t)
   (nxml-where-stop-updating)
   (nxml-where-unmark-forward-element)
   (nxml-where-restore-header-line-format)
@@ -258,12 +290,12 @@ If nil show only tag names."
 
 ;;;###autoload
 (define-minor-mode nxml-where-mode
-  "Shows path in mode line."
+  "Shows path in header line."
   :global nil
   :group 'nxml-where
   (if nxml-where-mode
       ;;Turn it on
-      (nxml-where-mode-start)
+      (setq nxml-where-mode (nxml-where-mode-start))
     ;; Turn it off
     (nxml-where-mode-stop)
     ))

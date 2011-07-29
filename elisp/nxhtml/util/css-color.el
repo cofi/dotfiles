@@ -77,7 +77,6 @@
 
 ;;; Code:
 (eval-when-compile (require 'cl))
-(eval-when-compile (require 'mumamo nil t))
 
 ;;;###autoload
 (defgroup css-color ()
@@ -356,7 +355,7 @@
 ;;;###autoload
 (define-minor-mode css-color-mode
   "Show hex color literals with the given color as background.
-In this mode hexadecimal colour specifications like #6600ff are
+In this mode hexadecimal colour specifications like #3253ff are
 displayed with the specified colour as background.
 
 Certain keys are bound to special colour editing commands when
@@ -374,10 +373,7 @@ point is at a hexadecimal colour:
         (add-hook 'font-lock-mode-hook 'css-color-font-lock-hook-fun nil t))
     (remove-hook 'font-lock-mode-hook 'css-color-font-lock-hook-fun t)
     (font-lock-remove-keywords nil css-color-keywords))
-  ;;(font-lock-fontify-buffer)
-  (save-restriction
-    (widen)
-    (mumamo-mark-for-refontification (point-min) (point-max))))
+  (jit-lock-refontify))
 
 (put 'css-color-mode 'permanent-local t)
 
@@ -398,7 +394,7 @@ point is at a hexadecimal colour:
     (css-color-mode -1)))
 
 (defvar css-color-map
-  (let ((m (make-sparse-keymap "css-color")))
+  (let ((m (make-sparse-keymap)))
     (define-key m "=" 'css-color-up)
     (define-key m "-" 'css-color-down)
     (define-key m "h" 'css-color-hue-up)
@@ -413,7 +409,7 @@ point is at a hexadecimal colour:
   "Mode map for `css-color-minor-mode'")
 
 (defvar css-color-generic-map
-  (let ((m (make-sparse-keymap "css-color")))
+  (let ((m (make-sparse-keymap)))
     (define-key m "=" 'css-color-num-up)
     (define-key m "-" 'css-color-num-down)
     (define-key m " " 'css-color-cycle-type)
@@ -862,13 +858,10 @@ Return list of point and color-type."
         color)))                                  ;else return hex
 
 (defun css-color-string-name-to-hex (str)
-  (let ((str (downcase str)))
-    (cadr (assoc-if
-           (lambda (a)
-             (string=
-              (downcase a)
-              str))
-	   css-color-html-colors))))
+  (let ((to-hex-myb (assoc str css-color-html-colors)))
+     (when to-hex-myb (cadr to-hex-myb))))
+;;
+;;; :TEST-ME (css-color-string-name-to-hex "MediumTurquoise")
 
 (defun css-color-string-rgb-to-hex (str)
   (save-match-data
@@ -903,7 +896,8 @@ Return list of point and color-type."
 	      (goto-char (+ 1 beg)))
 	     ((= (char-after) 35)
 	      (forward-char 1))
-	     ((evenp (- (point) beg))
+             ;; :WAS ((evenp (- (point) beg))
+             ((eq (logand (- (point) beg)) 1)
 	      (forward-char 1))
 	     (t (forward-char 2)))))))
 

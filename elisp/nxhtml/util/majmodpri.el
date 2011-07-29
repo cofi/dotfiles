@@ -61,7 +61,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'mumamo nil t))
-(eval-when-compile (require 'ourcomments-indirect-fun nil t))
+(eval-when-compile (require 'ourcomments-util nil t))
 
 ;;;; Idle sorting
 
@@ -111,6 +111,8 @@ This gives those multi major mode lower priority, but it does not
 prevent use of them."
   :type 'boolean
   :group 'majmodpri)
+
+(defvar majmodpri-mode-priorities)
 
 ;; (majmodpri-priority 'html-mumamo-mode)
 ;; (majmodpri-priority 'nxhtml-mumamo-mode)
@@ -198,6 +200,8 @@ Comparision:
                       (cond
                        ((/= pri1 pri2) (> pri1 pri2))
                        (t (> ord1 ord2))))))))))
+
+(defvar majmodpri-lists-to-sort)
 
 ;;;###autoload
 (defun majmodpri-sort-lists ()

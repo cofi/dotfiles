@@ -1,0 +1,47 @@
+me
+m
+y?
+y+
+yx*
+\|a OK=a?
+a\| OK=a?
+a\|b OK=[ab]
+a\|bc? OK=[ab]c?
+a*
+a*?
+aA?\|b
+\(?:a\|b\) OK=[ab]
+\(a\|b\) OK=\([ab]\)
+a?A\|bb OK=a?[Ab]b
+[ab]
+\|bc OK=b?c
+\|
+\(a\|bc\) OK=\([ab]c\)
+(ab)
+\(ab)
+\(ab\)
+(a\)
+\(ab\|de\) OK=\(a[bd]e\)
+\(\(ab\)\|de\)
+cd.a
+.
+.\|a
+^ab$
+\`ab\'
+\=ab
+\bhi\B
+\<word\>
+\_<sym\_>
+\_>
+\wsome\W OK=
+a[[:word:]]b
+a[[:wordx:]]b
+a\{5\}
+a\{5,7\}
+a\(b\)c\1d
+\(?2:hi\)
+a " \\t
+\\n
+\t
+/*
+/\*

@@ -65,6 +65,13 @@
   "Customization group for html-site."
   :group 'nxhtml)
 
+;;;###autoload
+(defun html-site-edit-sites ()
+  "Edit the list of sites.
+This is the same as customizing option `html-site-list'."
+  (interactive)
+  (customize-option-other-window 'html-site-list))
+
 ;; Fix-me: Rewrite using directory variables
 (defcustom html-site-list nil
   "Known site directories and corresponding attributes.
@@ -288,8 +295,10 @@ Use the entry with this name in `html-site-list'."
                (completing-read prompt site-names nil t nil 'site-names))))))
   (unless (or (string= name "")
               (string= name html-site-current))
-    (setq html-site-current name)
-    (customize-save-variable 'html-site-current html-site-current)))
+    ;;(setq html-site-current name)
+    (customize-set-variable 'html-site-current name)
+    (customize-set-value 'html-site-current name)
+    (customize-save-variable 'html-site-current name)))
 
 ;;;###autoload
 (defun html-site-dired-current ()

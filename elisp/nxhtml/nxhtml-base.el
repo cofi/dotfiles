@@ -46,13 +46,13 @@
 ;;; Code:
 
 ;;(eval-when-compile (require 'web-vcs nil t))
-(eval-when-compile (require 'flymake-js nil t))
-(eval-when-compile (require 'flymake-css nil t))
-(eval-when-compile (require 'flymake-java-1 nil t))
 
-(defconst nxhtml-menu:version "2.08")
-(setq message-log-max t)
-(setq debug-on-error t)
+;; (version< "2.09beta" "2.08")
+;; (version< "2.09beta" "2.09")
+(defconst nxhtml-menu:version "2.09beta")
+(when (and t (file-directory-p "c:/EmacsW32/"))
+  (setq message-log-max t)
+  (setq debug-on-error t))
 
 (defconst nxhtml-install-dir
   (file-name-directory (or load-file-name
@@ -75,6 +75,7 @@ Note that files are not updated automatically.  You have to use
   :lighter " nX"
   :group 'nxhtml)
 
+(declare-function web-autoload "web-autoload")
 (defun nxhtml-autoload (fun src &optional docstring interactive type)
   "Generalized `autoload'. May setup autoload from the web.
 If `nxhtml-autoload-web' is t then setup autoloading from the web.
@@ -124,25 +125,6 @@ Otherwise setup for normal local autoloading."
       (funcall set symbol (car saved))
       (custom-load-symbol symbol))))
 
-(defun flymake-init-load-flymakemsg ()
-  (require 'flymakemsg))
-
-(define-minor-mode nxhtml-flymake-setup
-  "Let nXhtml add some addtions to flymake.
-This adds support for CSS and JavaScript files.
-
-It also adds showing of errors in minibuffer when point is on
-them.
-
-If you turn this off you must restart Emacs for it to take
-effect."
-  :group 'nxhtml
-  :group 'flymake
-  (when nxhtml-flymake-setup
-    (flymake-js-load)
-    (flymake-css-load)
-    (flymake-java-1-load)
-    (add-hook 'flymake-mode-hook 'flymake-init-load-flymakemsg)))
 
 
 (provide 'nxhtml-base)

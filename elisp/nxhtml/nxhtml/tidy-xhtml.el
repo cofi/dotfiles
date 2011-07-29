@@ -194,8 +194,7 @@
 (eval-when-compile (require 'ediff))
 (eval-when-compile (require 'mumamo nil t))
 (eval-when-compile (require 'ourcomments-util nil t))
-(eval-when-compile
-  (add-to-list 'load-path default-directory))
+;;(eval-when-compile (add-to-list 'load-path default-directory))
 (eval-when-compile (require 'html-site nil t))
 (require 'easymenu) ;; This makes menus so much easier!
 (require 'compile)  ;; To make the error buffer more sexy
@@ -399,13 +398,13 @@ This option specifies if Tidy should add the XML declaration when
 outputting XML or XHTML. Note that if the input already includes an <?xml
 ... ?> declaration then this option will be ignored.")
 
-;;        ("add-xml-pi" "Fix Markup" "Boolean" "no"
-;;         "
-;; Type: Boolean
-;; Default: no
-;; Example: y/n, yes/no, t/f, true/false, 1/0
+          ;;        ("add-xml-pi" "Fix Markup" "Boolean" "no"
+          ;;         "
+          ;; Type: Boolean
+          ;; Default: no
+          ;; Example: y/n, yes/no, t/f, true/false, 1/0
 
-;; This option is the same as the add-xml-decl option.")
+          ;; This option is the same as the add-xml-decl option.")
 
           ("add-xml-space" "Fix Markup" "Boolean" "no"
            "
@@ -565,15 +564,15 @@ This option specifies if Tidy should enclose any text it finds in the body
 element within a <P> element. This is useful when you want to take
 existing HTML and use it with a style sheet.")
 
-;;        ("error-file" "Omit" "String" "-none-"
-;;         "
-;; Type: String
-;; Default: -none-
+          ;;        ("error-file" "Omit" "String" "-none-"
+          ;;         "
+          ;; Type: String
+          ;; Default: -none-
 
-;; This option specifies the error file Tidy uses for errors and
-;; warnings. Normally errors and warnings are output to \"stderr\".
+          ;; This option specifies the error file Tidy uses for errors and
+          ;; warnings. Normally errors and warnings are output to \"stderr\".
 
-;; This is option is ignored in Emacs.")
+          ;; This is option is ignored in Emacs.")
 
           ("escape-cdata" "Fix Markup" "Boolean" "no"
            "
@@ -625,17 +624,17 @@ encountered. Use this option with care - if Tidy reports an error,
 this means Tidy was not able to, or is not sure how to, fix the error,
 so the resulting output may not reflect your intention.")
 
-;;        ("gnu-emacs" "Omit" "Boolean" "no"
-;;         "
-;; Type: Boolean
-;; Default: no
-;; Example: y/n, yes/no, t/f, true/false, 1/0
+          ;;        ("gnu-emacs" "Omit" "Boolean" "no"
+          ;;         "
+          ;; Type: Boolean
+          ;; Default: no
+          ;; Example: y/n, yes/no, t/f, true/false, 1/0
 
-;; This option specifies if Tidy should change the format for reporting
-;; errors and warnings to a format that is more easily parsed by GNU
-;; Emacs.
+          ;; This option specifies if Tidy should change the format for reporting
+          ;; errors and warnings to a format that is more easily parsed by GNU
+          ;; Emacs.
 
-;; This option is automatically set in Emacs."  )
+          ;; This option is automatically set in Emacs."  )
 
           ("hide-comments" "Fix Markup" "Boolean" "no"
            "
@@ -977,17 +976,17 @@ Type: Name
 Default: -none-
 split Currently not used.")
 
-;;        ("show-body-only" "Omit" "Boolean" "no"
-;;         "
-;; Type: Boolean
-;; Default: no
-;; Example: y/n, yes/no, t/f, true/false, 1/0
+          ;;        ("show-body-only" "Omit" "Boolean" "no"
+          ;;         "
+          ;; Type: Boolean
+          ;; Default: no
+          ;; Example: y/n, yes/no, t/f, true/false, 1/0
 
-;; This option specifies if Tidy should print only the contents of the body
-;; tag as an HTML fragment. Useful for incorporating existing whole pages as
-;; a portion of another page.
+          ;; This option specifies if Tidy should print only the contents of the body
+          ;; tag as an HTML fragment. Useful for incorporating existing whole pages as
+          ;; a portion of another page.
 
-;; Emacs overrides this option.")
+          ;; Emacs overrides this option.")
 
           ("show-errors" "Input/Output" "Integer" "6"
            "
@@ -1015,7 +1014,7 @@ Default: -none-
 Currently not used.")
 
           ("split" "Omit" "Boolean" "no"
-            "
+           "
 Type: Boolean
 Default: no
 Example: y/n, yes/no, t/f, true/false, 1/0
@@ -1142,18 +1141,18 @@ Example: y/n, yes/no, t/f, true/false, 1/0
 This option specifies if Tidy should line wrap text contained within
 <![... ]> section tags.")
 
-;;        ("write-back" "Omit" "Boolean" "no"
-;;         "
-;; Type: Boolean
-;; Default: no
-;; Example: y/n, yes/no, t/f, true/false, 1/0
+          ;;        ("write-back" "Omit" "Boolean" "no"
+          ;;         "
+          ;; Type: Boolean
+          ;; Default: no
+          ;; Example: y/n, yes/no, t/f, true/false, 1/0
 
-;; This option specifies if Tidy should write back the tidied markup to
-;; the same file it read from. You are advised to keep copies of
-;; important files before tidying them, as on rare occasions the result
-;; may not be what you expect.
+          ;; This option specifies if Tidy should write back the tidied markup to
+          ;; the same file it read from. You are advised to keep copies of
+          ;; important files before tidying them, as on rare occasions the result
+          ;; may not be what you expect.
 
-;; This option is ignored by Emacs.")
+          ;; This option is ignored by Emacs.")
           ))
   )
 
@@ -1249,7 +1248,7 @@ This option specifies if Tidy should line wrap text contained within
                  (def (nth 3 ent))
                  (cur (symbol-value (intern (concat "tidy-" nam))))
                  (show (copy-seq val))
-                )
+                 )
             (unless cur (setq cur def))
             (put-text-property 0 (length show)
                                'face
@@ -1294,15 +1293,15 @@ the buffer local variables in all buffers."
 ;; quite compiler
 (eval-when-compile
   (progn
-         (or (boundp 'current-menubar)
-             (defvar current-menubar nil))
-         (or (fboundp 'tidy-menu-position)
-             (defun  tidy-menu-position () ""))
-         (or (fboundp 'tidy-menu-lock)
-             (defun tidy-menu-lock (entry state path) ""))
-         (or (fboundp 'tidy-menu-lookup)
-             (defun tidy-menu-lookup (path) ""))
-         ))
+    (or (boundp 'current-menubar)
+        (defvar current-menubar nil))
+    (or (fboundp 'tidy-menu-position)
+        (defun  tidy-menu-position () ""))
+    (or (fboundp 'tidy-menu-lock)
+        (defun tidy-menu-lock (entry state path) ""))
+    (or (fboundp 'tidy-menu-lookup)
+        (defun tidy-menu-lookup (path) ""))
+    ))
 
 ;; always define these
 (defvar tidy-menu nil "Menu used by tidy.")
@@ -1338,26 +1337,26 @@ the buffer local variables in all buffers."
     (car (tidy-x-find-menu-item current-menubar (cons "Tidy" path)))))
 
  (t
-    ;; GNU Emacs
+  ;; GNU Emacs
   (defun tidy-menu-position ()
     (let ()
       (list (list tidy-menu-x-position '-5)
             (selected-frame))))         ; frame
 
   ;; GNU Emacs
-;;   (defun tidy-menu-lock-old (entry state path)
-;;     (when (and (not (interactive-p)) tidy-menu-lock)
-;;       (or (and tidy-menu-position (eq state tidy-menu-state))
-;;        (setq tidy-menu-position (tidy-menu-position )
-;;              tidy-menu-state    state))
-;;       (let* ((menu   (tidy-menu-lookup path))
-;;           (result (x-popup-menu tidy-menu-position menu)))
-;;      (and result
-;;           (let ((command (lookup-key menu (vconcat result))))
-;;             (if (fboundp command)
-;;                 (funcall command)
-;;               (eval command)))))
-;;       (setq tidy-menu-position nil)))
+  ;;   (defun tidy-menu-lock-old (entry state path)
+  ;;     (when (and (not (interactive-p)) tidy-menu-lock)
+  ;;       (or (and tidy-menu-position (eq state tidy-menu-state))
+  ;;        (setq tidy-menu-position (tidy-menu-position )
+  ;;              tidy-menu-state    state))
+  ;;       (let* ((menu   (tidy-menu-lookup path))
+  ;;           (result (x-popup-menu tidy-menu-position menu)))
+  ;;      (and result
+  ;;           (let ((command (lookup-key menu (vconcat result))))
+  ;;             (if (fboundp command)
+  ;;                 (funcall command)
+  ;;               (eval command)))))
+  ;;       (setq tidy-menu-position nil)))
   (defun tidy-menu-lock (entry state path)
     (when (and (not (interactive-p)) tidy-menu-lock)
       (or (and tidy-menu-position (eq state tidy-menu-state))
@@ -1408,48 +1407,48 @@ that list."
                        :selected (list 'if symbol 'nil 't))))))
 
 (defun tidy-list-entry (symbol name type default menu)
-"Returns a menu entry that allows us to set via a radio button the
+  "Returns a menu entry that allows us to set via a radio button the
 value of SYMBOL.  SYMBOL refers to the option called NAME which has
 default value DEFAULT.  TYPE should be a list of the possible
 values. MENU refers to the sub-menu that this item belongs to and
 POSITION its position in that list."
   (let (value element)
-      (while (setq value (car type))
-        (if (equal value default)
-            (setq element
-                  (append element
-                          (list
-                           (vector
-                            (concat name " is \"" value "\"")
-                            (list 'tidy-set (list 'quote symbol)
-                                  (list 'if symbol 'nil value)
-                                  name
-                                  (list 'quote menu)
-                                  '(quote toggle)
-                                  )
-                            :style 'radio
-                            :selected (list 'if symbol 'nil 't)
-                            ))))
+    (while (setq value (car type))
+      (if (equal value default)
           (setq element
                 (append element
                         (list
                          (vector
                           (concat name " is \"" value "\"")
-
                           (list 'tidy-set (list 'quote symbol)
                                 (list 'if symbol 'nil value)
                                 name
                                 (list 'quote menu)
                                 '(quote toggle)
                                 )
-
                           :style 'radio
-                          :selected (list
-                                     'if (list 'string-equal symbol value)
-                                     't 'nil)
-                         )))))
-        (setq type (cdr type)))
-        element))
+                          :selected (list 'if symbol 'nil 't)
+                          ))))
+        (setq element
+              (append element
+                      (list
+                       (vector
+                        (concat name " is \"" value "\"")
+
+                        (list 'tidy-set (list 'quote symbol)
+                              (list 'if symbol 'nil value)
+                              name
+                              (list 'quote menu)
+                              '(quote toggle)
+                              )
+
+                        :style 'radio
+                        :selected (list
+                                   'if (list 'string-equal symbol value)
+                                   't 'nil)
+                        )))))
+      (setq type (cdr type)))
+    element))
 
 (defun tidy-set-string (symbol name default)
   "Set the value of SYMBOL identified by name to VALUE,
@@ -1474,12 +1473,12 @@ unless VALUE = DEFAULT, in which case we set it to nil."
           (string-to-number
            (if (tidy-xemacs-p)
                (read-string (format "Set %s to: " name)
-                (or last-value default) nil)
+                            (or last-value default) nil)
              (read-string (format "Set %s to: " name)
-                (or last-value default) nil default)
+                          (or last-value default) nil default)
              ))))
-         (set symbol (if (= new-value (string-to-number default)) nil
-                       (number-to-string new-value)))))
+    (set symbol (if (= new-value (string-to-number default)) nil
+                  (number-to-string new-value)))))
 
 
 (defun tidy-string-entry (symbol name type default menu)
@@ -1494,7 +1493,7 @@ DEFAULT.  TYPE should always be one of \"String\" \"Tags\", or
                       name default))))
 
 (defun tidy-integer-entry (symbol name type default menu)
-"Returns a menu entry that allows us to set the value of SYMBOL.
+  "Returns a menu entry that allows us to set the value of SYMBOL.
 SYMBOL refers to the option called NAME which has default value
 DEFAULT.  TYPE should always have the value \"Integer\". MENU and
 POSITION are not used in this case. "
@@ -1518,10 +1517,10 @@ POSITION are not used in this case. "
           ["Tidy Buffer" tidy-buffer
            :active (tidy-exe-found)]
 
-;;        ["Tidy Region" tidy-region
-;;         :active (and (mark)
-;;                         (tidy-exe-found))
-;;         :keys "C-u \\[tidy-buffer]"]
+          ;;        ["Tidy Region" tidy-region
+          ;;         :active (and (mark)
+          ;;                         (tidy-exe-found))
+          ;;         :keys "C-u \\[tidy-buffer]"]
 
           ["Tidy Directory Tree" tidy-tree
            :active (tidy-exe-found)]
@@ -1534,18 +1533,18 @@ POSITION are not used in this case. "
 
           ["Customize Tidy" (customize-group-other-window 'tidy)]
 
-;;           ["Use Ediff" (lambda () (interactive)
-;;                          (setq tidy-use-ediff (not tidy-use-ediff)))
-;;            :style toggle
-;;            :selected tidy-use-ediff
-;;            ]
+          ;;           ["Use Ediff" (lambda () (interactive)
+          ;;                          (setq tidy-use-ediff (not tidy-use-ediff)))
+          ;;            :style toggle
+          ;;            :selected tidy-use-ediff
+          ;;            ]
 
-;;        ["Load Settings" tidy-parse-config-file
-;;         :active (and tidy-config-file (file-exists-p tidy-config-file))]
+          ;;        ["Load Settings" tidy-parse-config-file
+          ;;         :active (and tidy-config-file (file-exists-p tidy-config-file))]
 
-;;        ["Load Settings All Buffers" (lambda () (interactive)
-;;                                          (tidy-parse-config-file t))
-;;         :active (and tidy-config-file (file-readable-p tidy-config-file))]
+          ;;        ["Load Settings All Buffers" (lambda () (interactive)
+          ;;                                          (tidy-parse-config-file t))
+          ;;         :active (and tidy-config-file (file-readable-p tidy-config-file))]
 
           ["Save Settings" tidy-save-settings
            :active (and tidy-config-file (file-readable-p tidy-config-file))]
@@ -1642,10 +1641,10 @@ POSITION are not used in this case. "
 (defun tidy-create-encoding-menu (label encoding-what msg-what)
   (list label ;; ==>
         (vector tidy-emacs-encoding-lbl   (list 'tidy-set (list 'quote encoding-what)
-                                tidy-emacs-encoding-lbl ;(list 'tidy-get-buffer-encoding)
-                                msg-what
-                                ''encoding
-                                ''toggle)
+                                                tidy-emacs-encoding-lbl ;(list 'tidy-get-buffer-encoding)
+                                                msg-what
+                                                ''encoding
+                                                ''toggle)
                 :style 'radio
                 :selected (list 'if (list 'equal encoding-what tidy-emacs-encoding-lbl) t nil)
                 )
@@ -1854,88 +1853,88 @@ POSITION are not used in this case. "
                           'tags))
 
              (if (or (equal type "Boolean") (equal type "AutoBool"))
-             (setq tags-menu-bool (append tags-menu-bool entry))
-             (setq tags-menu-set (append tags-menu-set entry))))
+                 (setq tags-menu-bool (append tags-menu-bool entry))
+               (setq tags-menu-set (append tags-menu-set entry))))
             (t)) ;; we simple omit all other menus
 
       (setq options-alist (cdr options-alist)))
 
-  (setq tidy-menu (append
-                   tidy-top-menu
-                   (list
-                    (list "Quick Options Settings"
-                          (vector "Set Options for XHTML"
-                                  'tidy-set-xhtml-options
-                                  :style 'toggle
-                                  :selected '(tidy-xhtml-options-ok)
-                                  )
-                          (vector "Show Options for XHTML"
-                                  'tidy-show-xhtml-options
-                                  )
-                          ))
-                   (list (append (list "Advanced")
+    (setq tidy-menu (append
+                     tidy-top-menu
+                     (list
+                      (list "Quick Options Settings"
+                            (vector "Set Options for XHTML"
+                                    'tidy-set-xhtml-options
+                                    :style 'toggle
+                                    :selected '(tidy-xhtml-options-ok)
+                                    )
+                            (vector "Show Options for XHTML"
+                                    'tidy-show-xhtml-options
+                                    )
+                            ))
+                     (list (append (list "Advanced")
 
 
-;;        "----------------------------------------------"
+                                   ;;        "----------------------------------------------"
 
-;;        ["Menu Lock" (tidy-set 'tidy-menu-lock
-;;                               (if tidy-menu-lock nil t)
-;;                               "Menu Lock"
-;;                               'top
-;;                               'toggle)
-;;         :style toggle
-;;         :selected (if tidy-menu-lock t nil)
-;;         ]
-;;                                  (vector "Menu Lock"
-;;                                          'tidy-menu-lock
-;;                                          :style 'toggle
-;;                                          :selected '(if tidy-menu-lock t nil)
-;;                                          )
-                                 (list (vector "Menu Lock"
-                                               '(tidy-set 'tidy-menu-lock
-                                                          (if tidy-menu-lock nil t)
-                                                          "Menu Lock"
-                                                          'top
-                                                          'toggle
-                                                          )
-                                               :style 'toggle
-                                               :selected '(if tidy-menu-lock t nil)
-                                               ))
-                                 (list (list "-------"))
+                                   ;;        ["Menu Lock" (tidy-set 'tidy-menu-lock
+                                   ;;                               (if tidy-menu-lock nil t)
+                                   ;;                               "Menu Lock"
+                                   ;;                               'top
+                                   ;;                               'toggle)
+                                   ;;         :style toggle
+                                   ;;         :selected (if tidy-menu-lock t nil)
+                                   ;;         ]
+                                   ;;                                  (vector "Menu Lock"
+                                   ;;                                          'tidy-menu-lock
+                                   ;;                                          :style 'toggle
+                                   ;;                                          :selected '(if tidy-menu-lock t nil)
+                                   ;;                                          )
+                                   (list (vector "Menu Lock"
+                                                 '(tidy-set 'tidy-menu-lock
+                                                            (if tidy-menu-lock nil t)
+                                                            "Menu Lock"
+                                                            'top
+                                                            'toggle
+                                                            )
+                                                 :style 'toggle
+                                                 :selected '(if tidy-menu-lock t nil)
+                                                 ))
+                                   (list (list "-------"))
 
-                                 (list (append (list "Fix Markup")
-                                               markup-menu-bool
-                                               markup-menu-set))
-                                 (list (append  (list "Line Wrapping")
-                                                line-wrap-menu-bool
-                                                line-wrap-menu-set))
-                                 (list (append (list "Preference")
-                                               preference-menu-bool
-                                               preference-menu-set))
-                                 (list (append (list "Indentation")
-                                               indent-menu-bool
-                                               indent-menu-set))
-                                 (list (append (list "Input/Output")
-                                              io-menu-bool
-                                              io-menu-set))
-                                 (list (append (list "Tags")
-                                               tags-menu-bool
-                                               tags-menu-set))
-                                 (list tidy-doctype-menu)
-                                 (list tidy-output-encoding-menu)
-                                 (list tidy-newline-menu)
-                                 ))
-                   '(["Describe Options" tidy-describe-options t])
-                   (list (list "-------"))
-                   '(["Tidy Home Page"
-                      (lambda ()
-                        "Open Tidy home page in your web browser."
-                        (interactive)
-                        (browse-url "http://tidy.sourceforge.net/"))
-                      t])
-                   ))
+                                   (list (append (list "Fix Markup")
+                                                 markup-menu-bool
+                                                 markup-menu-set))
+                                   (list (append  (list "Line Wrapping")
+                                                  line-wrap-menu-bool
+                                                  line-wrap-menu-set))
+                                   (list (append (list "Preference")
+                                                 preference-menu-bool
+                                                 preference-menu-set))
+                                   (list (append (list "Indentation")
+                                                 indent-menu-bool
+                                                 indent-menu-set))
+                                   (list (append (list "Input/Output")
+                                                 io-menu-bool
+                                                 io-menu-set))
+                                   (list (append (list "Tags")
+                                                 tags-menu-bool
+                                                 tags-menu-set))
+                                   (list tidy-doctype-menu)
+                                   (list tidy-output-encoding-menu)
+                                   (list tidy-newline-menu)
+                                   ))
+                     '(["Describe Options" tidy-describe-options t])
+                     (list (list "-------"))
+                     '(["Tidy Home Page"
+                        (lambda ()
+                          "Open Tidy home page in your web browser."
+                          (interactive)
+                          (browse-url "http://tidy.sourceforge.net/"))
+                        t])
+                     ))
+    )
   )
-)
 
 (defvar tidy-menu-symbol nil)
 ;;(tidy-build-menu (&optional map)
@@ -2023,17 +2022,17 @@ Used to set up a Tidy menu in your favourite mode."
       ;; else build it from scratch
       (setq buffer (get-buffer-create "*tidy-options*"))
       (let* ((start 0)
-            (end 0)
-            name
-            (count 0)
-            (option-alist tidy-options-alist)
-            (column2a (+ (length "drop-proprietary-attributes") 3))
-            (column2b (/ (window-width) 3))
-            (column2 (if (> column2a column2b) column2a column2b))
-            (column3 (* 2 column2))
-            (start-line 0)
-            (third-length 0)
-            (two-third-length 0))
+             (end 0)
+             name
+             (count 0)
+             (option-alist tidy-options-alist)
+             (column2a (+ (length "drop-proprietary-attributes") 3))
+             (column2b (/ (window-width) 3))
+             (column2 (if (> column2a column2b) column2a column2b))
+             (column3 (* 2 column2))
+             (start-line 0)
+             (third-length 0)
+             (two-third-length 0))
 
         (set-buffer buffer)
 
@@ -2062,9 +2061,9 @@ Used to set up a Tidy menu in your favourite mode."
           (cond
            ((< count third-length)     ;; 0 <= count < third-length
             (setq start (point))
-                (insert name)
-                (setq end (point))
-                (insert "\n"))
+            (insert name)
+            (setq end (point))
+            (insert "\n"))
            ((< count two-third-length) ;; third-length <= count < two-third-length
             (if (= count third-length)
                 (tidy-goto-line start-line)
@@ -2164,34 +2163,34 @@ The local values in the current buffer will be saved."
   (or config-file (setq config-file tidy-config-file))
   (when config-file
 
-      ;; should check for locks!
-      (if (or (not (interactive-p))
-              (y-or-n-p "Save settings to your tidy configuration file? "))
+    ;; should check for locks!
+    (if (or (not (interactive-p))
+            (y-or-n-p "Save settings to your tidy configuration file? "))
 
-          (let ((buffer (find-file-noselect config-file t))
-                (option-alist tidy-options-alist)
-                (outer-buffer (current-buffer))
-                option name symbol value)
-            (with-current-buffer buffer
-              (delete-region (point-min) (point-max)) ;; clear the buffer
+        (let ((buffer (find-file-noselect config-file t))
+              (option-alist tidy-options-alist)
+              (outer-buffer (current-buffer))
+              option name symbol value)
+          (with-current-buffer buffer
+            (delete-region (point-min) (point-max)) ;; clear the buffer
 
-              ;; need this line so that config file is always non empty
-              (insert "// HTML Tidy configuration file \n")
-              (while (setq option (car option-alist))
-                (setq option-alist (cdr option-alist))
-                (setq name      (nth 0 option)
-                      symbol    (intern (concat "tidy-" name)))
-                (with-current-buffer outer-buffer
-                  (setq value (symbol-value symbol)))
-                (when (string= value tidy-emacs-encoding-lbl)
-                  (setq value (tidy-get-buffer-encoding)))
-                (when value ;; nil iff default
-                  (insert (car option) ": " value "\n")))
+            ;; need this line so that config file is always non empty
+            (insert "// HTML Tidy configuration file \n")
+            (while (setq option (car option-alist))
+              (setq option-alist (cdr option-alist))
+              (setq name      (nth 0 option)
+                    symbol    (intern (concat "tidy-" name)))
+              (with-current-buffer outer-buffer
+                (setq value (symbol-value symbol)))
+              (when (string= value tidy-emacs-encoding-lbl)
+                (setq value (tidy-get-buffer-encoding)))
+              (when value ;; nil iff default
+                (insert (car option) ": " value "\n")))
 
-              (save-buffer)
-              ;;(basic-save-buffer)
-              (kill-buffer buffer)
-              )))))
+            (save-buffer)
+            ;;(basic-save-buffer)
+            (kill-buffer buffer)
+            )))))
 
 
 ;;;;; Main user function
@@ -2283,7 +2282,7 @@ etc). A fictive XHTML validation header will apply as
 above. However if there is no such header then when you tidy part
 of the buffer still a hopefully suitable header is added before
 calling tidy."
-;; Fix-me: copy back parts outside visible region
+  ;; Fix-me: copy back parts outside visible region
   (interactive)
   (message "starting tidy-buffer")
   (let* ((is-narrowed (buffer-narrowed-p))
@@ -2314,7 +2313,7 @@ calling tidy."
          ;;(orig-dir (file-name-directory filename))
          (orig-buffer (current-buffer))
          (work-buffer (get-buffer-create "* Tidy Temporary Work Buffer *"))
-         (line-header-offset nil)
+         (line-header-offset 0)
 
          ;; Gasp! We have to use temp files here because the command
          ;; line would likely get too long!
@@ -2341,9 +2340,9 @@ calling tidy."
          (want-mumamo nil)
          )
 
-;;     (when (and use-ediff
-;;                (not tidy-show-warnings)) ;; default "yes" hence inverted logic
-;;       (setq use-ediff (y-or-n-p "Warning can not be shown when using ediff. Still use ediff? ")))
+    ;;     (when (and use-ediff
+    ;;                (not tidy-show-warnings)) ;; default "yes" hence inverted logic
+    ;;       (setq use-ediff (y-or-n-p "Warning can not be shown when using ediff. Still use ediff? ")))
     (unless buffer-file-name
       (error "Can't tidy buffer with no file name"))
 
@@ -2356,11 +2355,11 @@ calling tidy."
       (setq tidy-tidied-buffer orig-buffer))
 
     ;; OK do the tidy
-;;     (message "coding-system: %s, %s, %s"
-;;              (find-operation-coding-system
-;;               'call-process-region start end command)
-;;              coding-system-for-write
-;;              buffer-file-coding-system)
+    ;;     (message "coding-system: %s, %s, %s"
+    ;;              (find-operation-coding-system
+    ;;               'call-process-region start end command)
+    ;;              coding-system-for-write
+    ;;              buffer-file-coding-system)
     (let* ((coding-system-for-write buffer-file-coding-system)
            (tidy-input-encoding (tidy-get-tidy-encoding coding-system-for-write)))
 
@@ -2387,10 +2386,10 @@ calling tidy."
                                         ;(setq tidy-add-xml-decl "no")
       (let (;(orig-min (point-min)) (orig-max (point-max))
             )
-;;         (when region-restricted
-;;           ;; We have a visible region
-;;           (setq orig-min (region-beginning))
-;;           (setq orig-max (region-end)))
+        ;;         (when region-restricted
+        ;;           ;; We have a visible region
+        ;;           (setq orig-min (region-beginning))
+        ;;           (setq orig-max (region-end)))
         (with-current-buffer work-buffer
           (erase-buffer)
           (when validation-header
@@ -2416,7 +2415,7 @@ calling tidy."
                     (insert ht he b p))))
               (goto-char (point-max))
               (insert "\n" tidy-beg-mark)))
-          (setq line-header-offset (line-number-at-pos))
+          (setq line-header-offset (1- (line-number-at-pos)))
           (insert-buffer-substring orig-buffer start end) ;orig-min orig-max)
           (when partial (insert "\n" tidy-end-mark "\n"))
           (let ((args
@@ -2448,13 +2447,13 @@ calling tidy."
       (setq tidy-tidied-buffer orig-buffer)
       (insert-file-contents error-file)
       ;; Change the line numbers if a header was inserted
-      (when line-header-offset
+      (when (< 0 line-header-offset)
         (goto-char (point-min))
         (while (re-search-forward ":\\([0-9]+\\):[0-9]+" nil t)
           (let ((line (1+ (- (string-to-number (match-string-no-properties 1))
                              line-header-offset))))
             (replace-match (number-to-string line) nil nil nil 1))))
-        )
+      )
 
     ;; avoid leaving these guys lying around
     (if (file-exists-p error-file)  (delete-file error-file))
@@ -2481,73 +2480,81 @@ calling tidy."
                                  (switch-to-buffer-other-window orig-buf)
                                  (select-window curr-win))))
       (insert " ")
-      (widget-create 'push-button
-                     :tag " Show Tidied "
-                     :keymap (make-sparse-keymap)
-                     :arg-tidy output-buffer
-                     :arg-orig orig-buffer
-                     :action (lambda (widget &optional event)
-                               (let ((tidy-buf (widget-get widget :arg-tidy))
-                                     (orig-buf (widget-get widget :arg-orig))
-                                     (curr-win (selected-window)))
-                                 (tidy-check-is-tidied orig-buf tidy-buf)
-                                 (switch-to-buffer-other-window tidy-buf)
-                                 (select-window curr-win))))
+      (if (not (with-current-buffer output-buffer tidy-tidied-buffer))
+          (insert (propertize "(Tidy was not able to tidy the HTML code.)" 'font-lock-face font-lock-warning-face))
+        (widget-create 'push-button
+                       :tag " Show Tidied "
+                       :keymap (make-sparse-keymap)
+                       :arg-tidy output-buffer
+                       :arg-orig orig-buffer
+                       ;; Fix-me: Does not work (but is not used either).
+                       :active (lambda (widget)
+                                 (let ((tidy-buf (widget-get widget :arg-tidy)))
+                                   (when tidy-buf
+                                     (with-current-buffer tidy-buf tidy-tidied-buffer))))
+                       :action (lambda (widget &optional event)
+                                 (let ((tidy-buf (widget-get widget :arg-tidy))
+                                       (orig-buf (widget-get widget :arg-orig))
+                                       (curr-win (selected-window)))
+                                   (tidy-check-is-tidied orig-buf tidy-buf)
+                                   (switch-to-buffer-other-window tidy-buf)
+                                   (select-window curr-win))))
 
 
-      (insert " ")
-      (widget-create 'push-button
-                     :tag " Use Tidied "
-                     :keymap (make-sparse-keymap)
-                     :arg-tidy output-buffer
-                     :arg-orig orig-buffer
-                     :action (lambda (widget &optional event)
-                               (message "Copying ...")
-                               (let* ((orig-buf (widget-get widget :arg-orig))
-                                      (tidy-buf (widget-get widget :arg-tidy))
-                                      (orig-buf-str
-                                       (save-restriction
-                                         (with-current-buffer orig-buf
-                                           (widen)
-                                           (buffer-substring-no-properties (point-min) (point-max)))))
-                                      (tidy-buf-str
-                                       (save-restriction
-                                         (with-current-buffer tidy-buf
-                                           (widen)
-                                           (buffer-substring-no-properties (point-min) (point-max)))))
-                                      )
-                                 (tidy-check-is-tidied orig-buf tidy-buf)
-                                 (kill-buffer (current-buffer))
-                                 (kill-buffer tidy-buf)
-                                 (if (string= orig-buf-str tidy-buf-str)
-                                     (message "Original buffer's and tidied buffer's contents are equal")
-                                   (with-current-buffer orig-buf
-                                     (erase-buffer)
-                                     (insert tidy-buf-str)
-                                     (goto-char (point-min))
-                                     (delete-window (selected-window))
-                                     (switch-to-buffer orig-buf)
-                                     (message "Copied to %s" orig-buf))))))
-      (insert " ")
-      (widget-create 'push-button
-                     :tag " Ediff "
-                     :keymap (make-sparse-keymap)
-                     :arg-tidy output-buffer
-                     :arg-orig orig-buffer
-                     :action (lambda (widget &optional event)
-                               (require 'ediff)
-                               (let ((orig-buf (widget-get widget :arg-orig))
-                                     (tidy-buf (widget-get widget :arg-tidy))
-                                     ;; Fix-me: How should ediff-actual-options be set?
-                                     (old-ediff-actual-diff-options (default-value 'ediff-actual-diff-options))
-                                     (new-ediff-actual-diff-options " -a -b -w "))
-                                 (with-current-buffer orig-buf (setq ediff-actual-diff-options " -a -b -w "))
-                                 (with-current-buffer tidy-buf (setq ediff-actual-diff-options " -a -b -w "))
-                                 (tidy-check-is-tidied orig-buf tidy-buf)
-                                 (set-default 'ediff-actual-diff-options new-ediff-actual-diff-options)
-                                 (tidy-ediff-buffers orig-buf tidy-buf)
-                                 (set-default 'ediff-actual-diff-options old-ediff-actual-diff-options)
-                                 )))
+        (insert " ")
+        (widget-create 'push-button
+                       :tag " Use Tidied "
+                       :keymap (make-sparse-keymap)
+                       :arg-tidy output-buffer
+                       :arg-orig orig-buffer
+                       :action (lambda (widget &optional event)
+                                 (message "Copying ...")
+                                 (let* ((orig-buf (widget-get widget :arg-orig))
+                                        (tidy-buf (widget-get widget :arg-tidy))
+                                        (orig-buf-str
+                                         (save-restriction
+                                           (with-current-buffer orig-buf
+                                             (widen)
+                                             (buffer-substring-no-properties (point-min) (point-max)))))
+                                        (tidy-buf-str
+                                         (save-restriction
+                                           (with-current-buffer tidy-buf
+                                             (widen)
+                                             (buffer-substring-no-properties (point-min) (point-max)))))
+                                        )
+                                   (tidy-check-is-tidied orig-buf tidy-buf)
+                                   (kill-buffer (current-buffer))
+                                   (kill-buffer tidy-buf)
+                                   (if (string= orig-buf-str tidy-buf-str)
+                                       (message "Original buffer's and tidied buffer's contents are equal")
+                                     (with-current-buffer orig-buf
+                                       (erase-buffer)
+                                       (insert tidy-buf-str)
+                                       (goto-char (point-min))
+                                       (delete-window (selected-window))
+                                       (switch-to-buffer orig-buf)
+                                       (message "Copied to %s" orig-buf))))))
+        (insert " ")
+        (widget-create 'push-button
+                       :tag " Ediff "
+                       :keymap (make-sparse-keymap)
+                       :arg-tidy output-buffer
+                       :arg-orig orig-buffer
+                       :action (lambda (widget &optional event)
+                                 (require 'ediff)
+                                 (let ((orig-buf (widget-get widget :arg-orig))
+                                       (tidy-buf (widget-get widget :arg-tidy))
+                                       ;; Fix-me: How should ediff-actual-options be set?
+                                       (old-ediff-actual-diff-options (default-value 'ediff-actual-diff-options))
+                                       (new-ediff-actual-diff-options " -a -b -w "))
+                                   (with-current-buffer orig-buf (setq ediff-actual-diff-options " -a -b -w "))
+                                   (with-current-buffer tidy-buf (setq ediff-actual-diff-options " -a -b -w "))
+                                   (tidy-check-is-tidied orig-buf tidy-buf)
+                                   (set-default 'ediff-actual-diff-options new-ediff-actual-diff-options)
+                                   (tidy-ediff-buffers orig-buf tidy-buf)
+                                   (set-default 'ediff-actual-diff-options old-ediff-actual-diff-options)
+                                   )))
+        )
       ;;(widget-setup)
 
       (insert "\n\n")
@@ -2757,7 +2764,7 @@ called."
     ;;(setq tidy-batch-buffer procbuf)
     (tidy-save-settings config-file)
     (unwind-protect
-          (setq proc (apply 'noshell-procbuf-run procbuf command))
+        (setq proc (apply 'noshell-procbuf-run procbuf command))
       (with-current-buffer procbuf
         (set-process-sentinel proc 'tidy-batch-sentinel)
         ;;(set-process-coding-system 'dos)
@@ -2866,15 +2873,15 @@ called."
          (here (point)))
     ;;(message "pos-list=%s" pos-list)
     (mapc (lambda (p) (when (and p
-                                (if forward
-                                    (progn
-                                      (when (< p here)
-                                        (setq p (+ p len)))
-                                      (< p newpos))
-                                  (when (> p here)
-                                    (setq p (- p len)))
-                                  (> p newpos)))
-                       (setq newpos p)))
+                                 (if forward
+                                     (progn
+                                       (when (< p here)
+                                         (setq p (+ p len)))
+                                       (< p newpos))
+                                   (when (> p here)
+                                     (setq p (- p len)))
+                                   (> p newpos)))
+                        (setq newpos p)))
           pos-list)
     (if (= newpos defpos)
         (setq newpos here)

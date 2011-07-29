@@ -51,30 +51,7 @@
 (eval-when-compile (require 'mumamo))
 (eval-and-compile  (require 'mumamo-fun))
 (eval-when-compile (require 'rng-valid nil t))
-;;(mumamo-fun-require)
 
-;; (defgroup nxhtml-auto-val-head nil
-;;   "Automatic turn on of XHTML validation headers."
-;;   :group 'nxhtml)
-
-;; (defmacro define-fictive-validation-header-toggle (fun-sym default-value)
-;;   (let* ((fun-name (symbol-name fun-sym))
-;;          (custom-sym (intern (concat fun-name "-auto-val-head")))
-;;          (hook-sym (intern-soft (concat fun-name "-hook")))
-;;          (docstring
-;;           (concat "Automatic XHTML validation header for `" fun-name "'.
-;; ´")))
-;;     (assert hook-sym)
-;;     `(defcustom ,custom-sym ,default-value
-;;        ,docstring
-;;        :type 'boolean
-;;        :set (lambda (sym val)
-;;               (set-default sym val)
-;;               (if val
-;;                   (add-hook ',hook-sym 'nxhtml-turn-on-validation-header-mode)
-;;                 (remove-hook ',hook-sym 'nxhtml-turn-on-validation-header-mode)))
-;;        :group 'nxhtml-auto-val-head)
-;;     ))
 
 ;; Fix-me: add chunk type attr string as last alternative. This will
 ;; allow things like myattr="<?php echo ?>".
@@ -277,7 +254,8 @@ This also covers inlined style and javascript."
   "Turn on multiple major modes for JSP with main mode `nxhtml-mode'.
 This also covers inlined style and javascript."
   ("JSP nXhtml Family" nxhtml-mode
-   (mumamo-chunk-jsp
+   (mumamo-chunk-jsp-hidden-comment
+    mumamo-chunk-jsp
     mumamo-chunk-inlined-style
     mumamo-chunk-inlined-script
     mumamo-chunk-style=
@@ -292,7 +270,9 @@ This also covers inlined style and javascript."
   "Turn on multiple major modes for eRuby with main mode `nxhtml-mode'.
 This also covers inlined style and javascript."
   ("eRuby nXhtml Family" nxhtml-mode
-   (mumamo-chunk-eruby
+   (mumamo-chunk-eruby-comment
+    mumamo-chunk-eruby=
+    mumamo-chunk-eruby
     mumamo-chunk-inlined-style
     mumamo-chunk-inlined-script
     mumamo-chunk-style=

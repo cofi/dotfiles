@@ -16,7 +16,7 @@ Note 3: You may optionally also byte compile nXhtml from the nXhtml
 
 
 
-Files that are now in Emacs' development (CVS/Bazaar) repository
+Files that are now in Emacs' development Bazaar repository
 ================================================================
 
 Some files that were previously distributed with nXhtml are now in
@@ -28,7 +28,7 @@ Instead you can (if you do not have the files in your Emacs) in many
 cases use the version from the repository.  To do that you can
 currently start from
 
-  http://cvs.savannah.gnu.org/viewvc/emacs/emacs/lisp/
+  https://code.launchpad.net/~vcs-imports/emacs/trunk
 
 Files you can download and use this way are for example
 

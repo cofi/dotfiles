@@ -4,7 +4,7 @@
 ;; Maintainer:
 ;; Created: Wed Dec 07 15:35:09 2005
 (defconst winsize:version "0.98") ;;Version: 0.97
-;; Lxast-Updated: Sun Nov 18 02:14:52 2007 (3600 +0100)
+;; Last-Updated: 2010-05-27 Thu
 ;; Keywords:
 ;; Compatibility:
 ;;
@@ -115,38 +115,26 @@ makes the mouse jump a few times."
 (defvar winsize-keymap nil
   "Keymap used by `resize-windows'.")
 
+(defun winsize-ignore ()
+  (interactive)
+  (message "Key is ignored during resizing"))
+
 (defun winsize-make-keymap (let-me-use)
   "Build the keymap that should be used by `winsize-keymap'."
   (let ((map (make-sparse-keymap "Window Resizing")))
-    (when (featurep 'winsav)
-      (define-key map [menu-bar bw rotate]
-        '("Rotate window configuration" . winsav-rotate))
-      (define-key map [menu-bar bw sep3] '(menu-item "--")))
-    (define-key map [menu-bar bw]
-      (cons "Resize" (make-sparse-keymap "second")))
-    (define-key map [menu-bar bw save-config]
-      '("Save window configuration" . winsize-save-window-configuration))
-    (define-key map [menu-bar bw next-config]
-      '("Next saved window configuration" . winsize-next-window-configuration))
-    (define-key map [menu-bar bw prev-config]
-      '("Previous saved window configuration" . winsize-previous-window-configuration))
-    (define-key map [menu-bar bw sep2] '(menu-item "--"))
-    (define-key map [menu-bar bw fit]
-      '("Fit Window to Buffer" . fit-window-to-buffer))
-    (define-key map [menu-bar bw shrink]
-      '("Shrink Window to Buffer" . shrink-window-if-larger-than-buffer))
-    (define-key map [menu-bar bw sep1] '(menu-item "--"))
-    (define-key map [menu-bar bw siblings]
-      '("Balance Window Siblings" . winsize-balance-siblings))
-    (define-key map [menu-bar bw balance]
-      '("Balance Windows" . balance-windows))
-
+    (define-key map [t] 'winsize-ignore)
     (when (featurep 'winsav)
       (define-key map [?|] 'winsav-rotate))
     (define-key map [?+] 'balance-windows)
     (define-key map [?.] 'winsize-balance-siblings)
-    (define-key map [?=] 'fit-window-to-buffer)
-    (define-key map [?-] 'shrink-window-if-larger-than-buffer)
+    ;;(define-key map [?h] 'fit-window-to-buffer)
+    (define-key map [?w] 'winsize-fit-window-to-desired-width)
+    (define-key map [?W] 'winsize-fit-windows-to-desired-widths)
+    (define-key map [?h] 'shrink-window-if-larger-than-buffer)
+
+    (define-key map [?f] 'winsize-fit-frame-width)
+    (define-key map [?F] 'winsize-fitw-and-maxh-frame)
+    (define-key map [?H] 'winsize-max-frame-height)
 
     (define-key map [(up)]    'winsize-move-border-up)
     (define-key map [(down)]  'winsize-move-border-down)
@@ -184,7 +172,7 @@ makes the mouse jump a few times."
     (define-key map [(control ?g)]     'winsize-quit)
     (define-key map [(control return)] 'winsize-stop-go-back)
     (define-key map [(return)]         'winsize-stop)
-    (define-key map [t]                'winsize-stop-and-execute)
+    ;;(define-key map [t]                'winsize-stop-and-execute)
 
     (dolist (ks let-me-use)
       (if (and (not (vectorp ks))
@@ -197,7 +185,78 @@ makes the mouse jump a few times."
         (unless (lookup-key map ks)
           (define-key map ks nil))))
 
-    (setq winsize-keymap map)))
+    (setq winsize-keymap map)
+
+    (easy-menu-define nil winsize-keymap
+      "Menu for winsize."
+      '("WinSize"
+        ["Help" winsize-help]
+        "--"
+        ("Balance or Fit Windows"
+         ["Balance Windows" balance-windows]
+         ["Balance Siblings" winsize-balance-siblings]
+         "--"
+         ["Fit Window Width" winsize-fit-window-to-desired-width]
+         ["Fit Windows Widths" winsize-fit-windows-to-desired-widths]
+         ["Shrink Window If Too High" shrink-window-if-larger-than-buffer]
+         "--"
+         ["Fit Frame Width" winsize-fit-frame-width]
+         ["Max Frame Height" winsize-max-frame-height]
+         ["Fit Frame Width + Max Height" winsize-fitw-and-maxh-frame]
+         )
+        ("Move Borders Step by Step"
+         ["Move Bottom Up" winsize-move-border-up     :active (winsize--vertical-moveable)]
+         ["Move Bottom Down" winsize-move-border-down :active (winsize--vertical-moveable)]
+         ["Move Right Border Left" winsize-move-border-left   :active (winsize--horizontal-moveable)]
+         ["Move Right Border Right" winsize-move-border-right :active (winsize--horizontal-moveable)]
+         )
+        "--"
+        ("Jump To New Window"
+         ["Up" winsize-to-border-or-window-up       :active (winsize--has-window-above)]
+         ["Down" winsize-to-border-or-window-down   :active (winsize--has-window-below)]
+         ["Left" winsize-to-border-or-window-left   :active (winsize--has-window-left)]
+         ["Right" winsize-to-border-or-window-right :active (winsize--has-window-right)]
+         )
+        "--"
+        ("Divide Or Delete Windows"
+         ["Delete Window" delete-window :active (< 1 (length (window-list nil 'no-mini)))]
+         ["Delete Other Windows" delete-other-windows]
+         ["Split Vertically" split-window-vertically]
+         ["Split Horizontally" split-window-horizontally]
+         ;;["" other-window]
+         )
+        "--"
+        ["Rotate" winsav-rotate :active (featurep 'winsav)]
+        "--"
+        ["Exit" winsize-stop-go-back]
+        ["Exit With Selected Window" winsize-stop]
+        ["Undo And Quit" winsize-quit]
+        ))
+    ))
+
+(defun winsize--has-window-left ()
+  (/= (nth 0 (window-edges (selected-window)))
+      (nth 0 (window-edges (frame-root-window)))))
+
+(defun winsize--has-window-above ()
+  (/= (nth 1 (window-edges (selected-window)))
+      (nth 1 (window-edges (frame-root-window)))))
+
+(defun winsize--has-window-right ()
+  (/= (nth 2 (window-edges (selected-window)))
+      (nth 2 (window-edges (frame-root-window)))))
+
+(defun winsize--has-window-below ()
+  (/= (nth 3 (window-edges (selected-window)))
+      (nth 3 (window-edges (frame-root-window)))))
+
+(defun winsize--vertical-moveable ()
+  (or (winsize--has-window-above)
+      (winsize--has-window-below)))
+
+(defun winsize--horizontal-moveable ()
+  (or (winsize--has-window-left)
+      (winsize--has-window-right)))
 
 (defcustom winsize-let-me-use '(next-line ;;[(control ?n)]
                                 previous-line ;;[(control ?p)]
@@ -205,9 +264,12 @@ makes the mouse jump a few times."
                                 backward-char ;;[(control ?b)]
                                 [(home)]
                                 [(end)]
+                                [(next)]
+                                [(prior)]
                                 ;; Fix-me: replace this with something
                                 ;; pulling in help-event-list:
                                 [(f1)]
+                                [(control ?h)]
                                 execute-extended-command
                                 eval-expression)
   "Key sequences or commands that should not be overriden during resize.
@@ -344,57 +406,59 @@ You can also do other window operations, like splitting, deleting
 and balancing the sizes.  The keybindings below describes the key
 bindings during resizing:\\<winsize-keymap>
 
-  `balance-windows'                      \\[balance-windows]
-  `winsize-balance-siblings'             \\[winsize-balance-siblings]
-  `fit-window-to-buffer'                 \\[fit-window-to-buffer]
-  `shrink-window-if-larger-than-buffer'  \\[shrink-window-if-larger-than-buffer]
+ `balance-windows'                       \\[balance-windows]
+ `winsize-balance-siblings'              \\[winsize-balance-siblings]
+ `winsize-fit-window-to-desired-width'   \\[winsize-fit-window-to-desired-width]
+ `winsize-fit-windows-to-desired-widths' \\[winsize-fit-windows-to-desired-widths]
+ `shrink-window-if-larger-than-buffer'   \\[shrink-window-if-larger-than-buffer]
 
-  `winsav-rotate'                        \\[winsav-rotate]
+ `winsize-fit-frame-width'      \\[winsize-fit-frame-width]
+ `winsize-fitw-and-maxh-frame'  \\[winsize-fitw-and-maxh-frame]
+ `winsize-max-frame-height'     \\[winsize-max-frame-height]
 
-  `winsize-move-border-up'      \\[winsize-move-border-up]
-  `winsize-move-border-down'    \\[winsize-move-border-down]
-  `winsize-move-border-left'    \\[winsize-move-border-left]
-  `winsize-move-border-right'   \\[winsize-move-border-right]
+ `winsav-rotate'  \\[winsav-rotate]
 
-  `winsize-to-border-or-window-left'    \\[winsize-to-border-or-window-left]
-  `winsize-to-border-or-window-up'      \\[winsize-to-border-or-window-up]
-  `winsize-to-border-or-window-right'   \\[winsize-to-border-or-window-right]
-  `winsize-to-border-or-window-down'    \\[winsize-to-border-or-window-down]
+ `winsize-move-border-up'      \\[winsize-move-border-up]
+ `winsize-move-border-down'    \\[winsize-move-border-down]
+ `winsize-move-border-left'    \\[winsize-move-border-left]
+ `winsize-move-border-right'   \\[winsize-move-border-right]
 
-   Note that you can also use your normal keys for
-   `forward-char', `backward-char', `next-line', `previous-line'
-   and what you have on HOME and END to move in the windows. That
-   might sometimes be necessary to directly select a
-   window. \(You may however also use `other-window' or click
-   with the mouse, see below.)
+ `winsize-to-border-or-window-left'    \\[winsize-to-border-or-window-left]
+ `winsize-to-border-or-window-up'      \\[winsize-to-border-or-window-up]
+ `winsize-to-border-or-window-right'   \\[winsize-to-border-or-window-right]
+ `winsize-to-border-or-window-down'    \\[winsize-to-border-or-window-down]
 
-  `delete-window'                \\[delete-window]
-  `delete-other-windows'         \\[delete-other-windows]
-  `split-window-vertically'      \\[split-window-vertically]
-  `split-window-horizontally'    \\[split-window-horizontally]
-  `other-window'                 \\[other-window]
+ `delete-window'                \\[delete-window]
+ `delete-other-windows'         \\[delete-other-windows]
+ `split-window-vertically'      \\[split-window-vertically]
+ `split-window-horizontally'    \\[split-window-horizontally]
+ `other-window'                 \\[other-window]
 
-  `winsize-save-window-configuration'       \\[winsize-save-window-configuration]
-  `winsize-next-window-configuration'       \\[winsize-next-window-configuration]
-  `winsize-previous-window-configuration'   \\[winsize-previous-window-configuration]
+ `winsize-save-window-configuration'       \\[winsize-save-window-configuration]
+ `winsize-next-window-configuration'       \\[winsize-next-window-configuration]
+ `winsize-previous-window-configuration'   \\[winsize-previous-window-configuration]
 
-  `mouse-set-point'   \\[mouse-set-point]
+ `mouse-set-point'   \\[mouse-set-point]
 
-  `winsize-quit'               \\[winsize-quit]
-  `winsize-stop-go-back'       \\[winsize-stop-go-back]
-  `winsize-stop'               \\[winsize-stop]
-  `winsize-stop-and-execute'   \\[winsize-stop-and-execute]
+ `winsize-quit'               \\[winsize-quit]
+ `winsize-stop-go-back'       \\[winsize-stop-go-back]
+ `winsize-stop'               \\[winsize-stop]
+ `winsize-stop-and-execute'   \\[winsize-stop-and-execute]
 
-  `winsize-help'          \\[winsize-help]
-  `describe-key'          \\[describe-key]
-  `describe-key-briefly'  \\[describe-key-briefly]
-  (All the normal help keys work, and at least those above will
+ `winsize-help'          \\[winsize-help]
+ `describe-key'          \\[describe-key]
+ `describe-key-briefly'  \\[describe-key-briefly]
+ (All the normal help keys work, and at least those above will
   play well with resizing.)
 
-Nearly all other keys exits window resizing and they are also
-executed.  However, the key sequences in `winsize-let-me-use' and
-dito for commands there are also executed without exiting
-resizing.
+You can use keys and commands listed in `winsize-let-me-use' as
+normal.  This means that you by default can use your normal keys
+for `forward-char', `backward-char', `next-line',
+`previous-line' and what you have on HOME and END to move in the
+windows.  That might sometimes be necessary to directly select a
+window.  \(You may however also use `other-window' or click with
+the mouse, see below.)
+
 
 The colors of the modelines are changed to those given in
 `winsize-mode-line-colors' to indicate that you are resizing
@@ -535,6 +599,420 @@ variable `winsize-autoselect-borders'.
   (setq winsize-window-for-side-hor nil)
   (setq winsize-window-for-side-ver nil))
 
+(defcustom winsize-desired-width 'major
+  "Column to use for `winsize-fit-window-to-desired-width' etc."
+  :type '(choice (const :tag "Use fill-column" 'fill-column)
+                 (const :tag "Per major mode" 'major)
+                 integer)
+  :group 'winsize)
+
+(defcustom winsize-desired-width-per-mode
+  '((fill-column text-mode fundamental-mode org-mode)
+    (80))
+  "List of windows width for different major modes.
+Each entry has the form
+
+  (WIDTH . (MAJ1 MAJ2 ...))
+
+where WIDTH is the desired width and MAJ1 etc are major modes.
+The last entry may be \(WIDTH) which catches all modes.
+
+First matching entry is used."
+  :type '(repeat (cons (choice (const :tag "Fill column" 'fill-column)
+                               integer)
+                       (repeat command)))
+  :group 'winsize)
+
+(defun winsize-desired-width (window)
+  (cond ( (wholenump winsize-desired-width)
+          winsize-desired-width)
+        ( (eq 'fill-column winsize-desired-width)
+          (with-current-buffer (window-buffer window)
+            fill-column))
+        ( (eq 'major winsize-desired-width)
+          (let* ((major (with-current-buffer
+                           (window-buffer window)
+                         major-mode))
+                 (val
+                  (catch 'val
+                    (dolist (rec winsize-desired-width-per-mode)
+                      (when (or (memq major rec)
+                                (not (cdr rec)))
+                        (throw 'val (car rec)))))))
+            (cond
+             ((not val) fill-column)
+             ((eq val 'fill-column) fill-column)
+             ((wholenump val) val)
+             (t
+              (message
+               "Bad car in winsize-desired-width-per-mode: %S" val)
+              80))))
+        (t
+         (message "Bad winsize-desired-width=%S" winsize-desired-width)
+         80)))
+
+;;;###autoload
+(defun winsize-fit-window-to-desired-width (window only-trailing desired-width)
+  "Adjust width of WINDOW to desired width for its buffer.
+This will not delete any window but may widen the window as much
+as possible up to desired width.
+
+The desired width is defined by `winsize-desired-width'.  It can
+a major mode specific \(a number or `fill-column') or fall back
+to a number or `fill-column'.
+
+When used non-interactively ONLY-TRAILING can be non-nil and in
+this case only the trailing edge of the window can change.
+
+For non-interactive use you can also specify the wanted width in
+DESIRED-WIDTH."
+  (interactive (list (selected-window) current-prefix-arg nil))
+  (let* ((our-frame (window-frame window))
+         (our-edges (window-edges window))
+         (root-window (frame-root-window our-frame))
+         (root-edges (window-edges root-window))
+         (our-buffer (window-buffer window))
+         (our-desired-width (or desired-width (winsize-desired-width window)))
+         (max-width (window-width root-window))
+         (our-width (let* ((margs (window-margins window))
+                           (lm (or (car margs) 0))
+                           (rm (or (cdr margs) 0)))
+                      (+ (window-width window) lm rm)))
+         ;;(our-width (- (nth 2 our-edges) (nth 0 our-edges)))
+         (diff (- (min max-width our-desired-width)
+                  our-width))
+         (old-wcfg (current-window-configuration our-frame))
+         (num-windows (length (window-list our-frame 'no-mini)))
+         new-num-windows
+         (nn (abs diff))
+         (orig-diff diff)
+         (problem "Problem fitting window"))
+    (cond
+     ((= 1 num-windows)
+      (message "There is only one window on the frame, can't widen window"))
+     ((and (= 0 (nth 0 our-edges)) ;; left
+           (= (nth 2 our-edges) (nth 2 root-edges))) ;; right
+      (message "This window already is as wide as the frame"))
+     (t
+      (with-selected-window window
+        (catch 'done
+          (while (< 0 (setq nn (1- nn)))
+            (if only-trailing
+                (condition-case err
+                    (progn
+                      (adjust-window-trailing-edge window diff t)
+                      (throw 'done t))
+                  (error (setq problem (error-message-string err))))
+              (enlarge-window diff t)
+              (setq new-num-windows (length (window-list our-frame 'no-mini)))
+              (when (= num-windows new-num-windows) (throw 'done 't))
+              (setq problem
+                    "Could not fit window to desired width without deleting windows")
+              (set-window-configuration old-wcfg)
+              (setq diff (+ diff (if (> diff 0) -1 1)))))))
+      (unless (= diff orig-diff)
+        (message "%s" problem))))))
+
+(defvar winsize-windows-desired-width nil
+  "Internal use in `winsize-fit-windows-to-desired-widths'.")
+
+;;;###autoload
+(defun winsize-fit-window-to-buffer (&optional window max-height min-height)
+  "A more complete `fit-window-to-buffer'. Fix-me: not ready, bug# 7822.
+Find through an iterative search minimal height to display whole
+buffer \(narrowed part if narrowed) and set window height to that
+height.  Or, if that can not be done then set the height to the
+best possible height for fit.
+
+Try first to adjust window below and if that is not enough window
+above.
+"
+  (let* ((window (or window (selected-window)))
+         (frm (window-frame window))
+         (frm-height (frame-height frm))
+         here
+         (above (windmove-find-other-window 'up   nil window))
+         (below (windmove-find-other-window 'down nil window))
+         ;;(wcfg (current-window-configuration frm))
+         window-configuration-change-hook
+         (eob-in-win (= (window-end window t) (point-max)))
+         (curh (window-height window))
+         (minh (if (not eob-in-win)
+                   curh
+                 (or min-height window-min-height)))
+         (orig-minh minh)
+         (maxh (if eob-in-win
+                   curh
+                 (or max-height frm-height)))
+         (orig-maxh maxh)
+         midh
+         done)
+    (when (window-minibuffer-p below)
+      (setq below nil))
+
+    (when (or above below)
+      (with-current-buffer (window-buffer window)
+        (setq here (point))
+
+        ;; First try resizing window below.
+        (when below
+          (while (and (not done) (> maxh minh))
+            (setq midh (+ minh (/ (- maxh minh) 2)))
+            (let* ((winh (window-height window))
+                   (delta (- midh winh))
+                   did-it)
+              (condition-case err
+                  (progn
+                    (adjust-window-trailing-edge window delta nil)
+                    (setq did-it t))
+                (error
+                 (message "%S" err)))
+              (if did-it
+                  (progn
+                    (goto-char (point-min))
+                    ;; Fix-me: This unfortunately returns t even if
+                    ;; the last line is partly hidden (test example
+                    ;; help for posn-at-x-y):
+                    (setq eob-in-win (= (window-end window t) (point-max)))
+                    ;; So let us try another way to check if eob is in window:
+                    (let* ((edges (window-inside-pixel-edges))
+                           (left (1+ (nth 0 edges)))
+                           (bottom (1- (nth 3 edges))))
+                      (setq eob-in-win
+                            (= (point-max)
+                               (posn-point (posn-at-x-y left bottom frm)))))
+                    (if eob-in-win
+                        ;; Fix-me: This assumes that posn-at-point is
+                        ;; relative to window text area.
+                        (let* ((loc (event-end (posn-at-point (point-max) window)))
+                               (loc-bottom (cdr loc))
+                               (edges (window-inside-pixel-edges window))
+                               (win-top (nth 1 edges))
+                               (win-bottom (nth 3 edges))
+                               (win-rel-bottom (- win-bottom win-top))
+                               ;; Fix-me: This returns nil even though
+                               ;; we have updated above with
+                               ;; (window-end window t) and also after
+                               ;; (redisplay t) or (sit-for 0).
+                               (dummy (redisplay t))
+                               (dummy2 (sit-for 0))
+                               (bottom-line-height (window-line-height
+                                                    (line-number-at-pos (1- (point-max)))
+                                                    window)))
+                          ;; Make a guess if we are ready.
+                          (when (> bottom-line-height
+                                   (- win-rel-bottom loc-bottom))
+                            (setq done t))
+                          (setq maxh midh))
+                      (setq minh midh)))
+                (if (< 0 delta)
+                    (setq maxh (1- maxh))
+                  (setq minh (1+ minh))))
+              )))
+
+        ;; If we are not done try window above.
+        (when above
+          (while (and (not done) (> maxh minh))
+            (setq midh (+ minh (/ (- maxh minh) 2)))
+            (let* ((winh (window-height window))
+                   (delta (- winh midh))
+                   did-it)
+              ;; (when (> 0 delta) ;; Check window above min height
+              ;;   (setq delta (max delta
+              ;;                    (- window-min-height
+              ;;                       (window-height above))))
+              ;;   (setq midh (- delta winh)))
+              (condition-case err
+                  (progn
+                    (adjust-window-trailing-edge above delta nil)
+                    (setq did-it t))
+                (error
+                 (message "%S" err)))
+              (if did-it
+                  (progn
+                    (goto-char (point-min))
+                    (setq eob-in-win (= (window-end window t) (point-max)))
+                    (if eob-in-win
+                        (setq maxh midh)
+                      (setq minh midh)))
+                (if (> 0 delta)
+                    (setq maxh (1- maxh))
+                  (setq minh (1+ minh))))
+              )))
+        (goto-char here))
+      )))
+
+;;(winsize-fit-windows-to-desired-widths)
+;;;###autoload
+(defun winsize-fit-windows-to-desired-widths ()
+  "Fit window width to desired width for buffers.
+Set widths by calling `winsize-fit-window-to-desired-width'.
+
+Change windows in the order of left to right and only change
+trailing edges.  \(This means that the windows on the right edge
+of the frame gets the resulting width of the changes to the width
+of the windows left of them.)"
+  (interactive)
+  (winsize-fit-windows-to-desired-widths-1 nil))
+
+(defun winsize-fit-windows-to-desired-widths-1 (resize-frame)
+  (when (catch 'redo-after-wcfg
+          (let* ((our-tree (window-tree))
+                 (our-sizes (winsize-get-window-tree-desired-width-1
+                             (car our-tree)))
+                 (tot-width (nth 1 our-sizes)))
+            ;;(setq x our-sizes) ;; Debug.
+
+            ;; Just collect the windows and sizes first. Sort them
+            ;; according to left column. Then set sizes in that order.
+            (setq winsize-windows-desired-width nil)
+            (winsize-collect-window-tree-desired-width-1 our-sizes)
+            (setq winsize-windows-desired-width
+                  (sort winsize-windows-desired-width
+                        ;; Sort from left to right.
+                        (lambda (a b)
+                          (< (car a) (car b)))))
+            (when resize-frame
+              (let* ((frame (selected-frame))
+                     (curr-width (frame-width frame)))
+                (when (/= curr-width tot-width)
+                  (when (fboundp 'w32-frame-placement)
+                    (let* ((pm (w32-frame-placement frame))
+                           (state (nth 4 pm)))
+                      (when (/= state 2) ;; Not normal, i.e. min/max/hidden
+                        ;; SW_NORMAL
+                        (w32-showwindow frame 1)
+                        ;; We have to do it again when frame is
+                        ;; redisplayed.
+                        (throw 'redo-after-wcfg t))))
+                  (set-frame-size (selected-frame) tot-width
+                                  (frame-height (selected-frame))))))
+            (dolist (rec winsize-windows-desired-width)
+              (let ((win (nth 1 rec))
+                    (width-goal (nth 2 rec)))
+                (when (< 0 width-goal)
+                  (winsize-fit-window-to-desired-width win t width-goal))
+                ;;(msgtrc "after set: %S => %s, buf=%S, %d" win width-goal (window-buffer win) (nth 0 (window-edges win)))
+                )))
+          ;;(remove-hook 'window-configuration-change-hook this-command)
+          (remove-hook 'window-configuration-change-hook 'winsize-fitw-and-maxh-frame)
+          (remove-hook 'window-configuration-change-hook 'winsize-fit-windows-to-desired-widths)
+          nil)
+    (when (memq this-command
+                '(winsize-fitw-and-maxh-frame winsize-fit-windows-to-desired-widths))
+      (add-hook 'window-configuration-change-hook this-command))
+    ;;window-configuration-change-hook
+    ))
+
+;;;###autoload
+(defun winsize-max-frame-height ()
+  "Maximize frame height."
+  (interactive)
+  (let* ((frame (selected-frame))
+        (w32-pm(when (fboundp 'w32-frame-placement)
+                 (w32-frame-placement frame)))
+        (is-max (when w32-pm
+                  (let ((state (nth 4 w32-pm)))
+                    (= state 3))))
+        (char-height-pixels (frame-char-height frame))
+        (root-window-rows (window-height (frame-root-window frame)))
+        (other-pixels (- (frame-pixel-height frame)
+                         (* root-window-rows char-height-pixels)))
+        (pix-diff (- (display-pixel-height)
+                     (frame-pixel-height frame)
+                     other-pixels))
+        ;; fix-me: Why -1???
+        (char-diff (1- (floor (/ pix-diff char-height-pixels))))
+        (left (frame-parameter frame 'left))
+        (top (frame-parameter frame 'top))
+        (cols (frame-width frame))
+        (rows (window-height (frame-root-window frame)))
+        )
+    ;; Fix-me: bug in Emacs? No, propably I am missing the tool-bar
+    ;; height here... For now remove 3 lines
+    (setq rows (- rows 3))
+    (unless is-max
+      ;; Fix-me: There is a bug in w32 Emacs here. Setting just 'top
+      ;; will make 'left to the value that it had when the frame was
+      ;; maximized if it was maximized before. The correct value is in
+      ;; the placement record, use that instead.
+      (when (listp left) ;; was max
+        (setq left (nth 0 w32-pm))
+        (when left (set-frame-parameter frame 'left left)))
+      (set-frame-parameter frame 'top 0)
+      (set-frame-size frame cols (+ rows char-diff)))))
+
+;;;###autoload
+(defun winsize-fitw-and-maxh-frame ()
+  "Fit width and max height of frame.
+Just like `winsize-fit-frame-width' + `winsize-max-frame-height'."
+  (interactive)
+  (winsize-fit-frame-width)
+  (winsize-max-frame-height))
+
+;;;###autoload
+(defun winsize-fit-frame-width ()
+  "Fit frame FRAME to buffers desired width.
+Call `winsize-fit-window-to-desired-width' for all windows and
+adjust frame width to the resulting width.
+"
+  (interactive)
+  (winsize-fit-windows-to-desired-widths-1 t))
+
+(defun winsize-collect-window-tree-desired-width-1 (tree-sizes)
+  (let* ((vertical (nth 0 tree-sizes))
+         (tot-width (nth 1 tree-sizes))
+         (wins-and-trees (nth 2 tree-sizes)))
+    ;; Do it top-down, i.e. windows first
+    (dolist (win-or-tree wins-and-trees)
+      (when (windowp (car win-or-tree))
+        (let* ((win (car win-or-tree))
+               (width-goal (if vertical tot-width (nth 1 win-or-tree))))
+          ;;(msgtrc "collect: %S => %s, buf=%S, %d" win width-goal (window-buffer win) (nth 0 (window-edges win)))
+          (when width-goal
+            ;; Don't set, just collect. This makes it possible to set
+            ;; the sizes in a better order (i.e. from left to right).
+            (let* ((left-edge (nth 0 (window-edges win)))
+                   (cell (list left-edge win width-goal)))
+              (setq winsize-windows-desired-width
+                    (cons cell
+                          winsize-windows-desired-width)))))))
+    (dolist (win-or-tree wins-and-trees)
+      (unless (windowp (car win-or-tree))
+        (winsize-collect-window-tree-desired-width-1 win-or-tree)))))
+
+(defun winsize-get-window-tree-desired-width-1 (tree)
+  (if (not (listp tree))
+      ;; Just one window.
+      (list t (winsize-desired-width tree))
+    (let* ((vertical (nth 0 tree))
+           (wins-and-trees (nthcdr 2 tree))
+           result
+           (node-width 0))
+      (dolist (win-or-tree wins-and-trees)
+        (let (desired-width
+              res-rec)
+          (setq res-rec
+                (if (windowp win-or-tree)
+                    (let* ((win win-or-tree)
+                           (win-right (nth 2 (window-edges win)))
+                           (root-right (nth 2 (window-edges (frame-root-window))))
+                           (win-desired (if (= win-right root-right)
+                                            (- (winsize-desired-width win))
+                                          (winsize-desired-width win))))
+                      (list win win-desired))
+                  (winsize-get-window-tree-desired-width-1 win-or-tree)))
+          (setq result (cons res-rec result))))
+      (dolist (rec result)
+        (let ((type (nth 0 rec))
+              (width (or (abs (nth 1 rec)) ;; Right most negative.
+                         0)))
+          (if vertical
+              (when (> width node-width) (setq node-width width))
+            (setq node-width (+ width node-width))
+            )))
+      (list vertical node-width (reverse result)))))
+
 
 (defun winsize-setup-local-map ()
   "Setup an overriding keymap and use this during resizing.
@@ -631,7 +1109,8 @@ resizing. It is also when following help links."
       (setq buffer-read-only t))
     (unless winsize-old-view-exit-action
       (setq winsize-old-view-exit-action view-exit-action)
-      (setq view-exit-action 'winsize-restore-after-help)))
+      (setq view-exit-action 'winsize-restore-after-help))
+    (goto-char (point-min)))
   (set-window-buffer (selected-window) buffer)
   (message "Type q to return to window resizing"))
 
@@ -653,6 +1132,7 @@ Save current window configuration and pause resizing."
       (setq winsize-old-temp-buffer-show-function temp-buffer-show-function))
     (setq temp-buffer-show-function 'winsize-temp-buffer-show-function)
     (with-output-to-temp-buffer (help-buffer)
+      (help-setup-xref (list #'winsize-help) (interactive-p))
       (with-current-buffer (help-buffer)
         (insert "resize-windows is ")
         (describe-function-1 'resize-windows)))))
@@ -983,6 +1463,7 @@ should be one of 'left, 'up, 'right and 'down."
 ;;;###autoload
 (defun winsize-save-window-configuration ()
   (interactive)
+  ;; Fix-me: Isn't there something like winring to use instead??
   (let* ((curr-conf (current-window-configuration))
          (ring winsize-window-configuration-ring))
     (if (winsize-ring-index ring curr-conf)

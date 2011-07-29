@@ -1,0 +1,2 @@
+<img src="{{ STATIC_FILE }}1.jpg" />
+<p>some text</p>

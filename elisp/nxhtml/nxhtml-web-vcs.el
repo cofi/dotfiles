@@ -47,7 +47,9 @@
 (eval-when-compile (require 'cl))
 (eval-when-compile (require 'nxhtml-base nil t))
 ;;(eval-when-compile (require 'nxhtmlmaint nil t))
+(declare-function nxhtmlmaint-byte-recompile "nxhtmlmaint")
 (eval-when-compile (require 'web-vcs nil t))
+
 
 (defvar nxhtml-web-vcs-file (or load-file-name
                                 (when (boundp 'bytecomp-filename) bytecomp-filename)
@@ -68,6 +70,7 @@
 
 ;;(nxhtml-default-download-directory)
 (defun nxhtml-default-download-directory ()
+  (require 'web-vcs)
   (let* ((ur (expand-file-name "" "~"))
          (ur-len (length ur))
          (full (if (and (boundp 'nxhtml-install-dir)
@@ -91,6 +94,7 @@
                   "A directory named 'nxhtml' will be created below the root you give."
                   "\n"
                   prompt))
+             (resize-mini-windows (or resize-mini-windows t))
              (root (read-directory-name pr (nxhtml-default-download-directory))))
         (when root
           (expand-file-name "nxhtml" root)))))
@@ -153,7 +157,8 @@ please see URL `http://ourcomments.org/Emacs/nXhtml/doc/nxhtml.html'."
                          (allowed-keys (if has-nxhtml
                                            '(?1 ?2 ?3 ?T ?q 7)
                                          '(?1 ?2 ?T ?q 7)))
-                         (please nil))
+                         (please nil)
+                         (resize-mini-windows (or resize-mini-windows t)))
                     (while (not (member key allowed-keys))
                       (if (not (member key '(??)))
                           (when key
@@ -324,7 +329,7 @@ For more information about auto download of nXhtml files see
         (error "Aborted by user"))))
   (make-directory dl-dir t)
   (let ((msg (concat "Downloading nXhtml through Launchpad web interface will take rather long\n"
-                     "time (5-15 minutes) so you may want to do it in a separate Emacs session.\n\n"
+                     "time (10-25 minutes) so you may want to do it in a separate Emacs session.\n\n"
                      "Do you want to download using this Emacs session? "
                      )))
     (if (not (y-or-n-p msg))
@@ -345,7 +350,10 @@ If DO-BYTE is non-nil byte compile nXhtml after download."
          (base-url nxhtml-web-vcs-base-url)
          (files-url (concat base-url "files/"))
          ;;(revs-url  (concat base-url "changes/"))
-         (rev-part (if revision (number-to-string revision) "head%3A/"))
+         (rev-part (if revision (number-to-string revision)
+                     ;; "head%3A/"
+                     "head:/"
+                     ))
          (full-root-url (concat files-url rev-part))
          (web-vcs-folder-cache nil)
          (web-autoload-paranoid nil))
@@ -360,7 +368,8 @@ If DO-BYTE is non-nil byte compile nXhtml after download."
         (load autostart-file)
         (web-vcs-log-save)
         (web-vcs-message-with-face 'web-vcs-green "==== All files for nXhtml are now installed ====")
-        (nxhtmlmaint-byte-recompile)
+        (when do-byte
+          (nxhtmlmaint-byte-recompile))
         (unless has-nxhtml (nxhtml-add-loading-to-custom-file autostart-file nil))))))
 
 (defun nxhtml-check-convert-to-part-by-part ()
@@ -396,6 +405,7 @@ command `nxhtml-setup-install'."
   (interactive)
   (when (y-or-n-p "Do you want to update your nXhtml files? ")
     (message "")
+    (require 'web-vcs)
     (web-vcs-display-messages t)
     (web-vcs-message-with-face 'web-vcs-yellow "*\nStarting updating your nXhtml files.\n*\n")
     (message nil)
@@ -417,13 +427,18 @@ command `nxhtml-setup-install'."
 ;;(nxhtml-maybe-download-files (expand-file-name "nxhtml/doc/img/" nxhtml-install-dir) nil)
 ;;;###autoload
 (defun nxhtml-get-missing-files (sub-dir file-name-list)
+  "Download to SUB-DIR missing files matching FILE-NAME-LIST.
+If FILE-NAME-LIST is nil download all missing files.
+If it is a list download all missing files in the list.
+If it is a regexp download all missing matching files."
   (let (file-mask
         (root-url (nxhtml-download-root-url nil))
         files-regexp
         (full-dir (expand-file-name sub-dir nxhtml-install-dir))
         miss-names)
     (if file-name-list
-        (progn
+        (if (not (listp file-name-list))
+	    (setq files-regexp file-name-list)
           (dolist (f file-name-list)
             (let ((full-f (expand-file-name f full-dir)))
               (unless (file-exists-p full-f)
@@ -515,33 +530,34 @@ Loading is done if recompiled and LOAD is t."
 (defun nxhtml-add-loading-to-custom-file (file-to-load part-by-part)
   (message "")
   (require 'cus-edit)
-  (if (not (condition-case nil (custom-file) (error nil)))
-      (progn
-        (message "\n\n")
-        (web-vcs-message-with-face
-         'web-vcs-red
-         (concat "Since you have started this Emacs session without running your init files"
-                 "\nthey are unknown and the installation can not add the statement below."
-                 "\nTo finish the setup of nXhtml you must add"
-                 "\n\n  (load %S)"
-                 "\n\nto your custom-file if you have not done it yet."
-                 "\nYou must also customize the variable `nxhtml-autoload-web' to tell that"
-                 (if part-by-part
-                     "\nyou want to download nXhml files as you need them."
-                   "\nyou do not want to allow automatic downloading of nXhtml files."
-                   )
-                 "\n")
-         file-to-load)
-        (message "")
-        (web-vcs-display-messages t))
-    (let ((prompt (concat "Basic setup of nXhtml is done, but it must be loaded from (custom-file)."
-                          "\nShould I add loading of nXhtml to (custom-file) for you? ")))
-      (if (yes-or-no-p prompt)
-          (nxhtml-add-loading-to-custom-file-auto file-to-load)
-        (if (yes-or-no-p "Should I guide you through how to do it? ")
-            (nxhtml-handheld-add-loading-to-custom-file file-to-load)
-          (web-vcs-message-with-face 'web-vcs-green
-                                     "OK. You need to add (load %S) to your init file" file-to-load))))))
+  (let ((resize-mini-windows nil))
+    (if (not (condition-case nil (custom-file) (error nil)))
+        (progn
+          (message "\n\n")
+          (web-vcs-message-with-face
+           'web-vcs-red
+           (concat "Since you have started this Emacs session without running your init files"
+                   "\nthey are unknown and the installation can not add the statement below."
+                   "\nTo finish the setup of nXhtml you must add"
+                   "\n\n  (load %S)"
+                   "\n\nto your custom-file if you have not done it yet."
+                   "\nYou must also customize the variable `nxhtml-autoload-web' to tell that"
+                   (if part-by-part
+                       "\nyou want to download nXhml files as you need them."
+                     "\nyou do not want to allow automatic downloading of nXhtml files."
+                     )
+                   "\n")
+           file-to-load)
+          (message "")
+          (web-vcs-display-messages t))
+      (let ((prompt (concat "Basic setup of nXhtml is done, but it must be loaded from (custom-file)."
+                            "\nShould I add loading of nXhtml to (custom-file) for you? ")))
+        (if (yes-or-no-p prompt)
+            (nxhtml-add-loading-to-custom-file-auto file-to-load)
+          (if (yes-or-no-p "Should I guide you through how to do it? ")
+              (nxhtml-handheld-add-loading-to-custom-file file-to-load)
+            (web-vcs-message-with-face 'web-vcs-green
+                                       "OK. You need to add (load %S) to your init file" file-to-load)))))))
 
 ;; Fix-me: really do this? Is it safe enough?
 (defun nxhtml-add-loading-to-custom-file-auto (file-to-load)
@@ -586,8 +602,9 @@ Loading is done if recompiled and LOAD is t."
           (basic-save-buffer))
         (unless old-buf (kill-buffer old-buf))))))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;; Start Testing function
+;;;;;; Start Testing functions
 (defun emacs-Q-no-nxhtml (&rest args)
   (let* ((old-env-load-path (getenv "EMACSLOADPATH"))
          sub-env-load-path

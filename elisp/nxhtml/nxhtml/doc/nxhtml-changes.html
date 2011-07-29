@@ -319,6 +319,7 @@
           <a href="#v2.06">v2.06</a>
           <a href="#v2.07">v2.07</a>
           <a href="#v2.08">v2.08</a>
+          <a href="#v2.09">v2.09</a>
         </div>
 
         <dl>
@@ -3382,6 +3383,48 @@
             <p>
               One noticeable thing is that the menus were restructered to make it easier to find things. You can find some of the new things there. Most of the rest are internal changes and bug fixes.
             </p>
+            <p>
+              htmlfontify.el is no longer distributed with nXhtml since it is now included in the latest Emacs. If you need it please grab it from Emacs repository.
+            </p>
+          </dd>
+          <dt id="v2.09">2.09 - not yet released</dt>
+          <dd id="v2.09-dd">
+            <ul>
+              <li>
+                MuMaMo:
+                <ul>
+                  <li>
+                    Fixed some bugs, see Launchpad.
+                    Indentation for eRuby modes should perhaps work ok now.
+                  </li>
+                  <li>
+                    Added initial support for Amrita.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                wrap-to-fill.el:
+                <ul>
+                  <li>
+                    <span class="bugfix">Fixed a bug that maybe could make Emacs hang.</span>
+                  </li>
+                  <li>
+                    Added NUMBER) and LETTER) to hanging indents.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                pause.el:
+                <ul>
+                  <li>
+                    <span class="bugfix">Forgot to remind again if user did not take pause at once.</span>
+                  </li>
+                  <li>
+                    Implemented use of topmost. Much easier, but it requires currently the latest patched version of EmacsW32.
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </dd>
         </dl>
       </div>

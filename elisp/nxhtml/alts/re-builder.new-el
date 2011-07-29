@@ -1,0 +1,1641 @@
+;;; re-builder.el --- building Regexps with visual feedback
+
+;; Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004,
+;;   2005, 2006, 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
+
+;; Author: Detlev Zundel <dzu@gnu.org>
+;; Keywords: matching, lisp, tools
+
+;; This file is part of GNU Emacs.
+
+;; GNU Emacs is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; GNU Emacs is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; When I have to come up with regular expressions that are more
+;; complex than simple string matchers, especially if they contain sub
+;; expressions, I find myself spending quite some time in the
+;; `development cycle'.  `re-builder' aims to shorten this time span
+;; so I can get on with the more interesting bits.
+
+;; With it you can have immediate visual feedback about how well the
+;; regexp behaves to your expectations on the intended data.
+
+;; When called up `re-builder' attaches itself to the current buffer
+;; which becomes its target buffer, where all the matching is done.
+;; The active window is split so you have a view on the data while
+;; authoring the RE.  If the edited expression is valid the matches in
+;; the target buffer are marked automatically with colored overlays
+;; (for non-color displays see below) giving you feedback over the
+;; extents of the matched (sub) expressions.  The (non-)validity is
+;; shown only in the modeline without throwing the errors at you.  If
+;; you want to know the reason why RE Builder considers it as invalid
+;; call `reb-force-update' ("\C-c\C-u") which should reveal the error.
+
+;; The target buffer can be changed with `reb-change-target-buffer'
+;; ("\C-c\C-b").  Changing the target buffer automatically removes
+;; the overlays from the old buffer and displays the new one in the
+;; target window.
+
+;; The `re-builder' keeps the focus while updating the matches in the
+;; target buffer so corrections are easy to incorporate.  If you are
+;; satisfied with the result you can paste the RE to the kill-ring
+;; with `reb-copy' ("\C-c\C-w"), quit the `re-builder' ("\C-c\C-q")
+;; and use it wherever you need it.
+
+;; As the automatic updates can take some time on large buffers, they
+;; can be limited by `reb-auto-match-limit' so that they should not
+;; have a negative impact on the editing.  Setting it to nil makes
+;; even the auto updates go all the way.  Forcing an update overrides
+;; this limit allowing an easy way to see all matches.
+
+;; Currently `re-builder' understands five different forms of input,
+;; namely `read', `string', `rx', `sregex' and `lisp-re' syntax.  Read
+;; syntax and string syntax are both delimited by `"'s and behave
+;; according to their name.  With the `string' syntax there's no need
+;; to escape the backslashes and double quotes simplifying the editing
+;; somewhat.  The other three allow editing of symbolic regular
+;; expressions supported by the packages of the same name.  (`lisp-re'
+;; is a package by me and its support may go away as it is nearly the
+;; same as the `sregex' package in Emacs)
+
+;; Editing symbolic expressions is done through a major mode derived
+;; from `emacs-lisp-mode' so you'll get all the good stuff like
+;; automatic indentation and font-locking etc.
+
+;; When editing a symbolic regular expression, only the first
+;; expression in the RE Builder buffer is considered, which helps
+;; limiting the extent of the expression like the `"'s do for the text
+;; modes.  For the `sregex' syntax the function `sregex' is applied to
+;; the evaluated expression read.  So you can use quoted arguments
+;; with something like '("findme") or you can construct arguments to
+;; your hearts delight with a valid ELisp expression.  (The compiled
+;; string form will be copied by `reb-copy')  If you want to take
+;; a glance at the corresponding string you can temporarily change the
+;; input syntax.
+
+;; Changing the input syntax is transparent (for the obvious exception
+;; non-symbolic -> symbolic) so you can change your mind as often as
+;; you like.
+
+;; There is also a shortcut function for toggling the
+;; `case-fold-search' variable in the target buffer with an immediate
+;; update.
+
+
+;; Q: But what if my display cannot show colored overlays?
+;; A: Then the cursor will flash around the matched text making it stand
+;;    out.
+
+;; Q: But how can I then make out the sub-expressions?
+;; A: Thats where the `sub-expression mode' comes in.  In it only the
+;;    digit keys are assigned to perform an update that will flash the
+;;    corresponding subexp only.
+
+
+;;; Code:
+
+(eval-when-compile (require 'subword))
+
+;; On XEmacs, load the overlay compatibility library
+(unless (fboundp 'make-overlay)
+  (require 'overlay))
+
+;; User customizable variables
+(defgroup re-builder nil
+  "Options for the RE Builder."
+  :group 'lisp
+  :prefix "reb-")
+
+(defcustom reb-blink-delay 0.5
+  "Seconds to blink cursor for next/previous match in RE Builder."
+  :group 're-builder
+  :type 'number)
+
+(defcustom reb-mode-hook nil
+  "Hooks to run on entering RE Builder mode."
+  :group 're-builder
+  :type 'hook)
+
+(defcustom reb-re-syntax 'rx
+  "Syntax for the REs in the RE Builder.
+Can either be `read', `string', `rx'."
+  ;;Can either be `read', `string', `sregex', `lisp-re', `rx'."
+  :group 're-builder
+  :type '(choice (const :tag "Read syntax" read)
+		 (const :tag "String syntax" string)
+		 ;;(const :tag "`sregex' syntax" sregex)
+		 ;;(const :tag "`lisp-re' syntax" lisp-re)
+		 (const :tag "`rx' syntax" rx)))
+
+(defcustom reb-rx-backquote nil
+  "Do backquote expansion in rx syntax.
+If this is non-nil you can put a backquote, i.e. \"`\", before
+the rx form to get backquote expansion.
+
+This allows you to use for example
+
+  `(and ,(concat \"a\" \"b\"))
+  `(and ,my-var)
+
+And is not turned on by default because you have to know the
+backquote expansion to not shoot yourself in the foot.
+
+See Info node `(elisp) Backquote'."
+  :group 're-builder
+  :type 'boolean)
+
+(defcustom reb-auto-match-limit 200
+  "Positive integer limiting the matches for RE Builder auto updates.
+Set it to nil if you don't want limits here."
+  :group 're-builder
+  :type '(restricted-sexp :match-alternatives
+			  (integerp 'nil)))
+
+
+;; Internal variables below
+(defvar reb-mode nil
+  "Enables the RE Builder minor mode.")
+
+(defvar reb-target-buffer nil
+  "Buffer to which the RE is applied to.")
+
+(defvar reb-target-window nil
+  "Window to which the RE is applied to.")
+
+(defvar reb-regexp nil
+  "Last regexp used by RE Builder.")
+
+(defvar reb-regexp-src nil
+  "Last input regexp used by RE Builder before processing it.
+Except for Lisp syntax this is the same as `reb-regexp'.")
+
+;; (defvar reb-overlays nil
+;;   "List of overlays of the RE Builder.")
+
+(defvar reb-window-config nil
+  "Old window configuration.")
+
+(defvar reb-subexp-mode nil
+  "Indicates whether sub-exp mode is active.")
+
+(defvar reb-subexp-displayed nil
+  "Indicates which sub-exp is active.")
+
+(defvar reb-mode-string ""
+  "String in mode line for additional info.")
+
+(defvar reb-valid-string ""
+  "String in mode line showing validity of RE.")
+
+;;(make-variable-buffer-local 'reb-overlays)
+(make-variable-buffer-local 'reb-regexp)
+(make-variable-buffer-local 'reb-regexp-src)
+
+(defconst reb-buffer-name "*RE-Builder*"
+  "Buffer name to use for the RE Builder.")
+
+(defvar reb-buffer nil
+  "Buffer to use for the RE Builder.")
+
+(defvar reb-window nil
+  "Window for `reb-buffer'.")
+
+;; Define the local "\C-c" keymap
+(defvar reb-mode-map
+  (let ((map (make-sparse-keymap))
+	(menu-map (make-sparse-keymap)))
+    (define-key map "\C-c\C-c" 'reb-toggle-case)
+    (define-key map "\C-c\C-q" 'reb-quit)
+    (define-key map "\C-c\C-w" 'reb-copy)
+    (define-key map "\C-s" 'reb-next-match)
+    (define-key map "\C-r" 'reb-prev-match)
+    (define-key map "\C-c\C-s" 'isearch-forward)
+    (define-key map "\C-c\C-r" 'isearch-backward)
+    (define-key map "\M-\S-e"  'reb-quit-to-isearch)
+    (define-key map "\C-c\C-y" 'reb-next-syntax)
+    (define-key map "\C-c\C-e" 'reb-enter-subexp-mode)
+    (define-key map "\C-c\C-b" 'reb-change-target-buffer)
+    (define-key map [(control ?c) (control ?v)] 'reb-copy-target-region)
+    (define-key map [(control ?c) (meta ?f)] 'reb-copy-word-at-end)
+    (define-key map [(control ?c) (meta ?b)] 'reb-copy-word-at-beginning)
+    (define-key map [menu-bar reb-mode] (cons "Re-Builder" menu-map))
+    (define-key menu-map [rq]
+      '(menu-item "Quit" reb-quit
+		  :help "Quit RE Builder"))
+    (define-key menu-map [risearch]
+      '(menu-item "Quit To Isearch" reb-quit-to-isearch))
+    (define-key menu-map [rc]
+      '(menu-item "Copy Current RE" reb-copy
+		  :help "Copy current RE into the kill ring for later insertion"))
+
+    (define-key menu-map [div1] '(menu-item "--"))
+
+    (define-key menu-map [rt]
+      '(menu-item "Case Sensitive" reb-toggle-case
+		  :button (:toggle . case-fold-search)
+		  :help "Toggle case sensitivity of searches for RE Builder target buffer"))
+    (define-key menu-map [re]
+      '(menu-item "Enter Subexpression Mode" reb-enter-subexp-mode
+		  :help "Enter the subexpression mode in the RE Builder"))
+    (define-key menu-map [rb]
+      '(menu-item "Change Target Buffer..." reb-change-target-buffer
+		  :help "Change the target buffer and display it in the target window"))
+    (define-key menu-map [rs]
+      '(menu-item "Next Regexp Syntax" reb-next-syntax
+		  :help "Change the syntax used by the RE Builder"))
+
+    (define-key menu-map [div4] '(menu-item "--"))
+
+    (define-key menu-map [r-isf]
+      '(menu-item "Isearch In RE Buffer" isearch-forward))
+
+    (define-key menu-map [div3] '(menu-item "--"))
+
+    (define-key menu-map [rn]
+      '(menu-item "Next Match" reb-next-match
+		  :help "Go to next match in the RE Builder target window"))
+    (define-key menu-map [rp]
+      '(menu-item "Previous Match" reb-prev-match
+		  :help "Go to previous match in the RE Builder target window"))
+
+    (define-key menu-map [div2] '(menu-item "--"))
+
+    ;; (define-key menu-map [ru]
+    ;;   '(menu-item "Force Update" reb-force-update
+    ;;     	  :help "Force an update in the RE Builder target window without a match limit"))
+    (define-key menu-map [rctr]
+      '(menu-item "Copy Target Region" reb-copy-target-region))
+    (define-key menu-map [rcwe]
+      '(menu-item "Copy Word To End" reb-copy-word-at-end))
+    (define-key menu-map [rcwb]
+      '(menu-item "Copy Word To Beginning" reb-copy-word-at-beginning))
+
+    map)
+  "Keymap used by the RE Builder.")
+
+(define-minor-mode reb-target-mode
+  "Minor mode for `re-builder' target buffer."
+  :lighter " REB-TARGET"
+  :group 're-builder
+  :keymap reb-mode-map
+  (when reb-target-mode
+    (unless (and (eq (current-buffer) reb-target-buffer)
+                 (memq 'reb-post-command (default-value 'post-command-hook)))
+      (setq reb-target-mode nil)
+      (message "This mode only works in re-builder target buffer"))))
+
+(defvar reb-string-mode-map reb-mode-map)
+
+(define-derived-mode reb-string-mode nil "RE-string"
+  "Major mode for interactively building Regular Expressions.
+In this mode you use single \\ and no \"\"."
+  (set (make-local-variable 'blink-matching-paren) nil)
+  (reb-mode-common))
+
+(defvar reb-read-mode-map reb-mode-map)
+
+(define-derived-mode reb-read-mode nil "RE-read"
+  "Major mode for interactively building Regular Expressions.
+In this mode you use double \\ and \"\"."
+  (set (make-local-variable 'blink-matching-paren) nil)
+  (reb-mode-common))
+
+(defvar reb-rx-mode-map reb-mode-map)
+
+(define-derived-mode reb-rx-mode
+  ;; emacs-lisp-mode ;; this draws in emacs-lisp-mode hooks
+  nil
+  "RE-rx"
+  "Major mode for interactively building symbolic Regular Expressions."
+  (setq indent-line-function 'lisp-indent-line)
+  (set-syntax-table emacs-lisp-mode-syntax-table)
+  (set-keymap-parent reb-rx-mode-map nil)
+  (cond ((eq reb-re-syntax 'lisp-re)	; Pull in packages
+	 (require 'lisp-re))		; as needed
+	((eq reb-re-syntax 'sregex)	; sregex is not autoloaded
+	 (require 'sregex))		; right now..
+	((eq reb-re-syntax 'rx)		; rx-to-string is autoloaded
+	 (require 'rx)))		; require rx anyway
+  ;;Function used for `completion-at-point-functions' in `reb-rx-mode'.
+  (add-hook 'completion-at-point-functions 'rxx-completion-at-point nil t)
+  (reb-mode-common))
+
+(defun reb-rx-region-to-submatch (beg end)
+  "Make a submatch of the elements in the region."
+  (interactive "r")
+  )
+
+(defun reb-rx-region-to-anything (beg end)
+  "Replace string in RX re to match anything."
+  (interactive "r")
+  (cond
+   ( (not (eq (current-buffer) reb-buffer))
+     (message "Must be in RE buffer to do this"))
+   ( (not (derived-mode-p 'reb-rx-mode))
+     (message "Please switch to RX syntax for this"))
+   ( (not mark-active)
+     (message "Please select a region first"))
+   ( t
+     (let* ((beg-ppss (parse-partial-sexp 1 beg))
+            (beg-in-str (nth 3 beg-ppss))
+            (beg-str-start (nth 8 beg-ppss))
+            (end-ppss (parse-partial-sexp 1 end))
+            (end-in-str (nth 3 end-ppss))
+            (end-str-start (nth 8 end-ppss)))
+       (if (not (and beg-in-str
+                     end-in-str
+                     (= beg-str-start
+                        end-str-start)))
+           (message "Region must be within one string")
+         (let* ((min-max (y-or-n-p "Do you want to specify max/min length? "))
+                (min (when min-max (read-number "Min: " 0)))
+                (max (when min-max (read-number "Max: " 100)))
+                (nonl (not (y-or-n-p "Should it pass newlines? "))))
+           (delete-region beg end)
+           (insert "\" "
+                   (if min-max
+                       (format "(repeat %d %d anything)" min max)
+                     "(*? anything)")
+                   " \"")))))))
+
+(defvar reb-subexp-mode-map
+  (let ((m (make-keymap)))
+    (suppress-keymap m)
+    ;; Again share the "\C-c" keymap for the commands
+    (define-key m "\C-c" (lookup-key reb-mode-map "\C-c"))
+    (define-key m "q" 'reb-quit-subexp-mode)
+    (dotimes (digit 10)
+      (define-key m (int-to-string digit) 'reb-display-subexp))
+    m)
+  "Keymap used by the RE Builder for the subexpression mode.")
+
+(defun reb-update-mode-line ()
+  (with-current-buffer reb-buffer
+    (let ((new-mlbi
+           (append
+            '(25 . ("%b" reb-mode-string))
+            (list " "
+                  (let ((len (length reb-valid-string)))
+                    (if (zerop len)
+                        (make-string 15 32)
+                      (concat (propertize reb-valid-string 'face 'isearch-fail)
+                              (make-string (max 0 (- 15 len)) 32))))))))
+      (unless (equal new-mlbi mode-line-buffer-identification)
+        (setq mode-line-buffer-identification new-mlbi)
+        ;;(force-mode-line-update)
+        ))))
+
+(defvar reb-need-target-update nil)
+(defvar reb-need-regexp-update nil)
+
+(defun reb-mode-common ()
+  "Setup functions common to functions `reb-mode' and `reb-mode-lisp'."
+  (setq	reb-mode-string  "")
+  (setq reb-valid-string nil)
+  ;; (setq mode-line-buffer-identification
+  ;;                        '(25 . ("%b" reb-mode-string reb-valid-string)))
+  (reb-update-modestring)
+  (add-hook 'after-change-functions 'reb-after-change nil t)
+  (add-hook 'post-command-hook 'reb-post-command)
+  (setq reb-need-regexp-update t))
+
+(defun reb-color-display-p ()
+  "Return t if display is capable of displaying colors."
+  (eq 'color
+      ;; emacs/xemacs compatibility
+      (if (fboundp 'frame-parameter)
+	  (frame-parameter (selected-frame) 'display-type)
+	(if (fboundp 'frame-property)
+	    (frame-property (selected-frame) 'display-type)))))
+
+(defsubst reb-lisp-syntax-p ()
+  "Return non-nil if RE Builder uses a Lisp syntax."
+  (memq reb-re-syntax '(lisp-re sregex rx)))
+
+(defmacro reb-target-binding (symbol)
+  "Return binding for SYMBOL in the RE Builder target buffer."
+  `(with-current-buffer reb-target-buffer ,symbol))
+
+;; (make-human-regexp "\\( \t\f\n\\)")
+;; (length (make-human-regexp "\t\f\n"))
+;; (let ((print-escape-newlines t)) (format "%c" ?\n))
+;; (setq x "\\(x\\)")
+;; (re-search-forward x)
+;; (message "%s" (make-human-regexp "\\(?.\\|\n\\)\t"))
+(defun make-human-regexp (re &optional as-is-chars)
+  "Make a string useful for human reading of regexp RE.
+This function just translates ASCII control chars (those below
+32) to something readable, like for example ^J.  However it does
+not translate chars that are in the string AS-IS-CHARS.
+
+As an example take the regexp in the string
+
+  \"\\\\(?.\\\\|\\n\\\\)\\tnext\"
+
+Inserting this string directly somewhere will insert both a
+newline and a tab.  This might make it difficult for human
+interpretation.  On the other hand the print representation of
+the string \(which you can see a version of above\) is not that
+easy to read either because of the multiple \\-chars.
+
+Using this function you can insert this, perhaps more human
+readable, form instead:
+
+  \\(?.\\|^J\\)^Inext
+
+Please note that the this representation of the regexp string
+can't be used as a regexp any more, nor can it be read by the
+list reader.  This format is just meant for human reading!
+
+PS: You might think that ^J would look better as \\n above.  I
+think it could easily make the confusing impression that this
+could be read by the list reader, i.e. you might get tempted to
+write this form directly inside \"...\" in your program."
+  (let ((as-is-cc (append as-is-chars nil)))
+    (mapconcat (lambda (cc)
+                 (if (and (< cc 32)
+                          (not (memq cc as-is-cc)))
+                     (format "^%c" (+ cc 64))
+                   (char-to-string cc)))
+               re
+               "")))
+
+(defun reb-update-header-line-format ()
+  (when (eq 'rx reb-re-syntax)
+    (with-current-buffer reb-buffer
+      (let ((re-mixed (make-human-regexp
+                       (reb-target-binding reb-regexp))))
+        (unless re-mixed (setq re-mixed "(Trouble)"))
+        (setq header-line-format re-mixed)))))
+
+(defun reb-insert-regexp (re)
+  "Insert current RE."
+  ;; Lazy highlight does not work first time, unless it is told that
+  ;; things have changed. This is a good point to tell it that.
+  (setq isearch-lazy-highlight-last-string nil)
+  (cond ((eq reb-re-syntax 'read)
+         (let ((print-escape-newlines t))
+           (prin1 re (current-buffer))))
+        ((eq reb-re-syntax 'string)
+         (insert re))
+        ((eq reb-re-syntax 'rx)
+         (let* ((rec (rxx-parse-string re))
+                ;; If car is non-nil we have an rx, get the inner
+                ;; part of it and cons it to an (and ...) for
+                ;; editing.
+                (form (when (car rec) (cons 'and (cddr rec)))))
+           (setq header-line-format "") ;; For fit-window-to-buffer
+           (when form
+             (let ((print-escape-newlines t))
+               (insert
+                ;;(format "%S" form)
+                (pp-to-string form)
+                ;;(prin1-to-string form)
+                )))))
+        ;; For the other Lisp syntax we need the "source" of the
+        ;; regexp - but we do not have it.
+        ((reb-lisp-syntax-p)
+         (insert (reb-empty-regexp)))
+        (t (error "Unhandled syntax: %s" reb-re-syntax))))
+
+(defun reb-initialize-buffer (buffer)
+  "Initialize buffer BUFFER as a RE Builder buffer."
+  ;; Make the overlays go away if the buffer is reb buffer is killed.
+  (let ((win (get-buffer-window buffer)))
+    (if (not win)
+        (reb-quit t)
+      (with-current-buffer buffer
+        (setq reb-buffer (current-buffer))
+        (setq reb-window win)
+        (erase-buffer)
+        (cond ((reb-lisp-syntax-p)
+               (setq header-line-format "")
+               (reb-rx-mode))
+              ((eq reb-re-syntax 'read)
+               (reb-read-mode))
+              (t (reb-string-mode)))
+        (reb-insert-regexp (or (reb-target-binding reb-regexp)
+                               (reb-empty-regexp)))
+        (goto-char (point-min))
+        ;; The local hook might have killed
+        ;;(add-hook 'kill-buffer-hook 'reb-kill-buffer nil t)
+        ;; Fix-me:
+        (reb-restart-font-lock)
+        ;;(fit-window-to-buffer reb-window)
+        ))))
+
+(defun reb-mode-buffer-p ()
+  "Return non-nil if the current buffer is a RE Builder buffer."
+  (memq major-mode '(reb-read-mode reb-string-mode reb-rx-mode)))
+
+;;; This is to help people find this in Apropos.
+;;;###autoload
+(defalias 'regexp-builder 're-builder)
+
+(defun reb-quit-to-isearch ()
+  "Quit `re-builder' and start `isearch-forward-regexp'.
+Put current regexp in the regexp history."
+  (interactive)
+  (when (and reb-target-window
+             (window-live-p reb-target-window))
+    (select-window reb-target-window))
+  (reb-quit t)
+  (unless isearch-mode
+    (when reb-regexp
+      (isearch-resume reb-regexp t nil t reb-regexp t))))
+
+(defun reb-isearch-mode-hook-fun ()
+  "Quit to isearch unless in RE buffer."
+  (when (eq (current-buffer) reb-target-buffer)
+    (reb-quit-to-isearch)))
+
+(defun reb-quit-unless-window ()
+  (unless (and (buffer-live-p reb-buffer)
+               (get-buffer-window reb-buffer))
+    (reb-quit t)
+    t))
+
+;;;###autoload
+(defun re-builder ()
+  "Construct a regexp interactively."
+  (interactive)
+  (add-hook 'isearch-mode-hook 'reb-isearch-mode-hook-fun)
+  (if (and (eq (current-buffer) reb-buffer)
+	   (reb-mode-buffer-p))
+      (message "Already in the RE Builder")
+    (unless (buffer-live-p reb-buffer)
+      (setq reb-buffer (get-buffer-create reb-buffer-name)))
+    ;; (when reb-target-buffer
+    ;;   (reb-delete-overlays))
+    (setq reb-target-buffer (current-buffer)
+          reb-target-window (selected-window))
+    (let* ((old-reb-buffer-window (get-buffer-window reb-buffer))
+           (old-reb-frame (when old-reb-buffer-window (window-frame old-reb-buffer-window))))
+      (when old-reb-buffer-window
+        (unless (eq old-reb-frame (selected-frame))
+          (when (window-configuration-p reb-window-config)
+            (with-selected-frame old-reb-frame
+              (set-window-configuration reb-window-config)))
+          (setq old-reb-buffer-window nil)))
+      (select-window (or old-reb-buffer-window
+                         (progn
+                           (setq reb-window-config (current-window-configuration))
+                           (split-window (selected-window) (- (window-height) 4))))))
+    (switch-to-buffer reb-buffer)
+    (reb-initialize-buffer reb-buffer)
+    ;;(add-hook 'window-configuration-change-hook 'reb-quit-unless-window)
+    (setq reb-need-regexp-update t)
+    (setq reb-need-target-update t)
+    (with-current-buffer reb-target-buffer
+      (reb-target-mode 1)
+      (add-hook 'after-change-functions 'reb-after-change nil t))
+    ))
+
+(defun reb-change-target-buffer (buf)
+  "Change the target buffer and display it in the target window."
+  (interactive "bSet target buffer to: ")
+
+  (let ((buffer (get-buffer buf)))
+    (if (not buffer)
+        (error "No such buffer")
+      ;;(reb-delete-overlays)
+      (when (buffer-live-p reb-target-buffer)
+        (remove-hook 'after-change-functions 'reb-after-change t))
+      (setq reb-target-buffer buffer)
+      (with-current-buffer reb-target-buffer
+        (reb-target-mode 1)
+        (add-hook 'after-change-functions 'reb-after-change nil t))
+      (reb-update-modestring))))
+
+(defun reb-quit (dont-reset-wcfg)
+  "Quit the RE Builder mode."
+  (interactive "P")
+  ;; Fix-me: where should this be? There is some bad interaction now.
+  (remove-hook 'isearch-mode-hook 'reb-isearch-mode-hook-fun)
+  ;; Fix-me: why is re-builder-unload-function separate??
+  (re-builder-unload-function)
+  ;; Add regexp to regexp ring if there is a visible match now:
+  (when (and (buffer-live-p reb-target-buffer)
+             (overlayp isearch-overlay)
+             (eq (overlay-buffer isearch-overlay) reb-target-buffer)
+             (get-buffer-window reb-target-buffer))
+    (let ((regexp (reb-target-binding reb-regexp)))
+      (unless (equal (car regexp-search-ring)
+                     regexp)
+        (isearch-update-ring regexp t))))
+  (setq reb-subexp-mode nil
+	reb-subexp-displayed nil)
+  ;;(reb-delete-overlays)
+  (reb-isearch-dehighlight)
+  (lazy-highlight-cleanup lazy-highlight-cleanup)
+  (when (buffer-live-p reb-buffer)
+    (bury-buffer reb-buffer))
+  ;;(remove-hook 'window-configuration-change-hook 'reb-quit-unless-window)
+  ;;(set-window-configuration reb-window-config)
+  (when (window-live-p reb-window)
+    (when (< 1 (length (window-list (window-frame reb-window) 'no-mini)))
+      (unless dont-reset-wcfg
+        (when (and (eq (selected-window) reb-window)
+                   (window-live-p reb-target-window)
+                   (eq (window-frame reb-window)
+                       (window-frame reb-target-window)))
+          (select-window reb-target-window)))
+      (delete-window reb-window))))
+
+(defun reb-next-match ()
+  "Go to next match in the RE Builder target window."
+  (interactive)
+  (when (reb-assert-buffer-in-window)
+    (if (eq (selected-window) reb-target-window)
+        (isearch-resume reb-regexp t nil t reb-regexp t)
+      (with-selected-window reb-target-window
+        (when reb-regexp
+          (let ((p (point)))
+            (forward-char)
+            (if (not (re-search-forward reb-regexp (point-max) t))
+                (progn
+                  (goto-char p)
+                  (message "No more matches"))
+              (reb-update-matches)
+              (reb-show-subexp
+               (or (and reb-subexp-mode reb-subexp-displayed) 0)
+               t))))))))
+
+(defun reb-prev-match ()
+  "Go to previous match in the RE Builder target window."
+  (interactive)
+  (when (reb-assert-buffer-in-window)
+    (if (eq (selected-window) reb-target-window)
+        (isearch-resume reb-regexp t nil nil reb-regexp t)
+      (with-selected-window reb-target-window
+        (when reb-regexp
+          (let ((p (point)))
+            (backward-char)
+            (if (re-search-backward reb-regexp (point-min) t)
+                (progn
+                  (reb-update-matches)
+                  (reb-show-subexp
+                   (or (and reb-subexp-mode reb-subexp-displayed) 0)
+                   t))
+              (goto-char p)
+              (message "No more matches"))))))))
+
+(defun reb-toggle-case ()
+  "Toggle case sensitivity of searches for RE Builder target buffer."
+  (interactive)
+  (with-current-buffer reb-target-buffer
+    (setq case-fold-search (not case-fold-search)))
+  (reb-update-modestring)
+  (setq reb-need-regexp-update t))
+
+(defun reb-copy ()
+  "Copy current RE into the kill ring for later insertion."
+  (interactive)
+  (reb-update-regexp)
+  (let ((re (with-output-to-string
+	      (print (reb-target-binding reb-regexp)))))
+    (if (not re)
+        (message "No current valid regexp")
+      (setq re (substring re 1 (1- (length re))))
+      (setq re (replace-regexp-in-string "\n" "\\n" re nil t))
+      (kill-new re)
+      (message "Regexp copied to kill-ring"))))
+
+;; The subexpression mode is not electric because the number of
+;; matches should be seen rather than a prompt.
+(defun reb-enter-subexp-mode ()
+  "Enter the subexpression mode in the RE Builder."
+  (interactive)
+  (setq reb-subexp-mode t)
+  (reb-update-modestring)
+  (use-local-map reb-subexp-mode-map)
+  (message "`0'-`9' to display subexpressions  `q' to quit subexp mode"))
+
+(defun reb-show-subexp (subexp &optional pause)
+  "Visually show limit of subexpression SUBEXP of recent search.
+On color displays this just puts point to the end of the expression as
+the match should already be marked by an overlay.
+On other displays jump to the beginning and the end of it.
+If the optional PAUSE is non-nil then pause at the end in any case."
+  (with-selected-window reb-target-window
+    (unless (reb-color-display-p)
+      (goto-char (match-end subexp))
+      (sit-for reb-blink-delay)
+      (goto-char (match-beginning subexp))
+      (sit-for reb-blink-delay))
+    ;; Go to beginning because otherwise we will be jumping forward on
+    ;; changes and restarts after syntax errors:
+    (goto-char (match-beginning 0))
+    (when (or (not (reb-color-display-p)) pause)
+      (sit-for reb-blink-delay))))
+
+(defun reb-quit-subexp-mode ()
+  "Quit the subexpression mode in the RE Builder."
+  (interactive)
+  (setq reb-subexp-mode nil
+	reb-subexp-displayed nil)
+  (reb-update-modestring)
+  (use-local-map reb-mode-map))
+
+(defvar reb-change-syntax-hist nil)
+(require 'rxx)
+
+(defun reb-change-syntax (syntax)
+  "Change RE Builder source syntax to SYNTAX."
+  (interactive
+   (list (intern
+	  (completing-read "Select syntax: "
+			   (mapcar (lambda (el) (cons (symbol-name el) 1))
+				   ;;'(read string lisp-re sregex rx)
+				   '(read string rx)
+                                   )
+			   nil t (symbol-name reb-re-syntax)
+                           'reb-change-syntax-hist))))
+  (if (memq syntax '(read string lisp-re sregex rx))
+      (progn
+        (setq reb-re-syntax syntax)
+        (when (buffer-live-p reb-buffer)
+          (reb-initialize-buffer reb-buffer)))
+    (error "Invalid syntax: %s" syntax)))
+
+(defun reb-next-syntax ()
+  "Change to next RE Builder source syntax."
+  (interactive)
+  (let ((hit (memq reb-re-syntax '(rx read string rx))))
+    (when hit (reb-change-syntax (cadr hit)))))
+
+;; Non-interactive functions below
+(defun reb-update-matches ()
+  "Update matches in the RE Builder target window."
+  (when (and (buffer-live-p reb-buffer)
+             (get-buffer-window reb-buffer))
+    (reb-update-regexp)
+    (when (reb-assert-buffer-in-window)
+      (reb-update-isearch-in-timer 0)))
+  (setq reb-need-target-update nil))
+
+(defun reb-update-isearch ()
+  (reb-cancel-update-isearch)
+  (when (window-live-p reb-target-window)
+    (let ((is-in-reb-buffer (eq reb-buffer (current-buffer))))
+      (with-current-buffer reb-target-buffer
+        (when reb-regexp
+          (save-match-data
+            (let ((here (point))
+                  (subexp (if reb-subexp-mode reb-subexp-displayed nil))
+                  ;; Fix-me: unfortunately I am a lost about subexp. What was
+                  ;; it supposed to do before?
+                  (isearch-update-post-hook nil)
+                  (isearch-message-function (lambda ()))
+                  mb)
+              (setq isearch-string reb-regexp)
+              (setq isearch-regexp t)
+              ;; Unless we are moving in a special direction this might
+              ;; be best to avoid jumping forward:
+              (goto-char (point-at-bol))
+              ;;(set-window-point reb-target-window (point-at-bol))
+              (progn
+                (if (or (re-search-forward isearch-string nil t)
+                        ;; wrap around
+                        (let ((here (point)))
+                          (goto-char (point-min))
+                          (prog1
+                              (when (re-search-forward isearch-string nil t)
+                                (message "Wrapped around")
+                                t)
+                            (goto-char here))))
+                    (progn
+                      (setq isearch-other-end (match-end 0))
+                      (setq mb (match-beginning 0)))
+                  (setq reb-valid-string "No match")
+                  (setq isearch-other-end nil)))
+              (with-selected-window reb-target-window
+                ;; Fix-me: inhibit-redisplay does not feel good, but
+                ;; without it the display at least on w32 blinks very
+                ;; disturbingly.
+                (let ((inhibit-redisplay t))
+                  (when mb (set-window-point reb-target-window mb) )
+                  (isearch-update)))
+              ;; This must be done after with-selected-window for some
+              ;; reason, because otherwise the point isearch sets wins.
+              ;; Maybe this should be set-window-point ?
+              (unless is-in-reb-buffer (goto-char here))
+              )))))))
+
+(defun reb-post-command ()
+  "Update display `post-command-hook' if needed."
+  (unless (reb-quit-unless-window)
+    (when reb-need-regexp-update
+      (with-current-buffer reb-buffer
+        (save-restriction
+          (widen)
+          (save-excursion
+            (goto-char (point-min))
+            (skip-chars-forward " \t\n")
+            (when (eobp)
+              (reb-insert-regexp (reb-empty-regexp))))
+          (put-text-property (point-min) (point-max) 'fontified nil)))
+      (when (reb-update-regexp)
+        (setq reb-need-target-update t))
+      (let ((win (get-buffer-window reb-buffer)))
+        (when win
+          (let ((window-min-height 2))
+            (fit-window-to-buffer win))))
+      )
+    (when reb-need-target-update
+      (reb-update-matches)
+      (reb-update-header-line-format))
+    (reb-update-mode-line)))
+
+(defvar reb-target-update-isearch-timer nil)
+
+(defun reb-cancel-update-isearch ()
+  (when (timerp reb-target-update-isearch-timer)
+    (cancel-timer reb-target-update-isearch-timer))
+  (setq reb-target-update-isearch-timer nil))
+
+(defun reb-update-isearch-in-timer (delay)
+  (reb-cancel-update-isearch)
+  (setq reb-target-update-isearch-timer
+        (run-with-idle-timer delay nil 'reb-update-isearch-protected)))
+
+(defun reb-target-after-change (beg end lenold)
+  "Remember to update after changes in target buffer.
+Do not do update matches immediately since this would be
+disturbing."
+  (reb-update-isearch-in-timer 2))
+
+(defun reb-update-isearch-protected ()
+  (condition-case err
+      (reb-update-isearch)
+    (error (message "reb-update-isearch-in-timer: %s"
+                    (error-message-string err)))))
+(defun reb-after-change (beg end lenold)
+  "Remember to update after changes in reb buffer."
+  (setq reb-need-target-update t)
+  (setq reb-read-error-positions nil)
+  (when (eq reb-buffer (current-buffer))
+    (setq reb-need-regexp-update t)))
+
+
+(defun reb-isearch-dehighlight ()
+  (when (window-live-p reb-target-window)
+    (with-selected-window reb-target-window
+      (with-current-buffer reb-target-buffer
+        (isearch-dehighlight)))))
+
+(defun reb-assert-buffer-in-window ()
+  "Assert that `reb-target-buffer' is displayed in `reb-target-window'.
+If that succeeds return t, otherwise nil."
+  (when (and (window-live-p reb-target-window)
+             (buffer-live-p reb-target-buffer))
+    (unless (eq reb-target-buffer (window-buffer reb-target-window))
+      (set-window-buffer reb-target-window reb-target-buffer))
+    t))
+
+(defun reb-update-modestring ()
+  "Update the variable `reb-mode-string' displayed in the mode line."
+  ;;(message "update-modde-string: reb-valid-string=%S" reb-valid-string)
+  (setq reb-mode-string
+	(concat
+	 (if reb-subexp-mode
+             (format " (subexp %s)" (or reb-subexp-displayed "-"))
+	   "")
+	 (if (not (reb-target-binding case-fold-search))
+	     " Case"
+	   ""))))
+
+(defun reb-display-subexp (&optional subexp)
+  "Highlight only subexpression SUBEXP in the RE Builder."
+  (interactive)
+  (setq reb-subexp-displayed
+	(or subexp
+            (string-to-number (format "%c" last-command-event)))))
+
+
+;; The next functions are the interface between the regexp and
+;; its textual representation in the RE Builder buffer.
+;; They are the only functions concerned with the actual syntax
+;; being used.
+(defvar reb-read-error-positions nil)
+
+(defun reb-mark-read-error (beg end)
+  (setq reb-read-error-positions
+        (cons (cons beg end)
+              reb-read-error-positions)))
+
+(defun reb-read-regexp ()
+  "Read current regexp src from the RE Builder buffer.
+Return it in raw source format, but trimmed except for 'string
+format where the whole buffer is always returned.
+
+Also check input format.  However do not check yet if the
+resulting regexp is valid."
+  (when (buffer-live-p reb-buffer)
+    (with-current-buffer reb-buffer
+      (set (make-local-variable 'reb-read-error-positions) nil)
+      (save-excursion
+        (cond ((eq reb-re-syntax 'read)
+               (goto-char (point-min))
+               (skip-chars-forward " \t\n")
+               (let* ((start (point))
+                      (form (condition-case err
+                                (read (current-buffer))
+                              (error (setq reb-valid-string (error-message-string err))
+                                     (reb-mark-read-error start (point))
+                                     (message "rvs=%S" reb-valid-string)
+                                     nil))))
+                 (if (not form)
+                     (reb-mark-read-error start (point))
+                   (if (not (stringp form))
+                       (progn
+                         (reb-mark-read-error start (point))
+                         (setq reb-valid-string "Not a string"))
+                     (skip-chars-forward " \t\n")
+                     (if (eobp)
+                         form
+                       (setq start (point))
+                       (goto-char (point-max))
+                       (skip-chars-backward " \t\n")
+                       (reb-mark-read-error start (point))
+                       (setq reb-valid-string "Trailing garbage")
+                       nil)))))
+              ((eq reb-re-syntax 'string)
+               (buffer-substring-no-properties (point-min) (point-max)))
+              ((reb-lisp-syntax-p)
+               (goto-char (point-min))
+               (skip-chars-forward " \t\n")
+               ;;(if (memq (char-after) '(?\' ?\` ?\[))
+               (cond
+                ;; Exclude some chars to not upset the lisp reader:
+                ( (memq (char-after) '(?\[ ?\' ?\\ ?# ?,))
+                  (reb-mark-read-error (point) (1+ (point)))
+                  (setq reb-valid-string (format "Bad char: %c" (char-after)))
+                  nil)
+                ( (and (eq (char-after) ?\`)
+                       (not reb-rx-backquote))
+                  (progn
+                    (reb-mark-read-error (point) (1+ (point)))
+                    (setq reb-valid-string "RX backquote not enabled")
+                    nil))
+                (t (let* ((start (point))
+                          stop
+                          (form (condition-case err
+                                    (read (current-buffer))
+                                  (error (setq reb-valid-string (error-message-string err))
+                                         (reb-mark-read-error start (point))
+                                         nil))))
+                     (when form
+                       (setq stop (point))
+                       (skip-chars-forward " \n\t")
+                       (if (eobp)
+                           (cons form (buffer-substring-no-properties start stop))
+                         (reb-mark-read-error (point) (point-max))
+                         (setq reb-valid-string "Trailing garbage")
+                         nil))))))
+              (t (error "reb-re-syntax=%s" reb-re-syntax)))))))
+
+(defun reb-empty-regexp ()
+  "Return empty RE for current syntax."
+  (cond ((eq reb-re-syntax 'rx) "")
+        ((reb-lisp-syntax-p) "'()")
+	(t "")))
+
+(defun reb-cook-regexp (re)
+  "Return RE after processing it according to `reb-re-syntax'.
+The return value is a regexp in string format.  It may be
+invalid."
+  (cond ((eq reb-re-syntax 'lisp-re)
+	 (when (fboundp 'lre-compile-string)
+	   (lre-compile-string (eval (car re)))))
+	((eq reb-re-syntax 'sregex)
+	 (apply 'sregex (eval (car re))))
+	((eq reb-re-syntax 'rx)
+         (let* ((inner-rx (if reb-rx-backquote
+                              ;; Allow backquote expansion, i.e. `(and ,(concat "a" "b"))
+                              (eval (macroexpand (car re)))
+                            (car re)))
+                (rx (rxx-simplify-result (list 'rx inner-rx))))
+           ;; Use no-group = t to avoid shy group.
+           (rx-to-string (cons 'and (cdr rx)) t)))
+	(t re)))
+
+(defun reb-update-regexp ()
+  "Update the regexp for the target buffer.
+Return t if the (cooked) expression changed."
+  (when reb-need-regexp-update
+    (setq reb-valid-string nil)
+    (let* ((re-src (reb-read-regexp))
+           ;; Update re if source could be read
+           (re (unless reb-valid-string
+                 (condition-case err
+                     ;; Eval is used, there can be an error. Just catch it
+                     ;; here.
+                     (reb-cook-regexp re-src)
+                   (error
+                    ;;(setq reb-valid-string (format "re-src=%S => %s" re-src (error-message-string err)))
+                    (setq reb-valid-string (error-message-string err))
+                    ;;(reb-update-modestring)
+                    nil)))))
+      (when re
+        ;; (when (eq 'rx reb-re-syntax)
+        ;;   (let ((print-escape-newlines t))
+        ;;     (message "RE=%S" re)))
+        (unless (stringp re)
+          (unless reb-valid-string
+            (setq reb-valid-string "*internal error, re is not a string*"))
+          (setq re nil))
+        (condition-case err
+            (string-match-p re "")
+          (error
+           (setq reb-valid-string (error-message-string err))
+           (setq re nil)))
+        )
+      (reb-update-modestring)
+      (with-current-buffer reb-target-buffer
+        ;; fix-me:
+        (when (let ((oldre reb-regexp))
+                (prog1
+                    (not (equal oldre re))
+                  (setq reb-regexp re)))
+          ;; Only update the source re for the lisp formats
+          (when (reb-lisp-syntax-p)
+            (setq reb-regexp-src (cdr re-src))))))
+    (setq reb-need-regexp-update nil)))
+
+
+;; And now the real core of the whole thing
+
+;; See isearch ;-)
+
+;; The End
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Copying from target buffer
+
+;;;###autoload
+(defun reb-copy-target-region ()
+  "Copy region in RE Builder target buffer to edit buffer."
+  (interactive)
+  (if (not (with-current-buffer reb-target-buffer mark-active))
+      (message "No active region in RE target buffer")
+    ;; fix-me: check in string mode.
+    ;; In re-builder
+    (let ((str (with-current-buffer reb-target-buffer
+                 (buffer-substring-no-properties (region-beginning) (region-end)))))
+      (with-current-buffer reb-buffer
+        (let ((here (point)))
+          (case reb-re-syntax
+            (string
+             (insert (regexp-quote str)))
+            ((read rx)
+             (when (eq 'read reb-re-syntax) (setq str (regexp-quote str)))
+             (let* ((here (point))
+                    (ppss (parse-partial-sexp (point-min) here))
+                    (in-str (nth 3 ppss))
+                    (str-beg (nth 8 ppss))
+                    (print-escape-newlines t))
+               (if in-str
+                   ;; Try to split it, but carefully
+                   (progn
+                     ;; (skip-chars-backward "\\") ;; fix-me: did not work??
+                     (while (and (not (bobp)) (eq (char-before) ?\\ )) (backward-char))
+                     (insert "\" \"")
+                     (goto-char str-beg)
+                     (let ((str-l (read (current-buffer)))
+                           (str-r (read (current-buffer))))
+                       (delete-region str-beg (point))
+                       (prin1 (concat str-l str str-r) (current-buffer))))
+                 (if (eq 'read reb-re-syntax)
+                     (progn
+                       (skip-chars-backward " \t\n")
+                       (let ((at-beg (bobp))
+                             str-start
+                             old-str)
+                         (goto-char (point-min))
+                         (skip-chars-forward " \t\n")
+                         (setq str-start (point))
+                         (setq old-str (read (current-buffer)))
+                         (delete-region str-start (point))
+                         (prin1 (if at-beg
+                                    (concat str old-str)
+                                  (concat old-str str))
+                                (current-buffer))))
+                   ;; rx
+                   (skip-chars-forward " \t\n")
+                   (if (eobp)
+                       (progn
+                         (skip-chars-backward " \t\n")
+                         (backward-char)
+                         (insert " ")
+                         (prin1 str (current-buffer)))
+                     (skip-chars-forward "^ \t\n)")
+                     (insert " ")
+                     (prin1 str (current-buffer)))))))
+            (t (error "Unsupported syntax=%S" reb-re-syntax)))
+          (goto-char here))))))
+
+;; Fix-me: grab range of whitespace
+;; Fix-me: check +-1...
+(defun reb-copy-word-at-end ()
+  "Pull next character, subword or word from buffer into search string.
+Subword is used when `subword-mode' is activated. "
+  (interactive)
+  (reb-yank-from-target-internal
+   'end
+   (lambda ()
+     (if (or (= (char-syntax (or (char-after) 0)) ?w)
+             (= (char-syntax (or (char-after (1+ (point))) 0)) ?w))
+	 (if (and (boundp 'subword-mode) subword-mode)
+	     (subword-forward 1)
+	   (forward-word 1))
+       (forward-char 1)) (point))))
+
+;;(message " ourcomments f6 %.1f seconds elapsed" (- (float-time) ourcomments-load-time-start))
+
+(defun reb-copy-word-at-beginning ()
+  "Pull previous character, subword or word from buffer into search string.
+Subword is used when `subword-mode' is activated. "
+  (interactive)
+  (reb-yank-from-target-internal
+   'begin
+   (lambda ()
+     (if (or (= (char-syntax (or (char-before) 0)) ?w)
+             (= (char-syntax (or (char-before (1- (point))) 0)) ?w))
+	 (if (and (boundp 'subword-mode) subword-mode)
+	     (subword-backward 1)
+	   (backward-word 1))
+       (backward-char 1)) (point))))
+
+;;(message " ourcomments f7 %.1f seconds elapsed" (- (float-time) ourcomments-load-time-start))
+
+(defun reb-yank-from-target-internal (side jumpform)
+  "Pull in text from match border to point reached by JUMPFORM.
+JUMPFORM is a lambda expression that takes no arguments and returns
+a buffer position, possibly having moved point to that position.
+For example, it might move point forward by a word and return point,
+or it might return the position of the end of the line."
+  (cond
+   ( (not (eq reb-buffer (current-buffer)))
+     (message "Must be done from RE buffer"))
+   ( (not (eq reb-target-buffer (window-buffer reb-target-window)))
+     (message "RE target buffer not shown, can't copy"))
+   ( (not (or (and isearch-overlay
+                   (overlayp isearch-overlay)
+                   (buffer-live-p (overlay-buffer isearch-overlay)))
+              (let ((re (reb-target-binding 'reb-regexp)))
+                (or (not re)
+                    (zerop (length re))))))
+     (message "RE does not match"))
+   ( t
+     (let* ((match-ovl (and (overlayp isearch-overlay)
+                            (buffer-live-p (overlay-buffer isearch-overlay))
+                            isearch-overlay))
+            (string
+             (with-selected-window reb-target-window
+               (with-current-buffer reb-target-buffer
+                 (let ((here (point))
+                       start stop
+                       (match-point (if match-ovl
+                                        (cond
+                                         ((eq side 'begin)
+                                          (overlay-start match-ovl))
+                                         ((eq side 'end)
+                                          (overlay-end match-ovl))
+                                         (t (error "side=%s" side)))
+                                      (point))))
+                   (goto-char match-point)
+                   (setq start (point))
+                   (funcall jumpform)
+                   (setq stop (point))
+                   (when match-ovl (goto-char here))
+                   (if (eq side 'begin)
+                       (buffer-substring-no-properties stop start)
+                     (buffer-substring-no-properties start stop)))))))
+       (reb-yank-string-from-target side string)))))
+
+;;(message " ourcomments g %.1f seconds elapsed" (- (float-time) ourcomments-load-time-start))
+
+;; (let* ((print-escape-newlines t)
+;;        (ret (prin1-to-string str)))
+;;   (substring ret 1 -1)))
+
+(defun reb-yank-string-from-target (side string)
+  "Pull STRING into search string."
+  ;; Downcase the string if not supposed to case-fold yanked strings.
+  ;;(when case-fold-search (setq string (downcase string)))
+  ;;(setq string (rxx-escape-ntf (regexp-quote string)))
+  ;; Need to quote " too
+  ;;(setq string (replace-regexp-in-string "\"" (concat "\\\\" "\"") string))
+  (unless (memq side '(begin end)) (error "side=%s" side))
+  (with-current-buffer reb-buffer
+    (let ((print-escape-newlines t))
+      (case reb-re-syntax
+        (read (goto-char (point-min))
+              (skip-chars-forward " \t\n")
+              (let ((here (point))
+                    (cur (read (current-buffer)))
+                    )
+                (delete-region here (point-max))
+                (prin1 (if (eq side 'begin)
+                           (concat (regexp-quote string) cur)
+                         (concat cur (regexp-quote string)))
+                       (current-buffer))))
+        (string (if (eq side 'begin)
+                    (goto-char (point-min))
+                  (goto-char (point-max)))
+                (insert string))
+        (rx (goto-char (point-min))
+            (skip-chars-forward "^`(")
+            (skip-chars-forward "`(")
+            (let ((par-pos (1- (point)))
+                  what
+                  begin-pos)
+              (skip-chars-forward "^ \t\n")
+              (setq what (buffer-substring-no-properties (1+ par-pos) (point)))
+              (unless (string= what "and")
+                ;; Need to insert and here
+                (goto-char (point-max))
+                (skip-chars-backward " \t\n")
+                (backward-char)
+                (insert ")")
+                (goto-char par-pos)
+                (insert "(and "))
+              (if (eq side 'begin)
+                  (progn
+                    (skip-chars-forward " \t\n")
+                    (if (eq (char-after) ?\")
+                        (let ((str-beg (point))
+                              old-str)
+                          (setq old-str (read (current-buffer)))
+                          (delete-region str-beg (point))
+                          (prin1 (concat string old-str) (current-buffer)))
+                      (prin1 string (current-buffer))))
+                (goto-char (point-max))
+                (skip-chars-backward " \t\n")
+                (backward-char)
+                (skip-chars-backward " \t\n")
+                (if (eq (char-before) ?\")
+                    (let (str-beg
+                          old-str)
+                      (backward-sexp)
+                      (setq str-beg (point))
+                      (setq old-str (read (current-buffer)))
+                      (delete-region str-beg (point))
+                      (prin1 (concat old-str string) (current-buffer)))
+                  (prin1 string (current-buffer))))))
+        (t (error "Not supported for syntax=%s" reb-re-syntax))))))
+
+(defun re-builder-unload-function ()
+  "Unload the RE Builder library."
+  (remove-hook 'post-command-hook 'reb-post-command)
+  (reb-cancel-update-isearch)
+  (when (buffer-live-p reb-target-buffer)
+    (with-current-buffer reb-target-buffer
+      (reb-target-mode -1)
+      (remove-hook 'after-change-functions 'reb-after-change t)))
+  (when (buffer-live-p reb-buffer)
+    (with-current-buffer reb-buffer
+      (remove-hook 'after-change-functions 'reb-after-change t)
+      (when (reb-mode-buffer-p)
+	(funcall (or (default-value 'major-mode) 'fundamental-mode)))))
+  ;; continue standard unloading
+  nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Font lock etc
+
+;; Fix-me: move most of this to rxx.el
+
+(defun reb-fontify-string-re (bound)
+  (when nil ;; Enabling this hangs emacs (rather badly, but can be
+    ;; stopped if with-local-quit is used).
+    (with-local-quit
+      (catch 'found
+        ;; The following loop is needed to continue searching after matches
+        ;; that do not occur in strings.  The associated regexp matches one
+        ;; of `\\\\' `\\(' `\\(?:' `\\|' `\\)'.  `\\\\' has been included to
+        ;; avoid highlighting, for example, `\\(' in `\\\\('.
+        (when (memq reb-re-syntax '(read string))
+          (let ((n 0))
+            (while (and (> 200 (setq n (1+ n)))
+                        (re-search-forward
+                         (if (eq reb-re-syntax 'read)
+                             ;; Copied from font-lock.el
+                             "\\(\\\\\\\\\\)\\(?:\\(\\\\\\\\\\)\\|\\((\\(?:\\?[0-9]*:\\)?\\|[|)]\\)\\)"
+                           "\\(\\\\\\)\\(?:\\(\\\\\\)\\|\\((\\(?:\\?[0-9]*:\\)?\\|[|)]\\)\\)")
+                         bound t))
+              (unless (match-beginning 2)
+                (let ((face (get-text-property (1- (point)) 'face)))
+                  (when (or (and (listp face)
+                                 (memq 'font-lock-string-face face))
+                            (eq 'font-lock-string-face face)
+                            t)
+                    (throw 'found t))))))))))
+  ;; Tell we are ready
+  nil)
+
+(defface reb-regexp-grouping-backslash
+  '((t :inherit font-lock-keyword-face :weight bold :underline t))
+  "Font Lock mode face for backslashes in Lisp regexp grouping constructs."
+  :group 're-builder)
+
+(defface reb-regexp-grouping-construct
+  '((t :inherit font-lock-keyword-face :weight bold :underline t))
+  "Font Lock mode face used to highlight grouping constructs in Lisp regexps."
+  :group 're-builder)
+
+(defconst reb-string-font-lock-defaults
+  (eval-when-compile
+    '(((reb-fontify-string-re
+        (1 'reb-regexp-grouping-backslash prepend)
+        (3 'reb-regexp-grouping-construct prepend))
+       (reb-mark-non-matching-parenthesis)
+       (reb-font-lock-background-marker)
+       (reb-font-lock-error-marker)
+       )
+      nil)))
+
+(defsubst reb-while (limit counter where)
+  (let ((count (symbol-value counter)))
+    (if (= count limit)
+        (progn
+          (msgtrc "Reached (while limit=%s, where=%s)" limit where)
+          nil)
+      (set counter (1+ count)))))
+
+(defun reb-mark-non-matching-parenthesis (bound)
+  ;; We have a small string, check the whole of it, but wait until
+  ;; everything else is fontified.
+  (when (>= bound (point-max))
+    (with-local-quit
+      (with-silent-modifications
+        (let (left-pars
+              (n-reb 0)
+              faces-here)
+          (goto-char (point-min))
+          (while (and (reb-while 100 'n-reb "mark-par")
+                      (not (eobp)))
+            (skip-chars-forward "^()")
+            (unless (eobp)
+              (setq faces-here (get-text-property (point) 'face))
+              ;; It is already fontified, use that info:
+              (when (or (eq 'reb-regexp-grouping-construct faces-here)
+                        (and (listp faces-here)
+                             (memq 'reb-regexp-grouping-construct faces-here)))
+                (cond ((eq (char-after) ?\()
+                       (setq left-pars (cons (point) left-pars)))
+                      ((eq (char-after) ?\))
+                       (if left-pars
+                           (setq left-pars (cdr left-pars))
+                         (put-text-property (point) (1+ (point))
+                                            'face 'font-lock-warning-face)))
+                      (t (message "markpar: char-after=%s" (char-to-string (char-after))))))
+              (unless (eobp) (forward-char))))
+          (dolist (lp left-pars)
+            (put-text-property lp (1+ lp)
+                               'face 'font-lock-warning-face))))))
+  ;; Tell we are done
+  nil)
+
+(require 'rx)
+;; Fix-me: add some completion
+
+(defun rxx-completion-at-point (&optional predicate)
+  "Function used for `completion-at-point-functions' in `reb-rx-mode'.
+Mostly stolen from `lisp-completion-at-point'."
+  ;; FIXME: the `end' could be after point?
+  (let* ((pos (point))
+         (beg (with-syntax-table emacs-lisp-mode-syntax-table
+                (condition-case nil
+                    (save-excursion
+                      (backward-sexp 1)
+                      (skip-syntax-forward "'")
+                      (point))
+                  (scan-error pos))))
+         (predicate
+          (or predicate
+              (save-excursion
+                (goto-char beg)
+                (if (not (eq (char-before) ?\())
+                    (progn
+                      (skip-chars-backward " \t\n")
+                      (cond
+                       ( (string= (buffer-substring-no-properties (- (point) 8) (point))
+                                  "category")
+                         'rxx-cat-p)
+                       ( (string= (buffer-substring-no-properties (- (point) 8) (point))
+                                  "syntax")
+                         'rxx-syn-p)
+                       ( t
+                         'rxx-var-p)))
+                  ;; (lambda (sym)	;why not just nil ?   -sm
+                  ;;   (or (boundp sym) (fboundp sym)
+                  ;;       (symbol-plist sym)))
+                  ;; Looks like a funcall position.
+                  'rxx-fun-p))))
+         (end
+          (unless (or (eq beg (point-max))
+                      (member (char-syntax (char-after beg)) '(?\" ?\( ?\))))
+            (condition-case nil
+                (save-excursion
+                  (goto-char beg)
+                  (forward-sexp 1)
+                  (when (>= (point) pos)
+                    (point)))
+              (scan-error pos)))))
+    ;;(setq predicate nil)
+    (when end
+      (list beg end
+            (mapcar (lambda (sym) (symbol-name sym)) rxx-syms)
+            ;;rxx-syms
+            :predicate predicate
+            :annotate-function
+            (unless (eq predicate 'rxx-fun-p)
+              (lambda (str) (if (rxx-fun-p (intern-soft str)) " <f>")))))))
+
+;; (rxx-fun-p 'and)
+(defun rxx-fun-p (name)
+  (let ((sym (intern-soft name)))
+    (when sym (memq sym rxx-funs))))
+
+(defun rxx-var-p (name)
+  (let ((sym (intern-soft name)))
+    (when sym (memq sym rxx-vars))))
+
+(defun rxx-cat-p (name)
+  (let ((sym (intern-soft name)))
+    (when sym (memq sym rxx-cats))))
+
+(defun rxx-syn-p (name)
+  (let ((sym (intern-soft name)))
+    (when sym (memq sym rxx-syns))))
+
+(defvar rxx-funs
+  (sort (delq nil (mapcar (lambda (rec)
+                            (let ((key (car rec))
+                                  (val (cdr rec)))
+                              (while (symbolp val)
+                                (let ((subrec (assoc val rx-constituents)))
+                                  (setq val (cdr subrec))))
+                              (when (and (listp val)
+                                         (< 0 (nth 1 val)))
+                                key)))
+                          rx-constituents))
+        (lambda (a b)
+          (string< (symbol-name a)
+                   (symbol-name b)))))
+
+(defvar rxx-vars
+  (sort (delq nil (mapcar (lambda (rec)
+                            (let ((key (car rec))
+                                  (val (cdr rec)))
+                              (while (symbolp val)
+                                (let ((subrec (assoc val rx-constituents)))
+                                  (setq val (cdr subrec))))
+                              (when (or (stringp val)
+                                        (and (listp val)
+                                             (= 0 (nth 1 val))))
+                                key)))
+                          rx-constituents))
+        (lambda (a b)
+          (string< (symbol-name a)
+                   (symbol-name b)))))
+
+(defvar rxx-cats
+  (sort (delq nil (mapcar (lambda (rec)
+                            (car rec))
+                          rx-categories))
+        (lambda (a b)
+          (string< (symbol-name a)
+                   (symbol-name b)))))
+
+(defvar rxx-syns
+  (sort (delq nil (mapcar (lambda (rec)
+                            (car rec))
+                          rx-syntax))
+        (lambda (a b)
+          (string< (symbol-name a)
+                   (symbol-name b)))))
+
+(defvar rxx-syms (append rxx-funs rxx-vars rxx-cats rxx-syns))
+
+(defconst rxx-font-lock-keywords
+  (let ((funs       (mapcar (lambda (rec) (symbol-name rec)) rxx-funs))
+        (vars       (mapcar (lambda (rec) (symbol-name rec)) rxx-vars))
+        (syntax     (mapcar (lambda (rec) (symbol-name rec)) rxx-syns))
+        (categories (mapcar (lambda (rec) (symbol-name rec)) rxx-cats)))
+    `(
+      (reb-font-lock-error-marker)
+      (,(concat "(category[[:space:]]+" (regexp-opt categories t) ")")
+       (1 font-lock-variable-name-face))
+      (,(concat "(category[[:space:]]+\\([a-z-]+\\)")
+       (1 font-lock-warning-face))
+      (,(concat "(syntax[[:space:]]+" (regexp-opt syntax t) ")")
+       (1 font-lock-type-face))
+      (,(concat "(syntax[[:space:]]+\\([a-z-]+\\)")
+       (1 font-lock-warning-face))
+      (,(concat "(" (regexp-opt funs t))
+       (1 font-lock-keyword-face))
+      (,"(\\([a-z-]+\\)"
+       (1 font-lock-warning-face))
+      (,(concat " " (regexp-opt vars t))
+       (1 font-lock-constant-face))
+      (,"[^\(]\\([a-z-]+\\)"
+       (1 font-lock-warning-face))
+      ;; (,(concat "(" (regexp-opt (list "rx-to-string") t) "[[:space:]]")
+      ;;  (1 font-lock-warning-face))
+      ;; (,(concat "(" (regexp-opt (list "rx") t) "[[:space:]]")
+      ;;  (1 font-lock-warning-face))
+      )))
+
+(defun reb-font-lock-error-marker (limit)
+  (when (eq limit (point-max))
+    (with-local-quit
+      (save-restriction
+        (widen)
+        (with-silent-modifications
+          (dolist (rec reb-read-error-positions)
+            (let ((beg (car rec))
+                  (end (cdr rec)))
+              (setq end (min end (point-max)))
+              (when (> end beg)
+                (put-text-property beg end 'face 'font-lock-warning-face)))))))
+    ;; Tell we are done
+    (goto-char limit)
+    nil))
+
+(defface reb-string-bg
+  '((t :background "khaki"))
+  "Font Lock mode face for string style background."
+  :group 're-builder)
+
+(defun reb-font-lock-background-marker (limit)
+  (when (eq reb-re-syntax 'string)
+    (when (eq limit (point-max))
+      (with-local-quit
+        (save-restriction
+          (widen)
+          (let (beg end
+                    old-face
+                    new-face
+                    (n 0)
+                    (bg-face 'reb-string-bg))
+            ;; Fix-me: no reason to jump around here.
+            (goto-char (point-min))
+            (setq beg (point))
+            (with-silent-modifications
+              (while (and (> 200 (setq n (1+ n)))
+                          (not (eobp)))
+                (setq old-face (get-text-property beg 'face))
+                (setq end (or (next-single-property-change (point) 'face)
+                              (point-max)))
+                ;; This crashes Emacs
+                (if (listp old-face)
+                    (setq new-face (cons bg-face old-face))
+                  (setq new-face (list bg-face old-face)))
+                ;; so avoid it now:
+                (setq new-face bg-face)
+                (put-text-property beg end 'face new-face)
+                (goto-char end)
+                (setq beg (point)))))))
+      ;; We are ready, tell that:
+      nil)))
+
+(defun reb-restart-font-lock ()
+  "Restart `font-lock-mode' to fit current regexp format."
+  (font-lock-mode 1) ;; fix-me
+  (unless (eq (current-buffer) reb-buffer) (error "Not in %S" reb-buffer))
+  (setq reb-read-error-positions nil)
+  (let ((font-lock-is-on font-lock-mode))
+    (font-lock-mode -1)
+    (kill-local-variable 'font-lock-set-defaults)
+    (setq font-lock-defaults
+          (cond
+           ((memq reb-re-syntax '(read string))
+            ;; Fix-me: should this be keywords? Anyway split it up for
+            ;; read and string.
+            reb-string-font-lock-defaults)
+           ((eq reb-re-syntax 'rx)
+            '(rxx-font-lock-keywords
+              nil))
+           (t nil)))
+    (when font-lock-is-on (font-lock-mode 1))))
+
+(provide 're-builder)
+
+;; arch-tag: 5c5515ac-4085-4524-a421-033f44f032e7
+;;; re-builder.el ends here

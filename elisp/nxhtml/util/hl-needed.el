@@ -65,7 +65,7 @@ This is similar to turning on `vline-mode' and `hl-line-mode'"
   :type 'boolean
   :group 'hl-needed)
 
-(defcustom hl-needed-mark-column t
+(defcustom hl-needed-mark-column nil
   "Highlight column."
   :type 'boolean
   :group 'hl-needed)

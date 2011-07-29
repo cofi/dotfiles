@@ -1,11 +1,16 @@
 
 <%@LANGUAGE="VBScript"%>
+<%@ Page LANGUAGE="javascript"%>
+
+<SCRIPT language="C#" RUNAT="Server">
+
+</script>
 
 <SCRIPT LANGUAGE="JavaScript" RUNAT="Server">
 function JSGreeting()
-	{
-	return "Greetings from a JavaScript Function";
-	}
+{
+    return "Greetings from a JavaScript Function";
+}
 </SCRIPT>
 
 <SCRIPT LANGUAGE="VBScript" RUNAT="Server">
@@ -26,11 +31,11 @@ c += " (Two numbers are added by JavaScript, "
 c += "and then formatted into currency by VBScript.)"
 
 function add(x,y)
-	{
-	result = x + y;
-	result = toDollars(result);
-	return result;	
-	}
+{
+    result = x + y;
+    result = toDollars(result);
+    return result;
+}
 
 Response.Write("<HTML>\r")
 Response.Write(JSGreeting() + "<BR>\r")

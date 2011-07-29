@@ -10,19 +10,10 @@
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pylint-init)))
 
-(add-to-list 'load-path "~/.elisp/python-mode/")
-(autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-
-(require 'ipython)
-(setq py-python-command-args '( "-colors" "Linux"))
-
-(defadvice py-execute-buffer (around python-keep-focus activate)
-  "return focus to python code buffer"
-  (save-excursion ad-do-it))
-
 ;; Folding
 (add-hook 'python-mode-hook 'hs-minor-mode)
+
+(setq python-python-command "ipython")
 
 ;; setup pymacs
 (autoload 'pymacs-apply "pymacs")
@@ -49,8 +40,7 @@
 
 ;; Keybindings
 (add-hook 'python-mode-hook
-          (lambda ()
-            (fill-keymap py-mode-map
+          (gen-local-fill-keymap-hook
               "M-n"       'flymake-goto-next-error
               "M-p"       'flymake-goto-prev-error
               "C-c C-SPC" 'flymake-mode
@@ -59,7 +49,7 @@
               "C-c g"     'rope-goto-definition
               "C-c d"     'rope-show-doc
               "C-c t"     'rope-show-calltip
-              "C-c ?"     'pylookup-lookup)))
+              "C-c ?"     'pylookup-lookup))
 
 (setq pylookup-db-file (cofi/var-file "pylookup.db")
       pylookup-html-locations '("~/doc/python-2.7/")

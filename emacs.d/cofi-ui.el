@@ -208,5 +208,6 @@ Intended as `kill-buffer-query-functions' fun."
                                      "#AE4747" "#556B2F"
                                      "#DAA520" "#7A7AB0"
                                      "#8B7B8B" "#A7A15E" "#DDDDDD"))
+(setq multi-term-dedicated-select-after-open-p t)
 
 (provide 'cofi-ui)

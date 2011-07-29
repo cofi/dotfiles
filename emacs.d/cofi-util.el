@@ -220,6 +220,13 @@ strings."
      (interactive)
      (,mode 1)))
 
+(defmacro turn-on-file (mode)
+  "Return a `turn-on' fun for given mode that only turns on in buffers that visit files."
+  `(lambda ()
+     (interactive)
+     (if buffer-file-name
+         (,mode 1))))
+
 (defmacro defkeymap (symbol &rest mappings)
   (declare (indent 1))
   "Define keymap bound to `SYMBOL'.

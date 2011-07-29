@@ -183,10 +183,7 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
         (replace-state (set-cursor-color viper-replace-color))
         (otherwise     (set-cursor-color default-color)))))
 
-  (add-to-hooks 'cofi/viper-bar '(viper-insert-state-hook
-                                 viper-emacs-state-hook
-                                 viper-vi-state-hook
-                                 viper-replace-state-hook))
+  (add-hook 'post-command-hook #'cofi/viper-bar)
 
   ;; Disable annoying vim compatibilities
   (define-key viper-vi-basic-map (kbd "C-y") nil)

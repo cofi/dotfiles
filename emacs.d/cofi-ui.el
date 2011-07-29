@@ -155,11 +155,11 @@
 (global-font-lock-mode t)
 (global-hl-line-mode t)
 (column-number-mode 1)
-;; start linum only for real files
-(add-hook 'find-file-hook (turn-on linum-mode))
-(defadvice normal-mode (after re-line activate)
-  ;; fix normal-mode disabling
-  (linum-mode 1))
+;; enable (and re-enable) linum-mode only on real files
+(add-to-hooks (turn-on-file linum-mode)
+              '(find-file-hook
+                mumamo-after-change-major-mode-hook
+                change-major-mode-hook))
 (show-paren-mode t)
 (when on-mobile?
   (ignore-errors

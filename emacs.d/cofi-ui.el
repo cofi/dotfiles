@@ -201,4 +201,12 @@ Intended as `kill-buffer-query-functions' fun."
 (set-input-method 'german-postfix)
 ;;; C-x m i to toggle input-method, see cofi-keys.el
 ;;; ==============================
+
+;;; use same colors in ansi-term as in term
+(setq ansi-term-color-vector (vector 'unspecified
+                                     (frame-parameter nil 'background-color)
+                                     "#AE4747" "#556B2F"
+                                     "#DAA520" "#7A7AB0"
+                                     "#8B7B8B" "#A7A15E" "#DDDDDD"))
+
 (provide 'cofi-ui)

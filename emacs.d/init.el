@@ -26,7 +26,6 @@
     (add-to-list 'package-archives archive))
   (package-initialize))
 
-;; (load "~/.elisp/nxhtml/autostart.el")
 
 (defun add-to-loadpath (&rest dirs)
   (dolist (dir dirs load-path)
@@ -72,7 +71,8 @@
                                  "cofi-shell"
                                  "cofi-workgroups"
                                  "cofi-completion"))
-(defvar cofi/full-settings '("cofi-programming"))
+(defvar cofi/full-settings '("cofi-programming"
+                             "nxhtml/autostart.el"))
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
 (defvar cofi/mail-instance nil "This is an email instance.")

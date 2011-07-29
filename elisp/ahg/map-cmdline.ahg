@@ -1,2 +1,0 @@
-changeset = "{rev}:{node|short}\n{branches}\n{tags}\n{parents}\n{author}\n{date|date}\n{files}\n\t{desc|tabindent}\n"
-file = "{file}\n"

@@ -56,6 +56,7 @@
 (autoload 'idomenu "idomenu" "Switch to a buffer-local tag from Imenu via Ido." t)
 
 (autoload 'magit-status "magit" nil t)
+(autoload 'monky-status "monky" nil t)
 
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 (autoload 'markdown-mode "markdown-mode" "Mode for markdown files" t)

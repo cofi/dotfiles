@@ -76,3 +76,6 @@
 [submodule "elisp/vendor/ace-jump-mode"]
 	path = elisp/vendor/ace-jump-mode
 	url = git://github.com/winterTTr/ace-jump-mode.git
+[submodule "elisp/vendor/monky"]
+	path = elisp/vendor/monky
+	url = git://github.com/ananthakumaran/monky.git

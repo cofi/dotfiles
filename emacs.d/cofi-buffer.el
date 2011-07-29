@@ -44,6 +44,11 @@
                                 (mode . bbdb-mode)
                                 (name . "bbdb$")
                                 ))
+                 ("Gnus" (or
+                          (mode . message-mode)
+                          (mode . gnus-group-mode)
+                          (mode . gnus-summary-mode)
+                          (mode . gnus-article-mode)))
 
                  ("Terminals" (mode . term-mode))
 

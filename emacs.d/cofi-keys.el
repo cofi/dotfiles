@@ -47,12 +47,14 @@
 
 (fill-global-keymap
  ;; buffer
- "C-c y"   'bury-buffer
- "C-c Y"   'quit-window
- "C-c r"   'revert-buffer
- "C-x b"   'cofi/buffer
- "C-x B"   'cofi/buffer-alternate
- "C-x C-c" 'cofi/buffer
+ "C-c y"     'bury-buffer
+ "C-c Y"     'quit-window
+ "C-c r"     'revert-buffer
+ "C-x b"     'cofi/buffer
+ "C-x B"     'cofi/buffer-alternate
+ "C-x C-c"   'cofi/buffer
+ "C-x C-b"   'ibuffer-other-window
+ "C-x C-S-b" 'ibuffer
 
  ;; files
  "C-x M-f" 'ido-find-file-other-window

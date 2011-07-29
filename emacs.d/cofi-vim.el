@@ -138,11 +138,15 @@ Vanilla in vi-state; Prefixed with `C-' in insert-state and emacs-state.")
   (dolist (mode '(magit-mode
                   magit-key-mode
                   magit-show-branches-mode
-                  prolog-inferior-mode))
+                  prolog-inferior-mode
+                  inferior-python-mode))
     (push mode viper-emacs-state-mode-list))
 
-  (push 'clojure-mode viper-vi-state-mode-list)
-  (delete 'gnus-article-mode viper-vi-state-mode-list)
+  (dolist (mode '(clojure-mode))
+    (push mode viper-vi-state-mode-list))
+
+  (dolist (mode '(gnus-article-mode))
+    (delete mode viper-vi-state-mode-list))
   ;; ===================================================
 
   ;; Conflicts ========================================

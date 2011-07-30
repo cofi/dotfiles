@@ -29,50 +29,48 @@
             org-mode
             ))
 
-    (defvar ac-sources '(
-                         ac-source-words-in-buffer
-                         ac-source-words-in-same-mode-buffers
-                         ac-source-yasnippet
-                         ac-source-dictionary
-                         ac-source-filename
-                         ac-source-abbrev
-                         ))
-    (make-variable-buffer-local 'ac-sources)
+    (defvar cofi/ac-base-sources '(ac-source-words-in-buffer
+                                   ac-source-words-in-same-mode-buffers
+                                   ac-source-yasnippet
+                                   ac-source-dictionary
+                                   ac-source-filename
+                                   ac-source-abbrev))
 
-    (defun cofi/ac-elisp-setup ()
-      (setq ac-sources '(
-                         ac-source-symbols
-                         ac-source-functions
-                         ac-source-variables
-                         ac-source-features
-                         ac-source-words-in-buffer
-                         ac-source-words-in-same-mode-buffers
-                         ac-source-yasnippet
-                         )))
+    (setq-default ac-sources cofi/ac-base-sources)
 
-    (defun cofi/ac-python-setup ()
-      (setq ac-sources '(
-                         ac-source-words-in-buffer
-;;                          ac-source-words-in-same-mode-buffers
-                         ac-source-yasnippet
-                         ac-source-dictionary
-                         )))
+    (defvar cofi/ac-mode-sources
+      '((emacs-lisp-mode . (ac-source-symbols
+                            ac-source-functions
+                            ac-source-variables
+                            ac-source-features))
+        (lisp-mode       . (ac-source-words-in-buffer
+                            ac-source-slime))
+        (python-mode     . (ac-source-words-in-buffer
+                            ac-source-ropemacs))
+        (java-mode       . (ac-source-words-in-buffer
+                            ac-source-eclim))
+        (html-mode       . (ac-source-words-in-buffer
+                            ac-source-css-property))))
 
-    (defun cofi/ac-java-setup ()
-      (setq ac-sources '(
-                         ac-source-words-in-buffer
-                         ac-source-eclim
-                         ac-source-yasnippet
-                         ac-source-dictionary
-                         )))
+    (defvar cofi/ac-mode-aliases
+      '(((inferior-emacs-lisp-mode lisp-interaction-mode) . emacs-lisp-mode)
+        ((inferior-lisp-mode slime-repl-mode)             . lisp-mode)
+        ((nxhtml-mode css-mode)                           . html-mode)
+        ((inferior-python-mode)                           . python-mode)))
 
-    (add-hook 'emacs-lisp-mode-hook 'cofi/ac-elisp-setup)
-    (add-hook 'python-mode-hook 'cofi/ac-python-setup)
-    (add-hook 'java-mode-hook 'cofi/ac-java-setup)
+    (defun cofi/set-ac-sources ()
+      (let* ((alias (cdr (find major-mode cofi/ac-mode-aliases :key #'car :test #'member)))
+             (mode-sources (cdr (assoc (or alias major-mode) cofi/ac-mode-sources))))
+        (setq ac-sources (remove-duplicates (append mode-sources
+                                                    cofi/ac-base-sources)))))
+
+    (add-to-hooks #'cofi/set-ac-sources '(after-change-major-mode-hook
+                                          mumamo-after-change-major-mode-hook))
     (global-auto-complete-mode t)
     )
 
 ;; Manual completion -------------------------------------------------
+(require 'hippie-exp)
 (defvar cofi/base-completers
  '(try-expand-dabbrev-visible
    try-expand-dabbrev
@@ -87,26 +85,21 @@
     )
  "List of uncommon completers")
 
-(defconst cofi/lisp-completers
-  '(
-    try-expand-list
-    try-complete-lisp-symbol-partially
-    try-complete-lisp-symbol)
-  "List of completers used for Lisp.")
+(defvar cofi/mode-completers
+  `((emacs-lisp-mode . (try-expand-list
+                        try-complete-lisp-symbol-partially
+                        try-complete-lisp-symbol))
+    (python-mode     . ,(if (locate-library "pysmell")
+                            '(try-pysmell-complete)))))
 
-(defconst cofi/python-completers
-  (if (locate-library "pysmell")
-      '(try-pysmell-complete)
-    '())
-  "List of completers used for Python.")
+(defvar cofi/completion-mode-aliases cofi/ac-mode-aliases)
 
 (defun cofi/completion-functions ()
   "Get a completion function according to current major mode."
-  (cond
-   ((in-mode? 'emacs-lisp-mode) (append cofi/base-completers cofi/lisp-completers))
-   ((in-mode? 'lisp-mode) (append cofi/base-completers cofi/lisp-completers))
-   ((in-mode? 'python-mode) (append cofi/python-completers cofi/base-completers))
-   (t cofi/base-completers)))
+  (let ((alias (cdr (find major-mode cofi/completion-mode-aliases :key #'car :test #'member))))
+    (remove-duplicates
+     (append (cdr (assoc (or alias major-mode) cofi/mode-completers))
+             cofi/base-completers))))
 
 (defun cofi/complete (prefix)
   "Do hippie-completion based on current major-mode."

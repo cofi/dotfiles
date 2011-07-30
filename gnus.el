@@ -1,6 +1,8 @@
 ;;; org-contacts
 (require-and-exec 'org-contacts
-    (org-contacts-gnus-insinuate))
+  (org-contacts-gnus-insinuate)
+  ;; deactivate store last mail
+  (fset 'org-contacts-gnus-store-last-mail #'NOP))
 
 ;;; methods
 (setq imap-shell-program "/usr/lib/dovecot/imap -c ~/config/dovecot.conf"

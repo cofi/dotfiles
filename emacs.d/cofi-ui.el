@@ -165,8 +165,7 @@
   (ignore-errors
     (display-battery-mode 1)))
 
-(setq kill-buffer-query-functions (remq 'process-kill-buffer-query-function
-                                        kill-buffer-query-functions))
+(fset 'process-kill-buffer-query-function 'NOP)
 ;; ==================================================
 
 ;; enable functions ========================================

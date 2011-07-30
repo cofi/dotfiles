@@ -263,4 +263,8 @@ Major mode determines association."
   (interactive "b")
   (kill-new (sha1 buffer start end)))
 
+(defun NOP ()
+  "Non-op."
+  t)
+
 (provide 'cofi-func)

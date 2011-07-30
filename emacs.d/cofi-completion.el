@@ -16,7 +16,7 @@
                  "C-l" 'ac-expand-common
                  "C-j" 'ac-next
                  "C-k" 'ac-previou
-                 "ESC" 'keyboard-quit)
+                 "ESC" 'ac-stop)
 
     (setq ac-dictionary-directories '("~/.emacs.d/completion-dicts"))
 

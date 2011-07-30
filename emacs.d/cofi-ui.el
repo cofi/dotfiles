@@ -166,7 +166,9 @@
   (ignore-errors
     (display-battery-mode 1)))
 
-(fset 'process-kill-buffer-query-function 'NOP)
+(defadvice save-buffers-kill-emacs (around no-process-query activate)
+  (flet ((process-list ()))
+    ad-do-it))
 ;; ==================================================
 
 ;; enable functions ========================================

@@ -15,6 +15,7 @@ load_config $LOCALDIR/pre
 # load extra modules
 autoload -U zmv
 autoload -Uz vcs_info
+autoload run-help
 
 zmodload -i zsh/complist
 

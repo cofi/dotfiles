@@ -28,7 +28,7 @@ setopt no_rm_star_wait rm_star_silent
 setopt short_loops
 
 ### expansion+globbing options
-setopt brace_ccl extended_glob brace_expand
+setopt brace_ccl brace_expand
 setopt equals
 setopt rc_expand_param
 unset magic_equal_subst mark_dirs nomatch sh_glob

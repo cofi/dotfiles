@@ -44,6 +44,7 @@ zstyle ':completion:*' ambiguous true
 zstyle ':completion:*' glob true
 zstyle ':completion:*' word true
 zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'r:|[._-]=** r:|=**'
+zstyle ':completion:*' menu select
 
 #Formatting
 zstyle ':completion:*:descriptions' format $'%{\e[0;31m%}completing %B%d%b%{\e[0m%}'

@@ -13,3 +13,5 @@ bindkey "\e[A" up-line-or-search	# up arrow for back-history-search
 bindkey "\e[B" down-line-or-search	# down arrow for fwd-history-search
 
 bindkey " " magic-space			# do history expansion on space
+
+bindkey -M menuselect "+" accept-and-menu-complete

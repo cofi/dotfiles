@@ -4,7 +4,6 @@
 # see http://zshwiki.org/home/examples/zleiab for details
 # less risky than the global aliases but powerful as well
 # just type the abbreviation key and afterwards ',.' to expand it
-setopt extendedglob
 setopt interactivecomments
 typeset -Ag abbreviations
 abbreviations=(
@@ -75,6 +74,7 @@ abbreviations=(
 )   
     
 globalias() {
+    setopt extendedglob
     local MATCH
     LBUFFER=${LBUFFER%%(#m)[_a-zA-Z0-9]#}
     LBUFFER+=${abbreviations[$MATCH]:-$MATCH}" "

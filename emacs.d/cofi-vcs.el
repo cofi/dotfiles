@@ -28,7 +28,7 @@
 ;;; (a)hg
 (vim-mapleader-add "h" 'monky-status)
 (eval-after-load "monky"
-    '(fill-keymap monky-mode-map
+    '(fill-keymap monky-status-mode-map
                   "q" 'cofi/vcs-quit-window))
 
 (provide 'cofi-vcs)

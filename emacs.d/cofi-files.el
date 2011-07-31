@@ -63,7 +63,7 @@
 (if (fboundp 'anything-buffers+)
     (progn
       (defalias 'cofi/buffer 'cofi/anything-buffers)
-      (defalias 'cofi/file-alternate 'cofi/anything-files))
+      (defalias 'cofi/file-alternate 'anything-find-files))
   (defalias 'cofi/buffer 'ido-switch-buffer)
   (defalias 'cofi/file-alternate 'ido-find-file))
 

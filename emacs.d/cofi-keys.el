@@ -29,6 +29,7 @@
     "C-b" 'anything-browse-code
     "b"   'anything-bookmarks
     "c"   'cofi/anything-config
+    "f"   'cofi/anything-files
     "m"   'cofi/anything-make
     "u"   'cofi/anything-uni
     "M"   'cofi/anything-lacarte

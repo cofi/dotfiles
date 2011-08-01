@@ -135,13 +135,6 @@
                   "q" 'quit-window
                   "Q" 'kill-buffer-and-window)
               '(diff-mode-hook
-                compilation-mode-hook
-                ahg-diff-mode-hook
-                ahg-short-log-mode-hook
-                ahg-log-mode-hook
-                ahg-glog-mode-hook
-                ahg-command-mode-hook
-                ahg-status-mode-hook
-                ahg-mq-patches-mode-hook))
+                compilation-mode-hook))
 
 (provide 'cofi-keys)

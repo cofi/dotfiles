@@ -243,7 +243,10 @@ See `POUR-MAPPINGS-WITH'."
   "Fill `KEYMAPS' with `MAPPINGS'.
 See `POUR-MAPPINGS-WITH'."
   (dolist (keymap keymaps keymaps)
-    (pour-mappings-with (lambda (key fun) (define-key keymap key fun)) mappings)))
+    (let ((map (if (symbolp keymap)
+                   (symbol-value keymap)
+                 keymap)))
+      (pour-mappings-with (lambda (key fun) (define-key map key fun)) mappings))))
 
 (defmacro gen-fill-keymap-hook (keymap &rest mappings)
   (declare (indent 1))

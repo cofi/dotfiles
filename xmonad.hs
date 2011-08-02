@@ -41,7 +41,7 @@ import XMonad.Prompt.DirExec (dirExecPromptNamed)
 import XMonad.Prompt.Man (manPrompt)
 import XMonad.Prompt.Window
 
-import Data.List (isPrefixOf)
+import Data.List (isPrefixOf, findIndex)
 import qualified Data.Map as M
 import System.Directory (getHomeDirectory)
 import System.Posix.Unistd (getSystemID, SystemID(..))
@@ -322,6 +322,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , code
                                                   , pypi
                                                   , pep
+                                                  , py
                                                   , S.youtube
                                                   , zdfMediathek
                                                   , S.hoogle
@@ -356,6 +357,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       duck = S.searchEngine "d" "http://duckduckgo.com/?q="
       rfc = S.searchEngine "rfc" "http://www.ietf.org/rfc/rfc"
       pep = formatSearch "pep" "http://www.python.org/dev/peps/pep-%04s"
+      py = S.searchEngineF "py" dopy
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch
@@ -367,8 +369,27 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                     else site2 s)
         where removeColonPrefix = drop 1 . dropWhile (/= ':')
       formatSearch name fstring = S.searchEngineF name (\s -> (printf fstring s) :: String)
+      dopy s = case f of
+                 ""    -> "http://python.org"
+                 "doc" -> "http://docs.python.org" ++ r
+                 "doc3" -> "http://docs.python.org/py3k/" ++ r
+                 "lib" -> "http://docs.python.org/library/" ++ r ++ ".html"
+                 "lib3" -> "http://docs.python.org/py3k/library/" ++ r ++ ".html"
+              where a = split '/' s
+                    f = if (length a > 1)
+                        then head a
+                        else ""
+                    r = if (length a > 1)
+                        then concat $ tail a
+                        else concat a
 
 prefixKeymap prefix mapping = map (\ (binding, comm) -> (prefix ++ " " ++ binding, comm)) mapping
+
+split :: (Eq a) => a -> [a] -> [[a]]
+split x [] = [[]]
+split x xs = case findIndex (\x' -> x' == x) xs of
+               Just num -> take num xs : (split x (drop (num + 1) xs))
+               Nothing -> [xs]
 ----------------------------------------
 --  Local Variables:
 --  compile-command: "xmonad --recompile"

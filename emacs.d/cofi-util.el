@@ -196,9 +196,12 @@ Mimicks Python's `range'"
     (loop for i from start to end by step
           collect i)))
 
-(defun empty-string? (s)
-  "Test if `S' is an empty string."
-  (string= s ""))
+(defun empty? (x)
+  "Test if `x' is empty."
+  (typecase x
+    (string (string= x ""))
+    (list (null x))
+    (vector (= (length x) 0))))
 
 (defun cofi/org-wmean (values weights)
   "Sum `VALUES' weighted according to `WEIGHTS' and divide by the sum of `WEIGHTS'.
@@ -206,7 +209,7 @@ Tailored specific to org tables, i.e. input expected as strings and output are
 strings."
   (loop for v in values
         for w in weights
-        unless (or (empty-string? v) (empty-string? w))
+        unless (or (empty? v) (empty? w))
         sum (string-to-number w) into wsum
         collect (* (string-to-number v) (string-to-number w))
                 into weighted-values

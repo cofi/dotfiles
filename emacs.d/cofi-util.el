@@ -182,7 +182,7 @@
        append (loop for y in ys
                     collect (funcall combinator x y))))
 
-(defun range (start &optional end step)
+(defun range (end-or-start &optional end step)
   "Range of numbers from `START' to (including) `END' with stepwidth `STEP'.
 If only one argument is supplied it will be the end, 0 will be start.
 Mimicks Python's `range'"

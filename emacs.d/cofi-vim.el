@@ -44,7 +44,7 @@
     "Insert j, if j is followed by another j in the next half second, delete j and exit insert state."
     (interactive)
     (insert "j")
-    (let ((next-char (read-event "Insert j to exit insert state" t 0.5)))
+    (let ((next-char (read-event "Insert j to exit insert state" nil 0.5)))
       (if (null next-char)
           (message "")
         (if (char-equal next-char ?j)

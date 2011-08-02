@@ -38,7 +38,20 @@
                "C-y" 'yank
                "C-e" 'viper-goto-eol)
 
-  (vimpulse-imap "jk" 'viper-exit-insert-state)
+  (vimpulse-imap "j" 'cofi/maybe-exit-insert-j)
+
+  (defun cofi/maybe-exit-insert-j ()
+    "Insert j, if j is followed by another j in the next half second, delete j and exit insert state."
+    (interactive)
+    (insert "j")
+    (let ((next-char (read-event "Insert j to exit insert state" t 0.5)))
+      (if (null next-char)
+          (message "")
+        (if (char-equal next-char ?j)
+            (progn
+              (delete-char -1)
+              (viper-exit-insert-state))
+          (insert next-char)))))
 
   (when (string< vimpulse-version "0.5")
     (when (featurep 'goto-last-change)

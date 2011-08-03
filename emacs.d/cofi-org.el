@@ -322,7 +322,7 @@ Same arguments as in diary cyclic."
 (setq org-link-mailto-program '(compose-mail "%a" "%s"))
 
 ;;; weather
-(add-to-list 'load-path "~/.elisp/vendor/google-weather-el")
+(add-to-loadpath "~/.elisp/vendor/google-weather-el")
 (require 'org-google-weather)
 (setq org-google-weather-icon-directory "/usr/share/icons/oxygen/16x16/status/")
 ;; ==================================================

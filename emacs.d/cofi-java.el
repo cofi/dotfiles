@@ -1,5 +1,5 @@
-(add-to-list 'load-path "~/.elisp/vendor/emacs-eclim")
-(add-to-list 'load-path "~/.elisp/vendor/emacs-eclim/vendor/")
+(add-to-loadpath "~/.elisp/vendor/emacs-eclim"
+                 "~/.elisp/vendor/emacs-eclim/vendor/")
 
 (require-and-exec 'eclim
                   (add-hook 'java-mode-hook 'eclim-mode)

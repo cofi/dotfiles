@@ -1,8 +1,5 @@
-(dolist (path '(
-                "~/.elisp/vendor/magit"
-                "~/.elisp/vendor/monky"
-                ))
-  (add-to-list 'load-path path))
+(add-to-loadpath "~/.elisp/vendor/magit"
+                 "~/.elisp/vendor/monky")
 
 (setq vc-handled-backends '(SVN)
       vc-follow-symlinks t)

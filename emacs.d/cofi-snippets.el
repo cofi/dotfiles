@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.elisp/vendor/yasnippet")
+(add-to-loadpath "~/.elisp/vendor/yasnippet")
 (setq yas/prompt-functions '(yas/ido-prompt
                              yas/completing-prompt))
 (require-and-exec 'yasnippet
@@ -25,8 +25,11 @@
             (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
             (define-key yas/keymap [tab] 'yas/next-field)))
 
-(add-hook 'magit-mode-hook (lambda () (setq yas/dont-activate t)))
-(add-hook 'calc-mode-hook (lambda () (setq yas/dont-activate t)))
+(defun cofi/no-yas ()
+  (setq yas/dont-activate t))
+
+(add-to-hooks 'cofi/no-yas '(magit-mode-hook
+                            calc-mode-hook))
 
 (defun cofi/region-to-snippet (begin end)
   "Write new snippet based on current region."

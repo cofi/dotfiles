@@ -1,4 +1,4 @@
-(add-to-list 'load-path "~/.elisp/vendor/mk-project")
+(add-to-loadpath "~/.elisp/vendor/mk-project")
 (require-and-exec 'mk-project
   (when (fboundp 'ibuffer)
     (defun mk/proj-buffer-p (b)

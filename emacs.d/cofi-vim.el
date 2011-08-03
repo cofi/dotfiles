@@ -73,6 +73,8 @@ delete `ENTRY-CHAR' and exit insert state."
                "g,"    'goto-last-change-reverse
                "go"    'goto-char)
 
+  (add-hook 'change-major-mode-hook 'viper-exit-insert-state)
+
   ;; no need for ex, gimme elisp
   (define-key viper-vi-basic-map (kbd "C-:") 'eval-expression)
   (define-key viper-vi-basic-map (kbd ":") 'execute-extended-command)

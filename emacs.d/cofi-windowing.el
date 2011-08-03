@@ -24,12 +24,15 @@
 (defun swap-with-up () (interactive) (swap-window 'up))
 (defun swap-with-right () (interactive) (swap-window 'right))
 
-(defun smart-split ()
+(defun smart-split (horizontal)
   "Split the frame into 80-column sub-windows, and make sure no window has
    fewer than 80 columns."
-  (interactive)
-  (do ((w nil (split-window w 81 'below)))
-      ((<= (window-width w) (* 2 81)))))
+  (interactive "P")
+  (let ((dir (if horizontal
+                 'below
+               'right)))
+    (do ((w nil (split-window w 81 dir)))
+        ((<= (window-width w) (* 2 81))))))
 
 ;; Windowing
 (defkeymap cofi/window-map

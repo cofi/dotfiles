@@ -51,6 +51,7 @@
 ;;; ========================================
 
 (setq ack-prompt-for-directory 'unless-guessed)
+(setq confirm-nonexistent-file-or-buffer nil)
 
 ;;; Show trailing whitespace in file-buffers
 (add-hook 'find-file-hook (lambda () (setq show-trailing-whitespace t)))

@@ -380,4 +380,13 @@ See `POUR-MAPPINGS-WITH'."
   "Test if library is byte-compiled."
   (string-match-p "\\.elc$" (locate-library library)))
 
+(defun* find-index (x xs &key (test (get-equal x)))
+  "Alike `FINE' but return index.
+Returns nil if `X' not in `XS'."
+    (loop for a being the elements of xs
+          count t into i
+          do (if (funcall test a x)
+                 (return (1- i)))
+          finally (return nil)))
+
 (provide 'cofi-util)

@@ -284,18 +284,11 @@ Note: This assumes all files are in the org-directory."
   '())
 
 (defconst cofi-org-dayname-to-weekday
-  '(
-    ("So" . 0)
-    ("Mo" . 1)
-    ("Di" . 2)
-    ("Mi" . 3)
-    ("Do" . 4)
-    ("Fr" . 5)
-    ("Sa" . 6)))
+  ["So" "Mo" "Di" "Mi" "Do" "Fr" "Sa"])
 
 (defun cofi-org-term-class (day term-boundary term-pause)
   (let ((weekday (if (stringp day)
-                     (cdr (assoc day cofi-org-dayname-to-weekday))
+                     (find-index day cofi-org-dayname-to-weekday)
                    day)))
     (apply #'org-class `(,@term-boundary ,weekday ,@term-pause))))
 

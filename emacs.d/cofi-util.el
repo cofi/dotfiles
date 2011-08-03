@@ -368,6 +368,14 @@ See `POUR-MAPPINGS-WITH'."
    ((listp xs) (append (flatten (car xs)) (flatten (cdr xs))))
    (t (list xs))))
 
+(defun get-equal (x)
+  "Return a suitable equal fun for `X'."
+  (typecase x
+    (string             #'string=)
+    (character          #'char-equal)
+    ((or integer float) #'=)
+    (t                  #'equal)))
+
 (defun library-byte-compiled-p (library)
   "Test if library is byte-compiled."
   (string-match-p "\\.elc$" (locate-library library)))

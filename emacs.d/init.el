@@ -62,12 +62,12 @@
                                  "cofi-func"
                                  "cofi-keys"
                                  "cofi-mail"
+                                 "cofi-markup"
                                  "cofi-project"
                                  "cofi-snippets"
                                  "cofi-ui"
                                  "cofi-org"
                                  "cofi-vcs"
-                                 "cofi-rst"
                                  "cofi-shell"
                                  "cofi-workgroups"
                                  "cofi-completion"))

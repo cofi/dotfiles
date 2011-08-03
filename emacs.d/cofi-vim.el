@@ -38,8 +38,6 @@
                "C-y" 'yank
                "C-e" 'viper-goto-eol)
 
-  (vimpulse-imap "j" (cofi/maybe-exit-insert ?j ?k))
-
   (defun cofi/maybe-exit-insert (entry-char exit-char)
     "Return a a function that maybe inserts or exits insert-state.
 Insert `ENTRY-CHAR', if it is followed by a `EXIT-CHAR' in the next half second,
@@ -55,7 +53,9 @@ delete `ENTRY-CHAR' and exit insert state."
                  (progn
                    (delete-char -1)
                    (viper-exit-insert-state))
-               (insert next-char)))))))
+               (insert next-char))))))
+
+  (vimpulse-imap "j" (cofi/maybe-exit-insert ?j ?k))
 
   (when (string< vimpulse-version "0.5")
     (when (featurep 'goto-last-change)

@@ -69,7 +69,7 @@
  "C-r"     'isearch-backward-regexp
  "C-s"     'isearch-forward-regexp
  "M-r"     'query-replace-regexp
- "M-R"     'query-replace
+ "M-R"     'query-replace-regexp
  ;; movement
  "M-n"     'next-error
  "M-p"     'previous-error

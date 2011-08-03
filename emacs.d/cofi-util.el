@@ -188,7 +188,7 @@ If only one argument is supplied it will be the end, 0 will be start.
 Mimicks Python's `range'"
   (let ((step (or step 1))
         (start (if end
-                   start
+                   end-or-start
                  0))
         (end (if end
                  end

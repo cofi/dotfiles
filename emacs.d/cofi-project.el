@@ -35,31 +35,17 @@
      ibuffer-formats)
 
     (define-ibuffer-filter project
-      "Toggle current view to buffers in the defined mk-project."
+        "Toggle current view to buffers in the defined mk-project."
       (:description "mk-project")
       (mk/proj-buffer-p buf))
 
     (define-key ibuffer-mode-map (kbd "/ k") 'ibuffer-filter-by-project))
 
   (setq mk-proj-use-ido-selection t)
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "c") 'project-compile)
-    (define-key map (kbd "l") 'project-load)
-    (define-key map (kbd "a") 'project-ack)
-    (define-key map (kbd "g") 'project-grep)
-    (define-key map (kbd "o") 'project-multi-occur)
-    (define-key map (kbd "u") 'project-unload)
-    (define-key map (kbd "f") 'project-find-file-ido)
-    (define-key map (kbd "i") 'project-index)
-    (define-key map (kbd "s") 'project-status)
-    (define-key map (kbd "h") 'project-home)
-    (define-key map (kbd "d") 'project-dired)
-    (define-key map (kbd "t") 'project-tags)
-    (global-set-key (kbd "<f8>") map))
 
   (when (boundp 'cofi-project-files)
     (mapc (lambda (filename)
             (load filename 'noerror))
-            cofi-project-files))
+          cofi-project-files))
   )
 (provide 'cofi-project)

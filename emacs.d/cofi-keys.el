@@ -46,6 +46,20 @@
   "l" 'bc-list
   "C" 'bc-clear)
 
+(defkeymap cofi-project-map
+  "c" 'project-compile
+  "l" 'project-load
+  "a" 'project-ack
+  "g" 'project-grep
+  "o" 'project-multi-occur
+  "u" 'project-unload
+  "f" 'project-find-file-ido
+  "i" 'project-index
+  "s" 'project-status
+  "h" 'project-home
+  "d" 'project-dired
+  "t" 'project-tags)
+
 (fill-global-keymap
  ;; buffer
  "C-c y"     'bury-buffer
@@ -103,6 +117,7 @@
  "C-c b" cofi-breadcrumbs-map
  "C-c a" cofi-anything-map
  "C-w"   cofi/window-map
+ "<f8>"  cofi-project-map
  ;; alternative for buffers were C-w is used
  "C-c w" cofi/window-map
  )

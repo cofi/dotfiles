@@ -29,7 +29,7 @@
 
 (defun add-to-loadpath (&rest dirs)
   (dolist (dir dirs load-path)
-    (add-to-list 'load-path dir nil #'string=)))
+    (add-to-list 'load-path (expand-file-name dir) nil #'string=)))
 
 (add-to-loadpath "~/.elisp"
                  "~/.emacs.d"

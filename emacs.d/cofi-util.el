@@ -368,4 +368,8 @@ See `POUR-MAPPINGS-WITH'."
    ((listp xs) (append (flatten (car xs)) (flatten (cdr xs))))
    (t (list xs))))
 
+(defun library-byte-compiled-p (library)
+  "Test if library is byte-compiled."
+  (string-match-p "\\.elc$" (locate-library library)))
+
 (provide 'cofi-util)

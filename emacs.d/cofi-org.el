@@ -102,6 +102,23 @@ Note: This assumes all files are in the org-directory."
                          (return 'org-agenda-date-weekend))))))
               (when face (return face)))))))
 
+(defun cofi/agenda-frame ()
+  (modify-frame-parameters nil
+                           '( (name . "Agenda Frame")
+                              (width . 80)
+                              (height . 15)
+                              (vertical-scroll-bars . nil)
+                              (menu-bar-lines . nil)
+                              (tool-bar-lines . nil)))
+  (if (fboundp 'x-focus-frame)
+      (x-focus-frame nil))
+  (let ((org-agenda-window-setup 'current-window))
+    (make-variable-frame-local 'org-agenda-mode-map)
+    (fill-keymap org-agenda-mode-map
+                 "x" (cmd (org-agenda-exit)
+                          (delete-frame)))
+    (org-agenda-list)))
+
 (setq org-google-weather-format "%L: %i %c, %l-%h %s")
 
 (setq org-footnote-auto-label 'plain)

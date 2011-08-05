@@ -41,15 +41,6 @@
   (auto-complete-mode 1)
   (ac-flyspell-workaround))
 
-(defun speck-prog-mode (&optional arg)
-  "Turn speck mode on and make it aware of syntax."
-  (interactive "P")
-  (set (make-local-variable 'speck-syntactic) t)
-  (speck-mode arg))
-
-(fset 'turn-on-speck (turn-on speck-mode))
-(fset 'turn-on-speck-prog (turn-on speck-prog-mode))
-
 (defun cofi/inc-at-pt (amount)
   "Increment the number at point by `amount'"
   (interactive "p")

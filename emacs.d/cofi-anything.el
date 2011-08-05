@@ -47,7 +47,7 @@
        (anything-read-string-mode '(buffer variable command)))
 
     ;; From browse-kill-ring.el
-    (defadvice yank-pop (around kill-ring-browse-maybe (arg))
+    (defadvice yank-pop (around kill-ring-browse-maybe (arg) activate)
       "If last action was not a yank, run `browse-kill-ring' instead."
       ;; yank-pop has an (interactive "*p") form which does not allow
       ;; it to run in a read-only buffer.  We want browse-kill-ring to
@@ -60,7 +60,13 @@
           (anything-show-kill-ring)
         (barf-if-buffer-read-only)
         ad-do-it))
-    (ad-activate 'yank-pop)
+
+    (defadvice evil-paste-pop (around evil-browse-kill-ring (arg) activate)
+      (interactive "p")
+      (if (not (memq last-command '(yank evil-paste-before evil-paste-pop evil-paste-after)))
+          (anything-show-kill-ring)
+        (barf-if-buffer-read-only)
+        ad-do-it))
 
     (require-and-exec 'descbinds-anything
                       (descbinds-anything-install))

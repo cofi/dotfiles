@@ -79,3 +79,6 @@
 [submodule "elisp/vendor/monky"]
 	path = elisp/vendor/monky
 	url = git://github.com/ananthakumaran/monky.git
+[submodule "elisp/vendor/evil"]
+	path = elisp/vendor/evil
+	url = git://gitorious.org/evil/evil.git

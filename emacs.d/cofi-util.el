@@ -311,7 +311,7 @@ See `POUR-MAPPINGS-WITH'."
   "Macro for shorter keybindings with argument."
   (declare (indent 1))
   `(lambda (,@args)
-     (interactive iflag)
+     (interactive ,iflag)
      ,@code))
 
 (defun gen-extension-re (&rest extensions)

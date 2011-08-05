@@ -393,4 +393,11 @@ Returns nil if `X' not in `XS'."
                  (return (1- i)))
           finally (return nil)))
 
+(defun def-assoc (key alist default)
+  "Return cdr of `KEY' in `ALIST' or `DEFAULT' if key is no car in alist."
+  (let ((match (assoc key alist)))
+    (if match
+        (cdr match)
+      default)))
+
 (provide 'cofi-util)

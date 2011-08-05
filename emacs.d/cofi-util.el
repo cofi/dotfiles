@@ -196,7 +196,7 @@ Mimicks Python's `range'"
                  0))
         (end (if end
                  end
-               start)))
+               end-or-start)))
     (loop for i from start to end by step
           collect i)))
 

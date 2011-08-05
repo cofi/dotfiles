@@ -181,13 +181,7 @@
 ;; prettyfying ==============================
 (add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
 (require-and-exec 'pretty-mode
-                  (global-pretty-mode 1)
-                  (mapc (lambda (mode)
-                          (pretty-add-keywords mode '(
-                                                      ("=" . "←")
-                                                      ("==" . "=")
-                                                      )))
-                        '(python-mode c-mode java-mode cpp-mode)))
+                  (global-pretty-mode 1))
 ;; ========================================
 ;;; scratch ====================
 (defun save-a-scratch ()

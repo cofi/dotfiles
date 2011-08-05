@@ -105,3 +105,5 @@
                                 (message "Time needed to load: %d seconds."
                                          (time-to-seconds (time-since startup-time))))
           'append)
+
+(add-hook 'after-save-hook 'byte-compile-config-on-save)

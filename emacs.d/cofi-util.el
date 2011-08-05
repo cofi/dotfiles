@@ -400,4 +400,11 @@ Returns nil if `X' not in `XS'."
         (cdr match)
       default)))
 
+(setq byte-compile-warnings '(not cl-functions))
+
+(defun byte-compile-config-on-save ()
+  (let ((fname (buffer-file-name)))
+    (when (string-match "emacs\\.d/.*\\.el$" fname)
+      (byte-compile-file fname))))
+
 (provide 'cofi-util)

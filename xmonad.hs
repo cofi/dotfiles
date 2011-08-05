@@ -280,15 +280,21 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "python" "urxvtcd -e ipython" (title =? "ipython") scratchFloat
               , NS "clojure" "urxvtcd -e clj" (title =? "clj") scratchFloat
               , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
+              , NS "capture" "org-capture" (title =? "Capture Frame") orgFloat
+              , NS "agenda" "org-agenda" (title =? "Agenda Frame") orgFloat
               ]
   where scratchFloat = customFloating size
+        orgFloat = customFloating orgsize
         size = W.RationalRect (1/4) (1/4) (1/2) (1/2)
+        orgsize = W.RationalRect (1/2) (1/2) (1/2) (1/2)
 
 scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpads "term")
                                         , ("h", namedScratchpadAction scratchpads "haskell")
                                         , ("p", namedScratchpadAction scratchpads "python")
                                         , ("c", namedScratchpadAction scratchpads "clojure")
                                         , ("m", namedScratchpadAction scratchpads "monitor")
+                                        , ("o", namedScratchpadAction scratchpads "capture")
+                                        , ("a", namedScratchpadAction scratchpads "agenda")
                                         ]
 
 -- Search----------------------------------------

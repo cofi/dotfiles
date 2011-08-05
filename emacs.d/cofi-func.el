@@ -50,7 +50,7 @@
                      (point)))
          (start (progn (skip-chars-backward number-str)
                      (point)))
-         (number (string-to-int (buffer-substring-no-properties start end))))
+         (number (string-to-number (buffer-substring-no-properties start end))))
     (when (numberp number)
       (delete-region start end)
       (insert (number-to-string (+ number amount)))
@@ -61,11 +61,11 @@
   (interactive "p")
   (cofi/inc-at-pt (- (abs amount))))
 
-(defun toggle-comment-on-line-or-region (&optional min max)
+(defun toggle-comment-on-line-or-region ()
   "Comments or uncomments current current line or whole lines in region."
-  (interactive "r")
+  (interactive)
   (if (region-active-p)
-      (comment-or-uncomment-region min max)
+      (comment-or-uncomment-region (region-beginning) (region-end))
     (comment-or-uncomment-region (line-beginning-position)
                                  (line-end-position))))
 
@@ -174,12 +174,15 @@ Neither dir nor alias may contain spaces.")
     (insert char)
     (goto-char p)))
 
+(defvar cofi/switched-from nil)
+(make-variable-buffer-local 'cofi/switched-from)
+
 (defun cofi/open-header (fname)
   "Open associated .h for `fname' and set `fname' as cofi-switched-from."
   (find-file (replace-regexp-in-string
               "\\(.*\\)\\..+\\'" "\\1.h"
               fname t))
-  (set (make-local-variable 'cofi-switched-from) fname))
+  (setq cofi/switched-from fname))
 
 (defun cofi/switch-file ()
   "Switch to file associated to current file.
@@ -257,5 +260,7 @@ Major mode determines association."
 (defun NOP ()
   "Non-op."
   t)
+
+(push '("^\\*Pp Eval Output\\*" . View-mode) auto-mode-alist)
 
 (provide 'cofi-func)

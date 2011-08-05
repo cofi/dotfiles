@@ -1,8 +1,8 @@
 (setq calendar-date-style 'european)
 (setq calendar-week-start-day 1)
-(setq mark-holidays-in-calendar t)
+(setq calendar-mark-holidays-flag t)
 
-(setq european-calendar-style t)
+(setq calendar-date-style 'european)
 (setq calendar-time-display-form
       '(24-hours ":" minutes (and time-zone (concat " (" time-zone ")"))))
 
@@ -26,7 +26,7 @@
         (holiday-fixed 10 3 "Tag der Deutschen Einheit")
         ))
 
-(setq christian-holidays
+(setq holiday-christian-holidays
       '(
         (holiday-float 12 0 -4 "1. Advent" 24)
         (holiday-float 12 0 -3 "2. Advent" 24)
@@ -72,9 +72,9 @@
         (holiday-float 11 0 1 "Totensonntag" 20)))
 
 (setq calendar-holidays (append german-holidays
-                                local-holidays
-                                christian-holidays
-                                solar-holidays))
+                                holiday-local-holidays
+                                holiday-christian-holidays
+                                holiday-solar-holidays))
 
 (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
 

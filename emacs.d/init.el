@@ -44,8 +44,8 @@
                  "~/.elisp/vendor/ace-jump-mode")
 
 (require 'cofi-util)
-(defvar hostname (car (split-string system-name "\\." t)))
-(defvar on-mobile? (find hostname '("hitchhiker") :test #'string=))
+(defvar cofi/hostname (car (split-string system-name "\\." t)))
+(defvar on-mobile? (find cofi/hostname '("hitchhiker") :test #'string=))
 
 (load "private" 'noerror)
 (require 'cofi-vim)
@@ -103,7 +103,7 @@
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Time needed to load: %d seconds."
-                                         (time-to-seconds (time-since startup-time))))
+                                         (float-time (time-since startup-time))))
           'append)
 
 (add-hook 'after-save-hook 'byte-compile-config-on-save)

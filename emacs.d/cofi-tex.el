@@ -20,7 +20,7 @@
 (when (locate-library "cdlatex")
   (add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t)))
   (add-hook 'LaTeX-mode-hook
-            (gen-fill-keymap-hook LaTeX-mode-map
+            (gen-local-fill-keymap-hook
                                   "<f12>" 'cofi/latex-build
                                   "C-<f12>" 'cofi/latex-view)))
 

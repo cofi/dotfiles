@@ -1,3 +1,4 @@
+(require 'cofi-util)
 (require 'cofi-autoloads)
 (require 'cofi-windowing)
 
@@ -126,7 +127,7 @@
                             (local-set-key (kbd "q") 'kill-this-buffer)))
 
 (add-hook 'artist-mode-init-hook
-          (gen-local-fill-keymap-hook artist-mode-map
+          (gen-local-fill-keymap-hook
             "C-c C-o" 'artist-ido-select-operation
             "C-c C-s" 'artist-ido-select-settings))
 

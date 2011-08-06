@@ -102,10 +102,18 @@
   (setq cofi/evil-input-method current-input-method)
   (inactivate-input-method))
 (defun cofi/reactivate-input-method ()
-  (activate-input-method cofi/evil-input-method)
-  (setq cofi/evil-input-method nil))
+  (activate-input-method cofi/evil-input-method))
 
 (add-hook 'evil-insert-state-entry-hook #'cofi/reactivate-input-method)
 (add-hook 'evil-normal-state-entry-hook #'cofi/save-kill-input-method)
+
+(defadvice toggle-input-method (after evil-input-method-save-if-normal-state activate)
+  (when evil-mode
+    ;; hope that all play well
+    (if cofi/evil-input-method
+        (setq cofi/evil-input-method nil)
+      (setq cofi/evil-input-method current-input-method))
+    (if (eq evil-state 'normal)
+        (inactivate-input-method))))
 
 (provide 'cofi-evil)

@@ -96,4 +96,16 @@
                                 (error ad-do-it)))))
     (otherwise ad-do-it)))
 
+(defvar cofi/evil-input-method nil)
+(make-variable-buffer-local 'cofi/evil-input-method)
+(defun cofi/save-kill-input-method ()
+  (setq cofi/evil-input-method current-input-method)
+  (inactivate-input-method))
+(defun cofi/reactivate-input-method ()
+  (activate-input-method cofi/evil-input-method)
+  (setq cofi/evil-input-method nil))
+
+(add-hook 'evil-insert-state-entry-hook #'cofi/reactivate-input-method)
+(add-hook 'evil-normal-state-entry-hook #'cofi/save-kill-input-method)
+
 (provide 'cofi-evil)

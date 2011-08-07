@@ -6,11 +6,12 @@
                      (format "pdflatex %s && pdflatex %s" fname fname))))
     (compile builder)))
 
-(defun cofi/latex-view ()
-  (interactive)
-  (let ((name (TeX-active-master))
-        (opener "xdg-open %s.pdf"))
-    (shell-command (format opener name))))
+(defun cofi/latex-view (arg)
+  (interactive "p")
+  (let ((name (TeX-active-master t)))
+    (if arg
+        (find-file-other-window name)
+      (shell-command (concat "xdg-open " name)))))
 
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq fill-column 80)

@@ -34,8 +34,7 @@
 (define-key evil-emacs-state-map (kbd "<pause>") 'evil-exit-emacs-state)
 
 (fill-keymap evil-normal-state-map
-             "Y"     (cmd (save-excursion (evil-yank (point) (progn (evil-end-of-line)
-                                                                    (point)))))
+             "Y"     (cmd (evil-yank (point) (point-at-eol)))
              "_"     'evil-first-non-blank
              "+"     'cofi/inc-at-pt
              "-"     'cofi/dec-at-pt

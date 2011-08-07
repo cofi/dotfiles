@@ -1,4 +1,6 @@
 (require 'cofi-util)
+(add-to-list 'load-path "~/.elisp/vendor/undo-tree")
+(require-and-exec 'undo-tree)
 (defconst vim-mapleader "\\"
 "Mapping prefix; Vanilla in vi-state Prefixed with `C-' in insert-state and emacs-state.")
 (defvar cofi/vim-mapleader-map (make-sparse-keymap) "Mapleader keymap")

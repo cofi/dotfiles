@@ -1,5 +1,4 @@
 (add-to-list 'load-path "~/.elisp/vendor/vimpulse")
-(add-to-list 'load-path "~/.elisp/vendor/undo-tree")
 (setq viper-toggle-key [pause])
 (setq-default viper-ESC-moves-cursor-back nil)
 (setq-default viper-auto-indent t)
@@ -11,7 +10,6 @@
 (require-and-exec 'vimpulse
   (require-and-exec 'vimpulse-surround)
   (require-and-exec 'goto-chg)
-  (require-and-exec 'undo-tree)
 
   ;; Window keybindings ========================================
   ;; kill vimpulse bindings (new defined in windowing)

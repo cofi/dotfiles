@@ -290,6 +290,7 @@ Note: This assumes all files are in the org-directory."
 ;; time sexp ==============================
 (defconst cofi-org-ws-boundary
   '(2010 10 18
+(defvar cofi-boundary nil)
     2011  2 18))
 (defconst cofi-org-ws-pause-weeks
   '(49 50 51 52 1))

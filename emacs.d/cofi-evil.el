@@ -21,8 +21,25 @@
                 prolog-inferior-mode
                 inferior-python-mode
                 monky-mode
-                gnus-article-mode))
+                gnus-article-mode
+                gnus-server-mode
+                gnus-browse-mode
+                comint-mode
+                eshell-mode
+                shell-mode
+                inferior-emacs-lisp-mode
+                term-mode
+                org-agenda-mode
+                cfw:calendar-mode
+                docview-mode
+                ibuffer-mode
+                twittering-mode
+                ))
   (push mode evil-emacs-state-modes))
+
+(dolist (mode '(slime-repl-mode
+                ))
+  (push mode evil-insert-state-modes))
 
 (define-key evil-normal-state-map vim-mapleader cofi/vim-mapleader-map)
 (define-key evil-insert-state-map (read-kbd-macro (concat "C-" vim-mapleader)) cofi/vim-mapleader-map)
@@ -104,12 +121,12 @@
   (activate-input-method cofi/evil-input-method))
 
 (add-hook 'evil-normal-state-entry-hook #'cofi/save-kill-input-method)
+(add-hook 'evil-normal-state-exit-hook #'cofi/reactivate-input-method)
 
 (defadvice toggle-input-method (after evil-input-method-save-if-normal-state activate)
   (when evil-mode
     ;; hope that all play well
     (if cofi/evil-input-method
-(add-hook 'evil-normal-state-exit-hook #'cofi/reactivate-input-method)
         (setq cofi/evil-input-method nil)
       (setq cofi/evil-input-method current-input-method))
     (if (eq evil-state 'normal)

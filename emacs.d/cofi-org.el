@@ -3,6 +3,8 @@
                  "~/.elisp/vendor/org-mode/contrib/lisp")
 ;;; remove bundled org from load path
 (setq load-path (remove-if  (p (string-match "/usr/share/emacs/.*/org" x)) load-path))
+(setq org-modules '(org-bibtex org-docview org-gnus org-info org-w3m org-toc org-contacts))
+
 (require 'org-install)
 (require 'calfw-org)
 
@@ -288,9 +290,9 @@ Note: This assumes all files are in the org-directory."
 (require 'org-protocol)
 
 ;; time sexp ==============================
+(defvar cofi-boundary nil)
 (defconst cofi-org-ws-boundary
   '(2010 10 18
-(defvar cofi-boundary nil)
     2011  2 18))
 (defconst cofi-org-ws-pause-weeks
   '(49 50 51 52 1))
@@ -334,7 +336,6 @@ Same arguments as in diary cyclic."
 ;; ========================================
 ;; contacts ====================
 (setq org-contacts-files `(,(format "%s/contacts.org" org-directory)))
-(require 'org-contacts)
 ;;  ========================================
 ;; Misc ==============================
 (setq org-link-mailto-program '(compose-mail "%a" "%s"))

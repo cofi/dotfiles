@@ -8,8 +8,11 @@
   "Change cursor color according to viper-state."
   (let ((default "OliveDrab4")
         (cursor-colors '((insert . "dark orange")
-                         (emacs  . "sienna"))))
-    (setq cursor-type 'bar)
+                         (emacs  . "sienna")
+                         (visual . "white"))))
+    (setq cursor-type (if (eq evil-state 'visual)
+                          'hollow
+                        'bar))
     (set-cursor-color (def-assoc evil-state cursor-colors default))))
 
 (require 'evil)

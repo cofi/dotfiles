@@ -81,22 +81,22 @@
   (dolist (mapping (group pairs 2))
     (evil-define-key state map (read-kbd-macro (car mapping)) (cadr mapping))))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (cofi/evil-define-keys 'normal org-mode-map
-                                   "<return>" 'org-open-at-point
-                                   "za"       'org-cycle
-                                   "zA"       'org-shifttab
-                                   "zm"       'hide-body
-                                   "zr"       'show-all
-                                   "zo"       'show-subtree
-                                   "zO"       'show-all
-                                   "zc"       'hide-subtree
-                                   "zC"       'hide-all)
+(eval-after-load "org"
+          '(progn
+             (cofi/evil-define-keys 'normal org-mode-map
+                                    "<return>" 'org-open-at-point
+                                    "za"       'org-cycle
+                                    "zA"       'org-shifttab
+                                    "zm"       'hide-body
+                                    "zr"       'show-all
+                                    "zo"       'show-subtree
+                                    "zO"       'show-all
+                                    "zc"       'hide-subtree
+                                    "zC"       'hide-all)
 
-            (cofi/evil-define-keys 'insert org-mode-map
-                                   "M-l" 'org-metaright
-                                   "M-h" 'org-metaleft)))
+             (cofi/evil-define-keys 'insert org-mode-map
+                                    "M-l" 'org-metaright
+                                    "M-h" 'org-metaleft)))
 
 (defadvice evil-goto-definition (around evil-goto-lisp-def activate)
   "Make use of emacs' and slime's possibilities for finding definitions."

@@ -49,6 +49,11 @@ Should take one arg: the string to display"
   :group 'lisp
   :type 'function)
 
+(defcustom  eldoc-in-minibuffer-own-frame-p nil
+  "Whether minibuffer have own frame or not."
+  :group 'lisp
+  :type 'boolean)
+
 ;; Internal.
 (defvar eldoc-active-minibuffers-list nil
   "Store actives minibuffers with eldoc enabled.")
@@ -81,15 +86,21 @@ See `with-eldoc-in-minibuffer'."
        (setq eldoc-active-minibuffers-list
              (cdr eldoc-active-minibuffers-list)))))
 
+(defun eldoc-current-buffer ()
+  "The current-buffer before activating minibuffer."
+  (with-selected-frame (last-nonminibuffer-frame)
+    (window-buffer
+     (cond (eldoc-in-minibuffer-own-frame-p
+            (selected-window))
+           ((fboundp 'window-in-direction)
+            (window-in-direction 
+             'above (minibuffer-window)))
+           (t (minibuffer-selected-window))))))
+
 (defun eldoc-show-in-mode-line (str)
   "Display string STR in the mode-line next to minibuffer."
   (let (mode-line-in-non-selected-windows)
-    (with-current-buffer (window-buffer
-                          (with-selected-frame (selected-frame)
-                            (if (fboundp 'window-in-direction)
-                                (window-in-direction ; Only emacs24
-                                 'above (minibuffer-window))
-                                (minibuffer-selected-window))))
+    (with-current-buffer (eldoc-current-buffer)
       (make-local-variable 'mode-line-format)
       (let ((mode-line-format (concat " " str)))
         (force-mode-line-update nil)
@@ -129,4 +140,5 @@ See `with-eldoc-in-minibuffer'."
 (global-set-key [remap eval-expression] 'eval-expression-with-eldoc)
 
 (provide 'eldoc-eval)
-;;; eldoc-eval.el -- Show eldoc when using M-:
+
+;; eldoc-extensions.el ends here

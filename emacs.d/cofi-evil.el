@@ -99,7 +99,9 @@
 
              (cofi/evil-define-keys 'insert org-mode-map
                                     "M-l" 'org-metaright
-                                    "M-h" 'org-metaleft)))
+                                    "M-h" 'org-metaleft
+                                    "M-j" 'org-shiftleft
+                                    "M-k" 'org-shiftright)))
 
 (defadvice evil-goto-definition (around evil-goto-lisp-def activate)
   "Make use of emacs' and slime's possibilities for finding definitions."

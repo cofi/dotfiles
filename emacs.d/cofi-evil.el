@@ -139,4 +139,10 @@
     (if (memq evil-state '(normal visual))
         (inactivate-input-method))))
 
+(defun cofi/clear-empty-lines ()
+  (let ((line (buffer-substring (point-at-bol) (point-at-eol))))
+    (when (string-match "^\\( +\\)$" line)
+      (delete-region (point-at-bol) (point-at-eol)))))
+(add-hook 'evil-insert-state-exit-hook #'cofi/clear-empty-lines)
+
 (provide 'cofi-evil)

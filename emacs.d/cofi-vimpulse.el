@@ -33,7 +33,7 @@
                "C-e" 'viper-goto-eol)
 
 
-  (vimpulse-imap "j" (cofi/maybe-exit-insert 'viper-exit-insert-state ?j ?k))
+  (vimpulse-imap "j" (cofi/maybe-exit 'viper-exit-insert-state ?j ?k))
 
   (when (string< vimpulse-version "0.5")
     (when (featurep 'goto-last-change)

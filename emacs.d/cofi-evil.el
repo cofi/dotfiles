@@ -70,7 +70,7 @@
              "C-y"   nil)
 
 (fill-keymap evil-insert-state-map
-             "j"   (cofi/maybe-exit-insert 'evil-normal-state ?j ?k)
+             "j"   (cofi/maybe-exit 'evil-normal-state ?j ?k)
              "C-h" 'backward-delete-char
              "C-y" 'yank
              "C-e" 'end-of-line)

@@ -39,23 +39,23 @@
   (interactive "kKeysequence: \naFunction:")
   (define-key cofi/vim-mapleader-map (read-kbd-macro keyseq) fun))
 
-(defun cofi/maybe-exit-insert (exit-fun entry-char exit-char)
-  "Return a a function that maybe inserts or exits insert-state.
+(defun cofi/maybe-exit (exit-fun entry-char exit-char)
+  "Return a a function that maybe inserts or calls `EXIT-FUN'.
 Insert `ENTRY-CHAR', if it is followed by a `EXIT-CHAR' in the next half second,
-delete `ENTRY-CHAR' and exit insert state."
+delete `ENTRY-CHAR' and call `EXIT-FUN'."
   `(lambda ()
      (interactive)
      (let ((modified (buffer-modified-p)))
        (insert ,entry-char)
        (let ((evt (read-event (format "Insert %c to exit insert state" ,exit-char)
                               nil 0.5)))
-         (if (null evt)
-             (message "")
-           (if (and (integerp evt) (char-equal evt ,exit-char))
-               (progn (delete-char -1)
-                      (set-buffer-modified-p modified)
-                      (,exit-fun))
-             (setq unread-command-events (append unread-command-events
+         (cond
+          ((null evt) (message ""))
+          ((and (integerp evt) (char-equal evt ,exit-char))
+             (delete-char -1)
+             (set-buffer-modified-p modified)
+             (,exit-fun))
+          (t (setq unread-command-events (append unread-command-events
                                                  (list evt)))))))))
 
 (require 'cofi-evil)

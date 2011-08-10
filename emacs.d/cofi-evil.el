@@ -16,6 +16,7 @@
     (set-cursor-color (def-assoc evil-state cursor-colors default))))
 
 (require 'evil)
+(evil-set-toggle-key "<pause>")
 (evil-mode 1)
 
 (dolist (mode '(magit-mode
@@ -47,11 +48,6 @@
 (define-key evil-normal-state-map vim-mapleader cofi/vim-mapleader-map)
 (define-key evil-insert-state-map (read-kbd-macro (concat "C-" vim-mapleader)) cofi/vim-mapleader-map)
 (define-key evil-emacs-state-map (read-kbd-macro (concat "C-" vim-mapleader)) cofi/vim-mapleader-map)
-
-(define-key evil-motion-state-map (kbd "C-z") nil)
-(define-key evil-emacs-state-map (kbd "C-z") nil)
-(define-key evil-motion-state-map (kbd "<pause>") 'evil-emacs-state)
-(define-key evil-emacs-state-map (kbd "<pause>") 'evil-exit-emacs-state)
 
 (fill-keymap evil-normal-state-map
              "Y"     (cmd (evil-yank (point) (point-at-eol)))

@@ -55,7 +55,6 @@
 
 (fill-keymap evil-normal-state-map
              "Y"     (cmd (evil-yank (point) (point-at-eol)))
-             "_"     'evil-first-non-blank
              "+"     'cofi/inc-at-pt
              "-"     'cofi/dec-at-pt
              "SPC"   'ace-jump-mode
@@ -63,11 +62,15 @@
              "C-SPC" 'ace-jump-line-mode
              "go"    'goto-char
              "C-t"   'transpose-chars
+             "C-:"   'eval-expression
+             ":"     'anything-execute-extended-command)
+
+(fill-keymap evil-motion-state-map
+             "_"     'evil-first-non-blank
              "C-e"   'end-of-line
              "C-S-d" 'evil-scroll-up
              "C-S-f" 'evil-scroll-page-up
-             "C-:"   'eval-expression
-             ":"     'anything-execute-extended-command
+             "_"     'evil-first-non-blank
              "C-y"   nil)
 
 (fill-keymap evil-insert-state-map

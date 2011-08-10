@@ -15,7 +15,10 @@ command! -nargs=* beo tabopen http://dict.tu-chemnitz.de/dings.cgi?lang=de&servi
 command! -nargs=* leo tabopen http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&search=<args>&relink=on
 command! -nargs=* zdf tabopen http://www.zdf.de/ZDFmediathek/#/suche/<args>
 
-command! ril sidebar! Read It Later
+"sidebar
+command! bookstack sidebar! Bookstack
+map -g user <Leader>b -ex bookstack
+map -g user <Leader>c -ex sbclose
 
 set guioptions=sMTC
 set editor="emacsclient -c --alternate-editor=gvim"
@@ -54,8 +57,10 @@ cmap <A-b> <C-left>
 
 nmap -count <C-S-d> <scroll-up>
 nmap -count <C-S-u> <scroll-down>
-nmap -count <C-S-f> <scroll-page-up>
-nmap -count <C-S-b> <scroll-page-down>
+" nmap -count <C-S-f> <scroll-page-up>
+" nmap -count <C-S-b> <scroll-page-down>
+nmap -count <C-S-f> <C-b>
+nmap -count <C-S-b> <C-f>
 
 nnoremap j 5j
 nnoremap k 5k
@@ -63,13 +68,16 @@ nnoremap <C-e> 10<C-e>
 nnoremap <C-y> 10<C-y>
 
 " NoScript
-map -g user <A-s> :set nss!=<A-Tab>
-map -g user <A-C-s> set nso!=<A-Tab>
-map -g user <A-S-s> :set nst!=<A-Tab>
+map -g user <A-n> :set nss!=<A-Tab>
+map -g user <A-C-n> set nso!=<A-Tab>
+map -g user <A-S-n> :set nst!=<A-Tab>
 
 " Instapaper -- depends on instapaper bookmarklet with `readlater' keyword
 command! instapaper open readlater
-map -g user <A-r> -ex instapaper
+map -g user <Leader>r -ex instapaper
+" Instapaper text -- depends on instapaper bookmarklet with `instatext' keyword
+command! instatext open instatext
+map -g user <leader>t -ex instatext
 
 " Org
 command! store-link -javascript
@@ -90,8 +98,8 @@ command! save-link -javascript
    \ + encodeURIComponent(buffer.URL) + '/'
    \ + encodeURIComponent(buffer.title) + '"')
 
-map -g user <A-w> -ex save-link
-map -g user <A-l> -ex store-link
+map -g user <Leader>w -ex save-link
+map -g user <Leader>e -ex store-link
 
 " UTM trimmer, based on http://pentablg.blogspot.com/2011/05/tip-of-day-mapping-javascript.html
 command! yank-utm -javascript -desc 'yank utm-trimmed url'

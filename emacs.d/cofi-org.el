@@ -7,7 +7,7 @@
 
 (require 'org-install)
 (require 'calfw-org)
-
+(require 'cofi-autoloads)
 
 (if (file-directory-p "~/Org")
     (setq org-directory "~/Org/"
@@ -22,44 +22,12 @@
 (setq org-completion-use-ido t
       org-outline-path-complete-in-steps nil)
 
-(autoload 'org-agenda-files "org")
 (defun cofi/visit-org-agenda-files (fname)
   "Visit agenda files.
 Note: This assumes all files are in the org-directory."
   (interactive (list (ido-completing-read "Visit file: "
                                     (mapcar 'file-name-nondirectory (org-agenda-files)))))
   (find-file (concat org-directory fname)))
-
-(autoload 'org-todo "org.el")
-(defmacro cofi/set-todo-state (state)
-  `(lambda () (interactive)
-    (org-todo ,state)))
-
-(defkeymap cofi/org-state-map
-    "t" (cofi/set-todo-state "TODO")
-    "s" (cofi/set-todo-state "STARTED")
-    "w" (cofi/set-todo-state "WAITING")
-    "f" (cofi/set-todo-state "DEFERRED")
-    "l" (cofi/set-todo-state "DELEGATED")
-    "x" (cofi/set-todo-state "CANCELLED")
-    "d" (cofi/set-todo-state "DONE"))
-
-(defkeymap cofi/org-mode-map
-    "a" 'org-agenda-list
-    "t" (lambda () (interactive) (org-todo-list 0))
-    "o a" (lambda () (interactive)
-             (let ((org-indirect-buffer-display 'other-window))
-               (org-agenda-list)))
-    "o t" (lambda () (interactive)
-             (let ((org-indirect-buffer-display 'other-window))
-               (org-todo-list 0)))
-    "r" 'org-capture
-    "s" cofi/org-state-map
-    "l" 'org-store-link
-    "v" 'cofi/visit-org-agenda-files
-    "V" 'cofi/anything-org-files
-    "c" 'cfw:open-org-calendar
-    "f" 'org-footnote-action)
 
 (defun cofi/anything-org-files ()
   (interactive)
@@ -68,14 +36,12 @@ Note: This assumes all files are in the org-directory."
                                                  "\.org\\(_archive\\)?")
                          "*anything org*"))
 
-(fill-global-keymap "<f5>" cofi/org-mode-map
-                    "C-c o" cofi/org-mode-map)
-
 (add-hook 'org-mode-hook (lambda () (org-display-inline-images t)))
 (add-hook 'org-mode-hook
-          (gen-fill-keymap-hook org-mode-map
+          (gen-local-fill-keymap-hook
                                 "M-n" 'outline-next-visible-heading
                                 "M-p" 'outline-previous-visible-heading
+                                "C-c M-g" 'org-toc-show
                                 "C-M-<return>" (lambda ()
                                                  (interactive)
                                                  (end-of-line)

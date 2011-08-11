@@ -1,6 +1,7 @@
 (require 'cofi-util)
 (require 'cofi-autoloads)
 (require 'cofi-windowing)
+(require 'cofi-org)
 
 ;;; mode keymap
 (defkeymap cofi-minor-mode-map
@@ -61,6 +62,32 @@
   "d" 'project-dired
   "t" 'project-tags)
 
+(defkeymap cofi-org-state-map
+    "t" (cmd (org-todo "TODO"))
+    "s" (cmd (org-todo "STARTED"))
+    "w" (cmd (org-todo "WAITING"))
+    "f" (cmd (org-todo "DEFERRED"))
+    "l" (cmd (org-todo "DELEGATED"))
+    "x" (cmd (org-todo "CANCELLED"))
+    "d" (cmd (org-todo "DONE")))
+
+(defkeymap cofi-org-mode-map
+    "a" 'org-agenda-list
+    "t" (lambda () (interactive) (org-todo-list 0))
+    "o a" (lambda () (interactive)
+             (let ((org-indirect-buffer-display 'other-window))
+               (org-agenda-list)))
+    "o t" (lambda () (interactive)
+             (let ((org-indirect-buffer-display 'other-window))
+               (org-todo-list 0)))
+    "r" 'org-capture
+    "s" cofi-org-state-map
+    "l" 'org-store-link
+    "v" 'cofi/visit-org-agenda-files
+    "V" 'cofi/anything-org-files
+    "c" 'cfw:open-org-calendar
+    "f" 'org-footnote-action)
+
 (fill-global-keymap
  ;; buffer
  "C-c y"     'bury-buffer
@@ -118,6 +145,8 @@
  "C-c b" cofi-breadcrumbs-map
  "C-c a" cofi-anything-map
  "C-w"   cofi/window-map
+ "C-c o" cofi-org-mode-map
+ "<f5>"  cofi-org-mode-map
  "<f8>"  cofi-project-map
  ;; alternative for buffers were C-w is used
  "C-c w" cofi/window-map

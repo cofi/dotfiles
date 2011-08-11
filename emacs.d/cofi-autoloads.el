@@ -107,4 +107,9 @@ gists." t)
 
 (autoload 'scratch "scratch" nil t)
 
+;;; additional org
+
+(autoload 'org-agenda-files "org")
+(autoload 'org-todo "org")
+
 (provide 'cofi-autoloads)

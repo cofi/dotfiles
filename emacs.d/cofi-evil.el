@@ -94,13 +94,19 @@
                                     "zo"       'show-subtree
                                     "zO"       'show-all
                                     "zc"       'hide-subtree
-                                    "zC"       'hide-all)
+                                    "zC"       'hide-all
+                                    "M-H"      'org-metaleft
+                                    "M-J"      'org-metadown
+                                    "M-K"      'org-metaup
+                                    "M-L"      'org-metaright)
 
              (cofi/evil-define-keys 'insert org-mode-map
-                                    "M-l" 'org-metaright
-                                    "M-h" 'org-metaleft
                                     "M-j" 'org-shiftleft
-                                    "M-k" 'org-shiftright)))
+                                    "M-k" 'org-shiftright
+                                    "M-H" 'org-metaleft
+                                    "M-J" 'org-metadown
+                                    "M-K" 'org-metaup
+                                    "M-L" 'org-metaright)))
 
 (defadvice evil-goto-definition (around evil-goto-lisp-def activate)
   "Make use of emacs' and slime's possibilities for finding definitions."

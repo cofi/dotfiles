@@ -1,7 +1,8 @@
 (require 'cofi-util)
 (add-to-loadpath "~/.elisp/vendor/evil/")
 (setq evil-find-skip-newlines t)
-(setq evil-move-cursor-back nil)
+(setq evil-move-cursor-back nil
+      evil-cross-lines t)
 (setq evil-default-cursor #'cofi/evil-cursor)
 
 (defun cofi/evil-cursor ()

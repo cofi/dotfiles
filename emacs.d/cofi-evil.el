@@ -38,26 +38,24 @@
 (dolist (mode '(magit-mode
                 magit-key-mode
                 magit-show-branches-mode
-                prolog-inferior-mode
-                inferior-python-mode
                 monky-mode
                 gnus-article-mode
                 gnus-server-mode
                 gnus-browse-mode
-                comint-mode
-                eshell-mode
-                shell-mode
                 inferior-emacs-lisp-mode
                 term-mode
                 org-agenda-mode
                 cfw:calendar-mode
-                docview-mode
+                doc-view-mode
                 ibuffer-mode
                 twittering-mode
+                reftex-toc-mode
                 ))
   (push mode evil-emacs-state-modes))
 
 (dolist (mode '(slime-repl-mode
+                inferior-python-mode
+                prolog-inferior-mode
                 ))
   (push mode evil-insert-state-modes))
 

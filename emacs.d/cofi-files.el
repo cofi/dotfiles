@@ -93,4 +93,8 @@
    (add-hook 'kill-emacs-hook #'recentf-cleanup)
    )
 ;;; ========================================
+;;; tramp ==============================
+(setq tramp-persistency-file-name (cofi/var-file "emacs/tramp"))
+(setq tramp-default-method "ssh")
+;;; ==============================
 (provide 'cofi-files)

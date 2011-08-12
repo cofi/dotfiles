@@ -114,6 +114,7 @@
               indent-tabs-mode nil     ; no nasty tabs i say!
               tab-width 4)
 (setq-default fill-column 80)
+(setq tab-always-indent 'complete)
 
 (setq dabbrev-case-replace nil)
 

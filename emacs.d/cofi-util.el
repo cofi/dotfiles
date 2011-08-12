@@ -407,4 +407,22 @@ Returns nil if `X' not in `XS'."
     (when (string-match "emacs\\.d/.*\\.el$" fname)
       (byte-compile-file fname))))
 
+(defun cofi/decorative-time (time)
+  "Display `TIME' in seconds in a decorative way, divided into count of days, hours, minutes and seconds."
+  (loop for (div name) in '((86400 days) (3600 hours) (60 minutes) (1 seconds))
+        collect (let ((count (truncate time div))
+                      (name (symbol-name name)))
+                  (decf time (* count div))
+                  `(,count . ,name))
+        into times
+        finally (return
+                 (mapconcat (lambda (x)
+                              (let ((count (car x))
+                                    (s (cdr x)))
+                                (format "%d %s" count (if (= 1 count)
+                                                          (substring s 0 -1)
+                                                        s))))
+                            (remove-if (p (= (car x) 0)) times)
+                            " "))))
+
 (provide 'cofi-util)

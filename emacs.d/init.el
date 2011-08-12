@@ -102,8 +102,8 @@
 (cofi-next-file-assoc)
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()
-                                (message "Time needed to load: %d seconds."
-                                         (float-time (time-since startup-time))))
+                                (message "Time needed to load: %s."
+                                         (cofi/uptime)))
           'append)
 
 (add-hook 'after-save-hook 'byte-compile-config-on-save)

@@ -261,6 +261,12 @@ Major mode determines association."
   "Non-op."
   t)
 
-(push '("^\\*Pp Eval Output\\*" . View-mode) auto-mode-alist)
+(defun cofi/uptime ()
+  (interactive)
+  (let* ((time (float-time (time-since startup-time)))
+         (s (cofi/decorative-time time)))
+    (if (called-interactively-p 'any)
+        (message "Uptime: %s"  s)
+      s)))
 
 (provide 'cofi-func)

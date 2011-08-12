@@ -63,13 +63,14 @@
   "t" 'project-tags)
 
 (defkeymap cofi-org-state-map
-    "t" (cmd (org-todo "TODO"))
-    "s" (cmd (org-todo "STARTED"))
-    "w" (cmd (org-todo "WAITING"))
-    "f" (cmd (org-todo "DEFERRED"))
-    "l" (cmd (org-todo "DELEGATED"))
-    "x" (cmd (org-todo "CANCELLED"))
-    "d" (cmd (org-todo "DONE")))
+  "t"   (cmd (org-todo "TODO"))
+  "s"   (cmd (org-todo "STARTED"))
+  "w"   (cmd (org-todo "WAITING"))
+  "f"   (cmd (org-todo "DEFERRED"))
+  "l"   (cmd (org-todo "DELEGATED"))
+  "x"   (cmd (org-todo "CANCELLED"))
+  "d"   (cmd (org-todo "DONE"))
+  "SPC" (cmd (org-todo "")))
 
 (defkeymap cofi-org-mode-map
     "a" 'org-agenda-list

@@ -17,6 +17,9 @@
     (set-cursor-color (def-assoc evil-state cursor-colors default))))
 
 (require 'evil)
+(require-and-exec 'surround
+  (global-surround-mode 1))
+
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)
 

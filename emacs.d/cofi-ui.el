@@ -168,6 +168,7 @@
 (defadvice save-buffers-kill-emacs (around no-process-query activate)
   (flet ((process-list ()))
     ad-do-it))
+(setq mumamo-chunk-coloring 1)
 ;; ==================================================
 
 ;; enable functions ========================================

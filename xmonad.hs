@@ -316,6 +316,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , duck
                                                   , wiki
                                                   , wikiD
+                                                  , amazon
                                                   , github
                                                   , bitbucket
                                                   , debbugs
@@ -341,6 +342,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , rfc
                                                   , S.prefixAware google
                                                   ]
+
       -- new ones
       wiki = S.searchEngine "wp" "http://en.wikipedia.org/wiki/Special:Search?go=Go&search="
       wikiD = S.searchEngine "wpd" "http://de.wikipedia.org/wiki/Special:Search?go=Go&search="
@@ -364,6 +366,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       rfc = S.searchEngine "rfc" "http://www.ietf.org/rfc/rfc"
       pep = formatSearch "pep" "http://www.python.org/dev/peps/pep-%04s"
       py = S.searchEngineF "py" dopy
+      amazon = S.searchEngine "ama" "http://www.amazon.de/s/url=search-alias%3Daps&x=0&y=0&field-keywords="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

@@ -75,8 +75,8 @@ map -g user <A-S-n> :set nst!=<A-Tab>
 " Instapaper -- depends on instapaper bookmarklet with `readlater' keyword
 command! instapaper open readlater
 map -g user <Leader>r -ex instapaper
-" Instapaper text -- depends on instapaper bookmarklet with `instatext' keyword
-command! instatext open instatext
+" Instapaper text -- depends on instapaper bookmarklet with `text' keyword
+command! instatext open text
 map -g user <leader>t -ex instatext
 
 " Org

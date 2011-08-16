@@ -39,7 +39,9 @@
           (push 'escape unread-command-events))
        (t (push evt unread-command-events))))))
 
-(dolist (mode '(magit-mode
+(dolist (mode '(
+                ediff-mode
+                magit-mode
                 magit-key-mode
                 magit-show-branches-mode
                 monky-mode
@@ -54,6 +56,7 @@
                 ibuffer-mode
                 twittering-mode
                 reftex-toc-mode
+                wab-compilation-mode
                 ))
   (push mode evil-emacs-state-modes))
 

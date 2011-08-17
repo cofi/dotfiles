@@ -1122,11 +1122,15 @@ The processing is done in the extent of the toplevel restart."
 
 (defun auto-flush-loop (stream)
   (loop
-   (when (not (and (open-stream-p stream) 
-                   (output-stream-p stream)))
-     (return nil))
-   (finish-output stream)
-   (sleep *auto-flush-interval*)))
+    (when (not (and (open-stream-p stream) 
+                    (output-stream-p stream)))
+      (return nil))
+    ;; Use an IO timeout to avoid deadlocks
+    ;; on the stream we're flushing.
+    (call-with-io-timeout
+     (lambda () (finish-output stream))
+     :seconds 0.1)
+    (sleep *auto-flush-interval*)))
 
 (defun find-repl-thread (connection)
   (cond ((not (use-threads-p))
@@ -2773,6 +2777,9 @@ TAGS has is a list of strings."
   (setq *break-on-signals* (not *break-on-signals*))
   (format nil "*break-on-signals* = ~a" *break-on-signals*))
 
+(defslimefun sdlb-print-condition ()
+  (princ-to-string *swank-debugger-condition*))
+
 
 ;;;; Compilation Commands.
 
@@ -3255,6 +3262,17 @@ Include the nicknames if NICKNAMES is true."
 (defslimefun undefine-function (fname-string)
   (let ((fname (from-string fname-string)))
     (format nil "~S" (fmakunbound fname))))
+
+(defslimefun unintern-symbol (name package)
+  (let ((pkg (guess-package package)))
+    (cond ((not pkg) (format nil "No such package: ~s" package))
+          (t 
+           (multiple-value-bind (sym found) (parse-symbol name pkg)
+             (case found
+               ((nil) (format nil "~s not in package ~s" name package))
+               (t
+                (unintern sym pkg)
+                (format nil "Uninterned symbol: ~s" sym))))))))
 
 
 ;;;; Profiling
@@ -3881,34 +3899,63 @@ instead, we only do a full scan if the set of packages has changed."
 (defun perform-indentation-update (connection force)
   "Update the indentation cache in CONNECTION and update Emacs.
 If FORCE is true then start again without considering the old cache."
-  (let ((cache (connection.indentation-cache connection)))
-    (when force (clrhash cache))
-    (let ((delta (update-indentation/delta-for-emacs cache force)))
-      (setf (connection.indentation-cache-packages connection)
-            (list-all-packages))
-      (unless (null delta)
-        (send-to-emacs (list :indentation-update delta))))))
+  (let ((pkg *buffer-package*))
+    (flet ((perform-it ()
+             (let ((cache (connection.indentation-cache connection))
+                   ;; Rebind for spawned thread.
+                   (*emacs-connection* connection)
+                   (*buffer-package* pkg))
+               (multiple-value-bind (delta cache)
+                   (update-indentation/delta-for-emacs cache force)
+                 (setf (connection.indentation-cache-packages connection)
+                       (list-all-packages))
+                 (unless (null delta)
+                   (setf (connection.indentation-cache connection) cache)
+                   (send-to-emacs (list :indentation-update delta)))))))
+      (if (use-threads-p)
+          (spawn #'perform-it :name "indentation-update-thread")
+          (perform-it)))))
 
 (defun update-indentation/delta-for-emacs (cache &optional force)
-  "Update the cache and return the changes in a (SYMBOL . INDENT) list.
+  "Update the cache and return the changes in a (SYMBOL INDENT PACKAGES) list.
 If FORCE is true then check all symbols, otherwise only check symbols
 belonging to the buffer package."
-  (let ((alist '()))
-      (flet ((consider (symbol)
+  (let ((alist '())
+        (must-copy (use-threads-p)))
+    ;; The hash-table copying hair here is to ensure no two threads ever
+    ;; operate on the same hash-table -- except in the worst case with
+    ;; parallel readers. (Hash-tables aren't guaranteed to be thread-safe at
+    ;; all, but we make the hopefully-portable assumption that parallel
+    ;; readers are OK.)
+    (flet ((consider (symbol)
              (let ((indent (symbol-indentation symbol)))
                (when indent
                  (unless (equal (gethash symbol cache) indent)
+                   (when must-copy
+                     (setf cache (let ((new (make-hash-table :test #'eq)))
+                                   (maphash (lambda (k v)
+                                              (setf (gethash k new) v))
+                                            cache)
+                                   new)
+                           must-copy nil))
                    (setf (gethash symbol cache) indent)
-                   (push (cons (string-downcase symbol) indent) alist))))))
-      (if force
-          (do-all-symbols (symbol)
-            (consider symbol))
-          (do-symbols (symbol *buffer-package*)
-            ;; We're really just interested in the symbols of *BUFFER-PACKAGE*,
-            ;; and *not* all symbols that are _present_ (cf. SYMBOL-STATUS.)
-            (when (eq (symbol-package symbol) *buffer-package*)
-              (consider symbol)))))
-    alist))
+                   (let ((pkgs (loop for p in (list-all-packages)
+                                     when (eq symbol (find-symbol (string symbol) p))
+                                     collect (package-name p)))
+                         (name (string-downcase symbol)))
+                     (push (list name indent pkgs) alist)))))))
+      (cond (force
+             (setf cache (make-hash-table :test 'eq)
+                   must-copy nil)
+             (do-all-symbols (symbol)
+               (consider symbol)))
+            (t
+             (do-symbols (symbol *buffer-package*)
+               ;; We're really just interested in the symbols of *BUFFER-PACKAGE*,
+               ;; and *not* all symbols that are _present_ (cf. SYMBOL-STATUS.)
+               (when (eq (symbol-package symbol) *buffer-package*)
+                 (consider symbol)))))
+      (values alist cache))))
 
 (defun package-names (package)
   "Return the name and all nicknames of PACKAGE in a fresh list."

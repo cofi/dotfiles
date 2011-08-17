@@ -52,9 +52,6 @@
 [submodule "elisp/vendor/workgroups"]
 	path = elisp/vendor/workgroups
 	url = git://github.com/tlh/workgroups.el.git
-[submodule "elisp/vendor/slime"]
-	path = elisp/vendor/slime
-	url = git://github.com/nablaone/slime.git
 [submodule "elisp/vendor/clojure-mode"]
 	path = elisp/vendor/clojure-mode
 	url = git://github.com/technomancy/clojure-mode.git

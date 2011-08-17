@@ -1,4 +1,4 @@
-(add-to-loadpath "~/.elisp/vendor/slime/"
+(add-to-loadpath "~/.elisp/slime/"
                  "~/.elisp/vendor/clojure-mode/")
 
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
@@ -15,7 +15,7 @@
 (add-hook 'lisp-mode-hook (lambda ()
                             (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)))
 (add-hook 'lisp-mode-hook (lambda () (unless (slime-connected-p)
-                                       (save-excursion (call-interactively #'slime))))
+                                    (save-current-buffer (slime))))
           'append)
 
 ;;; paredit
@@ -41,10 +41,10 @@
 
 (add-hook 'sldb-mode-hook #'(lambda () (setq autopair-dont-activate t)))
 
-(require-and-exec 'slime
-                  (slime-setup '(slime-fancy
-                                 slime-banner
-                                 anything-slime)))
+(require-and-exec 'slime-autoloads
+  (slime-setup '(slime-fancy
+                 slime-banner
+                 anything-slime)))
 (setq slime-protocol-version 'ignore)
 (when (fboundp 'anything-slime-complete)
   (setq slime-complete-symbol-function #'anything-slime-complete))

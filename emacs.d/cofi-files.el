@@ -61,7 +61,7 @@
 (defalias 'cofi/buffer-alternate 'ido-switch-buffer)
 
 (require 'cofi-anything)
-(if (fboundp 'anything-buffers+)
+(if (featurep 'anything-config)
     (progn
       (defalias 'cofi/buffer 'cofi/anything-buffers)
       (defalias 'cofi/file-alternate 'anything-find-files))

@@ -105,7 +105,7 @@
         (type . file)))
     ;; --------------------------------------------------
     ;; anythings ----------------------------------------
-    (defalias 'cofi/anything-buffers 'anything-buffers+)
+    (defalias 'cofi/anything-buffers 'anything-buffers-list)
 
     (defun cofi/anything-files ()
       "ffap -> recentf -> buffer -> bookmark -> file-cache -> files-in-current-dir -> locate"

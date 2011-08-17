@@ -43,6 +43,7 @@
                 ediff-mode
                 inferior-emacs-lisp-mode
                 wab-compilation-mode
+                sldb-mode
                 ))
   (push mode evil-emacs-state-modes))
 

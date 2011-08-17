@@ -37,6 +37,8 @@
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (eldoc-add-command 'autopair-insert-opening))
 
+(setq doc-view-continuous t)
+
 (require-and-exec 'keychain-environment
   (run-with-timer 100 (* 5 60) 'keychain/refresh))
 ;; ==================================================

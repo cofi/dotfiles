@@ -425,4 +425,11 @@ Returns nil if `X' not in `XS'."
                             (remove-if (p (= (car x) 0)) times)
                             " "))))
 
+(defun f-alt (&rest alternatives)
+  "Test functions in `alternatives' and return first bound."
+  (catch 'found
+    (dolist (f alternatives)
+      (if (fboundp f)
+          (throw 'found f)))))
+
 (provide 'cofi-util)

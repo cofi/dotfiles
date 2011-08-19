@@ -44,8 +44,10 @@
 (require-and-exec 'slime-autoloads
   (slime-setup '(slime-fancy
                  slime-banner
-                 anything-slime)))
-(setq slime-protocol-version 'ignore)
+                 anything-slime))
+  (require 'slime)
+  (setq slime-protocol-version 'ignore))
+
 (when (fboundp 'anything-slime-complete)
   (setq slime-complete-symbol-function #'anything-slime-complete))
 

@@ -46,6 +46,9 @@
                  slime-banner
                  anything-slime))
   (require 'slime)
+  (setq slime-complete-symbol-function (f-alt 'anything-slime-complete
+                                              'slime-fuzzy-complete-symbol
+                                              'slime-simple-complete-symbol))
   (setq slime-protocol-version 'ignore))
 
 (when (fboundp 'anything-slime-complete)

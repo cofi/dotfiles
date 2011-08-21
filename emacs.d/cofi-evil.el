@@ -40,11 +40,7 @@
        (t (push evt unread-command-events))))))
 
 (dolist (mode '(
-                ediff-mode
                 inferior-emacs-lisp-mode
-                wab-compilation-mode
-                sldb-mode
-                w3m-mode
                 ))
   (push mode evil-emacs-state-modes))
 

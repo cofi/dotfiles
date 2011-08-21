@@ -432,4 +432,8 @@ Returns nil if `X' not in `XS'."
       (if (fboundp f)
           (throw 'found f)))))
 
+(defmacro pour-lists (place &rest lists)
+  "Append `LISTS' in front of list at `PLACE'."
+  `(setq ,place (append ,@lists ,place)))
+
 (provide 'cofi-util)

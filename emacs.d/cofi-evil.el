@@ -93,19 +93,19 @@
 (eval-after-load "org"
           '(progn
              (cofi/evil-define-keys 'normal org-mode-map
-                                    "<return>" 'org-open-at-point
-                                    "za"       'org-cycle
-                                    "zA"       'org-shifttab
-                                    "zm"       'hide-body
-                                    "zr"       'show-all
-                                    "zo"       'show-subtree
-                                    "zO"       'show-all
-                                    "zc"       'hide-subtree
-                                    "zC"       'hide-all
-                                    "M-H"      'org-metaleft
-                                    "M-J"      'org-metadown
-                                    "M-K"      'org-metaup
-                                    "M-L"      'org-metaright)
+                                    "RET" 'org-open-at-point
+                                    "za"  'org-cycle
+                                    "zA"  'org-shifttab
+                                    "zm"  'hide-body
+                                    "zr"  'show-all
+                                    "zo"  'show-subtree
+                                    "zO"  'show-all
+                                    "zc"  'hide-subtree
+                                    "zC"  'hide-all
+                                    "M-H" 'org-metaleft
+                                    "M-J" 'org-metadown
+                                    "M-K" 'org-metaup
+                                    "M-L" 'org-metaright)
 
              (cofi/evil-define-keys 'insert org-mode-map
                                     "M-j" 'org-shiftleft

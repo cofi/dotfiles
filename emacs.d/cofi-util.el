@@ -302,14 +302,14 @@ See `POUR-MAPPINGS-WITH'."
 
 (defmacro cmd (&rest code)
   "Macro for shorter keybindings."
-  (declare (indent 1))
+  (declare (indent defun))
   `(lambda ()
      (interactive)
      ,@code))
 
 (defmacro cmd-arg (args iflag &rest code)
   "Macro for shorter keybindings with argument."
-  (declare (indent 1))
+  (declare (indent defun))
   `(lambda (,@args)
      (interactive ,iflag)
      ,@code))

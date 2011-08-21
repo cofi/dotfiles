@@ -1,4 +1,7 @@
 (autoload 'ace-jump-mode "ace-jump-mode" nil t)
+(autoload 'ace-jump-line-mode "ace-jump-mode" nil t)
+(autoload 'ace-jump-word-mode "ace-jump-mode" nil t)
+
 (autoload 'ack "full-ack" "Run ack." t)
 (autoload 'ack-same "full-ack" "Run ack in files matching the current major mode." t)
 

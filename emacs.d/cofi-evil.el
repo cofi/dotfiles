@@ -19,12 +19,7 @@
 (require 'evil)
 (require-and-exec 'surround
   (global-surround-mode 1)
-  (pour-lists surround-pairs-alist
-              '(
-                (?\" . ?\")
-                (?'  . ?')
-                (?`  . ?')
-                )))
+  (push '(?` . ("`" . "'")) surround-pairs-alist))
 
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)

@@ -41,9 +41,14 @@
   :group 'evil)
 
 (defcustom surround-pairs-alist
-  '((?\( . ?\))
-    (?\[ . ?\])
-    (?{ . ?})
+  '((?\( . ("( " . " )"))
+    (?\[ . ("[ " . " ]"))
+    (?\{ . ("{ " . " }"))
+
+    (?\) . ("(" . ")"))
+    (?\] . ("[" . "]"))
+    (?\} . ("{" . "}"))
+
     (?# . ("#{" . "}"))
     (?b . ("(" . ")"))
     (?B . ("{" . "}"))
@@ -74,20 +79,18 @@ This only affects inserting pairs, not deleting or changing them."
           (format "</%s>" (or tag "")))))
 
 (defun surround-pair (char)
-  "Return the surround pair of CHAR.
+  "Return the surround pair of char.
 This is a cons cell (LEFT . RIGHT), both strings."
-  (let* ((open (or (car (rassoc char surround-pairs-alist)) char))
-         (close (or (cdr (assoc char surround-pairs-alist)) char)))
+  (let ((pair (assoc-default char surround-pairs-alist)))
     (cond
-     ((functionp close)
-      (funcall close))
-     ((consp close)
-      close)
-     ((eq (char-syntax char) ?\()
-      ;; add whitespace
-      (cons (format "%c " open) (format " %c" close)))
+     ((functionp pair)
+      (funcall pair))
+
+     ((consp pair)
+      pair)
+
      (t
-      (cons (format "%c" open) (format "%c" close))))))
+      (cons (format "%c" char) (format "%c" char))))))
 
 (defun surround-outer-overlay (char)
   "Return outer overlay for the delimited range represented by CHAR.
@@ -104,15 +107,14 @@ See also `surround-inner-overlay'."
 
 (defun surround-trim-whitespace-from-range (range &optional regexp)
   "Given an evil-range, trim whitespace around range by shrinking the range such that it neither begins nor ends with whitespace. Does not modify the buffer."
-  (let ((regexp (or regexp "[ \f\t\n\r\v]+")))
+  (let ((regexp (or regexp "[ \f\t\n\r\v]")))
     (save-excursion
       (save-match-data
         (goto-char (evil-range-beginning range))
-        (when (looking-at regexp)
-          (evil-set-range-beginning range (1+ (match-end 0))))
+        (while (looking-at regexp) (forward-char))
+        (evil-set-range-beginning range (point))
         (goto-char (evil-range-end range))
-        (while (looking-back regexp)
-          (goto-char (match-beginning 0)))
+        (while (looking-back regexp) (backward-char))
         (evil-set-range-end range (point))))))
 
 (defun surround-inner-overlay (char)

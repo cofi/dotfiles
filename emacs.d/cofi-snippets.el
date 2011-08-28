@@ -1,6 +1,7 @@
 (add-to-loadpath "~/.elisp/vendor/yasnippet")
 (setq yas/prompt-functions '(yas/ido-prompt
                              yas/completing-prompt))
+(setq yas/snippet-dirs '("~/.yasnippets" "~/dev/snippets"))
 (require-and-exec 'yasnippet
     (yas/initialize)
     (yas/load-directory "~/.yasnippets")

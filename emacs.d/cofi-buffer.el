@@ -84,14 +84,12 @@
                   " " filename-and-process)))
     )
 
-  (defun ibuffer-ediff-marked-buffers ()
-    (interactive)
-    (let* ((marked-buffers (ibuffer-get-marked-buffers))
-           (len (length marked-buffers)))
-      (unless (= 2 len)
-        (error (format "%s buffer%s been marked (needs to be 2)"
-                       len (if (= len 1) " has" "s have"))))
-      (ediff-buffers (car marked-buffers) (cadr marked-buffers))))
+  (defun ibuffer-ediff-marked-buffers (end)
+    "Ediff marked buffers based on prefix.
+Diffs prefix-1 marked buffer with prefix buffer."
+    (interactive "p")
+    (let ((marked-buffers (ibuffer-get-marked-buffers)))
+      (ediff-buffers (nth (1- end) marked-buffers) (nth end marked-buffers))))
 
   (define-key ibuffer-mode-map "<" 'ibuffer-ediff-marked-buffers)
 

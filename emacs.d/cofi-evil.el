@@ -87,35 +87,28 @@
 (require-and-exec 'sackspace
   (sack/install-in-evil))
 
-(defun cofi/evil-define-keys (state map &rest pairs)
-  "Define groups of key cmd `PAIRS' for `MODE' in `STATE'."
-  (dolist (mapping (group pairs 2))
-    (evil-define-key state map (read-kbd-macro (car mapping)) (cadr mapping))))
+(evil-declare-key 'normal org-mode-map
+  (kbd "RET") 'org-open-at-point
+  "za"        'org-cycle
+  "zA"        'org-shifttab
+  "zm"        'hide-body
+  "zr"        'show-all
+  "zo"        'show-subtree
+  "zO"        'show-all
+  "zc"        'hide-subtree
+  "zC"        'hide-all
+  (kbd "M-H") 'org-metaleft
+  (kbd "M-J") 'org-metadown
+  (kbd "M-K") 'org-metaup
+  (kbd "M-L") 'org-metaright)
 
-(eval-after-load "org"
-          '(progn
-             (cofi/evil-define-keys 'normal org-mode-map
-                                    "RET" 'org-open-at-point
-                                    "za"  'org-cycle
-                                    "zA"  'org-shifttab
-                                    "zm"  'hide-body
-                                    "zr"  'show-all
-                                    "zo"  'show-subtree
-                                    "zO"  'show-all
-                                    "zc"  'hide-subtree
-                                    "zC"  'hide-all
-                                    "M-H" 'org-metaleft
-                                    "M-J" 'org-metadown
-                                    "M-K" 'org-metaup
-                                    "M-L" 'org-metaright)
-
-             (cofi/evil-define-keys 'insert org-mode-map
-                                    "M-j" 'org-shiftleft
-                                    "M-k" 'org-shiftright
-                                    "M-H" 'org-metaleft
-                                    "M-J" 'org-metadown
-                                    "M-K" 'org-metaup
-                                    "M-L" 'org-metaright)))
+(evil-declare-key 'insert org-mode-map
+  (kbd "M-j") 'org-shiftleft
+  (kbd "M-k") 'org-shiftright
+  (kbd "M-H") 'org-metaleft
+  (kbd "M-J") 'org-metadown
+  (kbd "M-K") 'org-metaup
+  (kbd "M-L") 'org-metaright)
 
 (defadvice evil-goto-definition (around evil-goto-lisp-def activate)
   "Make use of emacs' and slime's possibilities for finding definitions."
@@ -130,28 +123,6 @@
                                   (find-variable (symbol-at-point))
                                 (error ad-do-it)))))
     (otherwise ad-do-it)))
-
-(defvar cofi/evil-input-method nil)
-(make-variable-buffer-local 'cofi/evil-input-method)
-(defun cofi/save-kill-input-method ()
-  (setq cofi/evil-input-method current-input-method)
-  (inactivate-input-method))
-(defun cofi/reactivate-input-method ()
-  (activate-input-method cofi/evil-input-method))
-
-(add-hook 'evil-normal-state-entry-hook #'cofi/save-kill-input-method)
-(add-hook 'evil-visual-state-entry-hook #'cofi/save-kill-input-method)
-(add-hook 'evil-normal-state-exit-hook #'cofi/reactivate-input-method)
-(add-hook 'evil-visual-state-exit-hook #'cofi/reactivate-input-method)
-
-(defadvice toggle-input-method (after evil-input-method-toggle activate)
-  (when evil-mode
-    ;; hope that all play well
-    (if cofi/evil-input-method
-        (setq cofi/evil-input-method nil)
-      (setq cofi/evil-input-method current-input-method))
-    (if (memq evil-state '(normal visual))
-        (inactivate-input-method))))
 
 (defun cofi/clear-empty-lines ()
   (let ((line (buffer-substring (point-at-bol) (point-at-eol))))

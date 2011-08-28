@@ -100,7 +100,7 @@ let opts = [
     ["vendorsub",   "The value of navigator.vendorsub",   "general.useragent.vendorSub"]
 ].map(Opt.fromArray, Opt);
 
-options.add(["useragent", "ua"],
+group.options.add(["useragent", "ua"],
     "The current browser user-agent",
     "string", "default",
     {

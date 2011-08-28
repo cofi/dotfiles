@@ -97,7 +97,7 @@ function getObjects() {
     return specific.concat(general).filter(function (site) !Set.add(seen, site));
 }
 
-var onUnload = util.overlayObject(gBrowser, {
+var onUnload = overlay.overlayObject(gBrowser, {
     // Extend NoScript's bookmarklet handling hack to the command-line
     // Modified from NoScript's own wrapper.
     loadURIWithFlags: function loadURIWithFlags(url) {
@@ -169,19 +169,17 @@ completion.noscriptObjects = function (context) {
         ["allowed",   "Allowed objects",   function (item) Set.has(whitelist, item.item)]]);
 };
 completion.noscriptSites = function (context) {
-    context.pushProcessor(0, function (item, text, next)
-        next.call(this, item, <span highlight={item.group}>{text}</span>));
     context.compare = CompletionContext.Sort.unsorted;
     context.generate = getSites;
     context.keys = {
         text: util.identity,
-        description: function (site) groupDesc[this.group] +
-            (this.groups.untrusted && this.group != "NoScriptUntrusted" ? " (untrusted)" : ""),
+        description: function (site) groupDesc[this.highlight] +
+            (this.groups.untrusted && this.highlight != "NoScriptUntrusted" ? " (untrusted)" : ""),
 
-        group: function (site) this.groups.temp      ? "NoScriptTemp" :
-                               this.groups.jsPolicy  ? "NoScriptAllowed" :
-                               this.groups.untrusted ? "NoScriptUntrusted" :
-                                                       "NoScriptBlocked",
+        highlight: function (site) this.groups.temp      ? "NoScriptTemp" :
+                                   this.groups.jsPolicy  ? "NoScriptAllowed" :
+                                   this.groups.untrusted ? "NoScriptUntrusted" :
+                                                           "NoScriptBlocked",
         groups: function (site) ({ site: site, __proto__: groupProto })
     };
     splitContext(context, [
@@ -246,16 +244,16 @@ function groupParams(group) ( {
     initialValue: true,
     persist: false
 });
-options.add(["noscript-forbid", "nsf"],
+group.options.add(["noscript-forbid", "nsf"],
     "The set of permissions forbidden to untrusted sites",
     "stringlist", "",
     groupParams("forbid"));
-options.add(["noscript-list", "nsl"],
+group.options.add(["noscript-list", "nsl"],
     "The set of domains to show in the menu and completion list",
     "stringlist", "",
     groupParams("list"));
 
-options.add(["script"],
+group.options.add(["script"],
     "Whether NoScript is enabled",
     "boolean", false,
     {
@@ -322,7 +320,7 @@ options.add(["script"],
         completer: function (context) completion.noscriptObjects(context)
     }
 ].forEach(function (params)
-    options.add(params.names, params.description,
+    group.options.add(params.names, params.description,
         "stringlist", "",
         {
             completer: function (context) {

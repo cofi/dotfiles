@@ -97,4 +97,12 @@
 (setq tramp-persistency-file-name (cofi/var-file "emacs/tramp"))
 (setq tramp-default-method "ssh")
 ;;; ==============================
+(defun cofi/create-directories-for-file  (&optional file)
+  (interactive "D")
+  (let ((dir (file-name-directory (or file buffer-file-name))))
+    (unless (file-exists-p dir)
+      (make-directory dir 'create-parents))))
+
+(add-hook 'before-save-hook 'cofi/create-directories-for-file)
+
 (provide 'cofi-files)

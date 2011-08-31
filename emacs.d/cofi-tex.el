@@ -48,6 +48,7 @@
 (setq cdlatex-math-modify-alist
       '(
         (?B "\\mathbb" nil t nil nil)
+        (?t "\\text" nil t nil nil)
         ))
 (setq cdlatex-math-symbol-alist
       '(

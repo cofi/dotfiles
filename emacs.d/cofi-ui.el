@@ -102,6 +102,7 @@
                 " "
                 ;; time
                 display-time-string
+                " %-"
                 ))
 
 (setq battery-mode-line-format " [%L %p%%]")

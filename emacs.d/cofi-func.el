@@ -301,7 +301,10 @@ Major mode determines association."
 
 (defun cofi/copy-sha1-of-buffer (buffer &optional start end)
   (interactive "b")
-  (kill-new (sha1 buffer start end)))
+  (let ((buffer (if (typep buffer 'buffer)
+                    buffer
+                  (get-buffer buffer))))
+    (kill-new (sha1 buffer start end))))
 
 (defun NOP ()
   "Non-op."

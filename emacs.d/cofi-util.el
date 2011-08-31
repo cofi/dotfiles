@@ -417,8 +417,10 @@ Returns nil if `X' not in `XS'."
 (setq byte-compile-warnings '(not cl-functions))
 
 (defun byte-compile-config-on-save ()
+  "Compile elisp files in the emacs.d dir unless they are themes."
   (let ((fname (buffer-file-name)))
-    (when (string-match "emacs\\.d/.*\\.el$" fname)
+    (when (and (string-match "emacs\\.d/\\(.*\\)\\.el$" fname)
+             (not (ends-with (match-string 1 fname) "theme")))
       (byte-compile-file fname))))
 
 (defun cofi/decorative-time (time)

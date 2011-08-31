@@ -56,23 +56,53 @@
                            battery-mode-line-string
                            appt-mode-string))
 
-(setq-default mode-line-format '("%e" mode-line-mule-info
-                                 mode-line-client mode-line-modified
-                                 mode-line-remote mode-line-frame-identification
-                                 mode-line-buffer-identification
-                                 mode-line-position
-                                 (vc-mode vc-mode)
-                                 (global-mode-string
-                                  ("" global-mode-string
-                                   #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display"))))
-                                 mode-line-modes
-                                 (which-func-mode
-                                  ("" which-func-format
-                                   #("--" 0 2 (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display"))))
-                                 viper-mode-string
-                                 #("-%-" 0 3
-                                   (help-echo "mouse-1: Select (drag to resize)\nmouse-2: Make current window occupy the whole frame\nmouse-3: Remove current window from display")))
-              )
+(setq eol-mnemonic-dos "W"
+      eol-mnemonic-mac "M"
+      eol-mnemonic-unix "U"
+      eol-mnemonic-undecided "-")
+
+(setq-default mode-line-format
+              `(
+                (evil-mode (" " evil-mode-line-tag))
+                ;; buffer name and file name as help
+                (:propertize "%b " face mode-line-buffer
+                             help-echo ("" buffer-file-name))
+                ;; coding and line ends
+                mode-line-mule-info
+                ;; buffer modified
+                "%* "
+                ;; appt
+                appt-mode-string
+                ;; battery
+                battery-mode-line-string
+                ;; sml modeline
+                (sml-modeline-mode (:eval (list (sml-modeline-create))))
+                ;; workgroup
+                (wg-mode-line-on (:eval (wg-mode-line-string)))
+                ;; line and column
+                "<%l,%c> "
+                ;; recursive edit
+                "%[("
+                ;; major mode
+                (:propertize ("" mode-name)
+                             face mode-line-major-mode
+                             mouse-face mode-line-highlight
+                             help-echo "Major mode\nmouse-1: Display minor mode menu\nmouse-2: Show help for minor mode, mouse-3: Toggle minor modes"
+                             local-map ,mode-line-major-mode-keymap)
+
+                ;; minor modes
+                (:propertize ("" minor-mode-alist)
+                             face mode-line-minor-mode
+                             mouse-face mode-line-highlight
+                             help-echo "Minor mode\nmouse-1: Display minor mode menu\nmouse-2: Show help for minor mode, mouse-3: Toggle minor modes"
+                             local-map ,mode-line-minor-mode-keymap)
+                "%])"
+                ;; which func mode
+                (which-func-mode (" " which-func-format))
+                " "
+                ;; time
+                display-time-string
+                ))
 
 (setq battery-mode-line-format " [%L %p%%]")
 

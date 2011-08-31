@@ -32,7 +32,9 @@
      ;; modeline
      `(mode-line ((t (:background "#334B7D" :foreground ,fg))))
      `(mode-line-inactive ((t (:background ,fg :foreground "#000000"))))
-     `(mode-line-buffer-id ((t (:bold t :foreground "gold" :background "#334B7D"))))
+     `(mode-line-buffer ((t (:bold t :foreground "DarkOrange"))))
+     `(mode-line-major-mode ((t (:bold t :foreground "gold"))))
+     `(mode-line-minor-mode ((t (:foreground "khaki"))))
 
      ;; diff faces
      `(diff-added-face ((t (:foreground ,vc-added))))

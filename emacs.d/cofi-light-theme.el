@@ -34,6 +34,9 @@
      `(mode-line ((t (:background "#8089a0" :foreground "black"))))
      `(mode-line-inactive ((t (:background "gray80" :foreground "#8089a0"))))
      `(mode-line-buffer-id ((t (:foreground "black" :background "#8089a0"))))
+     `(mode-line-buffer ((t (:bold t :foreground "black"))))
+     `(mode-line-major-mode ((t (:bold t :foreground "gold"))))
+     `(mode-line-minor-mode ((t (:foreground "khaki2"))))
 
      ;; diff
      `(diff-added-face ((t (:foreground ,vc-added))))

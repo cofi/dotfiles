@@ -400,6 +400,20 @@ Returns nil if `X' not in `XS'."
         (cdr match)
       default)))
 
+(defun ends-with (string end)
+  "Return if `STRING' ends with `END'."
+  ;; ignore error if string smaller than end
+  (ignore-errors
+    (string= end
+             (substring string (- (length end))))))
+
+(defun begins-with (string begin)
+  "Return if `STRING' begins with `BEGIN'."
+  ;; ignore error if string smaller than begin
+  (ignore-errors
+    (string= begin
+             (substring string (length begin)))))
+
 (setq byte-compile-warnings '(not cl-functions))
 
 (defun byte-compile-config-on-save ()

@@ -452,4 +452,12 @@ Returns nil if `X' not in `XS'."
   "Append `LISTS' in front of list at `PLACE'."
   `(setq ,place (append ,@lists ,place)))
 
+(defmacro on-full-instance (&rest body)
+  `(when cofi/full-emacs
+     ,@body))
+
+(defmacro on-mail-instance (&rest body)
+  `(when cofi/mail-instance
+     ,@body))
+
 (provide 'cofi-util)

@@ -1,7 +1,6 @@
 (add-to-loadpath "~/.elisp/vendor/workgroups/")
 
-(require-and-exec 'workgroups
-  (workgroups-mode 1))
+(require-and-exec 'workgroups)
 
 (setq wg-mode-line-on t
       wg-mode-line-left-brace "{"

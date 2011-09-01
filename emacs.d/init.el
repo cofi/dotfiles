@@ -95,10 +95,11 @@
                         (add-hook 'gnus-after-exiting-gnus-hook 'save-buffers-kill-emacs))))
 
 (add-hook 'emacs-startup-hook (lambda ()
-                                (when cofi/mail-instance
+                                (on-mail-instance
                                   (global-linum-mode -1))
-                                (when cofi/full-emacs
-                                  (mapc #'load cofi/full-settings))))
+                                (on-full-instance
+                                  (mapc #'load cofi/full-settings)
+                                  (workgroups-mode 1))))
 (cofi-next-file-assoc)
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()

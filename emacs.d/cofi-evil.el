@@ -4,6 +4,7 @@
 (setq evil-move-cursor-back nil
       evil-cross-lines t)
 (setq evil-default-cursor #'cofi/evil-cursor)
+(setq evil-mode-line-format nil)
 
 (defun cofi/evil-cursor ()
   "Change cursor color according to viper-state."

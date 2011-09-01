@@ -45,7 +45,7 @@
 
 ;; Settings ========================================
 (setq display-time-24hr-format t
-      display-time-format "%H:%M %e.%m"
+      display-time-format "%H:%M %d.%m"
       display-time-mail-file 'none
       display-time-default-load-average nil)
 

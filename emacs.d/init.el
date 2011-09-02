@@ -21,9 +21,8 @@
 (when (or (and (version< emacs-version "24")
                (load (expand-file-name "~/.emacs.d/elpa/package.el")))
           (require 'package))
-  (dolist (archive '(("marmalade" . "http://marmalade-repo.org/packages/")
-                     ("elpa" . "http://tromey.com/elpa/")))
-    (add-to-list 'package-archives archive))
+  (pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")
+                                 ("elpa" . "http://tromey.com/elpa/")))
   (package-initialize))
 
 

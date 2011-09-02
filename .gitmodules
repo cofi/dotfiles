@@ -79,3 +79,6 @@
 [submodule "elisp/vendor/evil"]
 	path = elisp/vendor/evil
 	url = git://gitorious.org/evil/evil.git
+[submodule "elisp/vendor/evil-numbers"]
+	path = elisp/vendor/evil-numbers
+	url = git://github.com/cofi/evil-numbers.git

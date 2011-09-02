@@ -1,5 +1,7 @@
 (require 'cofi-util)
-(add-to-loadpath "~/.elisp/vendor/evil/")
+(add-to-loadpath "~/.elisp/vendor/evil/"
+                 "~/.elisp/vendor/evil-numbers/")
+(require 'evil-numbers)
 (setq evil-find-skip-newlines t)
 (setq evil-move-cursor-back nil
       evil-cross-lines t)
@@ -56,8 +58,8 @@
 
 (fill-keymap evil-normal-state-map
              "Y"     (cmd (evil-yank (point) (point-at-eol)))
-             "+"     'cofi/inc-at-pt
-             "-"     'cofi/dec-at-pt
+             "+"     'evil-numbers/inc-at-pt
+             "-"     'evil-numbers/dec-at-pt
              "SPC"   'ace-jump-mode
              "S-SPC" 'ace-jump-word-mode
              "C-SPC" 'ace-jump-line-mode

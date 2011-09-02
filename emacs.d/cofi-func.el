@@ -41,52 +41,6 @@
   (auto-complete-mode 1)
   (ac-flyspell-workaround))
 
-(defun cofi/inc-at-pt (amount)
-  "Increment the number at point by `amount'"
-  (interactive "p*")
-  (save-match-data
-    (or
-     ;; find binary literals
-     (when (looking-back "0[bB][01]*")
-       ;; already ensured there's only one -
-       (skip-chars-backward "01")
-       (search-forward-regexp "[01]*")
-       (replace-match
-        (cofi/format-binary (+ amount (string-to-number (match-string 0) 2))
-                            (- (match-end 0) (match-beginning 0))))
-       t)
-
-     ;; find octal literals
-     (when (looking-back "0[oO]-?[0-7]*")
-       ;; already ensured there's only one -
-       (skip-chars-backward "-01234567")
-       (search-forward-regexp "-?\\([0-7]+\\)")
-       (replace-match
-        (format (format "%%0%do" (- (match-end 1) (match-beginning 1)))
-                (+ amount (string-to-number (match-string 0) 8))))
-       t)
-
-     ;; find hex literals
-     (when (looking-back "0[xX]-?[0-9a-fA-F]*")
-       ;; already ensured there's only one -
-       (skip-chars-backward "-0123456789abcdefABCDEF")
-       (search-forward-regexp "-?\\([0-9a-fA-F]+\\)")
-       (replace-match
-        (format (format "%%0%dX" (- (match-end 1) (match-beginning 1)))
-                (+ amount (string-to-number (match-string 0) 16))))
-       t)
-
-     ;; find decimal literals
-     (progn
-       (skip-chars-backward "0123456789")
-       (skip-chars-backward "-")
-       (when (looking-at "-?\\([0-9]+\\)")
-         (replace-match
-          (format (format "%%0%dd" (- (match-end 1) (match-beginning 1)))
-                  (+ amount (string-to-number (match-string 0) 10))))
-         t))
-     (error "No number at point"))))
-
 (defun* cofi/format-binary (number &optional width (fillchar ?0))
   "Format `NUMBER' as binary.
 Fill up to `WIDTH' with `FILLCHAR' (defaults to ?0) if binary
@@ -101,11 +55,6 @@ representation of `NUMBER' is smaller."
                  (make-string (- width len) fillchar)
                "")
              nums))))
-
-(defun cofi/dec-at-pt (amount)
-  "Decrement the number at point by `amount'"
-  (interactive "p*")
-  (cofi/inc-at-pt (- amount)))
 
 (defun toggle-comment-on-line-or-region ()
   "Comments or uncomments current current line or whole lines in region."

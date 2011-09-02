@@ -66,7 +66,7 @@
                 (evil-mode (" " evil-mode-line-tag))
                 ;; buffer name and file name as help
                 (:propertize "%b " face mode-line-buffer
-                             help-echo ("" buffer-file-name))
+                             help-echo (buffer-file-name))
                 ;; coding and line ends
                 mode-line-mule-info
                 ;; buffer modified

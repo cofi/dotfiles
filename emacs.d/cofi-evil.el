@@ -9,7 +9,7 @@
 (setq evil-mode-line-format nil)
 
 (defun cofi/evil-cursor ()
-  "Change cursor color according to viper-state."
+  "Change cursor color according to evil-state."
   (let ((default "OliveDrab4")
         (cursor-colors '((insert . "dark orange")
                          (emacs  . "sienna")

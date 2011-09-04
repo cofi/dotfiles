@@ -1,7 +1,9 @@
-(add-to-list 'load-path "~/.elisp/vendor/auto-complete")
+(add-to-loadpath "~/.elisp/vendor/auto-complete"
+                 "~/.elisp/vendor/ac-slime")
 (require-and-exec 'auto-complete
     (require 'auto-complete-config)
     (require 'auto-complete-latex)
+    (require 'ac-slime)
 
     (defvar ac-source-pysmell
       '((candidates
@@ -44,7 +46,8 @@
                             ac-source-variables
                             ac-source-features))
         (lisp-mode       . (ac-source-words-in-buffer
-                            ac-source-slime))
+                            ac-source-slime-fuzzy
+                            ac-source-slime-simple))
         (python-mode     . (ac-source-words-in-buffer
                             ac-source-ropemacs))
         (java-mode       . (ac-source-words-in-buffer

@@ -82,3 +82,6 @@
 [submodule "elisp/vendor/evil-numbers"]
 	path = elisp/vendor/evil-numbers
 	url = git://github.com/cofi/evil-numbers.git
+[submodule "elisp/vendor/ac-slime"]
+	path = elisp/vendor/ac-slime
+	url = git://github.com/purcell/ac-slime.git

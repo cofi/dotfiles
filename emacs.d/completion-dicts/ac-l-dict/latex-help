@@ -1,0 +1,2284 @@
+This is the short document of latex2e.txt.
+Modified for Auto Complete LaTeX.
+
+Maintainer: tequilasunset <tequilasunset.mac@gmail.com>
+
+Auto Complete LaTeX (an extension for auto-complete-mode on Emacs):
+   http://bitbucket.org/tequilasunset/auto-complete-latex/
+
+latex2e.txt (latex2e-help-texinfo):
+   http://www.ctan.org/tex-archive/info/latex2e-help-texinfo/
+
+
+\documentclass[OPTIONS]{CLASS}
+
+The class of a given document is defined by this. The `\documentclass'
+command must be the first command in a LaTeX source file. Built-in
+LaTeX document CLASS names are article, report, book, letter and slides.
+
+   Options for selecting the typeface size (default is `10pt'):
+
+     10pt  11pt  12pt  (except `slides' class)
+
+   Options for selecting the paper size (default is `letterpaper'):
+
+     a4paper a5paper b5paper executivepaper legalpaper letterpaper
+
+   Miscellaneous other options:
+
+`draft'        mark/do not mark overfull boxes with a big black box;
+`final'        default is `final'.
+
+`fleqn'        Put displayed formulas flush left; default is centered.
+
+`landscape'    Selects landscape format; default is portrait.
+
+`leqno'        Put equation numbers on the left side of equations;
+               default is the right side.
+
+`openbib'      Use "open" bibliography format.
+
+`titlepage'    Specifies whether the title page is separate; default
+'notitlepage'  depends on the class.
+
+   These options are not available with the slides class:
+
+`onecolumn'    Typeset in one or two columns; default is `onecolumn'.
+`twocolumn'
+
+`oneside'      Selects one- or two-sided layout; default is `oneside',
+`twoside'      except for the `book' class.
+
+     The `\evensidemargin' (`\oddsidemargin' parameter determines the
+     distance on even (odd) numbered pages between the left side of the
+     page and the text's left margin.  The defaults vary with the paper
+     size and whether one- or two-side layout is selected.  For
+     one-sided printing the text is centered, for two-sided,
+     `\oddsidemargin' is 40% of the difference between `\paperwidth'
+     and `\textwidth' with `\evensidemargin' the remainder.
+
+`openright'    Determines if a chapter should start on a right-hand
+`openany'      page; default is `openright' for book.
+
+   The `slides' class offers the option `clock' for printing the time
+at the bottom of each note.
+
+\usepackage[OPTIONS]{PKG}
+
+   Additional packages are loaded by this. To specify more than one PKG,
+you can separate them with a comma, or use multiple `\usepackage' commands.
+
+   Any options given in the `\documentclass' command that are unknown
+by the selected document class are passed on to the packages loaded with
+`\usepackage'.
+
+\textrm
+\rmfamily (declaration form)     Roman.
+
+\textit
+\itshape (declaration form)     Italics.
+
+\emph     Emphasis (switches between `\textit' and `\textrm').
+
+\textmd
+\mdseries (declaration form)     Medium weight (default).
+
+\textbf
+\bfseries (declaration form)     Boldface.
+
+\textup
+\upshape (declaration form)     Upright (default).
+
+\textsl
+\slshape (declaration form)     Slanted.
+
+\textsf
+\sffamily (declaration form)     Sans serif.
+
+\textsc
+\scshape (declaration form)     Small caps.
+
+\texttt
+\ttfamily (declaration form)     Typewriter.
+
+\textnormal
+\normalfont (declaration form)     Main document font.
+
+\mathrm     Roman, for use in math mode.
+
+\mathbf     Boldface, for use in math mode.
+
+\mathsf     Sans serif, for use in math mode.
+
+\mathtt     Typewriter, for use in math mode.
+
+\mathit
+\mit (declaration form)     Italics, for use in math mode.
+
+\mathnormal
+   For use in math mode, e.g. inside another type style declaration.
+
+\mathcal     `Calligraphic' letters, for use in math mode.
+
+\mathversion
+   In addition, the command `\mathversion{bold}' can be used for
+switching to bold letters and symbols in formulas. `\mathversion{normal}'
+restores the default.
+
+The table shows the command name and the corresponding actual font size
+used (in points) with the `10pt', `11pt', and `12pt' document size
+options.
+
+Command                `10pt'  `11pt'  `12pt'
+-------------------------------------------------- 
+\tiny                   5       6       6
+\scriptsize             7       8       8
+\footnotesize           8       9       10
+\small                  9       10      10.95
+\normalsize (default)   10      10.95   12
+\large                  12      12      14.4
+\Large                  14.4    14.4    17.28
+\LARGE                  17.28   17.28   20.74
+\huge                   20.74   20.74   24.88
+\Huge                   24.88   24.88   24.88
+
+   The commands as listed here are "declaration forms". The scope of
+the declaration form lasts until the next type style command or the end
+of the current group.
+
+\fontencoding{enc}
+     Select font encoding. Valid encodings include `OT1' and `T1'.
+
+\fontfamily{family}
+   Select font family. Valid families include:
+
+      * `cmr'  for Computer Modern Roman
+      * `cmss' for Computer Modern Sans Serif
+      * `cmtt' for Computer Modern Typewriter
+
+   and numerous others.
+
+\fontseries{series}
+   Select font series. Valid series include:
+
+      * `m'  Medium (normal)
+      * `b'  Bold
+      * `c'  Condensed
+      * `bc' Bold condensed
+      * `bx' Bold extended
+
+   and various other combinations.
+
+\fontshape{shape}
+   Select font shape. Valid shapes are:
+
+      * `n'  Upright (normal)
+      * `it' Italic
+      * `sl' Slanted (oblique)
+      * `sc' Small caps
+      * `ui' Upright italics
+      * `ol' Outline
+
+   The two last shapes are not available for most font families.
+
+\fontsize{size}{skip}
+   Set font size. The first parameter is the font size to switch to and
+the second is the line spacing to use; this is stored in a parameter
+named `\baselineskip'.  The unit of both parameters defaults to pt.
+The default `\baselineskip' for the Computer Modern typeface is 1.2
+times the `\fontsize'.
+   The line spacing is also multiplied by the value of the
+ `\baselinestretch' parameter when the type size changes; the default
+is 1.
+
+\selectfont
+   The changes made by calling the four font commands described above
+do not come into effect until `\selectfont' is called.
+
+\usefont{enc}{family}{series}{shape}
+   The same as invoking `\fontencoding', `\fontfamily', `\fontseries'
+and `\fontshape' with the given parameters, followed by `\selectfont'.
+
+\onecolumn
+   The `\onecolumn' declaration starts a new page and produces
+single-column output.  This is the default.
+
+\twocolumn[TEXT1COL]
+   The `\twocolumn' declaration starts a new page and produces
+two-column output. If the optional TEXT1COL argument is present, it is
+typeset in one-column mode before the two-column typesetting starts.
+
+\columnsep
+   The distance between columns (35pt by default).
+
+\columnseprule
+   The width of the rule between columns; the default is 0pt, so there
+is no rule.
+
+\columnwidth
+   The width of the current column; this is equal to `\textwidth' in
+single-column text.
+
+\dbltopfraction
+   Maximum fraction at the top of a two-column page that may be
+occupied by floats.  Default `.7', can be usefully redefined to (say)
+`.9' to avoid going to float pages so soon.
+
+\dblfloatpagefraction
+   The minimum fraction of a float page that must be occupied by
+floats, for a two-column float page.  Default `.5'.
+
+\dblfloatsep
+   Distance between floats at the top or bottom of a two-column float
+page.  Default `12pt plus2pt minus2pt' for `10pt' and `11pt' documents,
+`14pt plus2pt minus4pt' for `12pt'.
+
+\dbltextfloatsep
+   Distance between a multi-column float at the top or bottom of a
+page and the main text.  Default `20pt plus2pt minus4pt'.
+
+\flushbottom
+   The `\flushbottom' declaration makes all text pages the same height,
+adding extra vertical space where necessary to fill out the page.
+   This is the default if `twocolumn' mode is selected.
+
+\raggedbottom
+   The `\raggedbottom' declaration makes all pages the natural height of
+the material on that page.  No rubber lengths will be stretched.
+
+\headheight
+   Height of the box that contains the running head.  Default is `30pt',
+except in the `book' class, where it varies with the type size.
+
+\headsep
+   Vertical distance between the bottom of the header line and the
+top of the main text.  Default is `25pt', except in the `book' class,
+where it varies with the type size.
+
+\footskip
+   Distance from the baseline of the last line of text to the baseline
+of the page footer.  Default is `30pt', except in the `book' class,
+where it varies with the type size.
+
+\linewidth
+   Width of the current line; the default varies with the font size,
+paper width, two-column mode, etc.  For an `article' document in
+`10pt', it's set to `345pt'; in two-column mode, that becomes `229.5pt'.
+
+\textheight
+   The normal vertical height of the page body; the default varies
+with the font size, document class, etc.  For an `article' or `report'
+document in `10pt', it's set to `43\baselineskip'; for `book', it's
+`41\baselineskip'.  For `11pt', it's `38\baselineskip' and for `12pt',
+`36\baselineskip'.
+
+\textwidth
+   The normal horizontal width of the page body; the default varies
+as usual.  For an `article' or `report' document, it's `345pt' at
+`10pt', `360pt' at `11pt', and `390pt' at `12pt'.  For a `book'
+document, it's `4.5in' at `10pt', and `5in' at `11pt' or `12pt'.
+
+\topmargin
+   Space between the top of the TeX page (one inch from the top of the
+paper, by default) and the top of the header.  The default is computed
+based on many other parameters: `\paperheight - 2in - \headheight -
+ \headsep - \textheight - \footskip', and then divided by two.
+
+\topskip
+   Minimum distance between the top of the page body and the baseline
+of the first line of text.  For the standard clases, the default is
+the same as the font size, e.g., `10pt' at `10pt'.
+
+\part
+\chapter  (report and book class only)
+\section
+\subsection
+\subsubsection
+\paragraph
+\subparagraph
+
+   All sectioning commands take the same general form, e.g.,
+
+     \chapter[TOCTITLE]{TITLE}
+
+   In addition to providing the heading TITLE in the main text, the
+section title can appear in two other places:
+
+  1. The table of contents.
+  2. The running head at the top of the page.
+
+   You may not want the same text in these places as in the main text.
+To handle this, the sectioning commands have an optional argument
+TOCTITLE that, when given, specifies the text for these other places.
+   Also, all sectioning commands have `*'-forms that print TITLE as
+usual, but do not include a number and do not make an entry in the
+table of contents.  For instance:
+
+     \section*{Preamble}
+
+   The `\appendix' command changes the way following sectional units
+are numbered.  The `\appendix' command itself generates no text and
+does not affect the numbering of parts.  The normal use of this command
+is something like
+
+     \chapter{A Chapter}
+     ...
+     \appendix
+     \chapter{The First Appendix}
+
+\label{KEY}
+
+   A `\label' command appearing in ordinary text assigns to KEY the
+number of the current sectional unit; one appearing inside a numbered
+environment assigns that number to KEY.
+   A KEY name can consist of any sequence of letters, digits, or
+punctuation characters.  Upper and lowercase letters are distinguished.
+   To avoid accidentally creating two labels with the same name, it is
+common to use labels consisting of a prefix and a suffix separated by a
+colon or period. Some conventionally-used prefixes:
+
+  `ch'   for chapters
+  `sec'  for lower-level sectioning commands
+  `fig'  for figures
+  `tab'  for tables
+  `eq'   for equations
+
+   Thus, a label for a figure would look like `fig:snark'.
+
+\pageref{KEY}
+   The `\pageref'{KEY} command produces the page number of the place in
+the text where the corresponding `\label'{KEY} command appears.
+
+\ref{KEY}
+   The `\ref' command produces the number of the sectional unit,
+equation, footnote, figure, ..., of the corresponding `\label' command.
+It does not produce any text, such as the word `Section' or `Figure',
+just the bare number itself.
+
+`abstract'
+
+     \begin{abstract}
+     ...
+     \end{abstract}
+
+   Environment for producing an abstract, possibly of multiple paragraphs.
+
+`array'
+`\arrayrulewidth'
+`\arraystretch'
+
+     \begin{array}{TEMPLATE}
+     COL1 TEXT&COL1 TEXT&COLN}\\
+     ...
+     \end{array}
+
+   Math arrays are produced with the `array' environment, normally
+within an `equation' environment.  It has a single mandatory TEMPLATE
+argument describing the number of columns and the alignment within them.
+Each column COL is specified by a single letter that tells how items in
+that row should be formatted, as follows:
+
+   `c'  centered
+   `l'  flush left
+   `r'  flush right
+
+   Column entries are separated by `&'.  Column entries may include
+other LaTeX commands.  Each row of the array is terminated with `\\'.
+   In the template, the construct `@{TEXT}' puts TEXT between columns
+in each row.  Here's an example:
+
+     \begin{equation}
+       \begin{array}{lrc}
+       left1 & right1 & centered1 \\
+       left2 & right2 & centered2 \\
+       \end{array}
+     \end{equation}
+
+   The `\arraycolsep' parameter defines half the width of the space
+separating columns; the default is `5pt'. For other parameters which
+affect formatting in `array' environments, namely `\arrayrulewidth' and
+`\arraystretch'.
+   The `array' environment can only be used in math mode.
+
+`center'
+
+     \begin{center}
+     LINE1 \\
+     LINE2 \\
+     \end{center}
+
+   The `center' environment allows you to create a paragraph consisting
+of lines that are centered within the left and right margins on the
+current page.  Each line is terminated with the string `\\'.
+
+\centering
+
+The `\centering' declaration corresponds to the `center' environment.
+This declaration can be used inside an environment such as `quote' or
+in a `parbox'.  Thus, the text of a figure or table can be centered on
+the page by putting a `\centering' command at the beginning of the
+figure or table environment.
+   Unlike the `center' environment, the `\centering' command does not
+start a new paragraph; it simply changes how LaTeX formats paragraph
+units.  To affect a paragraph unit's format, the scope of the
+declaration must contain the blank line or `\end' command (of an
+environment such as quote) that ends the paragraph unit.
+
+`description'
+
+     \begin{description}
+     \item [LABEL1] ITEM1
+     \item [LABEL2] ITEM2
+     ...
+     \end{description}
+
+   The `description' environment is used to make labelled lists.  Each
+LABEL is typeset in bold, flush right.  The ITEM text may contain
+multiple paragraphs.
+   Another variation: since the bold style is applied to the labels, if
+you typeset a label in typewriter using `\texttt', you'll get bold
+typewriter: `\item[\texttt{bold and typewriter}]'.  This may be too
+bold, among other issues.  To get just typewriter, use `\tt', which
+resets all other style variations: `\item[{\tt plain typewriter}]'.
+
+`document'
+   The `document' environment encloses the body of a document.  It is
+required in every LaTeX document.
+
+`enumerate'
+
+     \begin{enumerate}
+     \item ITEM1
+     \item ITEM2
+     ...
+     \end{enumerate}
+
+   The `enumerate' environment produces a numbered list.  Enumerations
+can be nested within one another, up to four levels deep.  They can also
+be nested within other paragraph-making environments, such as `itemize'
+and `description'.
+   Each item of an enumerated list begins with an `\item' command.
+There must be at least one `\item' command within the environment.
+   By default, the numbering at each level is done like this:
+
+  1. 1., 2., ...
+  2. (a), (b), ...
+  3. i., ii., ...
+  4. A., B., ...
+
+   The `enumerate' environment uses the counters `\enumi' through
+`\enumiv' counters.  If the optional argument to `\item' is given, the
+counter is not incremented for that item.
+   The `enumerate' environment uses the commands `\labelenumi' through
+`\labelenumiv' to produce the default label.  So, you can use change
+the labels.  For instance, to have the first level use uppercase letters:
+
+     \renewcommand{\labelenumi}{\Alph{enumi}}
+
+`eqnarray'
+
+     \begin{eqnarray}  (or `eqnarray*')
+     FORMULA1 \\
+     FORMULA2 \\
+     ...
+     \end{eqnarray}
+
+   The `eqnarray' environment is used to display a sequence of
+equations or inequalities.  It is very much like a three-column `array'
+environment, with consecutive rows separated by `\\' and consecutive
+items within a row separated by an `&'.
+   `\\*' can also be used to separate equations, with its normal
+meaning of not allowing a page break at that line.
+   An equation number is placed on every line unless that line has a
+`\nonumber' command.  Alternatively, The `*'-form of the environment
+(`\begin{eqnarray*} ... \end{eqnarray*}') will omit equation numbering
+entirely, while otherwise being the same as `eqnarray'.
+   The command `\lefteqn' is used for splitting long formulas across
+lines. It typesets its argument in display style flush left in a box of
+zero width.
+
+`figure'
+
+     \begin{figure[*]}[PLACEMENT]
+     FIGBODY
+     \label{LABEL}
+     \caption[LOFTITLE]{TEXT}
+     \end{figure}
+
+   Figures are objects that are not part of the normal text, and are
+instead "floated" to a convenient place, such as the top of a page.
+Figures will not be split between two pages.
+   When typesetting in double-columns, the starred form produces a
+full-width figure (across both columns).
+   The optional argument `[placement]' determines where LaTeX will try
+to place your figure.  There are four places where LaTeX can possibly
+put a float:
+
+ `t'  (Top)--at the top of a text page.
+ `b'  (Bottom)--at the bottom of a text page.  However, `b' is not
+      allowed for full-width floats (`figure*') with double-column
+      output.
+ `h'  (Here)--at the position in the text where the figure environment
+      appears.  However, this is not allowed by itself, `t' is
+      automatically added.  To absolutely force a figure to appear
+      "here", use the `float' and use its `H' placement letter.  (That
+      package also provides other options.)
+ `p'  (Page of floats)--on a separate float page, which is a page
+      containing no text, only floats.
+
+   The standard report and article classes use the default placement
+`tbp'.
+   The body of the figure is made up of whatever text, LaTeX commands,
+etc.  you wish.
+   The `\caption' command specifies caption TEXT for the figure.  The
+caption is numbered by default.  If LOFTITLE is present, it is used in
+the list of figures instead of TEXT.
+   The maximum fraction of the page allowed to be occuped by floats at
+the bottom; default `.3'.
+
+\floatpagefraction
+   The minimum fraction of a float page that must be occupied by
+floats; default `.5'.
+
+\floatsep
+   Space between floats at the top or bottom of a page; default `12pt
+plus2pt minus2pt'.
+
+\intextsep
+   Space above and below a float in the middle of the main text;
+default `12pt plus2pt minus2pt' for `10pt' and `11pt' styles, `14pt
+plus4pt minus4pt' for `12pt'.
+
+\textfloatsep
+   Space between the last (first) float at the top (bottom) of a page;
+default `20pt plus2pt minus4pt'.
+
+\textfraction
+   Minimum fraction of a page that must be text; if floats take up too
+much space to preserve this much text, floats will be moved to a
+different page.  The default is `.2'.
+
+\topfraction
+   Maximum fraction at the top of a page that may be occupied before
+floats; default is `.7'.
+
+flushleft
+
+     \begin{flushleft}
+     LINE1 \\
+     LINE2 \\
+     ...
+     \end{flushleft}
+
+   The `flushleft' environment allows you to create a paragraph
+consisting of lines that are flush to the left-hand margin and ragged
+right Each line must be terminated with the string `\\'.
+
+\raggedright
+
+   The `\raggedright' declaration corresponds to the `flushleft'
+environment.  This declaration can be used inside an environment such
+as `quote' or in a `parbox'.
+   Unlike the `flushleft' environment, the `\raggedright' command does
+not start a new paragraph; it only changes how LaTeX formats paragraph
+units.  To affect a paragraph unit's format, the scope of the
+declaration must contain the blank line or `\end' command that ends the
+paragraph unit.
+
+flushright
+
+     \begin{flushright}
+     LINE1 \\
+     LINE2 \\
+     ...
+     \end{flushright}
+
+   The `flushright' environment allows you to create a paragraph
+consisting of lines that are flush to the right-hand margin and ragged
+left.  Each line must be terminated with the string `\\'.
+
+\raggedleft
+
+   The `\raggedleft' declaration corresponds to the `flushright'
+environment.  This declaration can be used inside an environment such
+as `quote' or in a `parbox'.
+   Unlike the `flushright' environment, the `\raggedleft' command does
+not start a new paragraph; it only changes how LaTeX formats paragraph
+units.  To affect a paragraph unit's format, the scope of the
+declaration must contain the blank line or `\end' command that ends the
+paragraph unit.
+
+`itemize'
+
+     \begin{itemize}
+     \item ITEM1
+     \item ITEM2
+          ...
+     \end{itemize}
+
+   The `itemize' environment produces an "unordered", "bulleted" list.
+Itemizations can be nested within one another, up to four levels deep.
+They can also be nested within other paragraph-making environments,
+such as `enumerate'.
+   Each item of an `itemize' list begins with an `\item' command.
+There must be at least one `\item' command within the environment.
+   By default, the marks at each level look like this:
+
+  1. * (bullet)
+  2. -- (bold en-dash)
+  3. * (asterisk)
+  4. . (centered dot, rendered here as a period)
+
+   The `itemize' environment uses the commands `\labelitemi' through
+`\labelitemiv' to produce the default label.  So, you can change the
+labels.  For instance, to have the first level use diamonds:
+
+     \renewcommand{\labelitemi}{$\diamond$}
+
+   The `\leftmargini' through `\leftmarginvi' parameters define the
+distance between the left margin of the enclosing environment and the
+left margin of the list.  By convention, `\leftmargin' is set to the
+appropriate `\leftmarginN' when a new level of nesting is entered.
+   The defaults vary from `.5em' (highest levels of nesting) to `2.5em'
+(first level), and are a bit reduced in two-column mode.  This example
+greatly reduces the margin space for outermost lists:
+
+     \setlength{\leftmargini}{1.25em} % default 2.5em
+
+\itemindent
+   Extra indentation before each item in a list; default zero.
+
+\labelsep
+   Space between the label and text of an item; default `.5em'.
+
+\labelwidth
+   Width of the label; default `2em', or `1.5em' in two-column mode.
+
+\listparindent
+   Extra indentation added to second and subsequent paragraphs within
+a list item; default `0pt'.
+
+\rightmargin
+   Horizontal distance between the right margin of the list and the
+enclosing environment; default `0pt', except in the `quote', `quotation',
+and `verse' environments, where it is set equal to `\leftmargin'.
+
+\itemsep
+   Vertical space between items.  The default is `2pt plus1pt minus1pt'
+for `10pt' documents, `3pt plus2pt minus1pt' for `11pt', and `4.5pt
+plus2pt minus1pt' for `12pt'.
+
+\parsep
+   Extra vertical space between paragraphs within a list item. Defaults
+are the same as `\itemsep'.
+
+\topsep
+   Vertical space between the first item and the preceding paragraph.
+For top-level lists, the default is `8pt plus2pt minus4pt' for `10pt'
+documents, `9pt plus3pt minus5pt' for `11pt', and `10pt plus4pt
+minus6pt' for `12pt'.  These are reduced for nested lists.
+
+\partopsep
+   Extra space added to `\topsep' when the list environment starts a
+paragraph.  The default is `2pt plus1pt minus1pt' for `10pt' documents,
+`3pt plus1pt minus1pt' for `11pt', and `3pt plus2pt minus2pt' for `12pt'.
+
+`list'
+   The `list' environment is a generic environment which is used for
+defining many of the more specific environments. It is seldom used in
+documents, but often in macros.
+
+     \begin{list}{LABELING}{SPACING}
+     \item ITEM1
+     \item ITEM2
+     ...
+     \end{list}
+
+   The mandatory LABELING argument specifies how items should be
+labelled (unless the optional argument is supplied to `\item').  This
+argument is a piece of text that is inserted in a box to form the
+label.  It can and usually does contain other LaTeX commands.
+   The mandatory SPACING argument contains commands to change the
+spacing parameters for the list.  This argument will most often be
+empty, i.e., `{}', which leaves the default spacing.
+
+`minipage'
+
+     \begin{minipage}[POSITION][HEIGHT][INNER-POS]{WIDTH}
+     TEXT
+     \end{minipage}
+
+   The `minipage' environment typesets its body TEXT in a block that
+will not be broken across pages.  This is similar to the `\parbox'
+command, but unlike `\parbox', other paragraph-making environments can
+be used inside a minipage.
+   The arguments are the same as for `\parbox'. By default, paragraphs
+are not indented in the `minipage' environment.  You can restore
+indentation with a command such as `\setlength{\parindent}{1pc}' command.
+   Footnotes in a `minipage' environment are handled in a way that is
+particularly useful for putting footnotes in figures or tables.  A
+ `\footnote' or `\footnotetext' command puts the footnote at the bottom
+of the minipage instead of at the bottom of the page, and it uses the
+`\mpfootnote' counter instead of the ordinary `footnote' counter.
+   However, don't put one minipage inside another if you are using
+footnotes; they may wind up at the bottom of the wrong minipage.
+
+`picture'
+
+     \begin{picture}(width,height)(x offset,y offset)
+     ... PICTURE COMMANDS ...
+     \end{picture}
+
+   The `picture' environment allows you to create just about any kind
+of picture you want containing text, lines, arrows and circles.  You
+tell LaTeX where to put things in the picture by specifying their
+coordinates.  A coordinate is a number that may have a decimal point
+and a minus sign--a number like `5', `0.3' or `-3.1416'.  A coordinate
+specifies a length in multiples of the unit length `\unitlength', so if
+ `\unitlength' has been set to `1cm', then the coordinate 2.54 specifies
+a length of 2.54 centimeters.  You should only change the value of
+ `\unitlength', using the `\setlength' command, outside of a `picture'
+environment.
+
+   A position is a pair of coordinates, such as `(2.4,-5)', specifying
+the point with x-coordinate `2.4' and y-coordinate `-5'.  Coordinates
+are specified in the usual way with respect to an origin, which is
+normally at the lower-left corner of the picture.  Note that when a
+position appears as an argument, it is not enclosed in braces; the
+parentheses serve to delimit the argument.
+
+   The `picture' environment has one mandatory argument, which is a
+ `position'.  It specifies the size of the picture.  The environment
+produces a rectangular box with width and height determined by this
+argument's x- and y-coordinates.
+
+   The `picture' environment also has an optional `position' argument,
+following the `size' argument, that can change the origin.  (Unlike
+ordinary optional arguments, this argument is not contained in square
+brackets.) The optional argument gives the coordinates of the point at
+the lower-left corner of the picture (thereby determining the origin).
+For example, if `\unitlength' has been set to `1mm', the command
+
+     \begin{picture}(100,200)(10,20)
+
+produces a picture of width 100 millimeters and height 200 millimeters,
+whose lower-left corner is the point (10,20) and whose upper-right
+corner is therefore the point (110,220).  When you first draw a
+picture, you typically omit the optional argument, leaving the origin
+at the lower-left corner.  If you then want to modify your picture by
+shifting everything, you can just add the appropriate optional argument.
+
+   The environment's mandatory argument determines the nominal size of
+the picture.  This need bear no relation to how large the picture
+really is; LaTeX will happily allow you to put things outside the
+picture, or even off the page.  The picture's nominal size is used by
+LaTeX in determining how much room to leave for it.
+
+   Everything that appears in a picture is drawn by the `\put' command.
+The command
+
+     \put (11.3,-.3){...}
+
+puts the object specified by `...' in the picture, with its reference
+point at coordinates (11.3,-.3).  The reference points for various
+objects will be described below.
+
+   The `\put' command creates an "LR box".  You can put anything that
+can go in an `\mbox' in the text argument of the `\put' command.  When
+you do this, the reference point will be the lower left corner of the box.
+
+\circle[*]{DIAMETER}
+   The `\circle' command for the picture environment produces a circle
+with a diameter as close to the specified one as possible.  The `*'-form
+of the command draws a solid circle.
+
+   Circles up to 40 pt can be drawn.
+
+\dashbox{DLEN}(RWIDTH,RHEIGHT)[POS]{TEXT}
+
+   `\dashbox' creates a dashed rectangle around TEXT in a `picture'
+environment.  Dashes are DLEN units long, and the rectangle has overall
+width RWIDTH and height RHEIGHT.  The TEXT is positioned at optional
+POS.   A dashed box looks best when the `rwidth' and `rheight' are
+multiples of the `dlen'.
+
+\frame{TEXT}
+   The `\frame' command puts a rectangular frame around TEXT.  The
+reference point is the bottom left corner of the frame.  No extra space
+is put between the frame and the object.
+
+\line(XSLOPE,YSLOPE){LENGTH}
+
+   The `\line' command draws a line with the given LENGTH and slope
+XSLOPE/YSLOPE.
+   Standard LaTeX can only draw lines with SLOPE = x/y, where x and y
+have integer values from -6 through 6.  For lines of any slope, not to
+mention other shapes.
+
+\linethickness
+   The `\linethickness{DIM}' command declares the thickness of
+horizontal and vertical lines in a picture environment to be DIM,
+which must be a positive length.
+   `\linethickness' does not affect the thickness of slanted lines,
+circles, or the quarter circles drawn by `\oval'.
+
+\thicklines
+   The `\thicklines' command is an alternate line thickness for
+horizontal and vertical lines in a picture environment.
+
+\thinlines
+   The `\thinlines' command is the default line thickness for
+horizontal and vertical lines in a picture environment.
+
+\multiput(X,Y)(DELTA_X,DELTA_Y){N}{OBJ}
+
+   The `\multiput' command copies the object OBJ in a regular pattern
+across a picture.  OBJ is first placed at position (x,y), then at
+(x+\delta x,y+\delta y), and so on, N times.
+
+\oval(WIDTH,HEIGHT)[PORTION]
+
+   The `\oval' command produces a rectangle with rounded corners.  The
+optional argument PORTION allows you to select part of the oval via the
+following:
+
+`t'  selects the top portion;
+`b'  selects the bottom portion;
+`r'  selects the right portion;
+`l'  selects the left portion.
+
+   The "corners" of the oval are made with quarter circles with a
+maximum radius of 20pt, so large "ovals" will look more like boxes with
+rounded corners.
+
+\put(x coord,y coord){ ...  }
+
+   The `\put' command places the item specified by the mandatory
+argument at the given coordinates.
+
+\shortstack[POSITION]{...\\...\\...}
+
+   The `\shortstack' command produces a stack of objects.  The valid
+positions are:
+
+`r'  Move the objects to the right of the stack.
+`l'  Move the objects to the left of the stack
+`c'  Move the objects to the centre of the stack (default)
+
+   Objects are separated with `\\'.
+
+\vector(X-SLOPE,Y-SLOPE){LENGTH}
+
+   The `\vector' command draws a line with an arrow of the specified
+length and slope.  The x and y values must lie between -4 and +4,
+inclusive.
+
+`quotation'
+
+     \begin{quotation}
+     TEXT
+     \end{quotation}
+
+   The margins of the `quotation' environment are indented on both the
+left and the right.  The text is justified at both margins.  Leaving a
+blank line between text produces a new paragraph.
+   Unlike the `quote' environment, each paragraph is indented normally.
+
+`quote'
+
+     \begin{quote}
+     TEXT
+     \end{quote}
+
+   The margins of the `quote' environment are indented on both the left
+and the right.  The text is justified at both margins.  Leaving a blank
+line between text produces a new paragraph.
+   Unlike the `quotation' environment, paragraphs are not indented.
+
+`tabbing'
+
+     \begin{tabbing}
+     ROW1COL1 \= ROW1COL2 \= ROW1COL3 \= ROW1COL4 \\
+     ROW2COL1 \>                \> ROW2COL3 \\
+     ...
+     \end{tabbing}
+
+   The `tabbing' environment provides a way to align text in columns.
+It works by setting tab stops and tabbing to them much as was done on
+an ordinary typewriter.  It is best suited for cases where the width of
+each column is constant and known in advance.
+   This environment can be broken across pages, unlike the `tabular'
+environment.
+   The following commands can be used inside a `tabbing' enviroment:
+
+`\\ tabbing'
+     End a line.
+`\= (tabbing)'
+     Sets a tab stop at the current position.
+`\> (tabbing)'
+     Advances to the next tab stop.
+`\<'
+     Put following text to the left of the local margin (without
+     changing the margin).  Can only be used at the start of the line.
+`\+'
+     Moves the left margin of the next and all the following commands
+     one tab stop to the right, beginning tabbed line if necessary.
+`\-'
+     Moves the left margin of the next and all the following commands
+     one tab stop to the left, beginning tabbed line if necessary.
+`\' (tabbing)'
+     Moves everything that you have typed so far in the current column,
+     i.e. everything from the most recent `\>', `\<', `\'', `\\', or
+     `\kill' command, to the right of the previous column, flush
+     against the current column's tab stop.
+`\` (tabbing)'
+     Allows you to put text flush right against any tab stop, including
+     tab stop 0.  However, it can't move text to the right of the last
+     column because there's no tab stop there.  The `\`' command moves
+     all the text that follows it, up to the `\\' or `\end{tabbing}'
+     command that ends the line, to the right margin of the tabbing
+     environment.  There must be no `\>' or `\'' command between the
+     `\`' and the command that ends the line.
+`\a (tabbing)'
+     In a `tabbing' environment, the commands `\=', `\'' and `\`' do
+     not produce accents as usual.  Instead, the commands `\a=', `\a''
+     and `\a`' are used.
+`\kill'
+     Sets tab stops without producing text.  Works just like `\\'
+     except that it throws away the current line instead of producing
+     output for it.  The effect of any `\=', `\+' or `\-' commands in
+     that line remain in effect.
+`\poptabs'
+     Restores the tab stop positions saved by the last `\pushtabs'.
+`\pushtabs'
+     Saves all current tab stop positions. Useful for temporarily
+     changing tab stop positions in the middle of a `tabbing'
+     environment.
+`\tabbingsep'
+     Distance to left of tab stop moved by `\''.
+
+`table'
+
+      \begin{table}[placement]
+
+       body of the table
+
+      \caption{table title}
+      \end{table}
+
+   Tables are objects that are not part of the normal text, and are
+usually "floated" to a convenient place, like the top of a page.
+Tables will not be split between two pages.
+   The optional argument `[placement]' determines where LaTeX will try
+to place your table.  There are four places where LaTeX can possibly put
+a float; these are the same as that used with the `figure' environment,
+and described there.
+   The standard `report' and `article' classes use the default
+placement `[tbp]'.
+   The body of the table is made up of whatever text, LaTeX commands,
+etc., you wish.  The `\caption' command allows you to title your table.
+
+`tabular'
+
+     \begin{tabular}[pos]{cols}
+     column 1 entry & column 2 entry ... & column n entry \\
+     ...
+     \end{tabular}
+  or
+     \begin{tabular*}{width}[pos]{cols}
+     column 1 entry & column 2 entry ... & column n entry \\
+     ...
+     \end{tabular*}
+
+   These environments produce a box consisting of a sequence of rows of
+items, aligned vertically in columns.
+   `\\' must be used to specify the end of each row of the table,
+except for the last, where it is optional--unless an `\hline' command
+(to put a rule below the table) follows. The mandatory and optional
+arguments consist of:
+
+ `width'
+     Specifies the width of the `tabular*' environment.  There must be
+     rubber space between columns that can stretch to fill out the
+     specified width.
+ `pos'
+     Specifies the vertical position; default is alignment on the
+     centre of the environment.
+
+    `t'   align on top row
+    `b'   align on bottom row
+
+ `cols'
+     Specifies the column formatting.  It consists of a sequence of the
+     following specifiers, corresponding to the sequence of columns and
+     intercolumn material.
+
+    `l'   A column of left-aligned items.
+    `r'   A column of right-aligned items.
+    `c'   A column of centred items.
+    `|'   A vertical line the full height and depth of the environment.
+
+    `@{TEXT}'
+          This inserts TEXT in every row.  An @-expression suppresses
+          the intercolumn space normally inserted between columns; any
+          desired space between the inserted text and the adjacent
+          items must be included in text.  An `\extracolsep{wd}'
+          command in an @-expression causes an extra space of width
+          `wd' to appear to the left of all subsequent columns, until
+          countermanded by another `\extracolsep' command.  Unlike
+          ordinary intercolumn space, this extra space is not
+          suppressed by an @-expression.  An `\extracolsep' command can
+          be used only in an @-expression in the `cols' argument.
+
+    `p{WD}'
+          Produces a column with each item typeset in a parbox of width
+          WD, as if it were the argument of a `\parbox[t]{WD}' command.
+          However, a `\\' may not appear in the item, except in the
+          following situations:
+
+            1. inside an environment like `minipage', `array', or
+               `tabular'.
+            2. inside an explicit `\parbox'.
+            3. in the scope of a `\centering', `\raggedright', or
+               `\raggedleft' declaration.  The latter declarations must
+               appear inside braces or an environment when used in a
+               `p'-column element.
+
+    `*{NUM}{COLS}'
+          Equivalent to NUM copies of COLS, where NUM is a positive
+          integer and COLS is any list of column-specifiers, which may
+          contain another `*-expression'.
+
+\arrayrulewidth
+   Thickness of the rule created by `|', `\hline', and `\vline' in
+the `tabular' and `array' environments; the default is `.4pt'.
+
+\arraystretch
+   Scaling of spacing between rows in the `tabular' and `array'
+environments; default is `1', for no scaling.
+
+\doublerulesep
+   Horizontal distance between the vertical rules produced by `||' in
+the `tabular' and `array' environments; default is `2pt'.
+
+\tabcolsep
+   Half the width of the space between columns; default is `6pt'.
+
+\multicolumn{COLS}{POS}{TEXT}
+
+   The `\multicolumn' command makes an entry that spans several
+columns.  The first mandatory argument, COLS, specifies the number of
+columns to span.  The second mandatory argument, POS, specifies the
+formatting of the entry; `c' for centered, `l' for flushleft, `r' for
+flushright.  The third mandatory argument, TEXT, specifies what text to
+put in the entry.
+   Here's an example showing two columns separated by an en-dash;
+`\multicolumn' is used for the heading:
+
+     \begin{tabular}{r@{--}l}
+     \multicolumn{2}{c}{\bf Unicode}\cr
+        0x80&0x7FF   \cr
+       0x800&0xFFFF  \cr
+     0x10000&0x1FFFF \cr
+     \end{tabular}
+
+\cline{I-J}
+   The `\cline' command draws horizontal lines across the columns
+specified, beginning in column I and ending in column J, which are
+specified in the mandatory argument.
+
+\hline
+   The `\hline' command draws a horizontal line the width of the
+enclosing `tabular' or `array' environment.  It's most commonly used
+to draw a line at the top, bottom, and between the rows of a table.
+
+\vline
+   The `\vline' command will draw a vertical line extending the full
+height and depth of its row.  An `\hfill' command can be used to move
+the line to the edge of the column.  It can also be used in an
+@-expression.
+
+`thebibliography'
+
+     \begin{thebibliography}{WIDEST-LABEL}
+     \bibitem[LABEL]{CITE_KEY}
+     ...
+     \end{thebibliography}
+
+   The `thebibliography' environment produces a bibliography or
+reference list.
+   In the `article' class, this reference list is labelled
+"References"; in the `report' class, it is labelled "Bibliography".
+You can change the label (in the standard classes) by redefining the
+command `\refname'.  For instance, this eliminates it entirely:
+
+     \renewcommand{\refname}{}
+
+   The mandatory WIDEST-LABEL argument is text that, when typeset, is
+as wide as the widest item label produced by the `\bibitem' commands.
+It is typically given as `9' for bibliographies with less than 10
+references, `99' for ones with less than 100, etc.
+
+\bibitem[LABEL]{CITE_KEY}
+
+   The `\bibitem' command generates an entry labelled by LABEL.  If the
+LABEL argument is missing, a number is automatically generated using
+the `enumi' counter.  The CITE_KEY is any sequence of letters, numbers,
+and punctuation symbols not containing a comma.
+   This command writes an entry to the `.aux' file containing the
+item's CITE_KEY and label.  When the `.aux' file is read by the
+`\begin{document}' command, the item's `label' is associated with
+`cite_key', causing references to CITE_KEY with a `\cite' command (see
+next section) to produce the associated label.
+
+\cite[SUBCITE]{KEYS}
+
+   The KEYS argument is a list of one or more citation keys, separated
+by commas.  This command generates an in-text citation to the
+references associated with KEYS by entries in the `.aux' file.
+   The text of the optional SUBCITE argument appears after the
+citation.  For example, `\cite[p.~314]{knuth}' might produce `[Knuth,
+p. 314]'.
+
+\nocite{key_list}
+   The `\nocite' command produces no text, but writes `key_list', which
+is a list of one or more citation keys, on the `.aux' file.
+
+\bibliographystyle{BIBSTYLE}
+\bibliography{BIBFILE1,BIBFILE2}
+
+   The `\bibliographystyle' defines the style in which the bibliography
+will be produced: BIBSTYLE refers to a file BIBSTYLE`.bst', which
+defines how your citations will look.  The standard STYLE names
+distributed with BibTeX are:
+
+ `alpha'  Sorted alphabetically. Labels are formed from name of author
+          and year of publication.
+ `plain'  Sorted alphabetically. Labels are numeric.
+ `unsrt'  Like `plain', but entries are in order of citation.
+ `abbrv'  Like `plain', but more compact labels.
+
+   The `\bibliography' command is what actually produces the
+bibliography.  The argument to `\bibliography' refers to files named
+`BIBFILE.bib', which should contain your database in BibTeX format.
+Only the entries referred to via `\cite' and `\nocite' will be listed
+in the bibliography.
+   If you use the BibTeX program, you don't use the `thebibliography'
+environment.
+
+`theorem'
+
+     \begin{theorem}
+     THEOREM-TEXT
+     \end{theorem}
+
+   The `theorem' environment produces "Theorem N" in boldface followed
+by THEOREM-TEXT, where the numbering possibilities for N are described
+under `\newtheorem'.
+
+`titlepage'
+
+     \begin{titlepage}
+     TEXT
+     \end{titlepage}
+
+   The `titlepage' environment creates a title page, i.e., a page with
+no printed page number or heading.  It also causes the following page
+to be numbered page one.  Formatting the title page is left to you.
+The `\today' command may be useful on title pages.
+   You can use the `\maketitle' command to produce a standard title page
+without a `titlepage' environment.
+
+`verbatim'
+
+     \begin{verbatim}
+     LITERAL-TEXT
+     \end{verbatim}
+
+   The `verbatim' environment is a paragraph-making environment in
+which LaTeX produces exactly what you type in; for instance the `\'
+character produces a printed `\'.  It turns LaTeX into a typewriter
+with carriage returns and blanks having the same effect that they would
+on a typewriter.
+   The `verbatim' uses a monospaced typewriter-like font (`\tt').
+
+\verb
+
+     \verbCHARLITERAL-TEXTCHAR
+     \verb*CHARLITERAL-TEXTCHAR
+
+   The `\verb' command typesets LITERAL-TEXT as it is input, including
+special characters and spaces, using the typewriter (`\tt') font.  No
+spaces are allowed between `\verb' or `\verb*' and the delimiter CHAR,
+which begins and ends the verbatim text.  The delimiter must not appear
+in LITERAL-TEXT.
+   The `*'-form differs only in that spaces are printed with a "visible
+space" character.
+
+`verse'
+
+     \begin{verse}
+     LINE1 \\
+     LINE2 \\
+     ...
+     \end{verse}
+
+   The `verse' environment is designed for poetry, though you may find
+other uses for it.
+   The margins are indented on the left and the right, paragraphs are
+not indented, and the text is not justified.  Separate the lines of each
+stanza with `\\', and use one or more blank lines to separate the
+stanzas.
+
+\footnote[NUMBER]{TEXT}
+
+   The `\footnote' command places the numbered footnote TEXT at the
+bottom of the current page.  The optional argument NUMBER changes the
+default footnote number.
+   This command can only be used in outer paragraph mode; i.e., you
+cannot use it in sectioning commands like `\chapter', in figures,
+tables or in a `tabular' environment.
+
+\footnotemark
+   With no optional argument, the `\footnotemark' command puts the
+current footnote number in the text.  This command can be used in inner
+paragraph mode.  You give the text of the footnote separately, with the
+`\footnotetext' command.
+   This command can be used to produce several consecutive footnote
+markers referring to the same footnote with
+
+     \footnotemark[\value{footnote}]
+
+   after the first `\footnote' command.
+
+\footnotetext[NUMBER]{TEXT}
+
+   The `\footnotetext' command places TEXT at the bottom of the page as
+a footnote.  This command can come anywhere after the `\footnotemark'
+command.  The `\footnotetext' command must appear in outer paragraph
+mode.
+   The optional argument NUMBER changes the default footnote number.
+
+\footnoterule
+   Produces the rule separating the main text on a page from the
+page's footnotes.  Default dimensions: `0.4pt' thick (or wide), and
+`0.4\columnwidth' long in the standard document classes (except slides,
+where it does not appear).
+
+\footnotesep
+   The height of the strut placed at the beginning of the footnote.
+   By default, this is set to the normal strut for `\footnotesize'
+fonts, therefore there is no extra space between footnotes.  This
+is `6.65pt' for `10pt', `7.7pt' for `11pt', and `8.4pt' for `12pt'.
+
+\newcommand{CMD}[NARGS][DEFAULT]{DEFN}
+\renewcommand{CMD}[NARGS][DEFAULT]{DEFN}
+
+CMD      The command name beginning with `\'.  For `\newcommand', it
+         must not be already defined and must not begin with `\end';
+         for `\renewcommand', it must already be defined.
+NARGS    An optional integer from 1 to 9 specifying the number of
+         arguments that the command will take.  The default is for the
+         command to have no arguments.
+DEFAULT  If this optional parameter is present, it means that the
+         command's first argument is optional.  When the new command is
+         called, the default value of the optional argument (i.e., if it
+         is not specified in the call) is the string `def'.
+DEFN     The text to be substituted for every occurrence of `cmd'; a
+         construct of the form `#N' in DEFN is replaced by the text of
+         the Nth argument.
+
+\newcounter{CNT}[COUNTERNAME]
+
+   The `\newcounter' command defines a new counter named CNT.  The new
+counter is initialized to zero.
+   Given the optional argument `[COUNTERNAME]', CNT will be reset
+whenever COUNTERNAME is incremented.
+
+\newlength{\ARG}
+   The `\newlength' command defines the mandatory argument as a `length'
+command with a value of `0in'.  The argument must be a control sequence,
+as in `\newlength{\foo}'.  An error occurs if `\foo' is already defined.
+
+\newsavebox{CMD}
+   Defines `\CMD', which must be a command name not already defined, to
+refer to a new bin for storing boxes.
+
+\newenvironment{ENV}[NARGS][DEFAULT]{BEGDEF}{ENDDEF}
+\renewenvironment{ENV}[NARGS]{BEGDEF}{ENDDEF}
+
+   These commands define or redefine an environment ENV, that is,
+`\begin{ENV} ... \end{ENV}'.
+
+ENV      The name of the environment.  For `\newenvironment', ENV must
+         not be an existing environment, and the command `\ENV' must
+         be undefined.  For `\renewenvironment', ENV must be the name
+         of an existing environment.
+NARGS    An integer from 1 to 9 denoting the number of arguments of
+         the newly-defined environment.  The default is no arguments.
+DEFAULT  If this is specified, the first argument is optional, and
+         DEFAULT gives the default value for that argument.
+BEGDEF   The text expanded at every occurrence of `\begin{ENV}'; a
+         construct of the form `#N' in BEGDEF is replaced by the text
+         of the Nth argument.
+ENDDEF   The text expanded at every occurrence of `\end{ENV}'.  It may
+         not contain any argument parameters.
+
+\newtheorem{NEWENV}{LABEL}[WITHIN]
+\newtheorem{NEWENV}[NUMBERED_LIKE]{LABEL}
+
+   This command defines a theorem-like environment.  Arguments:
+
+NEWENV
+     The name of the environment to be defined; must not be the name of
+     an existing environment or otherwise defined.
+LABEL
+     The text printed at the beginning of the environment, before the
+     number. For example, `Theorem'.
+NUMBERED_LIKE
+     (Optional.)  The name of an already defined theorem-like
+     environment; the new environment will be numbered just like
+     NUMBERED_LIKE.
+WITHIN
+     (Optional.)  The name of an already defined counter, a sectional
+     unit.  The new theorem counter will be reset at the same time as
+     the WITHIN counter.
+
+   At most one of NUMBERED_LIKE and WITHIN can be specified, not both.
+
+\newfont{CMD}{FONTNAME}
+
+   Defines a control sequence `\CMD', which must not already be
+defined, to make FONTNAME be the current font.  The file looked for on
+the system is named `FONTNAME.tfm'.
+   This is a low-level command for setting up to use an individual font.
+More commonly, fonts are defined in families through `.fd' files.
+
+\protect
+   Footnotes, line breaks, any command that has an optional argument,
+and many more are so-called "fragile" commands.  When a fragile command
+is used in certain contexts, called "moving arguments", it must be
+preceded by `\protect'.  In addition, any fragile commands within the
+arguments must have their own `\protect'.
+   Some examples of moving arguments are `\caption', `\thanks', and
+expressions in `tabular' and `array' environments.
+   Commands which are not fragile are called "robust".  They must not
+be preceded by `\protect'.
+
+\alph{COUNTER}
+   prints COUNTER using lowercase letters: `a', `b', ...
+
+\Alph{COUNTER}
+   uses uppercase letters: `A', `B', ...
+
+\arabic{COUNTER}
+   uses Arabic numbers: `1', `2', ...
+
+\roman{COUNTER}
+   uses lowercase roman numerals: `i', `ii', ...
+
+\roman{COUNTER}
+   uses uppercase roman numerals: `I', `II', ...
+
+\fnsymbol{COUNTER}
+   prints the value of COUNTER in a specific sequence of nine symbols
+(conventionally used for labeling footnotes).  The value of COUNTER
+must be between 1 and 9, inclusive.
+
+   The symbols mostly aren't supported in Info, but here are the names:
+     asterix(*) dagger ddagger section-sign paragraph-sign parallel
+     double-asterix(**) double-dagger double-ddagger
+
+\usecounter{COUNTER}
+   The `\usecounter' command is used in the second argument of the
+ `list' environment to specify COUNTER to be used to number the list
+items.
+
+\value{COUNTER}
+   The `\value' command produces the value of COUNTER.  It can be used
+anywhere LaTeX expects a number, for example:
+
+     \setcounter{myctr}{3}
+     \addtocounter{myctr}{1}
+     \hspace{\value{myctr}\parindent}
+
+\setcounter{\COUNTER}{VALUE}
+
+   The `\setcounter' command sets the value of \COUNTER to the VALUE
+argument.
+
+\addtocounter{COUNTER}{VALUE}
+
+   The `\addtocounter' command increments COUNTER by the amount
+specified by the VALUE argument, which may be negative.
+
+\refstepcounter{COUNTER}
+   The `\refstepcounter' command works in the same way as `\stepcounter',
+except it also defines the current `\ref' value to be the result of
+ `\thecounter'.
+
+\stepcounter{COUNTER}
+   The `\stepcounter' command adds one to COUNTER and resets all
+subsidiary counters.
+
+\day
+\month
+\year
+
+   LaTeX defines counters for the day of the month (`\day', 1-31),
+month of the year (`\month', 1-12), and year (`\year', Common Era).
+When TeX starts up, they are set to the current values on the system
+where TeX is running.  They are not updated as the job progresses.
+   The related command `\today' produces a string representing the
+current day.
+
+\setlength{\LEN}{VALUE}
+
+   The `\setlength' sets the value of \LEN to the VALUE argument, which
+can be expressed in any units that LaTeX understands, i.e., inches
+(`in'), millimeters (`mm'), points (`pt'), big points (`bp', etc.
+
+\addtolength{\LEN}{AMOUNT}
+
+   The `\addtolength' command increments a "length command" \LEN by
+the amount specified in the AMOUNT argument, which may be negative.
+
+\settodepth{\gnat}{text}
+
+   The `\settodepth' command sets the value of a `length' command equal
+to the depth of the `text' argument.
+
+\settoheight{\gnat}{text}
+
+   The `\settoheight' command sets the value of a `length' command
+equal to the height of the `text' argument.
+
+\settowidth{\LEN}{TEXT}
+
+   The `\settowidth' command sets the value of the command \LEN to the
+width of the TEXT argument.
+
+\width
+\height
+\depth
+\totalheight
+
+   These length parameters can be used in the arguments of the
+box-making commands. They specify the natural width etc. of the text in
+the box. `\totalheight' equals `\height' + `\depth'. To make a box with
+the text stretched to double the natural size, e.g., say
+
+   `\makebox[2\width]{Get a stretcher}'
+
+\\'[*][MORESPACE]
+
+   The `\\' command tells LaTeX to start a new line.  It has an optional
+argument, MORESPACE, that specifies how much extra vertical space is to
+be inserted before the next line.  This can be a negative amount.
+   The `\\*' command is the same as the ordinary `\\' command except
+that it tells LaTeX not to start a new page after the line.
+
+\obeycr
+\restorecr
+
+   The `\obeycr' command makes a return in the input file (`^^M',
+internally) the same as `\\' (followed by `\relax').  So each new line
+in the input will also be a new line in the output.
+
+   `\restorecr' restores normal line-breaking behavior.
+
+\newline
+
+   The `\newline' command breaks the line at the present point,
+with no stretching of the text before it.  It can only be used in
+paragraph mode.
+
+\- (discretionary hyphen)
+
+   The `\-' command tells LaTeX that it may hyphenate the word at
+that point.  LaTeX is very good at hyphenating, and it will usually
+find most of the correct hyphenation points, and almost never use an
+incorrect one.  The `\-' command is used for the exceptional cases.
+   When you insert `\-' commands in a word, the word will only be
+hyphenated at those points and not at any of the hyphenation points
+that LaTeX might otherwise have chosen.
+
+\fussy
+   The declaration `\fussy' (which is the default) makes TeX picky
+about line breaking.  This usually avoids too much space between words,
+at the cost of an occasional overfull box.
+   This command cancels the effect of a previous `\sloppy' command.
+
+\sloppy
+   The declaration `\sloppy' makes TeX less fussy about line breaking.
+This will avoid overfull boxes, at the cost of loose interword spacing.
+   Lasts until a `\fussy' command is issued.
+
+\hyphenation{WORD-ONE WORD-TWO}
+
+   The `\hyphenation' command declares allowed hyphenation points with
+a `-' character in the given words.  The words are separated by spaces.
+TeX will only hyphenate if the word matches exactly, no inflections are
+tried.  Multiple `\hyphenation' commands accumulate.  Some examples
+(the default TeX hyphenation patterns misses the hyphenations in these
+words):
+
+     \hyphenation{ap-pen-dix col-umns data-base data-bases}
+
+\linebreak[PRIORITY]
+\nolinebreak[PRIORITY]
+
+   By default, the `\linebreak' (`\nolinebreak') command forces
+(prevents) a line break at the current position.  For `\linebreak', the
+spaces in the line are stretched out so that it extends to the right
+margin as usual.
+   With the optional argument PRIORITY, you can convert the command
+from a demand to a request.  The PRIORITY must be a number from 0 to 4.
+The higher the number, the more insistent the request.
+
+\cleardoublepage
+   The `\cleardoublepage' command ends the current page and causes all
+figures and tables that have so far appeared in the input to be printed.
+In a two-sided printing style, it also makes the next page a right-hand
+(odd-numbered) page, producing a blank page if necessary.
+
+\clearpage
+   The `\clearpage' command ends the current page and causes all
+figures and tables that have so far appeared in the input to be printed.
+
+\newpage
+   The `\newpage' command ends the current page, but doesn't clear floats.
+
+\enlargethispage{size}
+\enlargethispage*{size}
+
+   Enlarge the `\textheight' for the current page by the specified
+amount; e.g. `\enlargethispage{\baselineskip}' will allow one
+additional line.
+   The starred form tries to squeeze the material together on the page
+as much as possible. This is normally used together with an explicit
+ `\pagebreak'.
+
+\pagebreak[PRIORITY]
+\nopagebreak[PRIORITY]
+
+   By default, the `\pagebreak' (`\nopagebreak') command forces
+(prevents) a page break at the current position.  For `\linebreak', the
+vertical space on the page is stretched out where possible so that it
+extends to the normal bottom margin.
+   With the optional argument PRIORITY, you can convert the
+`\pagebreak' command from a demand to a request.  The number must be a
+number from 0 to 4.  The higher the number, the more insistent the
+request is.
+
+\indent
+   `\indent' produces a horizontal space whose width equals the width of
+the `\parindent' length, the normal paragraph indentation.  It is used
+to add paragraph indentation where it would otherwise be suppressed.
+   The default value for `\parindent' is `1em' in two-column mode,
+otherwise `15pt' for `10pt' documents, `17pt' for `11pt', and `1.5em'
+for `12pt'.
+
+\noindent
+   When used at the beginning of the paragraph, `\noindent' suppresses
+any paragraph indentation.  It has no effect when used in the middle
+of a paragraph.
+
+\parskip
+   `\parskip' is a rubber length defining extra vertical space added
+before each paragraph.  The default is `0pt plus1pt'.
+
+\marginpar[LEFT]{RIGHT}
+\reversemarginpar
+
+   The `\marginpar' command creates a note in the margin.  The first
+line of the note will have the same baseline as the line in the text
+where the `\marginpar' occurs.
+   When you only specify the mandatory argument RIGHT, the text will be
+placed
+
+   * in the right margin for one-sided layout;
+   * in the outside margin for two-sided layout;
+   * in the nearest margin for two-column layout.
+
+   The command `\reversemarginpar' places subsequent marginal notes in
+the opposite (inside) margin.  `\normalmarginpar' places them in the
+default position.
+   When you specify both arguments, LEFT is used for the left margin,
+and RIGHT is used for the right margin.
+   The first word will normally not be hyphenated; you can enable
+hyphenation there by beginning the node with `\hspace{0pt}'.
+
+\marginparpush
+   Minimum vertical space between notes; default `7pt' for `12pt'
+documents, `5pt' else.
+
+\marginparsep
+   Horizontal space between the main text and the note; default `11pt'
+for `10pt' documents, `10pt' else.
+
+\marginparwidth
+   Width of the note itself; default for a one-sided `10pt' document
+is `90pt', `83pt' for `11pt', and `68pt' for `12pt'; `17pt' more in
+each case for a two-sided document.  In two column mode, the default
+is `48pt'.
+
+`math'        For formulas that appear right in the text.
+`displaymath  For formulas that appear on their own line.
+`equation'    The same as the displaymath environment except that it
+              adds an equation number in the right margin.
+
+   The `math' environment can be used in both paragraph and LR mode,
+but the `displaymath' and `equation' environments can be used only in
+paragraph mode.  The `math' and `displaymath' environments are used so
+often that they have the following short forms:
+
+     \(...\)   instead of   \begin{math}...\end{math}
+     \[...\]   instead of   \begin{displaymath}...\end{displaymath}
+
+   In fact, the `math' environment is so common that it has an even
+shorter form:
+
+     $ ... $   instead of   \(...\)
+
+   The `\displaystyle' declaration forces the size and style of the
+formula to be that of `displaymath', e.g., with limits above and below
+summations.  For example
+     $\displaystyle \sum_{n=0}^\infty x_n $
+
+\boldmath
+   The `\boldmath' command changes math letters and symbols to be in a
+bold font.  It is used _outside_ of math mode.  Conversely, the
+`\unboldmath' command changes math glyphs to be in a normal font; it
+too is used _outside_ of math mode.
+
+\*
+   A "discretionary" multiplication symbol, at which a line break is
+allowed.
+
+\cdots
+   A horizontal ellipsis with the dots raised to the center of the line.
+
+\ddots    A diagonal ellipsis: \ddots.
+
+\frac{num}{den}    Produces the fraction `num' divided by `den'.
+
+\overbrace{TEXT}
+   Generates a brace over TEXT.  For example, \overbracex+\cdots+x^k
+ \rm\;times.
+
+\overline{TEXT}
+   Generates a horizontal line over TEX.  For exampe, \overlinex+y.
+
+\sqrt[ROOT]{arg}
+   Produces the representation of the square root of ARG.  The optional
+argument ROOT determines what root to produce.  For example, the cube
+root of `x+y' would be typed as `$\sqrt[3]{x+y}$'.
+
+\stackrel{TEXT}{RELATION}
+   Puts TEXT above RELATION. For example, `\stackrel{f}{\longrightarrow}'.
+
+\underbrace{math}
+   Generates MATH with a brace underneath.
+
+\underline{text}
+   Causes TEXT, which may be either math mode or not, to be underlined.
+
+\vdots    Produces a vertical ellipsis.
+
+\maketitle
+   The `\maketitle' command generates a title on a separate title
+page--except in the `article' class, where the title is placed at the
+top of the first page.
+
+\author{NAME \and NAME2}
+   The `\author' command declares the document author(s), where the
+argument is a list of authors separated by `\and' commands.  Use `\\'
+to separate lines within a single author's entry--for example, to give
+the author's institution or address.
+
+\date{TEXT}
+   The `\date' command declares TEXT to be the document's date.  With
+no `\date' command, the current date is used.
+
+\thanks{TEXT}
+   The `\thanks' command produces a `\footnote' to the title, usually
+used for credit acknowledgements.
+
+\title{TEXT}
+   The `\title' command declares TEXT to be the title of the document.
+Use `\\' to force a line break, as usual.
+
+\pagenumbering{STYLE}
+
+   Specifies the style of page numbers, according to STYLE:
+
+`arabic'  arabic numerals
+`roman'   lowercase Roman numerals
+`Roman'   uppercase Roman numerals
+`alph'    lowercase letters
+`Alph'    uppercase letters
+
+\pagestyle{STYLE}
+\thispagestyle{STYLE}
+
+   The `\pagestyle' command specifies how the headers and footers are
+typeset from the current page onwards. The `\thispagestyle' command
+works in the same manner as the `\pagestyle' command except that it
+changes to STYLE for the current page only.  Values for STYLE:
+
+`plain'       Just a plain page number.
+`empty'       Empty headers and footers, e.g., no page numbers.
+`headings'    Put running headers on each page.  The document style
+              specifies what goes in the headers.
+`myheadings'  Custom headers, specified via the `\markboth' or the
+              `\markright' commands.
+
+\markboth{LEFT}{RIGHT}
+   Sets both the left and the right heading.  A "left-hand heading"
+(LEFT) is generated by the last `\markboth' command before the end
+of the page, while a "right-hand heading" (RIGHT is generated by the
+first `\markboth' or `\markright' that comes on the page if there is
+one, otherwise by the last one before the page.
+
+\markright{RIGHT}
+   Sets the right heading, leaving the left heading unchanged.
+
+\hspace[*]{LENGTH}
+
+   The `\hspace' command adds horizontal space.  The LENGTH argument
+can be expressed in any terms that LaTeX understands: points, inches,
+etc.  It is a rubber length.  You can add both negative and positive
+space with an `\hspace' command; adding negative space is like
+backspacing.
+   LaTeX normally removes horizontal space that comes at the beginning
+or end of a line.  To preserve this space, use the optional `*' form.
+
+\hfill
+   The `\hfill' fill command produces a "rubber length" which has no
+natural space but can stretch or shrink horizontally as far as needed.
+   The `\fill' parameter is the rubber length itself (technically, the
+glue value `0pt plus1fill'); thus, `\hspace\fill' is equivalent to
+`\hfill'.
+
+\ (space)
+   The `\ ' (space) command produces a normal interword space.  It's
+useful after punctuation which shouldn't end a sentence.  For example
+`Knuth's article in Proc.\ Amer.\ Math\. Soc.\ is fundamental'.  It is
+also often used after control sequences, as in `\TeX\ is a nice system.'
+   In normal circumstances, `\'<tab> and `\'<newline> are equivalent to
+`\ '.
+
+\@
+   The `\@' command makes the following punctuation character end a
+sentence even if it normally would not.  This is typically used after a
+capital letter.  Here are side-by-side examples with and without `\@':
+
+     ... in C\@.  Pascal, though ...
+     ... in C.  Pascal, though ...
+
+produces
+
+     ... in C.  Pascal, though ...  ... in C.  Pascal, though ...
+
+\thinspace
+   `\thinspace' produces an unbreakable and unstretchable space that is
+1/6 of an em.  This is the proper space to use in nested quotes, as in
+'".
+
+\/
+   The `\/' command produces an "italic correction".  This is a small
+space defined by the font designer for a given character, to avoid the
+character colliding with whatever follows.  The italic f character
+typically has a large italic correction value.
+   If the following character is a period or comma, it's not necessary
+to insert an italic correction, since those punctuation symbols have a
+very small height.  However, with semicolons or colons, as well as
+normal letters, it can help. Compare f: f; (in the TeX output, the `f's
+are nicely separated) with f: f;.
+   Despite the name, roman characters can also have an italic
+correction.  Compare pdfTeX (in the TeX output, there is a small space
+after the `f') with pdfTeX.
+
+\hrulefill
+   The `\hrulefill' fill command produces a "rubber length" which can
+stretch or shrink horizontally.  It will be filled with a horizontal rule.
+
+\dotfill
+   The `\dotfill' command produces a "rubber length" that fills with
+dots instead of just white space.
+
+\addvspace{length}
+   The `\addvspace' command normally adds a vertical space of height
+length.  However, if vertical space has already been added to the same
+point in the output by a previous `\addvspace' command, then this
+command will not add more space than needed to make the natural length
+of the total vertical space equal to `length'.
+
+\bigskip
+\medskip
+\smallskip
+
+   These commands produce a given amount of space.
+
+`\bigskip'    The same as `\vspace{bigskipamount}', ordinarily about
+              one line space (with stretch and shrink).
+`\medskip'    The same as `\vspace{medskipamount}', ordinarily about
+              half of a line space (with stretch and shrink).
+`\smallskip'  The same as `\vspace{smallskipamount}', ordinarily about
+              a quarter of a line space (with stretch and shrink).
+
+   The `\...amount' parameters are determined by the document class.
+
+\vfill
+   The `\vfill' fill command produces a rubber length (glue) which can
+stretch or shrink vertically as far as needed.  It's equivalent to
+ `\vspace{\fill}'.
+
+\vspace[*]{LENGTH}
+
+   The `\vspace' command adds the vertical space LENGTH, i.e., a rubber
+length.  LENGTH can be negative or positive.
+   Ordinarily, LaTeX removes vertical space added by `\vspace' at the
+top or bottom of a page.  With the optional `*' argument, the space is
+not removed.
+
+\mbox{TEXT}
+
+   The `\mbox' command creates a box just wide enough to hold the text
+created by its argument.  The TEXT is not broken into lines, so it can
+be used to prevent hyphenation.
+
+\fbox{TEXT}
+\framebox[WIDTH][POSITION]{TEXT}
+
+   The `\fbox' and `\framebox' commands are like `\mbox', except that
+they put a frame around the outside of the box being created.
+   In addition, the `\framebox' command allows for explicit
+specification of the box width with the optional WIDTH argument (a
+dimension), and positioning with the optional POSITION argument.  Both
+commands produce a rule of thickness `\fboxrule' (default `.4pt'), and
+leave a space of `\fboxsep' (default `3pt') between the rule and the
+contents of the box.
+   In the `picture' environment:
+
+     \framebox(WIDTH,HEIGHT)[POS]{...}
+
+   The `\framebox' command is like `\makebox', except that it puts a
+frame around the outside of the box that it creates. The `\framebox'
+command produces a rule of thickness `\fboxrule', and leaves a space
+`\fboxsep' between the rule and the contents of the box.
+
+lrbox environment
+
+ `\begin{lrbox}{cmd} text \end{lrbox}'
+
+   This is the environment form of `\sbox'.
+   The text inside the environment is saved in the box `cmd', which
+must have been declared with `\newsavebox'.
+
+\makebox[WIDTH][POSITION]{TEXT}
+
+   The `\makebox' command creates a box just wide enough to contain the
+TEXT specified.  The width of the box is specified by the optional
+WIDTH argument.  The position of the text within the box is determined
+by the optional POSITION argument, which may take the following values:
+
+`c'  Centered (default).
+`l'  Flush left.
+`r'  Flush right.
+`s'  Stretch (justify) across entire WIDTH; TEXT must contain
+     stretchable space for this to work.
+
+   `\makebox' is also used within the picture environment:
+   
+     \makebox(width,height)[position]{...}
+
+   The `\makebox' command for the picture environment is similar to the
+normal `\makebox' command except that you must specify a `width' and
+ `height' in multiples of `\unitlength'.
+   The optional argument, `[position]', specifies the quadrant that
+your text appears in.  You may select up to two of the following:
+
+`t'  Moves the item to the top of the rectangle.
+`b'  Moves the item to the bottom.
+`l'  Moves the item to the left.
+`r'  Moves the item to the right.
+
+\parbox[POSITION][HEIGHT][INNER-POS]{WIDTH}{TEXT}
+
+   The `\parbox' command produces a box whose contents are created in
+`paragraph' mode.  It should be used to make a box small pieces of
+text, with nothing fancy inside.  In particular, you shouldn't use any
+paragraph-making environments inside a `\parbox' argument.  For larger
+pieces of text, including ones containing a paragraph-making
+environment, you should use a `minipage' environment.
+   `\parbox' has two mandatory arguments:
+
+WIDTH  the width of the parbox;
+TEXT   the text that goes inside the parbox.
+
+   The optional POSITION argument allows you to align either the top or
+bottom line in the parbox with the baseline of the surrounding text
+(default is top).
+   The optional HEIGHT argument overrides the natural height of the box.
+   The INNER-POS argument controls the placement of the text inside the
+box, as follows; if it is not specified, POSITION is used.
+
+`t'  text is placed at the top of the box.
+`c'  text is centered in the box.
+`b'  text is placed at the bottom of the box.
+`s'  stretch vertically; the text must contain vertically stretchable
+     space for this to work.
+
+\raisebox{distance}[HEIGHT][DEPTH]{text}
+
+   The `\raisebox' command raises or lowers TEXT.  The first mandatory
+argument specifies how high TEXT is to be raised (or lowered if it is a
+negative amount).  TEXT itself is processed in LR mode.
+   The optional arguments HEIGHT and DEPTH are dimensions.  If they are
+specified, LaTeX treats TEXT as extending a certain distance above the
+baseline (height) or below (depth), ignoring its natural height and
+depth.
+
+\savebox{\BOXCMD}[WIDTH][POS]{TEXT}
+
+   This command typeset TEXT in a box just as with `\makebox', except
+that instead of printing the resulting box, it saves it in the box
+labeled \BOXCMD, which must have been declared with `\newsavebox'.
+
+\sbox{\BOXCMD}{TEXT}
+
+   `\sbox' types TEXT in a box just as with `\mbox' except that instead
+of the resulting box being included in the normal output, it is saved
+in the box labeled \BOXCMD.  \BOXCMD must have been previously declared
+with `\newsavebox'.
+
+\usebox{\BOXCMD}
+   `\usebox' producesthe box most recently saved in the bin \BOXCMD by
+a `\savebox' command.
+
+\copyright     The copyright symbol, (C).
+
+\dag     The dagger symbol (in text).
+
+\ddag     The double dagger symbol (in text).
+
+\LaTeX     The LaTeX logo.
+
+\ldots     An ellipsis (three dots at the baseline): `...'.  This command
+           also works in math mode.
+
+\lq     Left (opening) quote: `.
+
+\P     Paragraph sign (pilcrow).
+
+\pounds     English pounds sterling.
+
+\rq     Right (closing) quote: '.
+
+\S     Section symbol.
+
+\TeX     The TeX logo.
+
+\"     Produces an umlaut, as in o".
+
+\'     Produces an acute accent, as in o'.  In the `tabbing' environment,
+       pushes current column to the right of the previous column.
+
+\.     Produces a dot accent over the following, as in o..
+
+\=     Produces a macron (overbar) accent over the following, as in o=.
+
+\^     Produces a circumflex (hat) accent over the following, as in o^.
+
+\`     Produces a grave accent over the following, as in o`.  In the
+       `tabbing' environment, move following text to the right margin.
+
+\~     Produces a tilde accent over the following, as in n~.
+
+\b     Produces a bar accent under the following, as in o_.
+
+\c     Produces a cedilla accent under the following, as in
+
+\d     Produces a dot accent under the following, as in .o.
+
+\H     Produces a long Hungarian umlaut accent over the following, as in
+       o''.
+
+\i     Produces a dotless i, as in `i'.
+
+\j     Produces a dotless j, as in `j'.
+
+\t     Produces a tie-after accent, as in `oo['.
+
+\u     Produces a breve accent, as in `o('.
+
+\v     Produces a ha'c<ek (check) accent, as in `o<'.
+
+\aa
+\AA     aa and AA.
+
+\ae
+\AE     ae and AE.
+
+\l
+\L     /l and /L.
+
+\o
+\O     /o and /O.
+
+\oe
+\OE     oe and OE.
+
+\ss     ss.
+
+\rule[RAISE]{WIDTH}{THICKNESS}
+
+   The `\rule' command produces "rules", that is, lines or rectangles.
+The arguments are:
+
+RAISE      How high to raise the rule (optional).
+WIDTH      The length of the rule (mandatory).
+THICKNESS  The thickness of the rule (mandatory).
+
+\today
+   The `\today' command produces today's date, in the format `MONTH DD,
+YYYY'; for example, `July 4, 1976'.  It uses the predefined counters
+ `\day', `\month', and `\year' to do this. It is not updated as the
+program runs.
+   The `datetime' package, among others, can produce a wide variety of
+other date formats.
+
+\include{FILE}
+   If no `\includeonly' command is present, the `\include' command
+executes `\clearpage' to start a new page, then reads FILE, then does
+another `\clearpage'.
+   Given an `\includeonly' command, the `\include' actions are only run
+if FILE is listed as an argument to `\includeonly'.
+   The `\include' command may not appear in the preamble or in a file
+read by another `\include' command.
+
+\includeonly{FILE1,FILE2,...}
+
+   The `\includeonly' command controls which files will be read by
+subsequent `\include' commands.  The list of filenames is
+comma-separated. Each FILE must exactly match a filename specified in a
+`\include' command for the selection to be effective.
+   This command can only appear in the preamble.
+
+\input{FILE}
+   The `\input' command causes the specified FILE to be read and
+processed, as if its contents had been inserted in the current file at
+that point.
+   If FILE does not end in `.tex' (e.g., `foo' or `foo.bar'), it is
+first tried with that extension (`foo.tex' or `foo.bar.tex').  If that
+is not found, the original FILE is tried (`foo' or `foo.bar').
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+   A table of contents is produced with the `\tableofcontents' command.
+You put the command right where you want the table of contents to go;
+LaTeX does the rest for you.  A previous run must have generated a
+ `.toc' file.
+   The `\tableofcontents' command produces a heading, but it does not
+automatically start a new page.  If you want a new page after the table
+of contents, write a `\newpage' command after the `\tableofcontents'
+command.
+   The analogous commands `\listoffigures' and `\listoftables' produce
+a list of figures and a list of tables, respectively.  Everything works
+exactly the same as for the table of contents.
+   The command `\nofiles' overrides these commands, and _prevents_ any
+of these lists from being generated.
+
+\addcontentsline{EXT}{UNIT}{TEXT}
+\contentsline{UNIT}{NAME}
+
+   The `\addcontentsline' command adds an entry to the specified list
+or table where:
+
+EXT    The extension of the file on which information is to be written,
+       typically one of: `toc' (table of contents), `lof' (list of
+       figures), or `lot' (list of tables).
+
+UNIT   The name of the sectional unit being added, typically one of the
+       following, matching the value of the EXT argument:
+
+       `toc'  The name of the sectional unit: `part', `chapter',
+              `section', `subsection', `subsubsection'.
+       `lof'  For the list of figures.
+       `lot'  For the list of tables.
+
+ENTRY  The actual text of the entry.
+
+   What is written to the `.EXT' file is the command `\contentsline'.
+
+\addtocontents{EXT}{TEXT}
+
+   The `\addtocontents' command adds text (or formatting commands)
+directly to the `.EXT' file that generates the table of contents or
+lists of figures or tables.
+
+EXT   The extension of the file on which information is to be written:
+      `toc' (table of contents), `lof' (list of figures), or `lot'
+      (list of tables).
+TEXT  The text to be written.
+
+\makeglossary
+\glossary{TEXT}
+\glossaryentry{TEXT}{PAGENO}
+
+   The command `\makeglossary' enables creating glossaries.
+   The command `\glossary' writes a glossary entry for TEXT to an
+auxiliary file with the `.glo' extension.
+   Specifically, what gets written is the command `\glossaryentry',
+where PAGENO is the current `\thepage'
+value.
+
+\makeindex
+\index{TEXT}
+\indexentry{TEXT}{PAGENO}
+
+   The command `\makeindex' enables creating indexes.  Put this in the
+preamble.
+
+   The command `\index{TEXT}' writes an index entry for TEXT to an
+auxiliary file with the `.idx' extension.
+
+   Specifically, what gets written is the command
+ `\indexentry{TEXT}{PAGENO}', where PAGENO is the current `\thepage'
+value.
+
+   To generate a index entry for `bar' that says `See foo', use a
+vertical bar: `\index{bar|see{foo}}'.  Use `seealso' instead of `see'
+to make a `See also' entry.
+
+   The text `See' is defined by the macro `\seename', and `See also' by
+the macro `\alsoname'.  These can be redefined for other languages.
+
+   The generated `.idx' file is then sorted with an external command,
+usually either `makeindex' or (the multi-lingual) `xindy'.  This results
+in a `.ind' file, which can then be read to typeset the index.
+
+   The index is usually generated with the `\printindex' command.  This
+is defined in the `makeidx' package, so `\usepackage{makeidx}' needs to
+be in the preamble.
+
+   The rubber length `\indexspace' is inserted before each new letter
+in the printed index; its default value is `10pt plus5pt minus3pt'.
+
+   The `showidx' package causes each index entries to be shown in the
+margin on the page where the entry appears.  This can help in preparing
+the index.
+
+`letter'
+   You can use LaTeX to typeset letters, both personal and business.
+The `letter' document class is designed to make a number of letters at
+once, although you can make just one if you so desire.
+
+   Your `.tex' source file has the same minimum commands as the other
+document classes, i.e., you must have the following commands as a
+minimum:
+
+      \documentclass{letter}
+      \begin{document}
+       ... letters ...
+      \end{document}
+
+   Each letter is a `letter' environment, whose argument is the name
+and address of the recipient.  For example, you might have:
+
+      \begin{letter}{Mr. Joe Smith\\ 2345 Princess St.
+           \\ Edinburgh, EH1 1AA}
+        ...
+      \end{letter}
+
+   The letter itself begins with the `\opening' command.  The text of
+the letter follows.  It is typed as ordinary LaTeX input.  Commands that
+make no sense in a letter, like `\chapter', do not work.  The letter
+closes with a `\closing' command.
+
+   After the `closing', you can have additional material.  The `\cc'
+command produces the usual "cc: ...".  There's also a similar `\encl'
+command for a list of enclosures. With both these commands, use `\\' to
+separate the items.
+
+   These commands are used with the `letter' class.
+
+\address{RETURN-ADDRESS}
+   The `\address' specifies the return address of a letter, as it
+should appear on the letter and the envelope.  Separate lines of the
+address should be separated by `\\' commands.
+   If you do not make an `\address' declaration, then the letter will
+be formatted for copying onto your organisation's standard letterhead.
+If you give an `\address' declaration, then the letter will be
+formatted as a personal letter.
+
+\cc{NAME1\\NAME2}
+   Produce a list of NAMEs the letter was copied to.  Each name is
+printed on a separate line.
+
+\closing{text}
+   A letter closes with a `\closing' command, for example,
+     \closing{Best Regards,}
+
+\encl{LINE1\\LINE2}
+   Declare a list of one more enclosures.
+
+\location{address}
+   This modifies your organisation's standard address.  This only
+appears if the `firstpage' pagestyle is selected.
+
+\makelabels{number}
+   If you issue this command in the preamble, LaTeX will create a sheet
+of address labels. This sheet will be output before the letters.
+
+\name{June Davenport}
+   Your name, used for printing on the envelope together with the return
+address.
+
+\opening{TEXT}
+   A letter begins with the `\opening' command.  The mandatory
+argument, TEXT, is whatever text you wish to start your letter.  For
+instance:
+
+     \opening{Dear Joe,}
+
+\ps
+   Use the `\ps' command to start a postscript in a letter, after
+`\closing'.
+
+\signature{TEXT}
+   Your name, as it should appear at the end of the letter underneath the
+space for your signature.  `\\' starts a new line within TEXT as usual.
+
+\startbreaks
+   Used after a `\stopbreaks' command to allow page breaks again.
+
+\stopbreaks
+   Inhibit page breaks until a `\startbreaks' command occurs.
+
+\telephone{number}
+   This is your telephone number.  This only appears if the `firstpage'
+pagestyle is selected.
+
+\typein[\CMD]{MSG}
+
+   `\typein' prints MSG on the terminal and causes LaTeX to stop and
+wait for you to type a line of input, ending with return.  If the
+optional \CMD argument is omitted, the typed input is processed as if
+it had been included in the input file in place of the `\typein'
+command.  If the \CMD argument is present, it must be a command name.
+This command name is then defined or redefined to be the typed input.
+
+\typeout{MSG}
+
+   Prints `msg' on the terminal and in the `log' file.  Commands in
+`msg' that are defined with `\newcommand' or `\renewcommand' (among
+others) are replaced by their definitions before being printed.
+   LaTeX's usual rules for treating multiple spaces as a single space
+and ignoring spaces after a command name apply to `msg'.  A `\space'
+command in `msg' causes a single space to be printed, independent of
+surrounding spaces.  A `^^J' in `msg' prints a newline.

@@ -2,9 +2,10 @@
 
 ;; Copyright (C) 2010 tequilasunset
 
-;; Author:   tequilasunset <tequilasunset.mac@gmail.com>
-;; Keywords: LaTeX AUCTeX YaTeX
-;; Version:  0.1.3
+;; Author: tequilasunset <tequilasunset.mac@gmail.com>
+;; Repository: http://bitbucket.org/tequilasunset/auto-complete-latex
+;; Keywords: completion, LaTeX
+(defconst ac-l-version "0.2.4")
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,770 +22,955 @@
 
 ;;; Requirements:
 
-;; http://github.com/m2ym/auto-complete/blob/v1.0/auto-complete.el
+;;  auto-complete-mode:  http://cx4a.org/software/auto-complete/
+
+;;; Installation:
+
+;;  - Put files into load-path, and add the following into init file.
+;;
+;;      (require 'auto-complete-latex)
+;;      (setq ac-l-dict-directory "/path/to/ac-l-dict/")
+;;      (add-to-list 'ac-modes 'foo-mode)
+;;      (add-hook 'foo-mode-hook 'ac-l-setup)
+;;
+;;  - If you get the error below
+;;
+;;      `variable binding depth exceeds max-specpdl-size',
+;;
+;;    add the following into init file.
+;;
+;;      (setq max-specpdl-size (+ 500 max-specpdl-size))
 
 ;;; Commentary:
 
-;; Put this file into your load-path and add the following into your init file.
+;;  - Customize group:
 ;;
-;;   (require 'auto-complete-latex)
+;;      M-x customize-group RET auto-complete-latex RET
 ;;
-;; If necessary, add the following into your init file.
+;;  - Don't use ac-sources:
 ;;
-;;   (setq ac-modes (append ac-modes '(foo-mode)))
-;;   (add-hook 'foo-mode-hook 'ac-l-setup)
+;;    Use `ac-l-sources' instead.
 ;;
-
-;;; Tips:
-
-;; Add more keywords (ex. gin, vodka, tequila)
-;; -------------------------------------------
+;;  - Examples of configuration:
 ;;
-;; Add the following into your ~/.emacs.
+;;      * Setup for AUCTeX
 ;;
-;;   (setq ac-l-source-user-keywords*
-;;         '("gin" "vodka" "tequila"))
+;;          (when (require 'auto-complete-latex nil t)
+;;            (setq ac-l-dict-directory "~/.emacs.d/ac-l-dict/")
+;;            (add-to-list 'ac-modes 'latex-mode)
+;;            (add-hook 'LaTeX-mode-hook 'ac-l-setup))
 ;;
+;;      * Setup for YaTeX
 ;;
-;; Change sources
-;; --------------
+;;          (when (require 'auto-complete-latex nil t)
+;;            (setq ac-l-dict-directory "~/.emacs.d/ac-l-dict/")
+;;            (add-to-list 'ac-modes 'yatex-mode)
+;;            (add-hook 'yatex-mode-hook 'ac-l-setup))
 ;;
-;; Add the following into your ~/.emacs.
+;;        If you want to use command help in Japanese, put
+;;        YATEXHLP.jp into ac-l-dict.
 ;;
-;;   (setq ac-l-sources
-;;     '(
-;;       ac-l-source-user-keywords
-;;       ac-l-source-basic-commands
-;;       ac-l-source-package-commands
-;;       ac-l-source-primitives
-;;       ac-l-source-style-commands
-;;       ac-l-source-latex-dot-ltx
-;;       ac-l-source-basic-options-&-variables
-;;       ac-l-source-package-options-&-variables
-;;       ))
+;;  - ac-l-dict:
 ;;
-
-;;; History:
-
-;; 2010/02/11
-;;      * version 0.1.3 released
-;;      * prefix `ac-l-'
-;;      * modified name and contents of some sources
+;;    Files in it become sources, etc. Files are classified like below.
+;;    If there are unnecessary files, remove them.
 ;;
-;; 2010/02/10
-;;      * supported auto-complete.el v1.0
-;;      * added ac-latex-define-dictionary-source
+;;      1. Basic files
 ;;
-;; 2010/01/31
-;;      * version 0.1.2 released
-;;      * removed some sources from ac-latex-sources
+;;           basic-commands, basic-arguments, macro, latex-dot-ltx,
+;;           platex-commands, platex-arguments, primitives,
+;;           ptex-primitives
 ;;
-;; 2010/01/28
-;;      * fixed ac-source-latex-keywords
+;;         Keywords in these files become candidates for basic sources.
 ;;
-;; 2010/01/26
-;;      * version 0.1.1 released
-;;      * added ac-source-latex-dot-ltx
-;;      * added 120 keywords in ac-source-latex-style-keywords
-;;      * integrated ac-source-latex-math-symbols into ac-source-latex-keywords
+;;      2. User files
 ;;
-;; 2010/01/25
-;;      * initial version 0.1.0
+;;           user-commands, user-arguments
 ;;
+;;         These files become user sources.
+;;
+;;      3. Help file
+;;
+;;           latex-help
+;;
+;;         This file become a LaTeX command help.
+;;
+;;      4. External package files
+;;
+;;         Files other than above become package sources. the
+;;         form is NAME-TYPE-SYMBOL-REQUIRES.
+;;
+;;         NAME      Package or class file name. You can set the
+;;                   dependence with using `ac-l-package-dependences'.
+;;         TYPE      `c' (command) or `a' (argument).
+;;         SYMBOL    Symbol property. `*' => `p'.
+;;         REQUIRES  Requires property. `*' => not set.
+;;
+;;  - Commands that argument completion will work:
+;;
+;;      `ac-l-argument-regexps'
+;;      `ac-l-file-regexps'
+;;      `ac-l-label-regexps'
+;;      `ac-l-bib-regexps'
+;;
+;;    Above are related variables. If you want to complete label
+;;    names in argument of `\foo', write the following into init file.
+;;
+;;      (add-to-list 'ac-l-label-regexps "foo")
+;;
+;;  - Completion at point:
+;;
+;;    Two commands `ac-l-complete-labels' and `ac-l-complete-bibs'
+;;    are provided to complete at point.
+;;
+;;  - A table of symbol properties:
+;;
+;;       SYMBOL |           MEANING
+;;      --------+----------------------------------
+;;         l    | LaTeX or pLaTeX
+;;         a    | AMS packages
+;;         b    | beamer
+;;         h    | hyperlinks
+;;         g    | graphics
+;;         m    | math sign or equations
+;;         c    | colors
+;;         t    | tables
+;;         f    | fonts
+;;         p    | unclassified external packages
+;;         F    | file names in a current directory
+;;         L    | label names
+;;         B    | bib keys
+;;         u    | user-commands or user-arguments
+;;
+;;  - Startup improvement:
+;;
+;;    In case you use `ac-l-master-file', `ac-l-package-files' or
+;;    `ac-l-bib-files', startup will be slower. If you are using
+;;    ac-l-package-files, you can improve it with using the command
+;;    `ac-l-write-package-files'.
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
-
+(require 'cl)
 (require 'auto-complete)
 
-(defvar ac-l-source-user-keywords* nil
-  "A list of user keywords.")
+(defgroup auto-complete-latex nil
+  "Auto completion of LaTeX keywords."
+  :group 'auto-complete
+  :group 'tex
+  :prefix "ac-l-")
 
-(defvar ac-l-sources
-  '(
-    ac-l-source-user-keywords
-    ac-l-source-basic-commands
-    ac-l-source-package-commands
-    ;; ac-l-source-primitives
-    ;; ac-l-source-style-commands
-    ;; ac-l-source-latex-dot-ltx
-    ac-l-source-basic-options-&-variables
-    ac-l-source-package-options-&-variables
-    ))
+
+;;;; variables
+(defcustom ac-l-update-delay 0.8
+  "Delay to update candidates."
+  :type 'float
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-master-file nil
+  "Specify LaTeX master file path as string.
+Parse master file's \\input and \\include(only).
+Then create candidates from master file and parsed files."
+  :type 'string
+  :group 'auto-complete-latex)
+(defvaralias 'ac-l-target 'ac-l-master-file)
+
+(defcustom ac-l-sources nil
+  "A list of user sources.
+This is similar to `ac-sources', but you don't have to add
+`ac-l-source-*' and below sources.
+
+   ac-source-dictionary
+   ac-source-files-in-current-dir
+   ac-source-filename
+   ac-source-words-in-*"
+  :type '(repeat symbol)
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-package-files nil
+  "A list of package files (valid suffixes are .sty and .cls).
+Parse LaTeX command definitions in them, and create candidates."
+  :type '(repeat string)
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-bib-files nil
+  "A list of bib files (valid suffix is .bib).
+Parse bibliography keys in them, and create candidates."
+  :type '(repeat string)
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-use-word-completion nil
+  "If non-nil, use sources for normal word (text) completion."
+  :type 'boolean
+  :group 'auto-complete-latex)
+
+;;; internal
+(defvar ac-l-major-mode nil)
+(defvar ac-l-master-p nil)
+(defconst ac-l-command-prefix "\\\\\\([a-zA-Z@]+\\)")
+(defvar ac-l-update-timer nil)
+
+
+;;;; functions
+
+;;; DB
+;; package-cmds, package-args, cur-bib-tables, all-bib-tables, latex-cmds,
+;; latex-args, package-sources, user-noprefix-sources, user-prefix-sources,
+;; label-cands, bibitem-cands, bib-cands, filenames, label-tables, sources,
+;; bibitem-tables, file-cmds, file-words, children,
+(defconst ac-l-db (make-hash-table :test 'eq))
+
+(defsubst ac-l-db-get (sym)
+  (gethash sym ac-l-db))
+
+(defsubst ac-l-db-set (sym value)
+  (puthash sym value ac-l-db))
+
+(defsubst ac-l-db-push (value sym)
+  (puthash sym (cons value (gethash sym ac-l-db)) ac-l-db))
+
+(defsubst ac-l-db-append (sym lst)
+  (puthash sym (append (gethash sym ac-l-db) lst) ac-l-db))
+
+;;; prefixes for arguments
+(defcustom ac-l-argument-regexps
+  '("\\(?:usep\\|RequireP\\)ackage" "documentclass" "begin" "end" "fnsymbol"
+    "\\(?:this\\)?pagestyle" "bibliography\\(?:style\\)?" "pagenumbering"
+    "\\(?:new\\|addto\\|set\\)counter" "[aA]lph" "arabic" "[rR]oman"
+    "@\\(?:addtoreset\\|startsection\\|namedef\\|definecounter\\)"
+    "addcontentsline" "numberwithin" "\\(?:text\\|page\\|f\\|define\\)color"
+    "colorbox" "\\(?:column\\|row\\|cell\\|arrayrule\\|doublerulesep\\)color"
+    "hypersetup" "include\\(?:graphics\\|slide\\)" "insert[a-z]+" "frame"
+    "lst[a-zDIMS]+" "resetcount\\(?:er\\)?onoverlays" "tableofcontents"
+    "movie" "hyperlink\\(?:movie\\|sound\\)" "multiinclude" "sound" "note"
+    "trans[a-z]+" "use[a-z]*theme" "[a-z]+beamertemplate[a-z]*"
+    "\\(?:use\\|set\\)beamer\\(?:color\\|font\\|covered\\)")
+  "A list of regexps to match commands which take arguments."
+  :type '(repeat regexp)
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-file-regexps
+  '("include\\(?:only\\|graphics\\)?" "input" "hypersetup")
+  "A list of regexps to match commands which take file name argument."
+  :type '(repeat regexp)
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-label-regexps
+  '("\\(?:page\\|auto\\|eq\\)?ref" "label")
+  "A list of regexps to match commands which take label name argument."
+  :type '(repeat regexp)
+  :group 'auto-complete-latex)
+
+(defcustom ac-l-bib-regexps
+  '("\\(?:no\\|short\\)?cite[a-zA-Z]*" "bibitem")
+  "A list of regexps to match commands which take bibliography argument."
+  :type '(repeat regexp)
+  :group 'auto-complete-latex)
+
+(defun ac-l-prefix-in-paren (regexps)
+  ;; This doesn't work as omni completion because the return is ac-point.
+  (if (save-excursion
+        (re-search-backward
+         (concat "\\\\\\("
+                 (mapconcat 'identity regexps "\\|")
+                 "\\)\\*?\\(\\s([^]>}]*\\s)\\)*\\(\\s([^]>}]*\\)\\=") nil t))
+      ac-point))
+
+;;; read file data
+(defsubst ac-l-convert-filename-to-file (filename)
+  ;; faster than file-name-sans-extension
+  (let ((nodir (file-name-nondirectory filename)))
+    (if (string-match "\\(.+\\)\\.[^.]*$" nodir)
+        (match-string 1 nodir)
+      nodir)))
+
+(defun* ac-l-read-bibs
+    (&key (files ac-l-bib-files)
+          (regexp "^@[^{@]+{\\([^ =,\t\n]*\\),\n[^@]+\\(^}\\)"))
+  "Convert each bib file listed in FILES to a hash table."
+  (dolist (filename files)
+    (let* ((file (ac-l-convert-filename-to-file filename))
+           (table (make-hash-table :test 'equal)))
+      (ignore-errors
+        (with-temp-buffer
+          (insert-file-contents filename)
+          (while (re-search-forward regexp nil t)
+            (puthash (match-string-no-properties 1)
+                     (match-string-no-properties 0)
+                     table))))
+      (ac-l-db-push (cons file table) 'all-bib-tables)
+      (ac-l-db-push file 'filenames))))
+
+;; k -> package name in `ac-l-package-files', v -> [cmds args]
+(defconst ac-l-packages (make-hash-table :test 'equal))
+
+(defun* ac-l-read-packages
+    (&key (files ac-l-package-files)
+          (cmd-re "\\\\\\(?:[a-z@]*def\\|let\\|new[a-z]+\\|providecommand\\|Declare[a-zA-Z@]+\\)\\*?[ \t]*{?\\\\\\([a-zA-Z]+\\)}?[ =\\#[{]")
+          (arg-re  "\\\\\\(?:DeclareOption[a-zA-Z]*\\|new[a-z]+\\|@definecounter\\)\\*?[ \t]*{\\([a-zA-Z]+\\)}"))
+  "Convert each package listed in FILES to an element of `ac-l-packages'."
+  (dolist (filename files)
+    (let ((file (ac-l-convert-filename-to-file filename))
+          cand cmds args)
+      (ignore-errors
+        (with-temp-buffer
+          (insert-file-contents filename)
+          (while (re-search-forward cmd-re nil t)
+            (setq cand (match-string-no-properties 1))
+            (unless (member cand cmds)
+              (push cand cmds)))
+          (goto-char (point-min))
+          (while (re-search-forward arg-re nil t)
+            (setq cand (match-string-no-properties 1))
+            (unless (member cand args)
+              (push cand args)))))
+      (puthash file (vector cmds args) ac-l-packages)
+      (ac-l-db-push file 'filenames))))
+
+(defcustom ac-l-dict-directory "~/.emacs.d/ac-l-dict/"
+  "Path of the ac-l-dict."
+  :type 'string
+  :group 'auto-complete-latex)
+
+(defun ac-l-write-package-files (dir)
+  "Output candidates collected from files listed in `ac-l-package-files'.
+You can use them in the ac-l-dict."
+  (interactive (list (read-directory-name "Dir: " ac-l-dict-directory nil t)))
+  (maphash (lambda (k v)
+             (loop for (type cands) in `((c ,(aref v 0)) (a ,(aref v 1)))
+                   when cands do
+                   (with-temp-buffer
+                     (insert (mapconcat 'identity (sort cands #'string<) "\n"))
+                     (write-region (point-min) (point-max)
+                                   (format "%s%s-%s-*-*" dir k type)))))
+           ac-l-packages))
+
+(defcustom ac-l-package-dependences
+  '(("hyperref" . "beamer")
+    ("color" . "colortbl\\|beamer")
+    ("array" . "tabularx\\|colortbl"))
+  "Alist of external package dependences.
+Each element is the form (REQUIRED PACKAGE . PACKAGES). Package and
+class files are treated equivalently. This is effective only for
+files read from the ac-l-dict."
+  :type '(repeat (cons string regexp))
+  :group 'auto-complete-latex)
+
+(defun* ac-l-set-help-doc
+    (&optional (sources '(ac-l-source-latex-commands
+                          ac-l-source-latex-arguments)))
+  "Set document property to each source listed in SOURCES."
+  (let* ((files (directory-files ac-l-dict-directory))
+         (help-fn (cond
+                   ((member "YATEXHLP.jp" files)
+                    ;; `Warning: defvar ignored because kinsoku-limit is let-bound'.
+                    (load "international/kinsoku")
+                    'ac-l-yatex-jp-documentation)
+                   ((member "latex-help" files)
+                    'ac-l-latex2e-documentation))))
+    (when help-fn
+      (dolist (source sources)
+        (push (cons 'document help-fn) (symbol-value source))))))
+
+(defun ac-l-make-source-from-dir ()
+  (dolist (file (directory-files ac-l-dict-directory nil "^[^.]"))
+    (let ((sym "p")
+          (prx ac-l-command-prefix)
+          source package req)
+      ;; parse file name
+      (cond
+       ((string-match "^\\([^-]+\\)-\\([^-]\\)-\\([^-]\\)-\\([^-]\\)$" file)
+        (let* ((n (match-string 1 file))
+               (T (match-string 2 file))
+               (s (match-string 3 file))
+               (r (match-string 4 file))
+               (d (assoc-default n ac-l-package-dependences 'string=))
+               (filenames (ac-l-db-get 'filenames)))
+          (unless (member n filenames)
+            (ac-l-db-set 'filenames (cons n filenames)))
+          (if d (setq package (concat n "\\|" d)) (setq package n))
+          (unless (string= s "*") (setq sym s))
+          (unless (string= r "*") (setq req (string-to-number r)))
+          (if (string= T "a")
+              (setq prx 'ac-l-argument
+                    source (intern (format "ac-l-source-%s-arguments" n)))
+            (setq source (intern (format "ac-l-source-%s-commands" n))))))
+       ((or (string= "macro" file)
+            (string= "latex-dot-ltx" file)
+            (string-match "^\\(ptex-\\)?primitives$" file)
+            (string-match "^\\(basic\\|platex\\)-commands$" file))
+        (setq source 'latex-cmd))
+       ((string-match "^\\(basic\\|platex\\)-arguments$" file)
+        (setq source 'latex-arg))
+       ((cond ((string= "user-commands" file) t)
+              ((string= "user-arguments" file) (setq prx 'ac-l-argument)))
+        (setq sym "u"
+              source (intern (concat "ac-l-source-" file)))))
+      ;; read file contents
+      (when source
+        (let ((cands (with-temp-buffer
+                       (insert-file-contents (concat ac-l-dict-directory file))
+                       (split-string (buffer-string) "\n"))))
+          (case source
+            (latex-cmd (ac-l-db-append 'latex-cmds cands))
+            (latex-arg (ac-l-db-append 'latex-args cands))
+            (otherwise
+             (set source (delq nil `(,(if package `(ac-l-package . ,package))
+                                     ,(if (integerp req) `(requires . ,req))
+                                     (symbol . ,sym)
+                                     (prefix . ,prx)
+                                     (candidates . ',cands))))
+             (cond (package
+                    (ac-l-db-push source 'package-sources))
+                   ((string= sym "u")
+                    (ac-l-db-push source 'user-prefix-sources))))))))))
+
+;;; update file's info
+(defstruct ac-l-info
+  "Information about each tex file."
+  modification words commands packages labels bibitems bibs)
+
+;; k -> filename (full path), v -> struct
+(defconst ac-l-structs (make-hash-table :test 'equal))
+(defconst ac-l-children (make-hash-table :test 'equal))
+
+(defsubst ac-l-split-string (str)
+  (split-string str "\\([ \t\n]\\|%.*\n\\|,\\)+" t))
+
+(defsubst ac-l-candidates-hash (regexp table beg end)
+  (goto-char beg)
+  (while (re-search-forward regexp end t)
+    (puthash (match-string-no-properties 1)
+             (match-string-no-properties 0)
+             table)
+    (goto-char (1+ (match-beginning 0)))))
+
+(defun ac-l-make-info (struct filename &optional master)
+  (let* ((word-re "[^\\,]\\(\\<[-'a-zA-Z]+\\>\\)")
+         (package-re "^[^%\n]*\\\\\\(?:\\(?:usep\\|RequireP\\)ackage\\|documentclass\\)\\(?:\\[[^]]*\\]\\)?{\\([^}]+\\)")
+         (lines ".*\n.*\n.*\n")
+         (label-re "\\\\label{\\(\\(?:[^ }\t\n]\\)+\\)}")
+         (label-re1 (concat "^[^%\n]*" label-re ".*$"))
+         (label-re2 (concat "^" lines "[^%\n]*" label-re lines ".*$"))
+         (bibitem-re "^[^%\n]*\\\\bibitem\\(?:\\[[^]]*\\]\\)?{\\(\\(?:[^ }\t\n]\\)+\\)}[^\\]*")
+         (bib-re "^[^%\n]*\\\\bibliography{\\([^}]+\\)")
+         (collect-p (not (or master (buffer-file-name))))
+         (beg (point-min))
+         (label-beg (save-excursion
+                      (goto-char beg)
+                      (forward-line 3)
+                      (point)))
+         (label-end (save-excursion
+                      (goto-char (point-max))
+                      (forward-line -3)
+                      (point)))
+         (label-ht (or (ignore-errors (clrhash (ac-l-info-labels struct)))
+                       (make-hash-table :test 'equal)))
+         (bibitem-ht (or (ignore-errors (clrhash (ac-l-info-bibitems struct)))
+                         (make-hash-table :test 'equal)))
+         (i 0)
+         words commands packages bibs cand)
+    (save-excursion
+      (when (and ac-l-use-word-completion collect-p)
+        (goto-char beg)
+        (while (and (re-search-forward word-re nil t) (<= i 100))
+          (setq cand (match-string-no-properties 1))
+          (when (and (not (member cand words))
+                     (>= (length cand) 3))
+            (push cand words)
+            (incf i))))
+      (when collect-p
+        (let ((latex-cmds (ac-l-db-get 'latex-cmds)))
+          (goto-char beg)
+          (while (re-search-forward ac-l-command-prefix nil t)
+            (setq cand (match-string-no-properties 1))
+            (unless (or (member cand commands)
+                        (member cand latex-cmds))
+              (push cand commands)))))
+      (when master
+        (goto-char beg)
+        (while (re-search-forward package-re nil t)
+          (dolist (name (ac-l-split-string (match-string-no-properties 1)))
+            (unless (member name packages)
+              (push name packages)))))
+      (ac-l-candidates-hash label-re1 label-ht beg label-beg)
+      (ac-l-candidates-hash label-re2 label-ht beg nil)
+      (ac-l-candidates-hash label-re1 label-ht label-end nil)
+      (ac-l-candidates-hash bibitem-re bibitem-ht beg nil)
+      (when ac-l-bib-files
+        (goto-char beg)
+        (while (re-search-forward bib-re nil t)
+          (dolist (name (ac-l-split-string (match-string-no-properties 1)))
+            (unless (member name bibs)
+              (push name bibs))))))
+    (puthash filename
+             (make-ac-l-info
+              :modification (ignore-errors (nth 5 (file-attributes filename)))
+              :words words
+              :commands commands
+              :packages packages
+              :labels label-ht
+              :bibitems bibitem-ht
+              :bibs bibs)
+             ac-l-structs)))
+
+(defsubst ac-l-struct-master ()
+  (gethash ac-l-master-file ac-l-structs))
+
+(defsubst ac-l-all-structs ()
+  (delq t (append (loop for v being the hash-values in ac-l-children collect v)
+                  (list (ac-l-struct-master)))))
+
+(defsubst ac-l-append-info (info-fn)
+  (apply 'append (mapcar info-fn (ac-l-all-structs))))
+
+(defsubst ac-l-convert-file-to-filename (file base-dir suffix)
+  ;; FILE -> BASE-DIR/FILE.SUFFIX
+  (let ((path (expand-file-name file base-dir)))
+    (concat (if (string-match "^\\(.+\\)\\.[^./]+$" path)
+                (match-string 1 path)
+              path)
+            "." suffix)))
+
+(defun ac-l-update-children-names ()
+  ;; parse file names in master and push them into DB
+  (let* ((beg-re "^[^%\n]*\\\\\\(?:")
+         (end-re "\\)[ {\t]+\\([^ }%\n]+\\)")
+         (regexp (concat beg-re "in\\(?:put\\|clude\\)" end-re))
+         (beg (point-min))
+         (dir (if (string-match "^\\(.+/\\).+$" ac-l-master-file)
+                  (match-string 1 ac-l-master-file)
+                "/"))
+         names)
+    (save-excursion
+      (goto-char beg)
+      (when (re-search-forward (concat beg-re "includeonly" end-re) nil t)
+        (setq names (ac-l-split-string (match-string-no-properties 1))
+              regexp (concat beg-re "input" end-re)))
+      (goto-char beg)
+      (setq names (append names
+                          (loop while (re-search-forward regexp nil t)
+                                collect (match-string-no-properties 1)))))
+    (ac-l-db-set 'children
+                 (loop for name in names
+                       for filename = (ac-l-convert-file-to-filename name dir "tex")
+                       if (file-exists-p filename)
+                       collect filename))))
+
+(defun ac-l-update-children (filenames)
+  (clrhash ac-l-children)
+  (dolist (filename filenames)
+    ;; If struct is undefined, put t.
+    (puthash filename (or (gethash filename ac-l-structs) t) ac-l-children))
+  ac-l-children)
+
+(defsubst ac-l-file-mod-p (struct filename)
+  (not (equal (ac-l-info-modification struct)
+              (nth 5 (file-attributes filename)))))
+
+(defsubst ac-l-update-master-info ()
+  (ac-l-make-info (ac-l-struct-master) ac-l-master-file t))
+
+(defun ac-l-update-info (&optional force)
+  "If necessary, update file's info."
+  (if ac-l-master-p
+      (let ((master-mod-p (or force (ac-l-file-mod-p (ac-l-struct-master) ac-l-master-file)))
+            (buf-list (buffer-list)))
+        ;; master
+        (or (loop with master = (expand-file-name ac-l-master-file)
+                  for buf in buf-list
+                  if (string= master (buffer-file-name buf))
+                  do (when (or (buffer-modified-p buf) master-mod-p)
+                       (with-current-buffer buf
+                         (ac-l-update-children-names)
+                         (ac-l-update-master-info)))
+                  and return t)
+            (when master-mod-p
+              (with-temp-buffer
+                (insert-file-contents ac-l-master-file)
+                (ac-l-update-children-names)
+                (ac-l-update-master-info))))
+        ;; children
+        (let* ((filenames (ac-l-db-get 'children))
+               (table (ac-l-update-children filenames)))
+          (dolist (buf buf-list)
+            (let* ((filename (buffer-file-name buf))
+                   (struct (gethash filename table)))
+              (when (and struct
+                         (or (not (ac-l-info-p struct))
+                             (buffer-modified-p buf)
+                             (ac-l-file-mod-p struct filename)))
+                (with-current-buffer buf
+                  (ac-l-make-info struct filename))
+                (remhash filename table))))
+          (maphash (lambda (filename struct)
+                     (when (or (not (ac-l-info-p struct))
+                               (ac-l-file-mod-p struct filename))
+                       (with-temp-buffer
+                         (insert-file-contents filename)
+                         (ac-l-make-info struct filename))))
+                   table)
+          (ac-l-update-children filenames)))
+    (when (or force (buffer-modified-p))
+      (ac-l-update-master-info))))
+
+(defun ac-l-update ()
+  "Update `ac-sources' according to packages."
+  (ac-l-db-set 'package-cmds nil)
+  (ac-l-db-set 'package-args nil)
+  (let ((sources (ac-l-db-get 'sources))
+        cmd-sources arg-sources)
+    (dolist (name (ac-l-info-packages (ac-l-struct-master)))
+      ;; sources
+      (dolist (source (ac-l-db-get 'package-sources))
+        (let* ((alist (symbol-value source))
+               (package (cdr (assq 'ac-l-package alist)))
+               (prefix (cdr (assq 'prefix alist))))
+          (when (string-match package name)
+            (cond
+             ((string= prefix ac-l-command-prefix)
+              (unless (memq source cmd-sources)
+                (push source cmd-sources)))
+             ((eq prefix 'ac-l-argument)
+              (unless (memq source arg-sources)
+                (push source arg-sources)))))))
+      ;; candidates
+      (let* ((vec (or (gethash name ac-l-packages) '[nil nil]))
+             (cmd (aref vec 0))
+             (arg (aref vec 1)))
+        (if cmd (ac-l-db-append 'package-cmds cmd))
+        (if arg (ac-l-db-append 'package-args arg))))
+    (setq ac-sources (append (ac-l-db-get 'user-prefix-sources)
+                             (nth 0 sources)
+                             cmd-sources
+                             (nth 1 sources)
+                             arg-sources
+                             (nth 2 sources)
+                             (ac-l-db-get 'user-noprefix-sources)
+                             (nth 3 sources)))))
+
+(defun ac-l-set-sources ()
+  (let ((s0 `(ac-source-filename
+              ac-l-source-labels
+              ac-l-source-bibitems
+              ,(if ac-l-bib-files 'ac-l-source-bibliographies)
+              ,(if (ac-l-db-get 'latex-cmds) 'ac-l-source-latex-commands)))
+        (s1 `(,(if ac-l-package-files 'ac-l-source-package-commands)
+              ac-l-source-commands
+              ac-source-files-in-current-dir
+              ,(if (ac-l-db-get 'latex-args) 'ac-l-source-latex-arguments)))
+        (s2 `(,(if ac-l-package-files 'ac-l-source-package-arguments)
+              ,(if (ac-l-db-get 'filenames) 'ac-l-source-filenames)))
+        (s3 `(,(if ac-l-use-word-completion 'ac-l-source-words)
+              ac-source-dictionary)))
+    (ac-l-db-set 'sources
+                 (mapcar (lambda (s) (delq nil s)) (list s0 s1 s2 s3)))))
+
+;;; candidate
+;; copied from auto-complete.el and added arguments
+(defun ac-l-candidate (beg-re end-re)
+  (let ((i 0)
+        (regexp (concat beg-re (regexp-quote ac-prefix) end-re))
+        cand cands)
+    (save-excursion
+      ;; Search backward
+      (goto-char ac-point)
+      (while (and (or (not (integerp ac-limit)) (< i ac-limit))
+                  (re-search-backward regexp nil t))
+        (setq cand (match-string-no-properties 1))
+        (unless (member cand cands)
+          (push cand cands)
+          (incf i)))
+      ;; Search backward
+      (goto-char (+ ac-point (length ac-prefix)))
+      (while (and (or (not (integerp ac-limit)) (< i ac-limit))
+                  (re-search-forward regexp nil t))
+        (setq cand (match-string-no-properties 1))
+        (unless (member cand cands)
+          (push cand cands)
+          (incf i))))
+    (nreverse cands)))
+
+(defun ac-l-incremental-update-index (idx cand-fn)
+  (let ((pair (symbol-value idx))
+        (ac-limit (or (and (integerp ac-limit) ac-limit) 10)))
+    (when (null pair)
+      (set idx (cons nil nil)))
+    ;; Mark incomplete
+    (when (car pair)
+      (setcar pair nil))
+    (let ((list (cdr pair))
+          (words (funcall cand-fn)))
+      (dolist (word words)
+        (unless (member word list)
+          (push word list)
+          (setcdr pair list))))))
+
+(defun ac-l-update-index (idx cand-fn)
+  (dolist (buf (buffer-list))
+    (when (and (eq ac-l-major-mode (buffer-local-value 'major-mode buf))
+               (or ac-fuzzy-enable
+                   (not (eq buf (current-buffer)))))
+      (with-current-buffer buf
+        (when (and (not (car (symbol-value idx)))
+                   (< (buffer-size) 1048576))
+          ;; Complete index
+          (set idx (cons t (let ((ac-point (point-min))
+                                 (ac-prefix "")
+                                 ac-limit)
+                             (funcall cand-fn)))))))))
+
+(defun ac-l-candidates (idx cand-fn)
+  (loop initially (unless ac-fuzzy-enable
+                    (ac-l-incremental-update-index idx cand-fn))
+        for buf in (buffer-list)
+        if (and (or (not (integerp ac-limit)) (< (length cands) ac-limit))
+                (derived-mode-p (buffer-local-value 'major-mode buf)))
+        append (funcall ac-match-function ac-prefix
+                        (cdr (buffer-local-value idx buf)))
+        into cands
+        finally return cands))
+
+
+;;;; sources
+(defvar ac-l-word-index nil)
+(make-variable-buffer-local 'ac-l-word-index)
+
+(defun ac-l-smart-capitalize ()
+  ;; Meadow/Emacs memo: http://www.bookshelf.jp/soft/meadow_34.html#SEC495
+  (when (and (looking-back "[[:space:][:cntrl:]]+[a-z']+")
+             (= (point) (save-excursion
+                          (backward-sentence)
+                          (forward-word)
+                          (point))))
+    (capitalize-word -1)))
+
+(defun ac-l-candidate-words-in-buffer ()
+  (ac-l-candidate "[^\\,]\\(\\<" "[-'a-zA-Z]+\\>\\)"))
+
+(defvar ac-l-source-words
+  '((action . ac-l-smart-capitalize)
+    (requires . 3)))
+
+(defvar ac-l-command-index nil)
+(make-variable-buffer-local 'ac-l-command-index)
+
+(defun ac-l-candidate-commands-in-buffer ()
+  (ac-l-candidate "\\\\\\(" "[a-zA-Z@]+\\)"))
+
+(defvar ac-l-source-commands
+  `((prefix . ,ac-l-command-prefix)))
+
+(defun ac-l-basic-sources-setup ()
+  ;; Add properties into basic sources.
+  ;; The sources work like ac-source-words-in-same-mode-buffers.
+  (let* ((cw-fn 'ac-l-candidate-words-in-buffer)
+         (cc-fn 'ac-l-candidate-commands-in-buffer)
+         (wc `(ac-l-candidates 'ac-l-word-index ',cw-fn))
+         (cc `(ac-l-candidates 'ac-l-command-index ',cc-fn))
+         (wi `(ac-l-update-index 'ac-l-word-index ',cw-fn))
+         (ci `(ac-l-update-index 'ac-l-command-index ',cc-fn)))
+    (labels ((pushprops (p1 p2 p3 p4)
+                        (push `(candidates . ,p1) ac-l-source-words)
+                        (push `(candidates . ,p2) ac-l-source-commands)
+                        (push `(init . ,p3) ac-l-source-words)
+                        (push `(init . ,p4) ac-l-source-commands)))
+      (if ac-l-master-p
+          ;; add functions for file's candidates
+          (pushprops `(append ,wc (ac-l-db-get 'file-words))
+                     `(append ,cc (ac-l-db-get 'file-cmds))
+                     `(lambda ()
+                        ,wi
+                        (ac-l-db-set 'file-words
+                                     (ac-l-append-info 'ac-l-info-words)))
+                     `(lambda ()
+                        ,ci
+                        (ac-l-db-set 'file-cmds
+                                     (ac-l-append-info 'ac-l-info-commands))))
+        (pushprops wc cc wi ci)))))
+
+(defvar ac-l-source-latex-commands
+  `((candidates . (ac-l-db-get 'latex-cmds))
+    (prefix . ,ac-l-command-prefix)
+    (symbol . "l")))
+
+(defvar ac-l-source-latex-arguments
+  `((candidates . (ac-l-db-get 'latex-args))
+    (prefix . ac-l-argument)
+    (symbol . "l")))
+
+(defvar ac-l-source-filenames
+  '((candidates . (ac-l-db-get 'filenames))
+    (prefix . ac-l-argument))
+  "Source for package and bib file names.")
+
+(defvar ac-l-source-package-commands
+  `((candidates . (ac-l-db-get 'package-cmds))
+    (prefix . ,ac-l-command-prefix)
+    (symbol . "p")))
+
+(defvar ac-l-source-package-arguments
+  '((candidates . (ac-l-db-get 'package-args))
+    (prefix . ac-l-argument)
+    (symbol . "p")))
+
+(defsubst ac-l-gethash (key tables)
+  (loop for table in tables thereis (gethash key table)))
+
+(defsubst ac-l-append-keys (tables)
+  (apply 'append (mapcar (lambda (table)
+                           (loop for k being the hash-keys in table collect k))
+                         tables)))
+
+(defun ac-l-update-labels ()
+  (let ((it (ac-l-db-set 'label-tables
+                         (mapcar 'ac-l-info-labels (ac-l-all-structs)))))
+    (ac-l-db-set 'label-cands (ac-l-append-keys it))))
+
+(defvar ac-l-source-labels
+  '((init . ac-l-update-labels)
+    (candidates . (ac-l-db-get 'label-cands))
+    (prefix . ac-l-label)
+    (document . (lambda (k) (ac-l-gethash k (ac-l-db-get 'label-tables))))
+    (symbol . "L")))
+
+(defun ac-l-complete-labels ()
+  "Start label name completion at point."
+  (interactive)
+  (auto-complete (list (remove '(prefix . ac-l-label) ac-l-source-labels))))
+
+(defun ac-l-update-bibitems ()
+  (let ((it (ac-l-db-set 'bibitem-tables
+                         (mapcar 'ac-l-info-bibitems (ac-l-all-structs)))))
+    (ac-l-db-set 'bibitem-cands (ac-l-append-keys it))))
+
+(defvar ac-l-source-bibitems
+  '((init . ac-l-update-bibitems)
+    (candidates . (ac-l-db-get 'bibitem-cands))
+    (prefix . ac-l-bib)
+    (document . (lambda (k) (ac-l-gethash k (ac-l-db-get 'bibitem-tables))))
+    (symbol . "B")))
+
+(defun ac-l-update-bib ()
+  (let ((it (ac-l-db-set 'cur-bib-tables
+                         (loop with tables = (ac-l-db-get 'all-bib-tables)
+                               for name in (ac-l-append-info 'ac-l-info-bibs)
+                               if (assoc-default name tables 'string=)
+                               collect it))))
+    (ac-l-db-set 'bib-cands (ac-l-append-keys it))))
+
+(defvar ac-l-source-bibliographies
+  '((init . ac-l-update-bib)
+    (candidates . (ac-l-db-get 'bib-cands))
+    (prefix . ac-l-bib)
+    (document . (lambda (k) (ac-l-gethash k (ac-l-db-get 'cur-bib-tables))))
+    (symbol . "B")))
+
+(defun ac-l-complete-bibs ()
+  "Start bibliography completion at point."
+  (interactive)
+  (auto-complete `(,(remove '(prefix . ac-l-bib) ac-l-source-bibitems)
+                   ,(remove '(prefix . ac-l-bib) ac-l-source-bibliographies))))
+
+;;; help
+(defconst ac-l-help (make-hash-table :test 'equal))
+
+(defmacro ac-l-define-help-doc (name file beg-re end-re)
+  (declare (indent 1))
+  `(defun ,(intern (format "ac-l-%s-documentation" name)) (str)
+     (or (gethash str ac-l-help)
+         (unless (string-match "@" str)
+           (with-temp-buffer
+             (insert-file-contents (concat ac-l-dict-directory ,file))
+             (if (re-search-forward (concat ,beg-re str ,end-re) nil t)
+                 (puthash str (match-string-no-properties 1) ac-l-help)
+               (puthash str t ac-l-help)))))))
+
+(ac-l-define-help-doc latex2e
+  "latex-help"
+  "\\(?:\f\n\\)\\([^\f]*\\(?:^[`\\]"
+  "\\(?:\\s(\\|[ '\n]\\)[^\f]+\\)\\)")
+
+(ac-l-define-help-doc yatex-jp
+  "YATEXHLP.jp"
+  "^\\(\\\\?"
+  "\n[^]+\\)")
+
+
+;;;; clear
+(defvar ac-l-clear-timer nil)
+
+(defun ac-l-clear ()
+  (clrhash ac-l-help))
+
+(defun* ac-l-cancel-timers
+    (&optional (timers '(ac-l-update-timer
+                         ac-l-clear-timer)))
+  (interactive)
+  (dolist (timer timers)
+    (let ((val (symbol-value timer)))
+      (when (timerp val)
+        (cancel-timer val)
+        (set timer nil)))))
+
+
+;;;; setup
+(defun ac-l-update-all (&optional force)
+  (when (eq ac-l-major-mode major-mode)
+    (ac-l-update-info force)
+    (ac-l-update)))
+
+(defun ac-l-master-p ()
+  (setq ac-l-master-p (and (stringp ac-l-master-file)
+                           (file-exists-p ac-l-master-file))))
+
+(defmacro ac-l-set-local-variable (var val)
+  (declare (indent 1))
+  `(unless (local-variable-p ',var)
+     (set (make-local-variable ',var) ,val)))
+
+(defun ac-l-set-local-variables ()
+  (ac-l-set-local-variable ac-prefix-definitions
+    (append '((ac-l-argument . (ac-l-prefix-in-paren ac-l-argument-regexps))
+              (ac-l-file . (ac-l-prefix-in-paren ac-l-file-regexps))
+              (ac-l-label . (ac-l-prefix-in-paren ac-l-label-regexps))
+              (ac-l-bib . (ac-l-prefix-in-paren ac-l-bib-regexps)))
+            ac-prefix-definitions))
+  (ac-l-set-local-variable ac-source-files-in-current-dir
+    (append '((prefix . ac-l-file)
+              (symbol . "F"))
+            ac-source-files-in-current-dir)))
+
+(defun* ac-l-user-sources-setup (&optional (sources ac-l-sources))
+  (dolist (source sources)
+    (ac-l-db-push source (if (assq 'prefix (symbol-value source))
+                             'user-prefix-sources
+                           'user-noprefix-sources))))
+
+(defun ac-l-set-timers ()
+  (setq ac-l-update-timer (run-with-idle-timer ac-l-update-delay t 'ac-l-update-all)
+        ac-l-clear-timer (run-with-timer 600 600 'ac-l-clear)))
 
 (defun ac-l-setup ()
-  (setq ac-sources (append ac-l-sources ac-sources)))
-
-(defun ac-l-after-init-setup ()
-  (setq ac-modes (append ac-modes '(latex-mode)))
-  (add-hook 'latex-mode-hook 'ac-l-setup)
-  ;; for AUCTeX users
-  (and (require 'tex-site nil t)
-       (add-hook 'LaTeX-mode-hook 'ac-l-setup))
-  ;; for YaTeX users
-  (when (fboundp 'yatex-mode)
-    (setq ac-modes (append ac-modes '(yatex-mode)))
-    (add-hook 'yatex-mode-hook 'ac-l-setup)))
-
-(add-hook 'after-init-hook 'ac-l-after-init-setup)
-
-;;;; keywords
-
-(defmacro ac-l-define-dictionary-source (name list)
-  `(defconst ,name
-     '((candidates . (lambda () (all-completions ac-prefix ,list)))
-       )))
-
-;; user keywords (command, option or varoable)
-(ac-l-define-dictionary-source
- ac-l-source-user-keywords
- ac-l-source-user-keywords*)
-
-;; basic options and variables
-(ac-l-define-dictionary-source
- ac-l-source-basic-options-&-variables
- '("a4paper" "a5paper" "abstract" "array" "article" "b4paper" "b5paper"
-   "book" "bp" "center" "cm" "dd" "description" "displaymath" "document"
-   "draft" "em" "ex" "enumerate" "eqnarray" "equation" "evensidemargin"
-   "executivepaper" "figure" "final" "fleqn" "flushleft" "flushright" "in"
-   "leqno" "letter" "letterpaper" "list" "minipage" "mm" "notitlepage"
-   "oneside" "openany" "picture" "pc" "pt" "quotation" "quote" "tabbing"
-   "table" "tabular" "thebibliography" "theindex" "titlepage" "twoside"
-   "verb" "verbatim" "verse"
-
-   ;; pLaTeX
-   "a4j" "disablejfam" "jarticle" "jbook" "jreport" "jsarticle" "jsbook"
-   "tarticle" "tbook" "treport" "zh" "zw"
-   ))
-
-;; external package options and variables
-(ac-l-define-dictionary-source
- ac-l-source-package-options-&-variables
- '(
-   ;; AMS-LaTeX
-   "Bmatrix" "MaxMatrixCols" "Vmatrix" "align" "alignat" "aligned"
-   "alignedat" "amsmath" "amssymb" "bmatrix" "cases" "centertags" "flalign"
-   "fleqn" "gather" "gathered" "intlimits" "leqno" "matrix" "multline"
-   "namelimits" "nointlimits" "nonamelimits" "nosumlimits" "pmatrix" "reqno"
-   "smallmatrix" "split" "subarray" "subequations" "sumlimits" "tbtags"
-   "vmatrix"
-
-   ;; graphicx.sty
-   "angle" "bb" "bbllx" "bblly" "bburx" "bbury" "clip" "command" "demo"
-   "draft" "ext" "final" "graphicx" "height" "hiderotate" "hidesbb"
-   "hidescale" "hiresbb" "keepaspectratio" "natheight" "natwidth" "origin"
-   "read" "scale" "totalheight" "trim" "type" "viewport" "width"
-
-   ;; color.sty
-   "Apricot" "Aquamarine" "Bittersweet" "Black" "Blue" "BlueGreen"
-   "BlueViolet" "BrickRed" "Brown" "BurntOrange" "CadetBlue" "CarnationPink"
-   "Cerulean" "CornflowerBlue" "Cyan" "Dandelion" "DarkOrchid" "Emerald"
-   "ForestGreen" "Fuchsia" "Goldenrod" "Gray" "Green" "GreenYellow"
-   "JungleGreen" "Lavender" "LimeGreen" "Magenta" "Mahogany" "Maroon"
-   "Melon" "MidnightBlue" "Mulberry" "NavyBlue" "OliveGreen" "Orange"
-   "OrangeRed" "Orchid" "Peach" "Periwinkle" "PineGreen" "Plum" "ProcessBlue"
-   "Purple" "RawSienna" "Red" "RedOrange" "RedViolet" "Rhodamine" "RoyalBlue"
-   "RoyalPurple" "RubineRed" "Salmon" "SeaGreen" "Sepia" "SkyBlue"
-   "SpringGreen" "Tan" "TealBlue" "Thistle" "Turquoise" "Violet" "VioletRed"
-   "WildStrawberry" "Yellow" "YellowGreen" "YellowOrange" "black" "blue"
-   "green" "cyan" "magenta" "red" "white" "yellow"
-
-   ;; latexsym.sty
-   "latexsym"
-   ))
-
-;; (p)LaTeX basic commands
-(ac-l-define-dictionary-source
- ac-l-source-basic-commands
- '("Arrowvert" "Big" "Bigg" "Biggl" "Biggm" "Biggr" "Bigl" "Bigm" "Bigr"
-   "Delta" "Downarrow" "Gamma" "Huge" "Im" "LARGE" "LaTeX" "LaTeXe" "Lambda"
-   "Large" "Leftarrow" "Leftrightarrow" "Lleftarrow" "Longleftarrow"
-   "Longleftrightarrow" "Longrightarrow" "Omega" "Phi" "Pi" "Pr" "Psi" "Re"
-   "Rightarrow" "Sigma" "TeX" "Theta" "Uparrow" "Updownarrow" "Upsilon"
-   "Vert" "Xi" "acute" "address" "addtocounter" "addtolength"
-   "aleph" "alpha" "amalg" "angle" "appendix" "approx" "arabic" "arccos"
-   "arcsin" "arctan" "arg" "arraycolsep" "arrayrulewidth" "arraystretch"
-   "arrowvert" "ast" "asymp" "atop" "author" "backslash" "bar" "baselineskip"
-   "because" "begin" "beta" "bf" "bfseries" "bibitem" "bibliography"
-   "bibliographystyle" "big" "bigcap" "bigcirc" "bigcup" "bigg" "biggl"
-   "biggm" "biggr" "bigl" "bigm" "bigodot" "bigoplus" "bigotimes" "bigr"
-   "bigskip" "bigsqcup" "bigtriangledown" "bigtriangleup" "biguplus" "bigvee"
-   "bigwedge" "bmod" "boldmath" "bot" "bowtie" "bracevert" "breve" "buildrel"
-   "bullet" "cap" "caption" "cbezier" "cdot" "cdots" "centering" "chapter"
-   "check" "chi" "circ" "cite" "cleardoublepage" "clearpage" "cline"
-   "clubsuit" "colon" "columnsep" "columnseprule" "cong" "coprod" "cos"
-   "cosh" "cot" "crcr" "csc" "cup" "dagger" "dashbox" "dashv" "date"
-   "ddagger" "ddot" "ddots" "deg" "delta" "det" "diamond" "diamondsuit" "dim"
-   "displaystyle" "div" "documentclass" "documentstyle" "dot" "doteq"
-   "doublerulesep" "downarrow" "ell" "emph" "emptyset" "end" "enlargethispage"
-   "enskip" "enspace" "ensuremath" "epsilon" "equiv" "eta" "exists" "exp"
-   "fbox" "footnote" "footnotemark" "footnotesize" "footnotetext" "footskip"
-   "forall" "frac" "framebox" "frown" "gamma" "gcd" "ge" "geq" "gets" "gg"
-   "glossary" "grave" "halflineskip" "hat" "hbar" "hbox" "headheight"
-   "headsep" "heartsuit" "hfil" "hfill" "hline" "hom" "hookleftarrow"
-   "hookrightarrow" "hphantom" "hskip" "hspace" "hss" "huge" "ialign" "iff"
-   "imath" "in" "include" "includeonly" "indent" "index" "inf" "infty" "input"
-   "int" "iota" "it" "item" "itemindent" "itemize" "itemsep" "itshape" "jmath"
-   "join" "kappa" "ker" "kern" "kill" "label" "labelsep" "labelwidth" "lambda"
-   "land" "landscape" "langle" "large" "lbrace" "lceil" "ldots" "le" "left"
-   "leftarrow" "leftharpoondown" "leftharpoonup" "leftmargin" "leftrightarrow"
-   "legalpaper" "leq" "lfloor" "lg" "lgroup" "lim" "liminf" "limsup" "line"
-   "linebreak" "linethickness" "linewidth" "listoffigures" "listoftables"
-   "listparindent" "ll" "llap" "lmoustache" "ln" "lnot" "log" "longleftarrow"
-   "longleftrightarrow" "longmapsto" "longrightarrow" "lor" "lower"
-   "macrocode" "makeatletter" "makeatother" "makebox" "makeindex" "maketitle"
-   "mapsto" "marginpar" "marginparsep" "marginparwidth" "mathbin" "mathbm"
-   "mathcal" "mathclose" "mathindent" "mathit" "mathnormal" "mathop"
-   "mathopen" "mathord" "mathpunct" "mathrel" "mathring" "mathrm" "mathsf"
-   "mathtt" "max" "mbox" "mdseries" "medskip" "mid" "min" "models" "mp" "mu"
-   "multicolumn" "multiput" "nabla" "natural" "ne" "nearrow" "neg"
-   "negthinspace" "neq" "newcommand" "newcounter" "newenvironment" "newlength"
-   "newline" "newpage" "newsavebox" "newtheorem" "ni" "noalign" "nocite"
-   "nofiles" "noindent" "nolinebreak" "nonumber" "nopagebreak" "normalsize"
-   "not" "notin" "nu" "nwarrow" "oalign" "oddsidemargin" "odot" "oint" "omega"
-   "ominus" "onelineskip" "ooalign" "openbib" "oplus" "oslash" "otimes" "oval"
-   "overbrace" "overleftarrow" "overline" "overrightarrow" "owns" "pagebreak"
-   "pagenumbering" "pageref" "pagestyle" "par" "paragraph" "parallel" "parbox"
-   "parindent" "parsep" "parskip" "part" "partial" "partopsep" "perp"
-   "phantom" "phi" "pi" "pm" "pmod" "prec" "preceq" "prime" "prod" "propto"
-   "protect" "providecommand" "psi" "put" "qbezier" "qquad" "quad" "raise"
-   "raisebox" "rbrace" "rceil" "ref" "renewcommand" "renewenvironment"
-   "report" "rfloor" "rgroup" "rho" "right" "rightarrow" "rightharpoondown"
-   "rightharpoonup" "rightleftharpoons" "rightmargin" "rlap" "rm" "rmfamily"
-   "rmoustache" "rule" "savebox" "sbox" "sc" "scriptscriptstyle" "scriptsize"
-   "scriptstyle" "scshape" "searrow" "sec" "section" "setbox" "setcounter"
-   "setlength" "setminus" "settowidth" "sf" "sffamily" "sharp" "sigma" "sim"
-   "simeq" "sin" "sinh" "skew" "sl" "sloppy" "sloppypar" "slshape" "small"
-   "smallint" "smallskip" "smile" "spadesuit" "sqcap" "sqcup" "sqrt"
-   "sqsubseteq" "sqsupseteq" "stackrel" "star" "stepcounter" "subparagraph"
-   "subsection" "subset" "subseteq" "subsubparagraph" "subsubsection" "succ"
-   "succeq" "sum" "sup" "supset" "supseteq" "surd" "swarrow" "tabcolsep"
-   "tableofcontents" "tan" "tanh" "tau" "textbf" "textcircled" "textheight"
-   "textit" "textmd" "textnormal" "textrm" "textsc" "textsf" "textsl"
-   "textsterling" "textstyle" "textsuperscript" "texttt" "textup" "textwidth"
-   "thanks" "therefore" "theta" "thicklines" "thinlines" "thinspace"
-   "thispagestyle" "tilde" "times" "tiny" "title" "to" "tombow" "top"
-   "topmargin" "topsep" "topskip" "triangle" "triangleleft" "triangleright"
-   "tt" "ttfamily" "twocolumn" "typeout" "unboldmath" "underbrace"
-   "underline" "unitlength" "uparrow" "updownarrow" "uplus" "upshape"
-   "upsilon" "usebox" "usepackage" "varbigtriangledown" "varbigtriangleup"
-   "varepsilon" "varphi" "varpi" "varrho" "varsigma" "vartheta" "vdash"
-   "vdots" "vec" "vector" "vee" "vert" "vfil" "vfill" "vphantom" "vskip"
-   "vspace" "vss" "vtop" "wedge" "widehat" "widetilde" "wp" "wr" "xi" "zeta"
-
-   ;; pLaTeX
-   "gtfamily" "mathgt" "mathmc" "mcfamily" "textgt" "textmc"
-   ))
-
-;; external package commands
-(ac-l-define-dictionary-source
- ac-l-source-package-commands
- '(
-   ;; AMS-LaTeX
-   "Bbbk""Bumpeq" "Cap" "Cup" "DeclareMathOperator" "Doteq" "Finv" "Game"
-   "Lleftarrow" "Lsh" "Rrightarrow" "Rsh" "Subset" "Supset" "Vdash"
-   "Vvdash" "abs" "allowdisplaybreaks" "approxeq" "backepsilon" "backprime"
-   "backsim" "backsimeq" "barwedge" "because" "beth" "between" "bigstar"
-   "binom" "blacklozenge" "blackprime" "blacksquare" "blacktriangle"
-   "blacktriangledown" "blacktriangleleft" "blacktriangleright"
-   "boldsymbol" "boxdot" "boxed" "boxminus" "boxplus" "boxtimes" "bumpeq"
-   "c@MaxMatrixCols" "cdots" "centerdot" "cfrac" "circeq" "circlearrowleft"
-   "circlearrowright" "circledS" "circledast" "circledcirc" "circleddash"
-   "complement" "curlyeqprec" "curlyeqsucc" "curlyvee" "curlywedge"
-   "curvearrowleft" "curvearrowright" "daleth" "dbinom" "ddddot"
-   "dddot" "dfrac" "diagdown" "diagup" "digamma" "displaybreak"
-   "divideontimes" "doteqdot" "dotplus" "dotsb" "dotsc" "dotsi" "dotsm"
-   "dotso" "doublebarwedge" "doublecap" "doublecup" "downdownarrows"
-   "downharpoonleft" "downharpoonright" "eqcirc" "eqref" "eqsim" "eqslantgtr"
-   "eqslantless" "eth" "fallingdotseq" "genfrac" "geqq" "geqslant" "ggg"
-   "gggtr" "gimel" "gnapprox" "gneq" "gneqq" "gnsim" "gtrapprox" "gtrdot"
-   "gtreqless" "gtreqqless" "gtrless" "gtrsim" "gvertneqq" "hdotsfor" "hslash"
-   "idotsint" "iiiint" "iiint" "iint" "injlim" "intercal" "intertext"
-   "lVert" "ldots" "leftarrowtail" "leftleftarrows" "leftrightarrows"
-   "leftrightharpoons" "leftrightsquigarrow" "leftroot" "leftthreetimes"
-   "leqq" "leqslant" "lessapprox" "lessdot" "lesseqgtr" "lesseqqgtr"
-   "lessgtr" "lesssim" "lll" "llless" "lnapprox" "lneq" "lneqq" "lnsim"
-   "looparrowleft" "looparrowright" "lozenge" "ltimes" "lvert" "lvertneqq"
-   "mathbb" "mathcal" "mathfrak" "measuredangle" "medspace" "mspace"
-   "multimap" "multlinegap" "nLeftarrow" "nLeftrightarrow" "nRightarrow"
-   "nVDash" "nVdash" "namelimits" "ncong" "negmedspace" "negthickspace"
-   "nexists" "ngeq" "ngeqq" "ngeqslant" "ngtr" "nleftarrow" "nleftrightarrow"
-   "nleq" "nleqq" "nleqslant" "nless" "nmid" "nobreakdash" "nointlimits"
-   "nonamelimits" "norm" "nosumlimits" "notag" "nparallel" "nprec" "npreceq"
-   "nrightarrow" "nshortmid" "nshortparallel" "nsim" "nsubseteq" "nsubseteqq"
-   "nsucc" "nsucceq" "nsupseteq" "nsupseteqq" "ntriangleleft"
-   "ntrianglelefteq" "ntriangleright" "ntrianglerighteq" "numberwithin"
-   "nvDash" "nvdash" "operatorname" "overleftrightarrow" "overset"
-   "parentequation" "pitchfork" "pmb" "precapprox" "preccurlyeq" "precnapprox"
-   "precneqq" "precnsim" "presim" "projlim" "rVert" "raisetag" "restriction"
-   "rightarrowtail" "rightleftarrows" "rightrightarrows" "rightsquigarrow"
-   "rightthreetimes" "risingdotseq" "rtimes" "rvert" "shortmid"
-   "shortparallel" "sideset" "smallfrown" "smallsetminus" "smallsmile"
-   "sphat" "sphericalangle" "sptilde" "square" "subseteqq" "subsetneq"
-   "subsetneqq" "succapprox" "succcurlyeq" "succnapprox" "succneqq"
-   "succnsim" "succsim" "supseteqq" "supsetneq" "supsetneqq" "tag" "tagform@"
-   "tags" "tbinom" "tfrac" "therefore" "thickapprox" "thicksim" "thickspace"
-   "triangledown" "trianglelefteq" "triangleq" "trianglerighteq"
-   "twoheadleftarrow" "twoheadrightarrow" "underleftarrow"
-   "underleftrightarrow" "underrightarrow" "underset" "upharpoonleft"
-   "upharpoonright" "uproot" "upuparrows" "vDash" "varDelta" "varGamma"
-   "varLambda" "varOmega" "varPhi" "varPi" "varPsi" "varSigma" "varTheta"
-   "varUpsilon" "varXi" "varinjlim" "varkappa" "varliminf" "varlimsup"
-   "varnothing" "varprojlim" "varpropto" "varsubsetneq" "varsubsetneqq"
-   "varsupsetneq" "varsupsetneqq" "vartriangle" "vartriangleleft"
-   "vartriangleright" "veebar" "xleftarrow" "xrightarrow"
-
-   ;; graphicx.sty
-   "DeclareGraphicsExtensions" "DeclareGraphicsRule" "graphicspath"
-   "includegraphics" "reflectbox" "resizebox" "rotatebox" "scalebox"
-
-   ;; color.sty
-   "color" "colorbox" "definecolor" "fcolorbox" "pagecolor" "textcolor"
-
-   ;; latexsym.sty
-   "Box" "Diamond" "Join" "leadsto" "lhd" "mho"
-   "rhd" "sqsubset" "sqsupset" "unlhd" "unrhd"
-   ))
-
-;; (p)TeX Primitive Control Sequences
-(ac-l-define-dictionary-source
- ac-l-source-primitives
- '("above" "abovedisplayshortskip" "abovedisplayskip" "abovewithdelims"
-   "accent" "adjdemerits" "advance" "afterassignment" "aftergroup" "atop"
-   "atopwithdelims" "badness" "baselineskip" "batchmode" "begingroup"
-   "belowdisplayshortskip" "belowdisplayskip" "binoppenalty" "botmark" "box"
-   "boxmaxdepth" "brokenpenalty" "catcode" "char" "chardef" "cleaders"
-   "closein" "closeout" "clubpenalty" "copy" "count" "countdef" "cr" "crcr"
-   "csname" "day" "deadcycles" "def" "defaulthyphenchar" "defaultskewchar"
-   "delcode" "delimiter" "delimiterfactor" "delimitershortfall" "dimen"
-   "dimendef" "discretionary" "displayindent" "displaylimits" "displaystyle"
-   "displaywidowpenalty" "displaywidth" "divide" "doublehyphendemerits" "dp"
-   "dump" "edef" "else" "emergencystretch" "end" "endcsname" "endgroup"
-   "endinput" "endlinechar" "eqno" "errhelp" "errmessage" "errorcontextlines"
-   "errorstopmode" "escapechar" "everycr" "everydisplay" "everyhbox"
-   "everyjob" "everymath" "everypar" "everyvbox" "exhyphenpenalty"
-   "expandafter" "fam" "fi" "finalhyphendemerits" "firstmark"
-   "floatingpenalty" "font" "fontdimen" "fontname" "futurelet" "gdef"
-   "global" "globaldefs" "halign" "hangafter" "hangindent" "hbadness" "hbox"
-   "hfil" "hfill" "hfilneg" "hfuzz" "hoffset" "holdinginserts" "hrule"
-   "hsize" "hskip" "hss" "ht" "hyphenation" "hyphenchar" "hyphenpenalty" "if"
-   "ifcase" "ifcat" "ifdim" "ifeof" "iffalse" "ifhbox" "ifhmode" "ifinner"
-   "ifmmode" "ifnum" "ifodd" "iftrue" "ifvbox" "ifvmode" "ifvoid" "ifx"
-   "ignorespaces" "immediate" "indent" "input" "inputlineno" "insert"
-   "insertpenalties" "interlinepenalty" "jobname" "kern" "language" "lastbox"
-   "lastkern" "lastpenalty" "lastskip" "lccode" "leaders" "left"
-   "lefthyphenmin" "leftskip" "leqno" "let" "limits" "linepenalty" "lineskip"
-   "lineskiplimit" "long" "looseness" "lower" "lowercase" "mag" "mark"
-   "mathaccent" "mathbin" "mathchar" "mathchardef" "mathchoice" "mathclose"
-   "mathcode" "mathinner" "mathop" "mathopen" "mathord" "mathpunct" "mathrel"
-   "mathsurround" "maxdeadcycles" "maxdepth" "meaning" "medmuskip" "message"
-   "mkern" "month" "moveleft" "moveright" "mskip" "multiply" "muskip"
-   "muskipdef" "newlinechar" "noalign" "noboundary" "noexpand" "noindent"
-   "nolimits" "nonscript" "nonstopmode" "nulldelimiterspace" "nullfont"
-   "number" "omit" "openin" "openout" "or" "outer" "output" "outputpenalty"
-   "over" "overfullrule" "overline" "overwithdelims" "pagedepth"
-   "pagefilllstretch" "pagefillstretch" "pagefilstretch" "pagegoal"
-   "pageshrink" "pagestretch" "pagetotal" "par" "parfillskip" "parindent"
-   "parshape" "parskip" "patterns" "pausing" "penalty" "postdisplaypenalty"
-   "predisplaypenalty" "predisplaysize" "pretolerance" "prevdepth" "prevgraf"
-   "radical" "raise" "read" "relax" "relpenalty" "right" "righthyphenmin"
-   "rightskip" "romannumeral" "scriptfont" "scriptscriptfont"
-   "scriptscriptstyle" "scriptspace" "scriptstyle" "scrollmode" "setbox"
-   "setlanguage" "sfcode" "shipout" "show" "showbox" "showboxbreadth"
-   "showboxdepth" "showlists" "showthe" "skewchar" "skip" "skipdef"
-   "spacefactor" "spaceskip" "span" "special" "splitbotmark" "splitfirstmark"
-   "splitmaxdepth" "splittopskip" "string" "tabskip" "textfont" "textstyle"
-   "the" "thickmuskip" "thinmuskip" "time" "toks" "toksdef" "tolerance"
-   "topmark" "topskip" "tracingcommands" "tracinglostchars" "tracingmacros"
-   "tracingonline" "tracingoutput" "tracingpages" "tracingparagraphs"
-   "tracingrestores" "tracingstats" "uccode" "uchyph" "underline" "unhbox"
-   "unhcopy" "unkern" "unpenalty" "unskip" "unvbox" "unvcopy" "uppercase"
-   "vadjust" "valign" "vbadness" "vbox" "vcenter" "vfil" "vfill" "vfilneg"
-   "vfuzz" "voffset" "vrule" "vsize" "vskip" "vsplit" "vss" "vtop" "wd"
-   "widowpenalty" "write" "xdef" "xleaders" "xspaceskip" "year"
-
-   ;; pTeX
-   "autospacing" "autoxspacing" "euc" "inhibitxspcode" "jcharwindowpenalty"
-   "jfam" "jfont" "jis" "kanjiskip" "kansuji" "kansujichar" "kuten"
-   "noautospacing" "noautoxspacing" "postbreakpenalty" "prebreakpenalty"
-   "showmode" "sjis" "tate" "tbaselineshift" "tfont" "xkanjiskip" "xspcode"
-   "ybaselineshift" "yoko"
-   ))
-
-;; for style files
-(ac-l-define-dictionary-source
- ac-l-source-style-commands
- '("@@end" "@@ifdefinable" "@@input" "@@par" "@Alph" "@M" "@MM" "@Roman"
-   "@TeXversion" "@addtofilelist" "@addtoreset" "@afterheading"
-   "@afterindentfalse" "@afterindenttrue" "@alph" "@arabic" "@author"
-   "@badmath" "@beginparpenalty" "@biblabel" "@captype" "@centercr"
-   "@chapapp" "@cite" "@clubpenalty" "@date" "@dblarg" "@dblfloat"
-   "@dblfpbot" "@dblfpsep" "@dblfptop" "@dotsep" "@dottedtocline" "@empty"
-   "@endparpenalty" "@endpart" "@eqnnum" "@evenfoot" "@evenhead"
-   "@firstoftwo" "@float" "@fnsymbol" "@fontswitch" "@for" "@fpbot" "@fpsep"
-   "@fptop" "@gobble" "@gobbletwo" "@gtempa" "@hangfrom" "@highpenalty"
-   "@idxitem" "@ifclassloaded" "@ifdefinable" "@ifnextchar"
-   "@ifpackageloaded" "@ifstar" "@ifundefined" "@ignoretrue" "@input"
-   "@inputcheck" "@inputcheck0" "@itempenalty" "@ixpt" "@latex@error"
-   "@listI" "@listi" "@listii" "@listiii" "@listiv" "@listv" "@listvi"
-   "@lowpenalty" "@m" "@mainmatterfalse" "@mainmattertrue" "@makecaption"
-   "@makechapterhead" "@makefnmark" "@makefntext" "@makeother" "@maketitle"
-   "@maxdepth" "@medpenalty" "@minipagefalse" "@minipagerestore"
-   "@minipagetrue" "@minus" "@mkboth" "@mparswitchfalse" "@mparswitchtrue"
-   "@mpfn" "@mpfootins" "@ne" "@nil" "@nobreaktrue" "@nocounterr" "@nomath"
-   "@normalsize" "@oddfoot" "@oddhead" "@openbib@code" "@part" "@plus"
-   "@pnumwidth" "@providesfile" "@ptsize" "@restonecolfalse" "@restonecoltrue"
-   "@roman" "@schapter" "@secondoftwo" "@sect" "@set@topoint" "@setfontsize"
-   "@setpar" "@settopoint" "@site" "@spart" "@ssect" "@startsection"
-   "@starttoc" "@svsec" "@svsechd" "@tabacckludge" "@tempboxa" "@tempcnta"
-   "@tempdima" "@tempdimb" "@tempswa" "@tempswafalse" "@tempswatrue"
-   "@testopt" "@textsuperscript" "@tfor" "@thanks" "@thefnmark" "@title"
-   "@titlepagefalse" "@titlepagetrue" "@tocrmarg" "@topnum" "@twosidefalse"
-   "@twosidetrue" "@undefined" "@viiipt" "@viipt" "@vipt" "@vpt" "@warning"
-   "@whiledim" "@whileenum" "@whilesw" "@xdblarg" "@xiipt" "@xipt" "@xivpt"
-   "@xpt" "@xsect" "@xviipt" "@xxpt" "@xxvpt" "AA" "AE" "AtBeginDocument"
-   "AtBeginDvi" "AtEndDocument" "AtEndOfPackage" "CheckSum" "CodelineIndex"
-   "DeclareFontShape" "DeclareMathAlphabet" "DeclareOption"
-   "DeclareRobustCommand" "DeclareSymbolFont" "DeclareSymbolFontAlphabet"
-   "DeclareTextAccentDefault" "DeclareTextCommand" "DeclareTextCommandDefault"
-   "DeclareTextFontCommand" "DeclareTextSymbolDefault" "DisableCrossrefs"
-   "DoNotIndex" "DocInclude" "DocInput" "EnableCrossrefs" "ExecuteOptions"
-   "Finale" "GetFileInfo" "IJ" "IfFileExists" "IndexColumns" "Lcount" "Lopt"
-   "MacroIndent" "MakeShortVerb" "MakeUppercase" "NeedsTeXFormat" "OE"
-   "OldMakeindex" "OnlyDescription" "PackageWarning" "PrintChanges"
-   "PrintIndex" "ProcessOptions" "ProvidePackage" "ProvidesClass"
-   "ProvidesFile" "RecordChanges" "RequirePackage" "SS" "SetSymbolFont"
-   "StandardModuleDepth" "StopEventually" "aa" "abovecaptionskip"
-   "addcontentsline" "ae" "alloc@" "and" "appendixname" "backmatter"
-   "belowcaptionskip" "bgroup" "bibindent" "bibname" "bigskipamount"
-   "botfigrule" "bottomfraction" "brokenpenalty" "c@bottomnumber"
-   "c@chapter" "c@dbltopnumber" "c@enumi" "c@enumii" "c@enumiii" "c@enumiv"
-   "c@figure" "c@footnote" "c@mpfootnote" "c@paragraph" "c@part"
-   "c@secnumdepth" "c@section" "c@subparagraph" "c@subsection"
-   "c@subsubsection" "c@tocdepth" "c@topnumber" "c@totalnumber" "changes"
-   "chaptermark" "chaptername" "chardef" "check@mathfonts" "clubpenalty"
-   "col@number" "contentsline" "contentsname" "copyright" "count@" "countdef"
-   "day" "dblfloatpagefraction" "dblfloatsep" "dbltextfloatsep"
-   "dbltopfraction" "dbltopnumber" "define@key" "displaywidowpenalty" "egroup"
-   "end@dblfloat" "end@float" "endfigure" "endinupt" "endlinechar" "endlist"
-   "endtrivlist" "errmessage" "escapechar" "ext@figure" "ext@table" "fboxrule"
-   "fboxsep" "figurename" "file" "filename@parse" "firstmark"
-   "floatpagefraction" "floatsep" "flushbottom" "fnsymbol" "fnum@figure"
-   "fnum@table" "fontsize" "footnoterule" "fps@figure" "fps@table"
-   "frontmatter" "ftype@figure" "ftype@table" "hb@xt@" "hss"
-   "if@compatibility" "if@mainmatter" "if@mparswitch" "if@noskipsec"
-   "if@openright" "if@restonecol" "if@tempswa" "if@titlepage" "if@twocolumn"
-   "if@twoside" "ifcase" "ij" "imath" "indexname" "interlinepenalty"
-   "intextsep" "iterate" "jmath" "jot" "l@chapter" "l@paragraph" "l@part"
-   "l@section" "l@subparagraph" "l@subsection" "l@subsubsection" "labelenumi"
-   "labelenumii" "labelenumiii" "labelenumiv" "labelitemi" "labelitemii"
-   "labelitemiii" "labelitemiv" "lbrace" "ldots" "leavevmode" "leftmargin"
-   "leftmargini" "leftmarginii" "leftmarginiii" "leftmarginiv" "leftmarginv"
-   "leftmarginvi" "list" "listfigurename" "listtablename" "loop" "lq" "m@ne"
-   "m@th" "mainmatter" "makeglossary" "marginpar" "markboth" "math@fontsfalse"
-   "math@fontstrue" "mathdollar" "mathellipsis" "mathindent" "mathparagraph"
-   "mathsection" "mathsterling" "maxdepth" "medskipamount" "meta" "month"
-   "mpfootnote" "newblock" "newbox" "newcount" "newdimen" "newhelp"
-   "newlanguage" "newmuskip" "newread" "newskip" "newtoks" "newwrite"
-   "nfss@text" "nobreak" "nobreakspace" "nocorr" "noexpand" "normalmarginpar"
-   "null" "num@figure" "number" "numberline" "oe" "onecolumn"
-   "operator@font" "or" "overfullrule" "p@" "p@enumii" "p@enumiii" "p@enumiv"
-   "paragraphmark" "parfillskip" "penalty" "postchaptername"
-   "postdisplaypenalty" "postpartname" "pounds" "prechaptername"
-   "predisplaypenalty" "prepartname" "protected@edef" "ps@headings" "pstyle"
-   "raggedbottom" "raggedleft" "raggedright" "rbrace" "reDeclareMathAlphabet"
-   "refname" "refstepcounter" "repeat" "reset@font" "reversemarginpar" "rq"
-   "secdef" "sectionmark" "selectfont" "sf@size" "sfcode" "sixt@@n" "sloppy"
-   "smallskipamount" "ss" "subitem" "subparagraphmark" "subsectionmark"
-   "subsubitem" "subsubsectionmark" "tabbingsep" "tablename" "textasciicircum"
-   "textasciitilde" "textasteriskcentered" "textbackslash" "textbar"
-   "textbardbl" "textbraceleft" "textbraceright" "textbullet" "textcircled"
-   "textcompwordmark" "textcopyright" "textdagger" "textdaggerdbl"
-   "textdollar" "textellipsis" "textemdash" "textendash" "textexclamdown"
-   "textfloatsep" "textfraction" "textgreater" "textless" "textordfeminine"
-   "textordmasculine" "textparagraph" "textperiodcentered" "textquestiondown"
-   "textquotedblleft" "textquotedblright" "textquoteleft" "textquoteright"
-   "textregistered" "textsection" "textsterling" "texttrademark"
-   "textunderscore" "textvisiblespace" "thechapter" "theenumi" "theenumii"
-   "theenumiii" "theenumiv" "theequation" "thefigure" "thefootnote"
-   "thempfootnote" "theparagraph" "thepart" "thesection" "thesubparagraph"
-   "thesubsection" "thesubsubsection" "tocdepth" "today" "topfigrule"
-   "topfraction" "trivlist" "tw@" "two@digits" "typeout" "viiipt" "viipt"
-   "vipt" "widowpenalty" "wlog" "z@"
-   ))
-
-;; latex.ltx
-(ac-l-define-dictionary-source
- ac-l-source-latex-dot-ltx
- '("@@enc@update" "@@end" "@@endpbox" "@@eqncr" "@@fileswith@pti@ns"
-   "@@hyph" "@@if@newlist" "@@ifdefinable" "@@input" "@@italiccorr"
-   "@@line" "@@math@egroup" "@@par" "@@protect" "@@startpbox" "@@underline"
-   "@@unprocessedoptions" "@@warning" "@Alph" "@DeclareMathDelimiter"
-   "@DeclareMathSizes" "@Esphack" "@Roman" "@TeXversion" "@acci" "@accii"
-   "@acciii" "@acol" "@acolampacol" "@activechar@info" "@addamp" "@addfield"
-   "@addmarginpar" "@addtobot" "@addtocurcol" "@addtodblcol" "@addtofilelist"
-   "@addtonextcol" "@addtopreamble" "@addtoreset" "@addtotoporbot"
-   "@afterheading" "@alph" "@ampacol" "@arabic" "@argarraycr" "@argdef"
-   "@argtabularcr" "@array" "@arrayacol" "@arrayclassiv" "@arrayclassz"
-   "@arraycr" "@arrayparboxrestore" "@arrayrule" "@arstrut" "@author"
-   "@auxout" "@backslashchar" "@badend" "@badlinearg" "@badmath"
-   "@badpoptabs" "@badrequireerror" "@badtab" "@begin@tempboxa"
-   "@begindocumenthook" "@begindvi" "@begintheorem" "@bezier" "@bibitem"
-   "@biblabel" "@bitor" "@botlist" "@boxfpsbit" "@break@tfor" "@bsphack"
-   "@caption" "@captype" "@car" "@carcube" "@cdr" "@centercr" "@cflb" "@cflt"
-   "@changed@cmd" "@charlb" "@charrb" "@check@c" "@check@eq" "@checkend"
-   "@circ" "@circle" "@circlefnt" "@cite" "@cite@ofmt" "@citea" "@citeb"
-   "@citex" "@classi" "@classii" "@classiii" "@classiv" "@classoptionslist"
-   "@classv" "@classz" "@cline" "@cls@pkg" "@clsextension" "@clubpenalty"
-   "@combinedblfloats" "@combinefloats" "@comdblflelt" "@comflelt" "@cons"
-   "@contfield" "@ctrerr" "@curr@enc" "@currbox" "@currdir" "@current@cmd"
-   "@currentlabel" "@currenvir" "@currenvline" "@currext" "@currlist"
-   "@currname" "@currnamestack" "@curroptions" "@currsize" "@date" "@dbflt"
-   "@dblarg" "@dbldeferlist" "@dblfloat" "@dblfloatplacement" "@dbltoplist"
-   "@dec@text@cmd" "@declaredoptions" "@declareoption" "@defaultsubs"
-   "@defaultunits" "@defdefault" "@deferlist" "@definecounter" "@dischyph"
-   "@doclearpage" "@documentclasshook" "@doendpe" "@dofilelist"
-   "@donoparitem" "@dot" "@dottedtocline" "@downline" "@downvector" "@eha"
-   "@ehb" "@ehc" "@ehd" "@elt" "@empty" "@emptycol" "@end@tempboxa"
-   "@enddocumenthook" "@endfloatbox" "@endparenv" "@endpbox" "@endtheorem"
-   "@enlargepage" "@ensuredmath" "@enumctr" "@eqncr" "@eqnnum" "@eqnsel"
-   "@esphack" "@evenfoot" "@evenhead" "@expandtwoargs" "@expast"
-   "@failedlist" "@filef@und" "@filelist" "@fileswfalse" "@fileswith@pti@ns"
-   "@fileswith@ptions" "@fileswithoptions" "@fileswtrue" "@finalstrut"
-   "@firstofone" "@firstoftwo" "@flcheckspace" "@flfail" "@float"
-   "@floatboxreset" "@floatplacement" "@flsetnum" "@flsettextmin" "@flstop"
-   "@flsucceed" "@fltovf" "@flupdates" "@fnsymbol" "@font@info"
-   "@font@warning" "@fontswitch" "@footnotemark" "@footnotetext" "@for"
-   "@forloop" "@fornoop" "@fps" "@fpsadddefault" "@frameb@x" "@framebox"
-   "@framepicbox" "@freelist" "@getcirc" "@getfpsbit" "@getlarrow"
-   "@getlinechar" "@getpen" "@getrarrow" "@gnewline" "@gobble" "@gobblecr"
-   "@gobblefour" "@gobbletwo" "@gtempa" "@halignto" "@hangfrom" "@height"
-   "@hline" "@hspace" "@hspacer" "@hvector" "@icentercr" "@iden" "@if"
-   "@if@pti@ns" "@if@ptions" "@ifatmargin" "@ifclasslater" "@ifclassloaded"
-   "@ifclasswith" "@ifdefinable" "@iffileonpath" "@ifl@aded" "@ifl@t@r"
-   "@ifl@ter" "@ifnch" "@ifnextchar" "@iforloop" "@ifpackagelater"
-   "@ifpackageloaded" "@ifpackagewith" "@iframebox" "@iframepicbox" "@ifstar"
-   "@ifundefined" "@ignorefalse" "@ignoretrue" "@iiiminipage" "@iiiparbox"
-   "@iiminipage" "@iinput" "@iiparbox" "@iirsbox" "@imakebox" "@imakepicbox"
-   "@iminipage" "@include" "@index" "@inmatherr" "@inmathwarn" "@input"
-   "@input@" "@inputcheck" "@iparbox" "@irsbox" "@isavebox" "@isavepicbox"
-   "@ishortstack" "@istackcr" "@itabcr" "@item" "@itemfudge" "@itemitem"
-   "@itemlabel" "@iwhiledim" "@iwhilenum" "@iwhilesw" "@ixpt" "@ixstackcr"
-   "@killglue" "@largefloatcheck" "@latex@error" "@latex@info"
-   "@latex@info@no@line" "@latex@warning" "@latex@warning@no@line"
-   "@latexbug" "@latexerr" "@lbibitem" "@leftmark" "@let@token" "@lign"
-   "@linefnt" "@listdepth" "@listfiles" "@loadwithoptions" "@ltab"
-   "@mainaux" "@makebox" "@makecol" "@makefcolumn" "@makefnmark" "@makeother"
-   "@makepicbox" "@makespecialcolbox" "@marginparreset" "@markright"
-   "@maxdepth" "@midlist" "@minipagefalse" "@minipagerestore" "@minipagetrue"
-   "@minus" "@missingfileerror" "@mkboth" "@mklab" "@mkpream" "@mpargs"
-   "@mpfn" "@mpfootnotetext" "@multiplelabels" "@multiput" "@multispan"
-   "@namedef" "@nameuse" "@nbitem" "@needsf@rmat" "@needsformat"
-   "@newcommand" "@newctr" "@newenv" "@newenva" "@newenvb" "@newl"
-   "@newl@bel" "@newline" "@next" "@nnil" "@no@font@optfalse" "@no@lnbk"
-   "@no@pgbk" "@nobreakfalse" "@nobreaktrue" "@nocnterr" "@nocounterr"
-   "@nodocument" "@noitemerr" "@noligs" "@nolnerr" "@nomath" "@normalsize"
-   "@notdefinable" "@notprerr" "@nthm" "@obsoletefile" "@oddfoot" "@oddhead"
-   "@onefilewithoptions" "@onelevel" "@onlypreamble" "@opargbegintheorem"
-   "@opcol" "@options" "@othm" "@outputdblcol" "@outputpage" "@oval"
-   "@ovhorz" "@ovvert" "@p@pfilename" "@par" "@parboxrestore" "@parboxto"
-   "@parmoderr" "@parse@version" "@partaux" "@partlist" "@partswfalse"
-   "@partswtrue" "@pass@ptions" "@penup" "@percentchar" "@picture"
-   "@picture@warn" "@pkgextension" "@plus" "@popfilename" "@pr@videpackage"
-   "@preamble" "@preamblecmds" "@preamerr" "@process@pti@ns"
-   "@process@ptions" "@protected@testopt" "@providesfile" "@ptionlist"
-   "@pushfilename" "@put" "@qend" "@qrelax" "@rc@ifdefinable" "@reargdef"
-   "@refundefined" "@reinserts" "@removeelement" "@reset@ptions"
-   "@resetactivechars" "@resethfps" "@restorepar" "@rightmark" "@roman"
-   "@rsbox" "@rtab" "@rule" "@sanitize" "@savebox" "@savemarbox"
-   "@savepicbox" "@scolelt" "@sdblcolelt" "@seccntformat" "@secondoftwo"
-   "@sect" "@seqncr" "@setckpt" "@setfloattypecounts" "@setfontsize"
-   "@setfpsbit" "@setminipage" "@setnobreak" "@setpar" "@setref" "@setsize"
-   "@settab" "@settodim" "@settopoint" "@sharp" "@shortstack" "@sline"
-   "@slowromancap" "@spaces" "@specialoutput" "@specialstyle" "@sptoken"
-   "@sqrt" "@ssect" "@stackcr" "@star@or@long" "@startcolumn"
-   "@startdblcolumn" "@startfield" "@startline" "@startpbox" "@startsection"
-   "@starttoc" "@stopfield" "@stopline" "@stpelt" "@svector" "@sverb"
-   "@svsec" "@svsechd" "@sxverbatim" "@tabacckludge" "@tabacol" "@tabarray"
-   "@tabclassiv" "@tabclassz" "@tabcr" "@tablab" "@tabminus" "@tabplus"
-   "@tabrj" "@tabular" "@tabularcr" "@tempdimb" "@tempswa" "@tempswafalse"
-   "@tempswatrue" "@testdef" "@testfalse" "@testfp" "@testopt" "@testpach"
-   "@testtrue" "@text@composite" "@text@composite@x" "@textbottom"
-   "@textsuperscript" "@texttop" "@tf@r" "@tfor" "@tforloop" "@thanks"
-   "@thefnmark" "@thefoot" "@thehead" "@themargin" "@themark" "@thirdofthree"
-   "@thm" "@thmcounter" "@thmcountersep" "@title" "@toodeep" "@toplist"
-   "@topnewpage" "@trivlist" "@tryfcolumn" "@trylist" "@twoclasseserror"
-   "@twoloadclasserror" "@typein" "@typeset" "@typeset@protect" "@uclclist"
-   "@unexpandable@protect" "@unknownoptionerror" "@unprocessedoptions"
-   "@unused" "@unusedoptionlist" "@upline" "@upordown" "@upvector"
-   "@use@ption" "@use@text@encoding" "@verb" "@verbatim" "@viiipt" "@viipt"
-   "@vipt" "@vline" "@vobeyspaces" "@vpt" "@vspace" "@vspacer" "@vtryfc"
-   "@vvector" "@warning" "@wckptelt" "@whiledim" "@whilenum" "@whilesw"
-   "@wrglossary" "@wrindex" "@writeckpt" "@writefile" "@wrong@font@char"
-   "@wtryfc" "@x@protect" "@x@sf" "@xDeclareMathDelimiter" "@xaddvskip"
-   "@xargarraycr" "@xargdef" "@xarraycr" "@xbitor" "@xcentercr" "@xdblarg"
-   "@xdblfloat" "@xeqncr" "@xexnoop" "@xexpast" "@xfloat" "@xfootnote"
-   "@xfootnotemark" "@xfootnotenext" "@xhline" "@xifnch" "@xiipt" "@xipt"
-   "@xivpt" "@xmpar" "@xnewline" "@xnext" "@xnthm" "@xprocess@ptions"
-   "@xpt" "@xsect" "@xtabcr" "@xtabularcr" "@xthm" "@xtryfc" "@xtypein"
-   "@xverbatim" "@xviipt" "@xxDeclareMathDelimiter" "@xxpt" "@xxvpt"
-   "@xympar" "@yargarraycr" "@yargd@f" "@yargdef" "@yeqncr" "@ympar"
-   "@ynthm" "@ythm" "@ytryfc" "@ztryfc" "AA" "Alph" "AtBeginDocument"
-   "AtBeginDvi" "AtEndDocument" "AtEndOfClass" "AtEndOfPackage" "Biggl"
-   "Biggm" "Biggr" "Bigl" "Bigm" "Bigr" "Box" "CheckCommand" "ClassError"
-   "ClassInfo" "ClassWarning" "ClassWarningNoLine" "CurrentOption"
-   "DeclareErrorFont" "DeclareFixedFont" "DeclareFontEncoding"
-   "DeclareFontEncoding@" "DeclareFontEncodingDefaults" "DeclareFontFamily"
-   "DeclareFontShape" "DeclareFontShape@" "DeclareFontSubstitution"
-   "DeclareMathAccent" "DeclareMathAlphabet" "DeclareMathDelimiter"
-   "DeclareMathRadical" "DeclareMathSizes" "DeclareMathSymbol"
-   "DeclareMathVersion" "DeclareOldFontCommand" "DeclareOption"
-   "DeclarePreloadSizes" "DeclareRobustCommand" "DeclareSizeFunction"
-   "DeclareSymbolFont" "DeclareSymbolFontAlphabet"
-   "DeclareSymbolFontAlphabet@" "DeclareTextAccent" "DeclareTextAccentDefault"
-   "DeclareTextCommand" "DeclareTextCommandDefault" "DeclareTextComposite"
-   "DeclareTextCompositeCommand" "DeclareTextFontCommand" "DeclareTextSymbol"
-   "DeclareTextSymbolDefault" "Diamond" "ExecuteOptions" "G@refundefinedtrue"
-   "GenericError" "GenericInfo" "GenericWarning" "IfFileExists"
-   "InputIfFileExists" "Join" "LaTeX" "LaTeXe" "LastDeclaredEncoding"
-   "LoadClass" "LoadClassWithOptions" "MakeLowercase" "MakeUppercase"
-   "MessageBreak" "NeedsTeXFormat" "OptionNotUsed" "PackageError"
-   "PackageInfo" "PackageWarning" "PackageWarningNoLine" "PassOptionsToClass"
-   "PassOptionsToPackage" "Pr" "ProcessOptions" "ProvideTextCommand"
-   "ProvideTextCommandDefault" "ProvidesClass" "ProvidesFile"
-   "ProvidesPackage" "RequirePackage" "RequirePackageWithOptions"
-   "Roman" "SetMathAlphabet" "SetMathAlphabet@" "SetSymbolFont"
-   "SetSymbolFont@" "TeX" "TextSymbolUnavailable" "UndeclareTextCommand"
-   "UseTextAccent" "UseTextSymbol" "aa" "accent@spacefactor"
-   "active@math@prime" "add@accent" "addcontentsline" "addpenalty"
-   "addto@hook" "addtocontents" "addtocounter" "addtolength" "addtoversion"
-   "addvspace" "alloc@" "allowbreak" "alph" "alpha@elt" "alpha@list" "and"
-   "arabic" "arccos" "arcsin" "arctan" "areRobustCommand" "arg" "array"
-   "arraystretch" "author" "baselinestretch" "begin" "best@size" "bezier"
-   "bfseries" "bgroup" "bibcite" "bibdata" "bibitem" "bibliography"
-   "bibliographystyle" "bibstyle" "bigbreak" "biggl" "biggm" "biggr" "bigl"
-   "bigm" "bigr" "bigskip" "bm@b" "bm@c" "bm@l" "bm@r" "bm@s" "bm@t" "bmod"
-   "boldmath" "bordermatrix" "botfigrule" "bottomfraction" "brace" "brack"
-   "break" "buildrel" "c@errorcontextlines" "calculate@math@sizes" "caption"
-   "cases" "cdp@elt" "cdp@list" "center" "centering" "centerline"
-   "cf@encoding" "ch@ck" "chardef@text@cmd" "check@command" "check@icl"
-   "check@icr" "check@mathfonts" "check@nocorr@" "check@range" "check@single"
-   "choose" "circle" "citation" "cite" "cl@@ckpt" "cl@page" "cleardoublepage"
-   "clearpage" "cline" "closein" "closeout" "color@begingroup" "color@endbox"
-   "color@endgroup" "color@hbox" "color@setgroup" "color@vbox" "contentsline"
-   "copyright" "cos" "cosh" "cot" "coth" "cr" "csc" "curr@fontshape"
-   "curr@math" "curr@math@size" "dag" "dashbox" "date" "dblfigrule"
-   "dblfloatpagefraction" "dbltopfraction" "ddag" "declare@robustcommand"
-   "default@M" "default@T" "default@ds" "default@family" "default@mextra"
-   "default@series" "default@shape" "defaulthyphenchar" "defaultscriptratio"
-   "defaultscriptscriptratio" "defaultskewchar" "define@mathalphabet"
-   "define@mathgroup" "define@newfont" "deg" "depth" "det" "dim" "dimen@"
-   "displ@y" "displaylines" "displaymath" "do" "do@noligs"
-   "do@subst@correction" "document" "document@select@group" "documentclass"
-   "documentstyle" "dorestore@version" "dospecials" "dotfill" "dots" "ds@"
-   "eject" "em" "empty" "empty@sfcnt" "enc@update" "end" "end@dblfloat"
-   "end@float" "endarray" "endcenter" "enddisplaymath" "enddocument"
-   "endenumerate" "endeqnarray" "endequation" "endfilecontents"
-   "endflushleft" "endflushright" "endgraf" "enditemize" "endline"
-   "endlinechar" "endlist" "endlrbox" "endmath" "endminipage" "endpicture"
-   "endsloppypar" "endtabbing" "endtabular" "endtrivlist" "endverbatim"
-   "enlargethispage" "enskip" "enspace" "ensuremath" "enumerate" "eqnarray"
-   "equation" "err@rel@i" "error@fontshape" "every@math@size" "everydisplay"
-   "everymath" "execute@size@function" "exp" "external@font" "extra@def"
-   "extracolsep" "extract@alph@from@version" "extract@font"
-   "extract@rangefontinfo" "extract@sizefn" "f@baselineskip" "f@encoding"
-   "f@family" "f@linespread" "f@series" "f@shape" "f@size" "f@user@size"
-   "fbox" "filbreak" "filec@ntents" "filecontents" "filename@area"
-   "filename@base" "filename@dot" "filename@ext" "filename@parse"
-   "filename@path" "filename@simple" "finph@nt" "finsm@sh" "firstmark"
-   "fix@penalty" "fixed@sfcnt" "floatpagefraction" "flushbottom" "flushleft"
-   "flushright" "fmtname" "fmtversion" "fmtversion@topatch" "fnsymbol"
-   "font@info" "font@name" "font@submax" "fontencoding" "fontfamily"
-   "fontseries" "fontshape" "fontsize" "fontsubfuzz" "footnote" "footnotemark"
-   "footnoterule" "footnotetext" "frac" "frame" "framebox" "frenchspacing"
-   "frozen@everydisplay" "frozen@everymath" "fussy" "g@addto@macro" "gcd"
-   "gen@sfcnt" "genb@sfcnt" "genb@x" "genb@y" "get@cdp" "get@external@font"
-   "getanddefine@fonts" "glb@currsize" "glb@settings" "glossary" "goodbreak"
-   "group@elt" "group@list" "hb@xt@" "height" "hexnumber@" "hgl@" "hglue"
-   "hidewidth" "hline" "hmode@bgroup" "hmode@start@before@group" "hom"
-   "hphantom" "hrulefill" "hspace" "hss" "ialign" "if@filesw" "if@ignore"
-   "if@minipage" "if@newlist" "if@no@font@opt" "if@nobreak" "if@noskipsec"
-   "if@partsw" "if@tempswa" "if@test" "ifnot@nil" "ignorespacesafterend"
-   "in@" "in@@" "include" "includeonly" "index" "inf"
-   "init@restore@glb@settings" "init@restore@version" "input" "input@path"
-   "install@mathalphabet" "interfootnotelinepenalty" "is@range" "item"
-   "itemize" "iterate" "itshape" "ker" "kernel@ifnextchar" "kill" "l@ngrel@x"
-   "label" "labelsep" "labelwidth" "last@fontshape" "lbrack" "lccode" "ldots"
-   "leadsto" "leavevmode" "lefteqn" "leftline" "leftmark" "lg" "lhd" "lim"
-   "liminf" "limsup" "line" "linebreak" "linespread" "linethickness" "list"
-   "listfiles" "llap" "ln" "log" "loggingall" "loggingoutput" "loop" "lq"
-   "lrbox" "ltx@sh@ft" "m@th" "magstep" "magstephalf" "makeatletter"
-   "makeatother" "makebox" "makeglossary" "makeindex" "makelabel" "makeph@nt"
-   "makesm@sh" "mandatory@arg" "marginpar" "markboth" "markright" "math"
-   "math@bgroup" "math@egroup" "math@fonts" "math@version" "mathalpha"
-   "mathchar@type" "mathchardef" "mathellipsis" "mathgroup" "mathhexbox"
-   "mathpalette" "mathph@nt" "mathsm@sh" "mathstrut" "mathversion" "matrix"
-   "max" "maxdepth" "maybe@ic" "maybe@ic@" "mb@b" "mb@l" "mb@r" "mb@t" "mbox"
-   "mdseries" "medbreak" "medskip" "mho" "min" "minipage" "multicolumn"
-   "multiput" "multispan" "narrower" "negthinspace" "new@command"
-   "new@environment" "new@fontshape" "new@mathalphabet" "new@mathgroup"
-   "new@mathversion" "new@symbolfont" "newbox" "newcommand" "newcount"
-   "newcounter" "newdimen" "newenvironment" "newfam" "newfont" "newhelp"
-   "newif" "newinsert" "newlabel" "newlanguage" "newlength" "newline"
-   "newmathalphabet" "newmathalphabet@@" "newmathalphabet@@@" "newmuskip"
-   "newpage" "newread" "newsavebox" "newskip" "newtheorem" "newtoks"
-   "newwrite" "nfss@catcodes" "nfss@text" "no@alphabet@error" "noaccents@"
-   "noboundary" "nobreak" "nobreakdashes" "nobreakspace" "nocite" "nocorr"
-   "nocorrlist" "noexpand" "nofiles" "nointerlineskip" "nolinebreak"
-   "non@alpherr" "nonfrenchspacing" "nonumber" "nopagebreak" "normalbaselines"
-   "normalcolor" "normalfont" "normalmarginpar" "normalsfcodes" "normalsize"
-   "not@base" "not@math@alphabet" "null" "numberline" "o@lign" "oalign"
-   "obeycr" "obeylines" "obeyspaces" "offinterlineskip" "oldstylenums"
-   "on@line" "onecolumn" "ooalign" "openout" "openup" "optional@arg"
-   "outer@nobreak" "oval" "pagebreak" "pagenumbering" "pageref" "pagestyle"
-   "par" "paragraphmark" "parbox" "partopsep" "ph@nt" "phantom" "pickup@font"
-   "pictur@" "picture" "pmatrix" "pmod" "poptabs" "pounds" "pr@@@s" "pr@@@t"
-   "pr@m@s" "preload@sizes" "prim@s" "process@table" "protect" "protected"
-   "protected@edef" "protected@xdef" "provide@command" "providecommand"
-   "ps@empty" "ps@plain" "pushtabs" "put" "qbezier" "qbeziermax" "qquad"
-   "quad" "r@@t" "raggedbottom" "raggedleft" "raggedright" "raisebox"
-   "rbrack" "ref" "refstepcounter" "remove@angles" "remove@star"
-   "remove@to@nnil" "removelastskip" "renew@command" "renew@environment"
-   "renewcommand" "renewenvironment" "repeat" "reserved@a" "reserved@b"
-   "reserved@c" "reserved@d" "reserved@e" "reserved@f" "reset@font"
-   "restglb@settings" "restore@mathversion" "restore@protect" "restorecr"
-   "reversemarginpar" "rhd" "rightline" "rightmark" "rlap" "rmfamily" "roman"
-   "root" "rq" "rule" "samepage" "savebox" "sb" "sbox" "scan@@fontshape"
-   "scan@fontshape" "scshape" "sec" "secdef" "sectionmark" "select@group"
-   "selectfont" "set@@mathdelimiter" "set@color" "set@display@protect"
-   "set@fontsize" "set@mathaccent" "set@mathchar" "set@mathdelimiter"
-   "set@mathsymbol" "set@simple@size@args" "set@size@funct@args"
-   "set@size@funct@args@" "set@typeset@protect" "setcounter" "setlength"
-   "settodepth" "settoheight" "settowidth" "sffamily" "sh@ft" "shortstack"
-   "showhyphens" "showoutput" "showoverfull" "sin" "sinh" "size@update"
-   "sizefn@info" "skip@" "slash" "sloppy" "sloppypar" "slshape" "smallbreak"
-   "smallskip" "smash" "sp" "sp@n" "space" "split@name" "sqrt" "sqsubset"
-   "sqsupset" "ssf@size" "stackrel" "stepcounter" "stop" "stretch"
-   "strip@prefix" "strip@pt" "strut" "sub@sfcnt" "subf@sfcnt"
-   "subparagraphmark" "subsectionmark" "subst@correction" "subst@fontshape"
-   "subsubsectionmark" "sup" "suppressfloats" "sw@slant" "symbol" "t@st@ic"
-   "tabbing" "tabular" "tabularnewline" "tan" "tanh" "text@command"
-   "textellipsis" "textfont@name" "textfraction" "textsuperscript" "tf@size"
-   "thanks" "thefootnote" "thempfn" "thempfootnote" "thepage" "thicklines"
-   "thinlines" "thinspace" "thispagestyle" "title" "today" "topfigrule"
-   "topfraction" "totalheight" "tracingall" "tracingfonts" "trivlist"
-   "try@load@fontshape" "try@simple@size" "try@simples" "try@size@range"
-   "try@size@substitution" "tryif@simple" "ttfamily" "two@digits" "twocolumn"
-   "typein" "typeout" "uccode" "unboldmath" "underbar" "underline" "unhbox"
-   "unlhd" "unrestored@protected@xdef" "unrhd" "upshape" "use@mathgroup"
-   "usebox" "usecounter" "usefont" "usepackage" "value" "vector" "verb"
-   "verb@balance@group" "verb@egroup" "verb@eol@error" "verbatim"
-   "verbatim@font" "verbatim@nolig@list" "version@elt" "version@list" "vgl@"
-   "vglue" "vline" "vphantom" "vspace" "warn@rel@i" "width" "wlog" "write"
-   "wrong@fontshape" "x@protect" "zap@space"
-   ))
+  "Set up Auto Complete LaTeX."
+  (let ((msg "Loading auto-complete-latex...")
+        (initial-p (not (ac-l-struct-master))))
+    (message "%s" msg)
+    (setq ac-l-major-mode major-mode)
+    (ac-l-set-local-variables)
+    (when initial-p
+      (ac-l-master-p)
+      (ac-l-basic-sources-setup)
+      (ac-l-user-sources-setup)
+      (ac-l-read-packages)
+      (ac-l-read-bibs)
+      (ac-l-make-source-from-dir)
+      (ac-l-set-help-doc)
+      (ac-l-set-sources)
+      (ac-l-set-timers))
+    (when (or initial-p (not ac-l-master-p))
+      (ac-l-update-all t))
+    (message "%sdone" msg)))
 
 (provide 'auto-complete-latex)
-
 ;;; auto-complete-latex.el ends here

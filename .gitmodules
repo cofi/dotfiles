@@ -85,3 +85,6 @@
 [submodule "elisp/vendor/ac-slime"]
 	path = elisp/vendor/ac-slime
 	url = git://github.com/purcell/ac-slime.git
+[submodule "elisp/vendor/evil-surround"]
+	path = elisp/vendor/evil-surround
+	url = git://github.com/timcharper/evil-surround.git

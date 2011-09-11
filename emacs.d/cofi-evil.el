@@ -1,6 +1,7 @@
 (require 'cofi-util)
 (add-to-loadpath "~/.elisp/vendor/evil/"
-                 "~/.elisp/vendor/evil-numbers/")
+                 "~/.elisp/vendor/evil-numbers/"
+                 "~/.elisp/vendor/evil-surround/")
 (require 'evil-numbers)
 (setq evil-find-skip-newlines t)
 (setq evil-move-cursor-back nil

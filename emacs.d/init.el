@@ -1,7 +1,3 @@
-(defconst startup-time
-  (current-time)
-  "Time Emacs started.")
-
 (defun cofi/fortune2scratch ()
   "Return a comment-padded fortune cookie."
   (let ((cookie (shell-command-to-string "fortune -a")))
@@ -103,7 +99,7 @@
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Time needed to load: %s."
-                                         (cofi/uptime)))
+                                         (emacs-uptime "%s")))
           'append)
 
 (add-hook 'after-save-hook 'byte-compile-config-on-save)

@@ -6,7 +6,6 @@
 
 ;;; (ma)git
 (global-set-key (kbd "C-c g") 'magit-status)
-(vim-mapleader-add "g" 'magit-status)
 (setq magit-commit-signoff t
       magit-completing-read-function 'magit-ido-completing-read
       magit-commit-all-when-nothing-staged nil)
@@ -23,7 +22,6 @@
   '(fset 'magit-quit-window #'cofi/vcs-quit-window))
 
 ;;; (a)hg
-(vim-mapleader-add "h" 'monky-status)
 (eval-after-load "monky"
   '(fill-keymaps '(monky-status-mode-map
                    monky-log-mode-map)

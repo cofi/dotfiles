@@ -1,25 +1,19 @@
 (require 'cofi-util)
 (add-to-loadpath "~/.elisp/vendor/evil/"
                  "~/.elisp/vendor/evil-numbers/"
-                 "~/.elisp/vendor/evil-surround/")
+                 "~/.elisp/vendor/evil-surround/"
+                 "~/.elisp/vendor/undo-tree/"
+                 "~/.elisp/vendor/evil-leader/")
+(require 'undo-tree)
 (require 'evil-numbers)
 (setq evil-find-skip-newlines t)
 (setq evil-move-cursor-back nil
       evil-cross-lines t)
 (setq evil-default-cursor #'cofi/evil-cursor)
 (setq evil-mode-line-format nil)
-
-(defun cofi/evil-cursor ()
-  "Change cursor color according to evil-state."
-  (let ((default "OliveDrab4")
-        (cursor-colors '((insert . "dark orange")
-                         (emacs  . "sienna")
-                         (visual . "white"))))
-    (setq cursor-type (if (eq evil-state 'visual)
-                          'hollow
-                        'bar))
-    (set-cursor-color (def-assoc evil-state cursor-colors default))))
-
+(setq evil-leader/leader ","
+      evil-leader/in-all-states t)
+(require 'evil-leader)
 (require 'evil)
 (require-and-exec 'surround
   (global-surround-mode 1)
@@ -67,7 +61,7 @@
              "go"    'goto-char
              "C-t"   'transpose-chars
              "C-:"   'eval-expression
-             ":"     'anything-execute-extended-command)
+             ":"     'evil-repeat-find-char-reverse)
 
 (fill-keymap evil-motion-state-map
              "_"     'evil-first-non-blank
@@ -128,5 +122,43 @@
     (when (string-match "^\\( +\\)$" line)
       (delete-region (point-at-bol) (point-at-eol)))))
 (add-hook 'evil-insert-state-exit-hook #'cofi/clear-empty-lines)
+
+(evil-leader/set-key
+  "e" 'cofi/file
+  "E" 'cofi/file-alternate
+  "o" 'cofi-find-at-alias
+  "b" 'cofi/buffer
+  "B" 'cofi/buffer-alternate
+  "w" 'save-buffer
+  "W" 'save-some-buffers
+  "k" 'kill-buffer-and-window
+  "K" 'kill-this-buffer
+  "<" 'cofi-cd-alias
+  "d" 'dired-jump
+  "D" 'cofi-dired-alias
+
+  "m" 'compile
+
+  "n" 'split-window-horizontally
+  "c" 'delete-window
+  "N" 'make-frame-command
+  "C" 'delete-frame
+
+  "g" 'magit-status
+  "h" 'monky-status
+
+  "s" 'cofi/switch-file
+  ";" 'cofi/end-prog-line)
+
+(defun cofi/evil-cursor ()
+  "Change cursor color according to evil-state."
+  (let ((default "OliveDrab4")
+        (cursor-colors '((insert . "dark orange")
+                         (emacs  . "sienna")
+                         (visual . "white"))))
+    (setq cursor-type (if (eq evil-state 'visual)
+                          'hollow
+                        'bar))
+    (set-cursor-color (def-assoc evil-state cursor-colors default))))
 
 (provide 'cofi-evil)

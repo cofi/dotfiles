@@ -43,7 +43,7 @@
 (defvar on-mobile? (find cofi/hostname '("hitchhiker") :test #'string=))
 
 (load "private" 'noerror)
-(require 'cofi-vim)
+(require 'cofi-evil)
 
 (defvar cofi/standard-settings '("cofi-autoloads"
                                  "cofi-anything"

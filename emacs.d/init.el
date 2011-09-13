@@ -98,7 +98,7 @@
 (cofi-next-file-assoc)
 (cofi/next-colorscheme)
 (add-hook 'emacs-startup-hook (lambda ()
-                                (message "Time needed to load: %s."
+                                (message "Time needed to load: %s seconds."
                                          (emacs-uptime "%s")))
           'append)
 

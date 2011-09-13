@@ -44,7 +44,9 @@
     (require 'anything-show-completion)
 
     (require-and-exec 'anything-complete
-       (anything-read-string-mode '(buffer variable command)))
+       (anything-read-string-mode '(buffer variable command))
+       (defadvice anything-execute-extended-command (after show-keybinding activate)
+         (where-is this-command)))
 
     ;; From browse-kill-ring.el
     (defadvice yank-pop (around kill-ring-browse-maybe (arg) activate)

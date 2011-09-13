@@ -47,10 +47,6 @@
                 ))
   (push mode evil-insert-state-modes))
 
-(define-key evil-normal-state-map vim-mapleader cofi/vim-mapleader-map)
-(define-key evil-insert-state-map (read-kbd-macro (concat "C-" vim-mapleader)) cofi/vim-mapleader-map)
-(define-key evil-emacs-state-map (read-kbd-macro (concat "C-" vim-mapleader)) cofi/vim-mapleader-map)
-
 (fill-keymap evil-normal-state-map
              "Y"     (cmd (evil-yank (point) (point-at-eol)))
              "+"     'evil-numbers/inc-at-pt

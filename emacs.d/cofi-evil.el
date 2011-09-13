@@ -48,7 +48,7 @@
   (push mode evil-insert-state-modes))
 
 (fill-keymap evil-normal-state-map
-             "Y"     (cmd (evil-yank (point) (point-at-eol)))
+             "Y"     (cmd (evil-yank-characters (point) (point-at-eol)))
              "+"     'evil-numbers/inc-at-pt
              "-"     'evil-numbers/dec-at-pt
              "SPC"   'ace-jump-mode

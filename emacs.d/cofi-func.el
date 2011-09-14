@@ -259,4 +259,14 @@ Major mode determines association."
   "Non-op."
   t)
 
+(defun toggle-region-read-only (begin end)
+  "Toggle read-only on region and set face to `italic'."
+  (interactive "r")
+  (let ((read-only-properties '(read-only t face italic))
+        (remove (text-property-any begin end 'read-only t)))
+    (if remove
+        (let ((inhibit-read-only t))
+          (remove-text-properties begin end read-only-properties))
+      (add-text-properties begin end read-only-properties))))
+
 (provide 'cofi-func)

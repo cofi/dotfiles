@@ -144,7 +144,9 @@
   "h" 'monky-status
 
   "s" 'cofi/switch-file
-  ";" 'cofi/end-prog-line)
+  ";" 'cofi/end-prog-line
+
+  "." 'evil-ex-read-command)
 
 (defun cofi/evil-cursor ()
   "Change cursor color according to evil-state."

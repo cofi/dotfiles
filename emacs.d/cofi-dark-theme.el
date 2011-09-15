@@ -32,7 +32,7 @@
      ;; modeline
      `(mode-line ((t (:background "#334B7D" :foreground ,fg))))
      `(mode-line-inactive ((t (:background ,fg :foreground "#000000"))))
-     `(mode-line-buffer ((t (:bold t :foreground "DarkOrange"))))
+     `(mode-line-buffer ((t (:bold t :foreground "dark orange"))))
      `(mode-line-major-mode ((t (:bold t :foreground "gold"))))
      `(mode-line-minor-mode ((t (:foreground "khaki"))))
 

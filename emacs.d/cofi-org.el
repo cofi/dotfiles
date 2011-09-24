@@ -210,6 +210,7 @@ Note: This assumes all files are in the org-directory."
 ;; ==================================================
 
 ;; Exporting
+(setq org-hide-emphasis-markers t)
 (setq org-emphasis-alist
       '(("*" bold "<b>" "</b>")
         ("/" italic "<i>" "</i>")

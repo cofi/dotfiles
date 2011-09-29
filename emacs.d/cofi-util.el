@@ -308,9 +308,13 @@ See `POUR-MAPPINGS-WITH'."
      ,@code))
 
 (defmacro cmd-arg (args iflag &rest code)
-  "Macro for shorter keybindings with argument."
+  "Macro for shorter keybindings with argument.
+
+For example:
+  (cmd-arg (num) \"p\"
+    (message \"num-prefix: %d\" num)"
   (declare (indent defun))
-  `(lambda (,@args)
+  `(lambda ,args
      (interactive ,iflag)
      ,@code))
 

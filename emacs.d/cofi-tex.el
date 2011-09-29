@@ -1,28 +1,17 @@
-(defun cofi/latex-build ()
-  (interactive)
-  (let ((fname (TeX-active-master t))
-        (builder (if (executable-find "latexmk")
-                       (format "latexmk -pdf %s" fname)
-                     (format "pdflatex %s && pdflatex %s" fname fname))))
-    (compile builder)))
-
-(defun cofi/latex-view (arg)
-  (interactive "p")
-  (let ((name (TeX-active-master t)))
-    (if arg
-        (find-file-other-window name)
-      (shell-command (concat "xdg-open " name)))))
+(eval-after-load "tex"
+  '(push '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t :help "Run Latexmk on file")
+         TeX-command-list))
 
 (add-hook 'TeX-mode-hook (lambda ()
                            (setq fill-column 80)
                            (auto-fill-mode 1)))
 
-(when (locate-library "cdlatex")
-  (add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t)))
-  (add-hook 'LaTeX-mode-hook
-            (gen-local-fill-keymap-hook
-                                  "<f12>" 'cofi/latex-build
-                                  "C-<f12>" 'cofi/latex-view)))
+(add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t)))
+(add-hook 'LaTeX-mode-hook
+          (gen-local-fill-keymap-hook
+              "<f12>" (cmd-arg (override-confirm) "P"
+                        (TeX-command "latexmk" 'TeX-master-file override-confirm))
+              "C-<f12>" (cmd (TeX-command "View" 'TeX-master-file t))))
 
 (defun turn-on-reftex () (reftex-mode 1))
 

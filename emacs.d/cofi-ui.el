@@ -80,7 +80,9 @@
                 ;; workgroup
                 (wg-mode-line-on (:eval (wg-mode-line-string)))
                 ;; line and column
-                "<%l,%c> "
+                "<%l,%c>"
+                (cofi/mail-instance (:eval (offlineimap-mode-line)))
+                " "
                 ;; recursive edit
                 "%[("
                 ;; major mode

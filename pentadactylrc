@@ -134,3 +134,7 @@ command! strip-anchor -javascript -desc 'reopen current url with anchor stripped
    \   dactyl.open(url.substring(0, anchor));
 
 map -g user <Leader>s -ex strip-anchor
+
+" C-g as ESC
+map  -g user <C-g> <ESC>
+imap -g user <C-g> <ESC>

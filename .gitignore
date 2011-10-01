@@ -8,3 +8,4 @@ emacs.d/.emacs.desktop*
 vim/vim/.netrwhist
 emacs.d/url/
 emacs.d/elpa/
+/emacs.d/custom.el

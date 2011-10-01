@@ -10,10 +10,10 @@
 (setq initial-scratch-message (cofi/fortune2scratch))
 
 (setq custom-safe-themes '(;; cofi-dark
-                           "2d8454dc342ea874670f31f1d16438514bfaef00"
+                           "8ceac8a9cefee7992370ccf010d56499c452665a"
                            ;; cofi-light
-                           "2673eb79c0d9fbe5e2a16dd85d3b72c38d2570cd"
-                           default))
+                           "8b69ff3e9c3b1284e7eec061a7afc2d52fd4dc8b"
+                           ))
 (load-theme 'cofi-dark)
 
 (when (or (and (version< emacs-version "24")

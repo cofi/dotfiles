@@ -201,6 +201,10 @@
      `(wg-command-face ((t (:foreground "aquamarine" :bold t))))
      `(wg-frame-face ((t (:foreground ,fg))))
 
+     ;; flyspell
+     `(flyspell-duplicate ((t (:underline "gold3"))))
+     `(flyspell-incorrect ((t (:underline "OrangeRed"))))
+
      ;; misc
      `(which-func ((t (:foreground "gold"))))
 

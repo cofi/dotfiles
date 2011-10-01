@@ -2,13 +2,11 @@
                  "~/.elisp/vendor/clojure-mode/")
 
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
-  (add-hook hook
-            (gen-local-fill-keymap-hook
-            ;; viper overshadows slime-repl binding
-             "C-c M-p" 'slime-repl-set-package
-             "C-c '"   'slime-selector
-             "C-c C-;" 'slime-insert-balanced-comments
-             "C-c M-;" 'slime-remove-balanced-comments)))
+  (add-hook hook (gen-local-fill-keymap-hook
+                     "C-c '"   'slime-selector
+                     "C-c C-;" 'slime-insert-balanced-comments
+                     "C-c M-;" 'slime-remove-balanced-comments
+                     "C-c C-d C-a" 'slime-arglist)))
 
 ;;; CL
 (add-major-mode "\\.cl$" 'lisp-mode)

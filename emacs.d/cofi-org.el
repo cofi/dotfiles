@@ -126,11 +126,19 @@ Note: This assumes all files are in the org-directory."
       appt-display-format 'window)
 (appt-activate 1)
 
+(require 'notifications)
+(defvar cofi/org-appt-id nil)
 (setq appt-disp-window-function
       (lambda (min-to-app new-time msg)
-        (progn
-          (shell-command (format "appt-file In %s m: %s" min-to-app msg))
-          (send-notification msg (format "Appointment in %s minutes" min-to-app)))))
+        (unless (string< min-to-app (number-to-string (- appt-message-warning-time 5)))
+          (setq cofi/org-appt-id nil))
+        (shell-command (format "appt-file In %s m: %s" min-to-app msg))
+        (setq cofi/org-appt-id
+              (notifications-notify :title (format "Appointment in %s minutes" min-to-app)
+                                    :body msg
+                                    :app-name "Org appointment"
+                                    :replaces-id cofi/org-appt-id))))
+
 (setq appt-delete-window-function
       (lambda ()
         (shell-command "appt-file -clear")))

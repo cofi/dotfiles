@@ -37,6 +37,14 @@
     "M"   'cofi/anything-lacarte
     "l"   'anything-locate)
 
+;;; keymap for often used commands
+(defkeymap cofi-quick-map
+  "a" 'align-regexp
+  "r" 're-builder
+  "g" 'ack
+  "G" 'ack-same
+  "s" 'sort-lines)
+
 ;;; breadcrumbs keymap
 (defkeymap cofi-breadcrumbs-map
   "s" 'bc-set
@@ -145,6 +153,7 @@
  "C-x i" cofi-insert-map
  "C-c b" cofi-breadcrumbs-map
  "C-c a" cofi-anything-map
+ "C-c q" cofi-quick-map
  "C-c o" cofi-org-mode-map
  "<f5>"  cofi-org-mode-map
  "<f8>"  cofi-project-map

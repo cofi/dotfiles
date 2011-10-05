@@ -70,11 +70,12 @@
                 ;; coding and line ends
                 mode-line-mule-info
                 ;; buffer modified
-                "%* "
+                "%*"
                 ;; appt
                 appt-mode-string
                 ;; battery
                 battery-mode-line-string
+                " "
                 ;; sml modeline
                 (sml-modeline-mode (:eval (list (sml-modeline-create))))
                 ;; workgroup

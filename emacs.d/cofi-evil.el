@@ -1,8 +1,6 @@
 (require 'cofi-util)
 (add-to-loadpath "~/.elisp/vendor/evil/"
-                 "~/.elisp/vendor/evil-numbers/"
                  "~/.elisp/vendor/evil-surround/"
-                 "~/.elisp/vendor/undo-tree/"
                  "~/.elisp/vendor/evil-leader/")
 (require 'undo-tree)
 (require 'evil-numbers)

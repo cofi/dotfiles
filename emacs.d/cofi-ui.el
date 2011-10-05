@@ -39,6 +39,11 @@
 
 (setq doc-view-continuous t)
 
+(setq pp^L-^L-string (concat (make-string 30 ? ) "⁂" (make-string 30 ? ))
+      pp^L-^L-string-pre "")
+(when (fboundp 'pretty-control-l-mode)
+  (pretty-control-l-mode 1))
+
 (require-and-exec 'keychain-environment
   (run-with-timer 100 (* 5 60) 'keychain/refresh))
 ;; ==================================================

@@ -10,9 +10,9 @@
 (setq initial-scratch-message (cofi/fortune2scratch))
 
 (setq custom-safe-themes '(;; cofi-dark
-                           "8ceac8a9cefee7992370ccf010d56499c452665a"
+                           "738d94df0acf64602bafea9c24a57050f5b9d705"
                            ;; cofi-light
-                           "8b69ff3e9c3b1284e7eec061a7afc2d52fd4dc8b"
+                           "3a45cb5c3a9e99b83b49334c30ee12f28ed5e71d"
                            ))
 (load-theme 'cofi-dark)
 
@@ -44,6 +44,7 @@
                      markdown-mode
                      multi-term
                      paredit
+                     pp-c-l
                      rainbow-mode
                      undo-tree
                      workgroups

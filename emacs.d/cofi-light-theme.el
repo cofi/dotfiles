@@ -213,6 +213,8 @@
      `(linum ((t (:foreground "#000000" :background "#c0d0e0"))))
 
      `(trailing-whitespace ((t (:background "red" :foreground "yellow"))))
+
+     `(pp^L-highlight ((t (:box (:line-width 1 :color "black" :style nil)))))
      ))
 
 (provide-theme 'cofi-light)

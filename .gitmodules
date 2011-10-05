@@ -4,18 +4,12 @@
 [submodule "elisp/vendor/haskell-mode"]
 	path = elisp/vendor/haskell-mode
 	url = git://github.com/pheaver/haskell-mode.git
-[submodule "elisp/vendor/auto-complete"]
-	path = elisp/vendor/auto-complete
-	url = git://github.com/m2ym/auto-complete.git
 [submodule "elisp/vendor/sackspace"]
 	path = elisp/vendor/sackspace
 	url = git://github.com/cofi/sackspace.el
 [submodule "elisp/vendor/keychain-environment"]
 	path = elisp/vendor/keychain-environment
 	url = git://github.com/cofi/keychain-environment.el.git
-[submodule "elisp/vendor/rainbow"]
-	path = elisp/vendor/rainbow
-	url = git://git.naquadah.org/rainbow.git
 [submodule "elisp/vendor/scratch"]
 	path = elisp/vendor/scratch
 	url = git://github.com/ieure/scratch-el.git
@@ -25,12 +19,6 @@
 [submodule "elisp/vendor/google-weather-el"]
 	path = elisp/vendor/google-weather-el
 	url = git://git.naquadah.org/google-weather-el.git
-[submodule "elisp/vendor/vimpulse"]
-	path = elisp/vendor/vimpulse
-	url = git://gitorious.org/vimpulse/vimpulse.git
-[submodule "elisp/vendor/undo-tree"]
-	path = elisp/vendor/undo-tree
-	url = http://www.dr-qubit.org/git/undo-tree.git
 [submodule "elisp/vendor/mk-project"]
 	path = elisp/vendor/mk-project
 	url = git://github.com/mattkeller/mk-project.git
@@ -40,18 +28,12 @@
 [submodule "yasnippets/org-mode"]
 	path = yasnippets/org-mode
 	url = git@github.com:cofi/yasnippet-org-mode.git
-[submodule "elisp/vendor/full-ack"]
-	path = elisp/vendor/full-ack
-	url = git://github.com/nschum/full-ack.git
 [submodule "elisp/vendor/pylookup"]
 	path = elisp/vendor/pylookup
 	url = git://github.com/tsgates/pylookup.git
 [submodule "elisp/vendor/emacs-eclim"]
 	path = elisp/vendor/emacs-eclim
 	url = https://github.com/senny/emacs-eclim.git
-[submodule "elisp/vendor/workgroups"]
-	path = elisp/vendor/workgroups
-	url = git://github.com/tlh/workgroups.el.git
 [submodule "elisp/vendor/clojure-mode"]
 	path = elisp/vendor/clojure-mode
 	url = git://github.com/technomancy/clojure-mode.git
@@ -79,9 +61,6 @@
 [submodule "elisp/vendor/evil"]
 	path = elisp/vendor/evil
 	url = git://gitorious.org/evil/evil.git
-[submodule "elisp/vendor/evil-numbers"]
-	path = elisp/vendor/evil-numbers
-	url = git://github.com/cofi/evil-numbers.git
 [submodule "elisp/vendor/ac-slime"]
 	path = elisp/vendor/ac-slime
 	url = git://github.com/purcell/ac-slime.git

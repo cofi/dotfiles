@@ -21,8 +21,35 @@
           (require 'package))
   (pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")
                                  ("elpa" . "http://tromey.com/elpa/")))
-  (package-initialize))
-
+  (package-initialize)
+  (dolist (package '(
+                     all
+                     auctex
+                     auto-complete
+                     auto-dictionary
+                     autopair
+                     c-eldoc
+                     cdlatex
+                     dedicated
+                     diminish
+                     elein
+                     evil-numbers
+                     flymake-cursor
+                     full-ack
+                     highlight-parentheses
+                     htmlize
+                     keyfreq
+                     keywiz
+                     lacarte
+                     markdown-mode
+                     multi-term
+                     paredit
+                     rainbow-mode
+                     undo-tree
+                     workgroups
+                     ))
+    (unless (package-installed-p package)
+      (package-install package))))
 
 (defun add-to-loadpath (&rest dirs)
   (dolist (dir dirs load-path)

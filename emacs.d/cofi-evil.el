@@ -159,4 +159,44 @@
                         'bar))
     (set-cursor-color (def-assoc evil-state cursor-colors default))))
 
+(require 'cofi-windowing)
+;; allow C-w to be shadowed in emacs-state -- `evil-want-C-w-in-emacs-state' doesn't allow this
+(global-set-key (kbd "C-w") evil-window-map)
+;; alternative if shadowed
+(global-set-key (kbd "C-c w") evil-window-map)
+;; Windowing
+(fill-keymap evil-window-map
+    ;; Splitting
+    "\\" 'split-window-vertically
+    "|" 'split-window-horizontally
+    "/" 'smart-split
+
+    ;; Sizing
+    "RET" 'enlarge-window
+    "-"   'shrink-window-horizontally
+    "+"   'enlarge-window-horizontally
+
+    ;; Moving
+    "<left>"  'evil-window-left
+    "<down>"  'evil-window-down
+    "<up>"    'evil-window-up
+    "<right>" 'evil-window-right
+
+    ;; Swapping
+    "M-h"       'swap-with-left
+    "M-j"       'swap-with-down
+    "M-k"       'swap-with-up
+    "M-l"       'swap-with-right
+    "S-<left>"  'swap-with-left
+    "S-<down>"  'swap-with-down
+    "S-<up>"    'swap-with-up
+    "S-<right>" 'swap-with-right
+    "SPC"       'swap-window
+
+    ;; winner-mode
+    "u" 'winner-undo
+    "C-r" 'winner-reod
+    ;; shadow rotating in evil-window-map
+    "C-R" 'winner-redo)
+
 (provide 'cofi-evil)

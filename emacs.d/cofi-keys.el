@@ -145,12 +145,9 @@
  "C-x i" cofi-insert-map
  "C-c b" cofi-breadcrumbs-map
  "C-c a" cofi-anything-map
- "C-w"   cofi/window-map
  "C-c o" cofi-org-mode-map
  "<f5>"  cofi-org-mode-map
  "<f8>"  cofi-project-map
- ;; alternative for buffers were C-w is used
- "C-c w" cofi/window-map
  )
 
 (add-hook 'diff-mode-hook '(lambda ()

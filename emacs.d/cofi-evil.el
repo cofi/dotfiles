@@ -171,6 +171,9 @@
     "|" 'split-window-horizontally
     "/" 'smart-split
 
+    ;; Deleting
+    "d" 'delete-window
+
     ;; Sizing
     "RET" 'enlarge-window
     "-"   'shrink-window-horizontally

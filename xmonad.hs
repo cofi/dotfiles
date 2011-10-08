@@ -319,6 +319,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , amazon
                                                   , github
                                                   , bitbucket
+                                                  , sourceforge
                                                   , debbugs
                                                   , define
                                                   , urbanDictionary
@@ -369,6 +370,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       py = S.searchEngineF "py" dopy
       amazon = S.searchEngine "ama" "http://www.amazon.de/s/url=search-alias%3Daps&x=0&y=0&field-keywords="
       duden = S.searchEngine "duden" "http://www.duden.de/suchen/dudenonline/"
+      sourceforge = S.searchEngine "sf" "http://sourceforge.net/search/?q="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

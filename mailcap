@@ -15,3 +15,4 @@ image/*;                       /usr/bin/gwenview '%s'
 text/plain;                    /usr/bin/emacsclient -c '%s'
 video/*;                       /usr/bin/smplayer '%s'
 audio/*;                       /usr/bin/smplayer '%s'
+application/pgp-keys;          /usr/bin/gpg --import --interactive --verbose; needsterminal

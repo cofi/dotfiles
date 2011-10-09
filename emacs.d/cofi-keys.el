@@ -43,7 +43,8 @@
   "r" 're-builder
   "g" 'ack
   "G" 'ack-same
-  "s" 'sort-lines)
+  "s" 'sort-lines
+  "w" 'count-words-region)
 
 ;;; breadcrumbs keymap
 (defkeymap cofi-breadcrumbs-map

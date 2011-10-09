@@ -20,7 +20,7 @@ command! bookstack sidebar! Bookstack
 map -g user <Leader>b -ex bookstack
 map -g user <Leader>c -ex sbclose
 
-set guioptions=sMTC
+set guioptions=sNTC
 set editor="emacsclient -c --alternate-editor=gvim"
 
 set mapleader=","

@@ -81,6 +81,7 @@
                                       "M-n" 'gnus-summary-next-article
                                       "r"   'gnus-summary-wide-reply-with-original
                                       "B d" 'gnus-summary-delete-article))
+(require 'offlineimap)
 (add-hook 'gnus-group-mode-hook
           (gen-local-fill-keymap-hook "<f12>" 'offlineimap))
 

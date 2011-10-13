@@ -43,6 +43,11 @@
 (setq slime-repl-history-trim-whitespaces t
       slime-repl-history-remove-duplicates t)
 
+;;; spare me this fasl
+(let ((fasl-dir (expand-file-name "~/tmp/slime-fasls")))
+  (make-directory fasl-dir t)
+  (setq slime-compile-file-options `(:fasl-directory ,fasl-dir)))
+
 (require-and-exec 'slime-autoloads
   (slime-setup '(slime-fancy
                  slime-banner

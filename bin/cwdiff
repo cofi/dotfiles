@@ -1,0 +1,217 @@
+#! /bin/bash
+
+#(C) 2009 C. Junghans
+# junghans@mpip-mainz.mpg.de
+
+#version 0.1    04.08.10 -- initial version
+#version 0.1.1, 05.08.10 -- added -D and -o
+#version 0.1.2, 04.10.10 -- make -D work again and better help
+#version 0.1.3, 10.05.11 -- added --text to diff_opts to allow diff of binary files (issue #3)
+#version 0.1.4, 10.05.11 -- removed --text again and handle case of binary files
+
+FAT_GREEN="[32;01m"
+GREEN="[32m"
+FAT_RED="[31;01m"
+RED="[31m"
+MAG="[35m"
+FAT_BLACK="[1m"
+OFF="[0m"
+NL="
+"
+
+usage="Usage: ${0##*/} [OPTIONS] FILE1 FILE2"
+quiet="no"
+diff="no"
+filter="no"
+diff_opts='--new-file --unified --show-c-function --recursive'
+ab="no"
+out="-"
+style="wdiff"
+a2ps_opts="--prologue=color"
+
+color_filter() {
+  sed -e "s/\[-/$RED/g" \
+      -e "s/-\]/$OFF/g" \
+      -e "s/{+/$GREEN/g" \
+      -e "s/+}/$OFF/g" "$@"
+}
+
+output() {
+  [ "$1" = "-" ] && tee || tee > "$1"
+}
+
+die() {
+  echo -e "$*"
+  exit 1
+}
+
+qecho() {
+  [ "$quiet" = "yes" ] || echo -e "$*"
+}
+
+show_help () {
+  cat << eof
+A colorized version of wdiff
+$usage
+ARGS will be given to wdiff, if not --diffonly or --filter option given
+OPTIONS:
+-f, --filter        Act as a color filter only and don't excute diff/wdiff
+                    internally, just colorize input (no ARGS = read from stdin)
+-d, --diff          Preprocess input with diff and before giving it to wdiff
+                    (very useful for dirs). Option can be used in combination
+                    with --filter option meaning input is a patch.
+-D, --diffonly      Process input with diff only and NOT with wdiff, so ${0##*/}
+                    basically acts like a colorized version of diff. Option
+                    can be used in combination with --filter option meaning
+                    input is a patch.
+    --diffopts XXX  Change opts of diff
+                    Default: '$diff_opts'
+    --ab            replace trunc of dirname by 'a' and 'b'
+    --no-color      Disable color
+                    (implies --a2psopts '--prologue=ul')
+-a, --a2ps          Pipe the output to a2ps, which will produce ps code
+                    (also work with --filter)
+    --a2psopts XXX  Change opts of a2ps
+                    Default: '$a2ps_opts'
+-o, --out FILE      Change output file
+                    Default: stdout
+    --              Stop parsing options
+-h, --help          Show this help
+-v, --version       Show version
+    --hg            Show last log message for hg (or cvs)
+
+Examples:  ${0##*/} -d dir1 dir2
+           ${0##*/} file1 file2
+           ${0##*/} --ab -D dir1 dir2
+	   ${0##*/} -a --ab -D dir1 dir2 > file.ps
+	   wdiff file1 file2 | ${0##*/} -f
+	   diff file1 file2 | ${0##*/} -D -f
+
+
+Send bugs and comment to junghans@mpip-mainz.mpg.de
+eof
+}
+
+shopt -s extglob
+while [ "${1#-}" != "$1" ]; do
+ if [ "${1#--}" = "$1" ] && [ -n "${1:2}" ]; then
+    #short opt with arguments here: o
+    if [ "${1#-[o]}" != "${1}" ]; then
+       set -- "${1:0:2}" "${1:2}" "${@:2}"
+    else
+       set -- "${1:0:2}" "-${1:2}" "${@:2}"
+    fi
+ fi
+ case $1 in
+   --ab)
+    ab="yes"
+    shift;;
+   --no-color)
+    unset FAT_GREEN GREEN FAT_RED RED MAG OFF FAT_BLACK
+    color_filter() { sed -e 's/x/x/' "$@";}
+    a2ps_opts="--prologue=ul"
+    shift;;
+   -f | --filter)
+    filter="yes"
+    shift ;;
+   -d | --diff)
+    diff="yes"
+    shift ;;
+   -D | --diffonly)
+    diff="only"
+    shift ;;
+   -a | --a2ps)
+    a2ps="a2ps"
+    shift ;;
+  --a2psopts)
+    a2ps_opts="$2"
+    shift 2;;
+   -o | --out)
+    out="$2"
+    shift 2;;
+   --diffopts)
+    diff_opts="$2"
+    shift ;;
+   -q | --quiet)
+    quiet="yes"
+    shift ;;
+   -h | --help)
+    show_help
+    exit 0;;
+   --hg)
+    echo "${0##*/}: $(sed -ne 's/^#version.* -- \(.*$\)/\1/p' $0 | sed -n '$p')"
+    exit 0;;
+   -v | --version)
+    echo "${0##*/}, $(sed -ne 's/^#\(version.*\) -- .*$/\1/p' $0 | sed -n '$p') by C. Junghans"
+    exit 0;;
+   --)
+    shift
+    break;;
+  *)
+   die "Unknown option '$1'";;
+ esac
+done
+
+if [ -n "$a2ps" ]; then
+  unset FAT_GREEN GREEN FAT_RED RED MAG OFF FAT_BLACK
+  #seems like a bug in the a2ps style file
+  color_filter() { sed -e "s/\[-/[wd-/g" -e "s/-\]/-wd]/g" -e "s/{+/{wd+/g" -e "s/+}/+wd}/g" "$@"; }
+  a2ps=( a2ps $a2ps_opts --pretty-print=$style -o $out )
+else
+  a2ps=( output $out )
+fi
+
+if [ "$diff" != "no" ]; then
+  total_diff=$(mktemp)
+  t1=$(mktemp)
+  t2=$(mktemp)
+  if [ "$filter" = "no" ]; then
+    diff $diff_opts "$@" > $total_diff
+    #don't die here, because diff of binary files give exit code = 2
+  else
+    sed -e 's/x/x/' "$@" > $total_diff || die
+  fi
+  if [ "$ab" = "yes" ]; then
+    #find the longest equal part in $1 and $2 from the end
+    for ((i=1;i<=(${#1}<${#2}?${#1}:${#2});i++)); do
+      [ "${1:0-$i}" != "${2:0-$i}" ] && break
+    done
+    ((i--))
+    a="${1:0:${#1}-$i}"
+    b="${2:0:${#2}-$i}"
+  else
+    a=a; b=b
+  fi
+  IFS="$NL"
+  for i in $(<$total_diff); do
+    if [ -z "${i##Files * and * differ}" ]; then
+      i="${i/$a/a}"
+      i="${i/$b/b}"
+      echo -e "$i"
+      continue
+    fi
+    if [ -z "${i##diff*}" ]; then
+      i="${i/ $diff_opts}"
+      i="${i/$a/a}"
+      echo -e "$FAT_BLACK${i/$b/b}$OFF"
+      continue
+    fi
+    [ -z "${i##---*}" ] && echo -e "$FAT_RED${i/$a/a}$OFF" && continue
+    [ -z "${i##+++*}" ] && echo -e "$FAT_GREEN${i/$b/b}$OFF" && continue
+    [ -z "${i##@@*}" ] && echo -e "$MAG$i$OFF" && continue
+    if [ "$diff" = "only" ]; then
+      [ -z "${i##-*}" ] && echo "$RED${i}$OFF" && continue
+      [ -z "${i##+*}" ] && echo "$GREE${i}$OFF"&& continue
+      echo "${i}"
+    else
+      [ -z "${i##-*}" ] && echo ${i#-} >> $t1 && continue
+      [ -z "${i##+*}" ] && echo ${i#+} >> $t2 && continue
+      wdiff $t1 $t2 | color_filter; : > $t1; : > $t2
+      echo "${i## }"
+    fi
+  done
+elif [ "$filter" = "yes" ]; then
+  color_filter "$@"
+else
+  wdiff $@ | color_filter
+fi | "${a2ps[@]}"

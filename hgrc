@@ -16,6 +16,8 @@ kdiff3.gui = True
 
 [extdiff]
 cmd.kdiff = kompare
+cmd.wdiff = cwdiff
+opts.wdiff = --diff --ab
 
 [pager]
 attend = diff, log, df

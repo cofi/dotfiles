@@ -149,6 +149,7 @@
  "C-c i" (if (fboundp 'anything-imenu)
              'anything-imenu
            'idomenu)
+ "RET"   'newline-and-indent
  ;; maps
  "C-x m" cofi-minor-mode-map
  "C-x i" cofi-insert-map

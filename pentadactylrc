@@ -127,6 +127,9 @@ command! no-margin -javascript -desc 'set no margin on left and right'
    \ body.style.marginLeft = '0';
    \ body.style.marginRight = '0';
 
+map -g user <Leader>m -ex wide-margin
+map -g user <Leader>M -ex no-margin
+
 command! strip-anchor -javascript -desc 'reopen current url with anchor stripped'
    \ let url = buffer.URL;
    \ let anchor = url.indexOf('#');

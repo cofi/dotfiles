@@ -129,7 +129,7 @@
        (interactive)
        (setq cofi/anything-uni-sources
              (let* ((dirs '("OS" "IPL" "BP" "AI" "CE"))
-                    (subdirs '("aufgaben" "uebungen" "notes" ".."))
+                    (subdirs '("aufgaben" "uebungen" "notes"))
                     (file-filters `(("aufgaben" ,(gen-extension-re "pdf"))
                                     ("uebungen" ,(concat "Makefile" "\\|"
                                                            (gen-extension-re "tex"

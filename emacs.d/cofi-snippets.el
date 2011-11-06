@@ -10,7 +10,7 @@
     (setq yas/indent-line 'fixed)
     (setq yas/fallback-behavior 'call-other-command)
     (setq yas/triggers-in-field t)
-    (setq-default yas/trigger-key (kbd "TAB"))
+    (setq-default yas/trigger-key "TAB")
     (yas/define-snippets 'nxhtml-mode nil 'html-mode))
 
 (define-key yas/minor-mode-map "\C-c&" nil)
@@ -22,7 +22,6 @@
 (add-hook 'org-mode-hook
           (lambda ()
             ;; yasnippet (using the new org-cycle hooks)
-            (setq yas/trigger-key [tab])
             (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
             (define-key yas/keymap [tab] 'yas/next-field)))
 

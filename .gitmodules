@@ -1,6 +1,3 @@
-[submodule "elisp/vendor/yasnippet"]
-	path = elisp/vendor/yasnippet
-	url = git://github.com/emacsmirror/yasnippet.git
 [submodule "elisp/vendor/haskell-mode"]
 	path = elisp/vendor/haskell-mode
 	url = git://github.com/pheaver/haskell-mode.git
@@ -70,3 +67,6 @@
 [submodule "elisp/vendor/evil-leader"]
 	path = elisp/vendor/evil-leader
 	url = git://github.com/cofi/evil-leader.git
+[submodule "elisp/vendor/yasnippet"]
+	path = elisp/vendor/yasnippet
+	url = git://github.com/capitaomorte/yasnippet.git

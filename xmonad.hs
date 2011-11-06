@@ -286,6 +286,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
               , NS "capture" "org-capture" (title =? "Capture Frame") orgFloat
               , NS "agenda" "org-agenda" (title =? "Agenda Frame") orgFloat
+              , NS "network" "urxvtcd -title wicd -e wicd-curses" (title =? "wicd") scratchFloat
               ]
   where scratchFloat = customFloating size
         orgFloat = customFloating orgsize
@@ -299,6 +300,7 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("m", namedScratchpadAction scratchpads "monitor")
                                         , ("o", namedScratchpadAction scratchpads "capture")
                                         , ("a", namedScratchpadAction scratchpads "agenda")
+                                        , ("n", namedScratchpadAction scratchpads "network")
                                         ]
 
 -- Search----------------------------------------

@@ -22,8 +22,12 @@
 
 (defun cofi/close-after-successful-compilation (buffer desc)
   "Close compilation buffer window after successful compilation."
-  (unless (string-match "exited abnormally" desc)
-    (delete-windows-on buffer)))
+  (with-current-buffer buffer
+    (unless (or (string-match "exited abnormally" desc)
+               (progn (beginning-of-buffer)
+                      (re-search-forward "\\([wW]arning\\)\\|\\([eE]rror\\)" nil 'noerror)))
+      (bury-buffer buffer)
+      (winner-undo))))
 
 (push 'cofi/close-after-successful-compilation compilation-finish-functions)
 

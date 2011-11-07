@@ -128,8 +128,8 @@
      (defun cofi/update-anything-sources ()
        (interactive)
        (setq cofi/anything-uni-sources
-             (let* ((dirs '("OS" "IPL" "BP" "AI" "CE"))
-                    (subdirs '("aufgaben" "uebungen" "notes"))
+             (let* ((dirs '("OS" "IPL" "BP" "AI" "CE" "PS"))
+                    (subdirs '("aufgaben" "uebungen" "notes" "praktika"))
                     (file-filters `(("aufgaben" ,(gen-extension-re "pdf"))
                                     ("uebungen" ,(concat "Makefile" "\\|"
                                                            (gen-extension-re "tex"

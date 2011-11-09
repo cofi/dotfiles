@@ -78,10 +78,15 @@
 
 ;;; keys
 (add-hook 'gnus-summary-mode-hook
-          (gen-local-fill-keymap-hook "M-p" 'gnus-summary-prev-article
-                                      "M-n" 'gnus-summary-next-article
-                                      "r"   'gnus-summary-wide-reply-with-original
-                                      "B d" 'gnus-summary-delete-article))
+          (gen-local-fill-keymap-hook "M-p"   'gnus-summary-prev-article
+                                      "M-n"   'gnus-summary-next-article
+                                      "r"     'gnus-summary-wide-reply-with-original
+                                      "B d"   'gnus-summary-delete-article
+                                      "C-M-n" 'gnus-summary-next-thread
+                                      "C-M-p" 'gnus-summary-prev-thread
+                                      "A t"   'gnus-summary-refer-thread
+                                      "M-t"   'gnus-summary-refer-thread
+                                      ))
 (require 'offlineimap)
 (add-hook 'gnus-group-mode-hook
           (gen-local-fill-keymap-hook "<f12>" 'offlineimap))

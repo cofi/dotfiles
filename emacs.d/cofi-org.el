@@ -41,6 +41,7 @@ Note: This assumes all files are in the org-directory."
           (gen-local-fill-keymap-hook
                                 "M-n" 'outline-next-visible-heading
                                 "M-p" 'outline-previous-visible-heading
+                                "M-d" (cmd (org-todo "DONE"))
                                 "C-c M-g" 'org-toc-show
                                 "C-M-<return>" (lambda ()
                                                  (interactive)

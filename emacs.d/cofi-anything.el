@@ -134,11 +134,11 @@
                                     ("uebungen" ,(concat "Makefile" "\\|"
                                                            (gen-extension-re "tex"
                                                                              "gp"
-                                                                             "v"
                                                                              "java"
                                                                              "py"
                                                                              "hs"
                                                                              "lisp"
+                                                                             "org"
                                                                              "clj")))
                                     ("notes" ,(gen-extension-re "org"))
                                ))

@@ -66,7 +66,8 @@
 (setq gnus-summary-force-verify-and-decrypt t)
 (setq mm-verify-option 'always)
 (setq mml2015-verbose t
-      mml2015-encrypt-to-self t)
+      mml2015-encrypt-to-self t
+      mml2015-signers '("B4523295"))
 
 ;;; mime
 (setq gnus-mime-view-all-parts t

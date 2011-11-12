@@ -259,4 +259,9 @@ Major mode determines association."
           (remove-text-properties begin end read-only-properties))
       (add-text-properties begin end read-only-properties))))
 
+(defun cofi-full-calc ()
+  (interactive)
+  (calc nil t)
+  (set-frame-name "calc"))
+
 (provide 'cofi-func)

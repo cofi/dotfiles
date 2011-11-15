@@ -40,6 +40,7 @@
 ;;; keymap for often used commands
 (defkeymap cofi-quick-map
   "a" 'align-regexp
+  "A" 'align
   "r" 're-builder
   "g" 'ack
   "G" 'ack-same

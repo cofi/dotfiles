@@ -26,8 +26,12 @@
 (add-all-to-hook 'message-send-hook
                  #'cofi/mml-ask-if-send
                  (lambda ()
-                   (if (y-or-n-p "Sign message? ")
-                       (mml-secure-message-sign)))
+                   ;; only ask if there is no <#secure cookie
+                   (unless (save-excursion
+                             (goto-char 0)
+                             (re-search-forward "<#secure" nil 'noerror))
+                     (if (y-or-n-p "Sign message? ")
+                         (mml-secure-message-sign))))
                  #'mail-subject-check
                  #'mail-attachment-check)
 

@@ -32,7 +32,6 @@
                              (re-search-forward "<#secure" nil 'noerror))
                      (if (y-or-n-p "Sign message? ")
                          (mml-secure-message-sign))))
-                 #'mail-subject-check
                  #'mail-attachment-check)
 
 ;;; writing

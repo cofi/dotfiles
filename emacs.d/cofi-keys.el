@@ -41,6 +41,7 @@
 (defkeymap cofi-quick-map
   "a" 'align-regexp
   "A" 'align
+  "c" 'calc
   "r" 're-builder
   "g" 'ack
   "G" 'ack-same

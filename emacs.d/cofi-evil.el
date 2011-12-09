@@ -49,7 +49,7 @@
              "Y"     (cmd (evil-yank-characters (point) (point-at-eol)))
              "+"     'evil-numbers/inc-at-pt
              "-"     'evil-numbers/dec-at-pt
-             "SPC"   'ace-jump-mode
+             "SPC"   'ace-jump-char-mode
              "S-SPC" 'ace-jump-word-mode
              "C-SPC" 'ace-jump-line-mode
              "go"    'goto-char

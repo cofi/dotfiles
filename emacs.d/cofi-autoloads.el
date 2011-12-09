@@ -1,4 +1,5 @@
 (autoload 'ace-jump-mode "ace-jump-mode" nil t)
+(autoload 'ace-jump-char-mode "ace-jump-mode" nil t)
 (autoload 'ace-jump-line-mode "ace-jump-mode" nil t)
 (autoload 'ace-jump-word-mode "ace-jump-mode" nil t)
 

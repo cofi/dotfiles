@@ -42,6 +42,7 @@
   "a" 'align-regexp
   "A" 'align
   "c" 'calc
+  "d" 'adict-guess-dictionary
   "r" 're-builder
   "g" 'ack
   "G" 'ack-same

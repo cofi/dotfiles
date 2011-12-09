@@ -98,7 +98,7 @@
   (kbd "M-L") 'org-metaright)
 
 (defadvice evil-goto-definition (around evil-goto-lisp-def activate)
-  "Make use of emacs' and slime's possibilities for finding definitions."
+  "Make use of emacs', slime's and ropemacs possibilities for finding definitions."
   (case major-mode
     (lisp-mode (if slime-mode
                    (or (slime-find-definitions (symbol-name (symbol-at-point)))
@@ -109,6 +109,9 @@
                        (error (condition-case nil
                                   (find-variable (symbol-at-point))
                                 (error ad-do-it)))))
+    (python-mode (if ropemacs-mode
+                     (rope-goto-definition)
+                   ad-do-it))
     (otherwise ad-do-it)))
 
 (defun cofi/clear-empty-lines ()

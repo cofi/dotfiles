@@ -18,7 +18,7 @@
       (list "epylint" (list local-file))))
 
   (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
+               '("\\.pyw?\\'" flymake-pylint-init)))
 
 ;; Folding
 (add-hook 'python-mode-hook 'hs-minor-mode)

@@ -40,26 +40,24 @@
       ropemacs-separate-doc-buffer nil
       ropemacs-enable-shortcuts nil)
 
-;; Modes
-(add-hook 'python-mode-hook
-          (lambda ()
-              (show-paren-mode 1)
-              (auto-fill-mode 1)
-              (setq tab-width 4)
-              (setq mode-name "py")))
-
-;; Keybindings
-(add-hook 'python-mode-hook
-          (gen-local-fill-keymap-hook
-              "M-n"       'flymake-goto-next-error
-              "M-p"       'flymake-goto-prev-error
-              "C-c C-SPC" 'flymake-mode
-              "M-?"       'rope-code-assist
-              "C-M-?"     'rope-lucky-assist
-              "C-c g"     'rope-goto-definition
-              "C-c d"     'rope-show-doc
-              "C-c t"     'rope-show-calltip
-              "C-c ?"     'pylookup-lookup))
+(add-all-to-hook 'python-mode-hook
+                 (turn-on autopair-mode)
+                 (turn-on show-paren-mode)
+                 #'turn-on-auto-fill
+                 (lambda ()
+                   (setq tab-width 4)
+                   (setq mode-name "py"))
+                 (gen-local-fill-keymap-hook
+                     "M-n"       'flymake-goto-next-error
+                     "M-p"       'flymake-goto-prev-error
+                     "C-c C-SPC" 'flymake-mode
+                     "M-?"       'rope-code-assist
+                     "C-M-?"     'rope-lucky-assist
+                     "C-c g"     'rope-goto-definition
+                     "C-c d"     'rope-show-doc
+                     "C-c t"     'rope-show-calltip
+                     "C-c ?"     'pylookup-lookup)
+                 )
 
 (setq pylookup-db-file (cofi/var-file "pylookup.db")
       pylookup-html-locations '("~/doc/python-2.7/")

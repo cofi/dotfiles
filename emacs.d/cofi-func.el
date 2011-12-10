@@ -125,6 +125,14 @@ Neither dir nor alias may contain spaces.")
   (let ((dir (cdr (assoc alias cofi-aliases))))
     (ido-find-file-in-dir dir)))
 
+(defun cofi-find-anything-at-alias (alias)
+  "Find file in aliased directory."
+  (interactive (list (anything-completing-read "Alias: "
+                                               (mapcar #'car
+                                                       cofi-aliases) nil t)))
+  (let ((default-directory (cdr (assoc alias cofi-aliases))))
+    (anything-find-files nil)))
+
 ;; Taken from http://www.emacswiki.org/emacs/ArtistMode
 (defun artist-ido-select-operation (type)
   "Use ido to select a drawing operation in artist-mode"

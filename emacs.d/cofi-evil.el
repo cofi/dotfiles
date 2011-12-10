@@ -124,6 +124,7 @@
   "e" 'cofi/file
   "E" 'cofi/file-alternate
   "o" 'cofi-find-at-alias
+  "O" 'cofi-find-anything-at-alias
   "b" 'cofi/buffer
   "B" 'cofi/buffer-alternate
   "w" 'save-buffer

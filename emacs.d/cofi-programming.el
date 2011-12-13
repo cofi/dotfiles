@@ -25,7 +25,7 @@
   "Close compilation buffer window after successful compilation."
   (with-current-buffer buffer
     (unless (or (string-match "exited abnormally" desc)
-               (progn (beginning-of-buffer)
+               (progn (goto-char 0)
                       (re-search-forward "\\([wW]arning\\)\\|\\([eE]rror\\)" nil 'noerror)))
       (bury-buffer buffer)
       (winner-undo))))

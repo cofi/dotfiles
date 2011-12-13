@@ -1,14 +1,15 @@
-(setq prog-mode-hooks '(
-                        python-mode-hook
-                        haskell-mode-hook
-                        emacs-lisp-mode-hook
-                        sh-mode-hook
-                        lisp-mode-hook
-                        clojure-mode-hook
-                        c-mode-hook
-                        c++-mode-hook
-                        java-mode-hook
-                        ))
+(setq programming-hooks '(
+                          python-mode-hook
+                          haskell-mode-hook
+                          emacs-lisp-mode-hook
+                          sh-mode-hook
+                          lisp-mode-hook
+                          clojure-mode-hook
+                          c-mode-hook
+                          c++-mode-hook
+                          java-mode-hook
+                          ))
+
 (mapc 'load '(
               "cofi-markers"
               "cofi-flymake"

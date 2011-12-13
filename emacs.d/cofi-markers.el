@@ -1,8 +1,7 @@
 (setq fic-highlighted-words '( "HACK" "FIXME" "TODO" "XXX" "BUG"))
 
 (require-and-exec 'fic-mode
-   (add-to-hooks 'fic-mode (append prog-mode-hooks
-                                   '(rst-mode-hook TeX-mode-hook org-mode-hook))))
+   (add-to-hooks 'fic-mode `(,@programming-hooks rst-mode-hook TeX-mode-hook org-mode-hook)))
 
 (defconst marker-regexp "\\<\\(HACK\\|FIXME\\|TODO\\|XXX+\\|BUG\\):"
   "Regexp that matches the markers.")

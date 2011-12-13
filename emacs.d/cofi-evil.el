@@ -13,9 +13,14 @@
       evil-leader/in-all-states t)
 (require 'evil-leader)
 (require 'evil)
+
+;;; evil-surround
+(make-variable-buffer-local 'surround-pairs-alist)
 (require-and-exec 'surround
   (global-surround-mode 1)
-  (push '(?` . ("`" . "'")) surround-pairs-alist))
+  (add-to-hooks (lambda ()
+                  (push '(?` . ("`" . "'")) surround-pairs-alist))
+                '(emacs-lisp-mode-hook lisp-mode-hook)))
 
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)

@@ -272,4 +272,24 @@ Major mode determines association."
   (calc nil t)
   (set-frame-name "calc"))
 
+(defun cofi-dwim-bol (force-to-indentation)
+  "Move to bol, indentation or previous line depending on point.
+
+If point is bolp move to previous line,
+if point is at indentation move to bol,
+else move to indentation.
+
+With a prefix argument you can force to move back to indentation."
+  (interactive "P")
+  (if force-to-indentation
+      (back-to-indentation)
+    (cond
+     ((bolp) (forward-line -1))
+     ((= (point)
+         (save-excursion
+           (back-to-indentation)
+           (point)))
+      (beginning-of-line))
+     (t (back-to-indentation)))))
+
 (provide 'cofi-func)

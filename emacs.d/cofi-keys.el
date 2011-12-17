@@ -194,4 +194,8 @@
               '(diff-mode-hook
                 compilation-mode-hook))
 
+;;; remapping keys
+
+(global-set-key [remap move-beginning-of-line] 'cofi-dwim-bol)
+
 (provide 'cofi-keys)

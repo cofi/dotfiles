@@ -89,6 +89,8 @@
   "zO"        'show-all
   "zc"        'hide-subtree
   "zC"        'hide-all
+  (kbd "M-j") 'org-shiftleft
+  (kbd "M-k") 'org-shiftright
   (kbd "M-H") 'org-metaleft
   (kbd "M-J") 'org-metadown
   (kbd "M-K") 'org-metaup

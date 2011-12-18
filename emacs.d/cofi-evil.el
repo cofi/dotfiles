@@ -182,6 +182,7 @@
 
     ;; Deleting
     "d" 'delete-window
+    "1" 'delete-other-windows
 
     ;; Sizing
     "RET" 'enlarge-window

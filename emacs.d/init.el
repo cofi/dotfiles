@@ -16,6 +16,21 @@
                            ))
 (load-theme 'cofi-dark)
 
+(defun add-to-loadpath (&rest dirs)
+  (dolist (dir dirs load-path)
+    (add-to-list 'load-path (expand-file-name dir) nil #'string=)))
+
+(add-to-loadpath "~/.elisp"
+                 "~/.emacs.d"
+                 "~/.elisp/vendor/sackspace"
+                 "~/.elisp/vendor/keychain-environment"
+                 "~/.elisp/vendor/gist"
+                 "~/.elisp/vendor/pylookup"
+                 "~/.elisp/vendor/scratch"
+                 "~/.elisp/vendor/offlineimap"
+                 "~/.elisp/vendor/ace-jump-mode")
+
+(require 'cofi-util)
 (when (or (and (version< emacs-version "24")
                (load (expand-file-name "~/.emacs.d/elpa/package.el")))
           (require 'package))
@@ -52,21 +67,6 @@
     (unless (package-installed-p package)
       (package-install package))))
 
-(defun add-to-loadpath (&rest dirs)
-  (dolist (dir dirs load-path)
-    (add-to-list 'load-path (expand-file-name dir) nil #'string=)))
-
-(add-to-loadpath "~/.elisp"
-                 "~/.emacs.d"
-                 "~/.elisp/vendor/sackspace"
-                 "~/.elisp/vendor/keychain-environment"
-                 "~/.elisp/vendor/gist"
-                 "~/.elisp/vendor/pylookup"
-                 "~/.elisp/vendor/scratch"
-                 "~/.elisp/vendor/offlineimap"
-                 "~/.elisp/vendor/ace-jump-mode")
-
-(require 'cofi-util)
 (defvar cofi/hostname (car (split-string system-name "\\." t)))
 (defvar on-mobile? (find cofi/hostname '("hitchhiker") :test #'string=))
 

@@ -101,7 +101,7 @@
     "c" 'cfw:open-org-calendar
     "f" 'org-footnote-action)
 
-(fill-global-keymap
+(fill-keymap 'global
  ;; buffer
  "C-c y"     'bury-buffer
  "C-c Y"     'quit-window

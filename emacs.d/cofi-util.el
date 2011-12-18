@@ -213,54 +213,57 @@ strings."
      (if buffer-file-name
          (,mode 1))))
 
+;;; keybinding
+(defun cofi/set-key (map spec cmd)
+  "Set in `map' `spec' to `cmd'.
+
+`Map' may be `'global' `'local' or a keymap.
+A `spec' can be a `read-kbd-macro'-readable string or a vector."
+  (let ((setter-fun (case map
+                      (global #'global-set-key)
+                      (local  #'local-set-key)
+                      (t      (lambda (key def) (define-key map key def)))))
+        (key (typecase spec
+               (vector spec)
+               (string (read-kbd-macro spec))
+               (t (error "wrong argument")))))
+    (funcall setter-fun key cmd)))
+
 (defmacro defkeymap (symbol &rest mappings)
-  (declare (indent 1))
-  "Define keymap bound to `SYMBOL'.
-See `POUR-MAPPINGS-WITH'."
-  `(setq ,symbol (fill-keymap (make-sparse-keymap) ,@mappings)))
+  "Define keymap bound to `symbol'.
+See `pour-mappings-to'"
+  `(anything-defconst ,symbol (pour-mappings-to (make-sparse-keymap mappings))))
 
 (defun fill-keymap (keymap &rest mappings)
   "Fill `KEYMAP' with `MAPPINGS'.
-See `POUR-MAPPINGS-WITH'."
-  (pour-mappings-with (lambda (key fun) (define-key keymap key fun)) mappings)
-  keymap)
+See `pour-mappings-to'."
+  (pour-mappings-to keymap mappings))
 
 (defun fill-keymaps (keymaps &rest mappings)
   "Fill `KEYMAPS' with `MAPPINGS'.
-See `POUR-MAPPINGS-WITH'."
+See `pour-mappings-to'."
   (dolist (keymap keymaps keymaps)
     (let ((map (if (symbolp keymap)
                    (symbol-value keymap)
                  keymap)))
-      (pour-mappings-with (lambda (key fun) (define-key map key fun)) mappings))))
+      (pour-mappings-to map mappings))))
 
 (defmacro gen-fill-keymap-hook (keymap &rest mappings)
-  (declare (indent 1))
   "Build fun that fills `KEYMAP' with `MAPPINGS'.
-See `POUR-MAPPINGS-WITH'."
+See `pour-mappings-to'."
   `(lambda () (fill-keymap ,keymap ,@mappings)))
 
 (defmacro gen-local-fill-keymap-hook (&rest mappings)
-  (declare (indent 1))
   "Build fun that fills local keymap with `MAPPINGS'.
-See `POUR-MAPPINGS-WITH'."
+See `pour-mappings-to'."
   `(lambda () (fill-local-keymap ,@mappings)))
 
-(defun fill-local-keymap (&rest mappings)
-  "Fill local keymap with `MAPPINGS'.
-See `POUR-MAPPINGS-WITH'."
-  (pour-mappings-with 'local-set-key mappings))
-
-(defun fill-global-keymap (&rest mappings)
-  "Fill global keymap with `MAPPINGS'.
-See `POUR-MAPPINGS-WITH'."
-  (pour-mappings-with 'global-set-key mappings))
-
-(defun pour-mappings-with (fill-fun mappings)
-  "Calls `FILL-FUN' on every key-fun pair in `MAPPINGS'.
+(defun pour-mappings-to (map mappings)
+  "Calls `cofi/set-key' with `map' on every key-fun pair in `MAPPINGS'.
 `MAPPINGS' is a list of string-fun pairs, with a `READ-KBD-MACRO'-readable string and a interactive-fun."
   (dolist (mapping (group mappings 2))
-    (funcall fill-fun (read-kbd-macro (car mapping)) (cadr mapping))))
+    (cofi/set-key map (car mapping) (cadr mapping)))
+  map)
 
 (defun group (lst n)
   "Group `LST' into portions of `N'."
@@ -281,7 +284,6 @@ See `POUR-MAPPINGS-WITH'."
 
 (defmacro cmd (&rest code)
   "Macro for shorter keybindings."
-  (declare (indent defun))
   `(lambda ()
      (interactive)
      ,@code))
@@ -292,7 +294,6 @@ See `POUR-MAPPINGS-WITH'."
 For example:
   (cmd-arg (num) \"p\"
     (message \"num-prefix: %d\" num)"
-  (declare (indent defun))
   `(lambda ,args
      (interactive ,iflag)
      ,@code))

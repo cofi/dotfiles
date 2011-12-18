@@ -102,14 +102,6 @@
 (mapc #'load cofi/standard-settings)
 
 (add-to-list 'command-switch-alist
-             '("wl" . (lambda (&rest ignore)
-                        (setq cofi/mail-instance t)
-                        (setq cofi/full-emacs nil)
-                        (add-hook 'emacs-startup-hook 'wl 'append)
-                        ;; Exit Emacs after quitting WL
-                        (add-hook 'wl-exit-hook 'save-buffers-kill-emacs))))
-
-(add-to-list 'command-switch-alist
              '("gnus" . (lambda (&rest ignore)
                         (setq cofi/mail-instance t)
                         (setq cofi/full-emacs nil)

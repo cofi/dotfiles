@@ -256,7 +256,7 @@ See `pour-mappings-to'."
 (defmacro gen-local-fill-keymap-hook (&rest mappings)
   "Build fun that fills local keymap with `MAPPINGS'.
 See `pour-mappings-to'."
-  `(lambda () (fill-local-keymap ,@mappings)))
+  `(lambda () (fill-keymap 'local ,@mappings)))
 
 (defun pour-mappings-to (map mappings)
   "Calls `cofi/set-key' with `map' on every key-fun pair in `MAPPINGS'.

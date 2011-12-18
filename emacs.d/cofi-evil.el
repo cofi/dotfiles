@@ -20,7 +20,11 @@
   (add-to-hooks (lambda ()
                   (make-local-variable 'surround-pairs-alist)
                   (push '(?` . ("`" . "'")) surround-pairs-alist))
-                '(emacs-lisp-mode-hook lisp-mode-hook)))
+                '(emacs-lisp-mode-hook lisp-mode-hook))
+  (add-to-hooks (lambda ()
+                  (make-local-variable 'surround-pairs-alist)
+                  (push '(?~ . ("``" . "``")) surround-pairs-alist))
+                '(markdown-mode-hook rst-mode-hook)))
 
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)

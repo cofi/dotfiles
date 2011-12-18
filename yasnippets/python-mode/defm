@@ -1,5 +1,6 @@
 # -*- coding: utf-8 mode: snippet -*-
-# name: defm
+# name: Define Method
+# key: defm
 # contributor: Orestis Markou
 # contributor: Yasser González Fernández <yglez@uh.cu>
 # contributor: Michael Markert <markert.michael@googlemail.com>

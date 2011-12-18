@@ -232,7 +232,7 @@ A `spec' can be a `read-kbd-macro'-readable string or a vector."
 (defmacro defkeymap (symbol &rest mappings)
   "Define keymap bound to `symbol'.
 See `pour-mappings-to'"
-  `(anything-defconst ,symbol (pour-mappings-to (make-sparse-keymap mappings))))
+  `(defconst ,symbol (fill-keymap (make-sparse-keymap) ,@mappings)))
 
 (defun fill-keymap (keymap &rest mappings)
   "Fill `KEYMAP' with `MAPPINGS'.

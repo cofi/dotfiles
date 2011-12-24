@@ -1,0 +1,28 @@
+# -*- mode: sh -*-
+
+emulate -L zsh
+
+rehash_preexec() {
+    case $1 in
+        # debian
+        *apt-get*|*aptitude*)
+            ;&                  # fall through
+        # python
+        *pip*)
+            ;&                  # fall through
+        # haskell
+        *cabal*)
+            __rehash=true
+            ;;
+    esac
+}
+
+rehash_precmd() {
+    if [[ -n __rehash ]]; then
+        rehash
+        unset __rehash
+    fi
+}
+
+preexec_functions+=rehash_preexec
+precmd_functions+=rehash_precmd

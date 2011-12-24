@@ -74,7 +74,6 @@ setopt emacs
 setopt auto_pushd pushd_ignore_dups
 setopt chase_dots chase_links
 setopt auto_cd
-
 export PROMPT="%F{green}%n@%m %~ %#> %F{white}"
 
 if [[ -d $ZSHDIR ]] {
@@ -83,6 +82,7 @@ if [[ -d $ZSHDIR ]] {
     load_config $ZSHDIR/dirhash
     load_config $ZSHDIR/alias
     load_config $ZSHDIR/functions/common
+    load_config $ZSHDIR/auto_rehash
     load_config $ZSHDIR/abbrev_expansion
     load_config $ZSHDIR/completion
     load_config $ZSHDIR/extensions

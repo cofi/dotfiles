@@ -99,7 +99,8 @@
     "v" 'cofi/visit-org-agenda-files
     "V" 'cofi/anything-org-files
     "c" 'cfw:open-org-calendar
-    "f" 'org-footnote-action)
+    "f" 'org-footnote-action
+    "SPC" 'cofi-org-choose-todo)
 
 (fill-keymap 'global
  ;; buffer

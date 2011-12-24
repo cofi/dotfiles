@@ -102,6 +102,8 @@ if [[ -d $ZSHDIR ]] {
 
 load_config $LOCALDIR/post
 
+load_config $ZSHDIR/zsh-substring-search/zsh-history-substring-search.zsh
+
 unfunction load_config
 
 HISTFILE=~/.zshhistory

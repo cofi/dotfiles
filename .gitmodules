@@ -76,3 +76,6 @@
 [submodule "zsh/zsh-completions"]
 	path = zsh/zsh-completions
 	url = git://github.com/zsh-users/zsh-completions.git
+[submodule "zsh/zsh-substring-search"]
+	path = zsh/zsh-substring-search
+	url = git://github.com/zsh-users/zsh-history-substring-search.git

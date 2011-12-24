@@ -47,6 +47,7 @@
 
 (dolist (mode '(
                 inferior-emacs-lisp-mode
+                pylookup-mode
                 ))
   (push mode evil-emacs-state-modes))
 

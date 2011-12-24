@@ -25,7 +25,7 @@
 (defun cofi/visit-org-agenda-files (fname)
   "Visit agenda files.
 Note: This assumes all files are in the org-directory."
-  (interactive (list (ido-completing-read "Visit file: "
+  (interactive (list (completing-read "Visit file: "
                                     (mapcar 'file-name-nondirectory (org-agenda-files)))))
   (find-file (concat org-directory fname)))
 
@@ -140,6 +140,7 @@ Note: This assumes all files are in the org-directory."
 
 (require 'notifications)
 (defvar cofi/org-appt-id nil)
+;;; FIXME: Update for emacs24
 (setq appt-disp-window-function
       (lambda (min-to-app new-time msg)
         (unless (string< min-to-app (number-to-string (- appt-message-warning-time 5)))

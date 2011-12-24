@@ -4,6 +4,8 @@ export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
 export PATH=$PATH:$HOME/.bin
 
+fpath=($ZSHDIR/zsh-completions $fpath)
+
 function load_config() {
     if [[ -f $1 ]] {
         source $1
@@ -78,7 +80,6 @@ export PROMPT="%F{green}%n@%m %~ %#> %F{white}"
 
 if [[ -d $ZSHDIR ]] {
     load_config $ZSHDIR/colors
-    fpath=($ZSHDIR/functions $fpath)
     load_config $ZSHDIR/dirhash
     load_config $ZSHDIR/alias
     load_config $ZSHDIR/functions/common

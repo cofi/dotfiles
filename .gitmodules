@@ -73,3 +73,6 @@
 [submodule "elisp/vendor/python"]
 	path = elisp/vendor/python
 	url = git://github.com/fgallina/python.el.git
+[submodule "zsh/zsh-completions"]
+	path = zsh/zsh-completions
+	url = git://github.com/zsh-users/zsh-completions.git

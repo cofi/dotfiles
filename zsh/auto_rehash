@@ -3,16 +3,16 @@
 emulate -L zsh
 
 rehash_preexec() {
-    case $1 in
+    case "$1" in
         # debian
         *apt-get*|*aptitude*)
             ;&                  # fall through
         # python
         *pip*)
             ;&                  # fall through
-        # haskell
+        # hakell
         *cabal*)
-            __rehash=true
+            __rehash=1
             ;;
     esac
 }
@@ -23,6 +23,7 @@ rehash_precmd() {
         unset __rehash
     fi
 }
-
+typeset -ga preexec_functions
+typeset -ga precmd_functions
 preexec_functions+=rehash_preexec
 precmd_functions+=rehash_precmd

@@ -46,7 +46,11 @@
     (require-and-exec 'anything-complete
        (anything-read-string-mode '(buffer variable command))
        (defadvice anything-execute-extended-command (after show-keybinding activate)
-         (where-is this-command)))
+         (let ((output (with-output-to-string (where-is this-command))))
+           (unless (string-match "is not on any key" output)
+             (if (current-message)
+                 (sit-for 2))
+             (message "%s" output)))))
 
     ;; From browse-kill-ring.el
     (defadvice yank-pop (around kill-ring-browse-maybe (arg) activate)

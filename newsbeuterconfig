@@ -1,10 +1,10 @@
 auto-reload yes
-reload-time 30
-reload-threads 4
+reload-time 45
+reload-threads 8
 refresh-on-startup yes
 
 datetime-format "%m-%d %H:%M"
-max-items 200
+max-items 100
 save-path "~/Feed-Articles"
 
 show-read-feeds no

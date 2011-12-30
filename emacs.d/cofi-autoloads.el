@@ -8,6 +8,10 @@
 
 (autoload 'all "all" "Edit all matching lines" t)
 
+(autoload 'any-ini-mode "any-ini-mode")
+(add-to-list 'auto-mode-alist '("\\.ini\\'" . any-ini-mode))
+(add-to-list 'auto-mode-alist '("\\.conf\\'" . any-ini-mode))
+
 (autoload 'adict-change-dictionary "auto-dictionary"
   "Set buffer language to LANG and stop detecting it automatically." t)
 (autoload 'adict-guess-dictionary "auto-dictionary"

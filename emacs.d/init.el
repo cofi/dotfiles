@@ -24,11 +24,7 @@
                  "~/.emacs.d"
                  "~/.elisp/vendor/sackspace"
                  "~/.elisp/vendor/keychain-environment"
-                 "~/.elisp/vendor/gist"
-                 "~/.elisp/vendor/pylookup"
-                 "~/.elisp/vendor/scratch"
-                 "~/.elisp/vendor/offlineimap"
-                 "~/.elisp/vendor/ace-jump-mode")
+                 "~/.elisp/vendor/pylookup")
 
 (require 'cofi-util)
 (when (or (and (version< emacs-version "24")
@@ -39,10 +35,13 @@
   (package-initialize)
   (dolist (package '(
                      all
+                     ace-jump-mode
                      auctex
                      auto-complete
                      auto-dictionary
                      autopair
+                     bookmark+
+                     boxquote
                      c-eldoc
                      cdlatex
                      dedicated
@@ -51,16 +50,22 @@
                      evil-numbers
                      flymake-cursor
                      full-ack
+                     gist
                      highlight-parentheses
                      htmlize
                      keyfreq
                      keywiz
                      lacarte
+                     magit
+                     magithub
                      markdown-mode
                      multi-term
+                     offlineimap
                      paredit
                      pp-c-l
                      rainbow-mode
+                     scratch
+                     sml-modeline
                      undo-tree
                      workgroups
                      ))

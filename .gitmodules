@@ -7,12 +7,6 @@
 [submodule "elisp/vendor/keychain-environment"]
 	path = elisp/vendor/keychain-environment
 	url = git://github.com/cofi/keychain-environment.el.git
-[submodule "elisp/vendor/scratch"]
-	path = elisp/vendor/scratch
-	url = git://github.com/ieure/scratch-el.git
-[submodule "elisp/vendor/offlineimap"]
-	path = elisp/vendor/offlineimap
-	url = git://git.naquadah.org/offlineimap-el.git
 [submodule "elisp/vendor/google-weather-el"]
 	path = elisp/vendor/google-weather-el
 	url = git://git.naquadah.org/google-weather-el.git
@@ -49,9 +43,6 @@
 [submodule "elisp/vendor/gnus"]
 	path = elisp/vendor/gnus
 	url = http://git.gnus.org/gnus.git
-[submodule "elisp/vendor/ace-jump-mode"]
-	path = elisp/vendor/ace-jump-mode
-	url = git://github.com/winterTTr/ace-jump-mode.git
 [submodule "elisp/vendor/monky"]
 	path = elisp/vendor/monky
 	url = git://github.com/ananthakumaran/monky.git

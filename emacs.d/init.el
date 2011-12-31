@@ -68,6 +68,7 @@
                      sml-modeline
                      undo-tree
                      workgroups
+                     yaml-mode
                      ))
     (unless (package-installed-p package)
       (package-install package))))

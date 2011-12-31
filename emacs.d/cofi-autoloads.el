@@ -58,6 +58,8 @@
 (autoload 'trivial-cite "tc"
   "A simple citation function for use in news/mailreaders." t)
 
+(autoload 'yaml-mode "yaml-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-mode))
 ;;; additional org
 
 (autoload 'org-agenda-files "org")

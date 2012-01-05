@@ -117,8 +117,6 @@
 
 (mouse-avoidance-mode 'cat-and-mouse)
 
-(setq comint-prompt-read-only t)
-
 (setq comment-style 'align)
 
 ;;; Use string syntax for re-builder

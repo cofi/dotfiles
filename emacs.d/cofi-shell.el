@@ -1,4 +1,5 @@
 ;;; remove completions in shell-mode automatically
+(setq comint-prompt-read-only nil)
 ;;; works out of the box from emacs 24
 ;;; from http://snarfed.org/automatically_close_completions_in_emacs_shell_comint_mode
 (when (version< emacs-version "24")

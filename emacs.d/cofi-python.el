@@ -38,7 +38,7 @@
       ropemacs-global-prefix "C-c p"
       ropemacs-guess-project t
       ropemacs-separate-doc-buffer nil
-      ropemacs-enable-shortcuts nil)
+      ropemacs-enable-shortcuts t)
 
 (add-all-to-hook 'python-mode-hook
                  (turn-on autopair-mode)

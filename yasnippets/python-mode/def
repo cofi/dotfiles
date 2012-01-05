@@ -1,8 +1,6 @@
 # -*- coding: utf-8 mode: snippet -*-
-# name: Define function
+# name: Function with sphinx doc
 # key: def
-# contributor: Orestis Markou
-# contributor: Yasser González Fernández <yglez@uh.cu>
 # contributor: Michael Markert <markert.michael@googlemail.com>
 # --
 def ${1:name}($2):
@@ -12,12 +10,12 @@ def ${1:name}($2):
                               (mapcar '(lambda (x) (split-string x "="))
                                        (split-string (replace-regexp-in-string "[[:blank:]]*" "" text)
                                                      "," t)))))
-  (when args
-    (concat indent "Arguments:" indent
-            (mapconcat (lambda (x)
-                         (format "- %s%s:%s" (char-to-string 96) x (char-to-string 96)))
-                       args
-                       indent))))
+        (mapconcat (lambda (x)
+                     (format ":param %s:" x))
+                   args
+                   indent))
     }
+    :returns: $4
+    :rtype: $5
     """
     $0

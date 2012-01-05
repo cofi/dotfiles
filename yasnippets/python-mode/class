@@ -1,5 +1,5 @@
 # -*- utf-8 mode: snippet -*-
-# name: Class
+# name: Class with sphinx doc
 # key: class
 # contributor: Orestis Markou
 # contributor: Nishio Hirokazu
@@ -17,12 +17,10 @@ class ${1:ClassName}(${2:object}):
                                  (mapcar '(lambda (x) (split-string x "="))
                                          (split-string (replace-regexp-in-string "[[:blank:]]*" "" text)
                                                        "," t)))))
-  (when args
-    (concat indent "Arguments:" indent
-            (mapconcat (lambda (x)
-                         (format "- %s%s:%s" (char-to-string 96) x (char-to-string 96)))
-                         args
-                         indent))))
+        (mapconcat (lambda (x)
+                     (format ":param %s:" x))
+                   args
+                   indent))
         }
         """
         super($1, self).__init__()
@@ -34,5 +32,6 @@ class ${1:ClassName}(${2:object}):
         (mapconcat (lambda (x)
                      (format "self._%s = %s" x x))
                    args
-                   indent))}
-
+                   indent))
+        }
+        $0

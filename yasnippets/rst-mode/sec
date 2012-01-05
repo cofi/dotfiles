@@ -1,6 +1,6 @@
 # -*- coding: utf-8 mode: snippet -*-
 #name : Section title
-#key: -
+#key: sec
 # --
 ${1:Section}
 ${1:$(make-string (string-width text) ?\-)}

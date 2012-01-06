@@ -15,3 +15,6 @@ bindkey "\e[B" down-line-or-search	# down arrow for fwd-history-search
 bindkey " " magic-space			# do history expansion on space
 
 bindkey -M menuselect "+" accept-and-menu-complete
+
+zmodload zsh/deltochar
+bindkey "\ez" zap-to-char

@@ -84,6 +84,5 @@
                            "u"   'rope-undo
                            "C-r" 'rope-redo)))
 
-(when (fboundp 'column-marker-1)
-  (add-hook 'python-mode-hook 'highlight-80))
+(add-hook 'python-mode-hook 'highlight-80+-mode))
 (provide 'cofi-python)

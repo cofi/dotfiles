@@ -52,6 +52,7 @@
                      full-ack
                      gist
                      highlight-parentheses
+                     highlight-80+
                      htmlize
                      keyfreq
                      keywiz

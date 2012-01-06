@@ -232,10 +232,6 @@ Major mode determines association."
       (call-interactively 'org-cdlatex-mode nil)
     (call-interactively 'cdlatex-mode nil)))
 
-(defun highlight-80 ()
-  (interactive)
-  (column-marker-1 80))
-
 (defvar cofi/colorschemes (cofi/make-ring [cofi-dark cofi-light]))
 (defun cofi/next-colorscheme (&optional arg)
   "Move to next colorscheme. If `ARG' is non-nil reload current."

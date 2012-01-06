@@ -163,9 +163,8 @@
               woman-imenu t
               woman-cache-filename (cofi/var-file "emacs/woman-cache"))
 
-(eval-after-load "info"
-  '(add-to-list 'Info-directory-list
-         "~/doc/info"))
+(require 'info)
+(add-to-list 'Info-directory-list "~/doc/info")
 ;;; ========================================
 
 ;; mixedCase to small_words_with_underscores (visually)

@@ -35,6 +35,7 @@ alias rm='nocorrect rm'         # no spelling correction on rm
 
 alias rmr='nocorrect rm -r'
 
+alias d='dirs -v'
 alias p-='popd'
 alias pd='pushd'
 

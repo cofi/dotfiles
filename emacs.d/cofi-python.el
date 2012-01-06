@@ -35,10 +35,10 @@
                                      "os.path"
                                      "sys"
                                     )
-      ropemacs-global-prefix "C-c p"
+      ropemacs-local-prefix "C-c p"
       ropemacs-guess-project t
       ropemacs-separate-doc-buffer nil
-      ropemacs-enable-shortcuts t)
+      ropemacs-enable-shortcuts nil)
 
 (add-all-to-hook 'python-mode-hook
                  (turn-on autopair-mode)
@@ -75,9 +75,15 @@
                     (list #'autopair-default-handle-action
                           #'autopair-python-triple-quote-action))))
 
+;;; load ropemacs
 (add-hook 'python-mode-hook
           #'(lambda ()
-              (pymacs-load "ropemacs" "rope-")))
+              (pymacs-load "ropemacs" "rope-")
+              ;; move useful global commands to local keymap
+              (fill-keymap ropemacs-local-keymap
+                           "u"   'rope-undo
+                           "C-r" 'rope-redo)))
+
 (when (fboundp 'column-marker-1)
   (add-hook 'python-mode-hook 'highlight-80))
 (provide 'cofi-python)

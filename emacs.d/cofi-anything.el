@@ -43,6 +43,8 @@
     (require 'anything-match-plugin)
     (require 'anything-show-completion)
 
+    (anything-completion-mode 1)
+
     (require-and-exec 'anything-complete
        (anything-read-string-mode '(buffer variable command))
        (defadvice anything-execute-extended-command (after show-keybinding activate)

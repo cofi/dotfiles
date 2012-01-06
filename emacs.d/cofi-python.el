@@ -36,6 +36,7 @@
                                      "sys"
                                     )
       ropemacs-local-prefix "C-c p"
+      ropemacs-global-prefix nil
       ropemacs-guess-project t
       ropemacs-separate-doc-buffer nil
       ropemacs-enable-shortcuts nil)

@@ -71,7 +71,7 @@ abbreviations=(
     'd'         'DISPLAY=:0.0'
     's'         'sudo'
     'sv'        'sudo vim'
-
+)
 
 globalias() {
     setopt extendedglob

@@ -109,6 +109,10 @@
   (kbd "M-K") 'org-metaup
   (kbd "M-L") 'org-metaright)
 
+;;; don't use sackspace in term
+(evil-declare-key 'insert term-mode-map
+  (kbd "<backspace>") 'term-send-backspace)
+
 (defadvice evil-goto-definition (around evil-goto-lisp-def activate)
   "Make use of emacs', slime's and ropemacs possibilities for finding definitions."
   (case major-mode

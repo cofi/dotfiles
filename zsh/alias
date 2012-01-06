@@ -39,7 +39,7 @@ alias d='dirs -v'
 alias p-='popd'
 alias pd='pushd'
 
-alias open='kde-open 2&> /dev/null'
+alias open='kde-open &> /dev/null'
 
 alias g='git'
 

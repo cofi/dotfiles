@@ -72,16 +72,18 @@
 
   (require-and-exec 'ibuffer-git
     (setq ibuffer-formats
-          '(
-            (mark modified read-only git-status-mini " "
-                  (name 18 18 :left :elide)
+          '((mark modified read-only git-status-mini " "
+                  (name 20 20 :left :elide)
                   " "
-                  (size 9 -1 :right)
+                  (readable-size 5 5 :right)
                   " "
-                  (mode 16 16 :left :elide)
+                  (mode 14 14 :left :elide)
                   " "
                   (git-status 8 8 :left)
-                  " " filename-and-process)))
+                  " "
+                  filename-and-process)
+            (mark modified read-only
+                  (name 16 16 :left) (size 6 -1 :right))))
     )
 
   (defun ibuffer-ediff-marked-buffers (end)

@@ -35,7 +35,7 @@
                                      "os.path"
                                      "sys"
                                     )
-      ropemacs-local-prefix "C-c p"
+      ropemacs-local-prefix nil
       ropemacs-global-prefix nil
       ropemacs-guess-project t
       ropemacs-separate-doc-buffer nil
@@ -81,6 +81,8 @@
           #'(lambda ()
               (pymacs-load "ropemacs" "rope-")
               ;; move useful global commands to local keymap
+              (fill-keymap 'local
+                           "C-c p" ropemacs-local-keymap)
               (fill-keymap ropemacs-local-keymap
                            "u"   'rope-undo
                            "C-r" 'rope-redo)))

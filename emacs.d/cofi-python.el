@@ -41,6 +41,32 @@
       ropemacs-separate-doc-buffer nil
       ropemacs-enable-shortcuts nil)
 
+;; based on https://bitbucket.org/birkenfeld/dotemacs/src/tip/auto-complete-python.el
+(defvar ac-ropemacs-docs nil)
+(defun ac-ropemacs-candidates ()
+  (setq ac-ropemacs-docs nil)
+  (loop for (name doc _) in (rope-extended-completions)
+        for ac-name = (concat ac-prefix name)
+        do (when (push (cons ac-name doc) ac-ropemacs-docs))
+        collect ac-name))
+
+(defun ac-ropemacs-document (name)
+  (assoc-default name ac-ropemacs-docs))
+
+(ac-define-source nropemacs
+  '((candidates . ac-ropemacs-candidates)
+    (symbol     . "p")
+    (document   . ac-ropemacs-document)
+    (cache      . t)))
+
+(ac-define-source nropemacs-dot
+  '((candidates . ac-ropemacs-candidates)
+    (symbol     . "p")
+    (document   . ac-ropemacs-document)
+    (cache      . t)
+    (prefix     . c-dot)
+    (requires   . 0)))
+
 (add-all-to-hook 'python-mode-hook
                  (turn-on autopair-mode)
                  (turn-on show-paren-mode)

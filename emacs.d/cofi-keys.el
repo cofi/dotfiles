@@ -74,16 +74,6 @@
   "d" 'project-dired
   "t" 'project-tags)
 
-(defkeymap cofi-org-state-map
-  "t"   (cmd (org-todo "TODO"))
-  "s"   (cmd (org-todo "STARTED"))
-  "w"   (cmd (org-todo "WAITING"))
-  "f"   (cmd (org-todo "DEFERRED"))
-  "l"   (cmd (org-todo "DELEGATED"))
-  "x"   (cmd (org-todo "CANCELLED"))
-  "d"   (cmd (org-todo "DONE"))
-  "SPC" (cmd (org-todo "")))
-
 (defkeymap cofi-org-mode-map
     "a" 'org-agenda-list
     "t" (lambda () (interactive) (org-todo-list 0))
@@ -94,13 +84,12 @@
              (let ((org-indirect-buffer-display 'other-window))
                (org-todo-list 0)))
     "r" 'org-capture
-    "s" cofi-org-state-map
     "l" 'org-store-link
     "v" 'cofi/visit-org-agenda-files
     "V" 'cofi/anything-org-files
     "c" 'cfw:open-org-calendar
     "f" 'org-footnote-action
-    "SPC" 'cofi-org-choose-todo)
+    "SPC" (cmd (let ((current-prefix-arg '(4))) (call-interactively 'org-todo))))
 
 (fill-keymap 'global
  ;; buffer

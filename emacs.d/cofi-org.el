@@ -95,7 +95,7 @@ Note: This assumes all files are in the org-directory."
 (setq org-special-ctrl-a/e t)
 
 ;; ToDo
-(setq org-todo-keywords '((
+(setq org-todo-keywords '((sequence
                           "TODO"
                           "STARTED"
                           "WAITING"
@@ -105,16 +105,6 @@ Note: This assumes all files are in the org-directory."
                           "CANCELLED"
                           "DONE"
                           )))
-
-(defun cofi-org-choose-todo ()
-  (interactive)
-  (let ((selection (completing-read "State: "
-                                    (remove-if (lambda (x) (string= x "|"))
-                                               (apply 'concatenate
-                                                      (cons 'list
-                                                            org-todo-keywords))))))
-    (when selection
-      (org-todo selection))))
 
 (setq org-hide-leading-stars t)
 

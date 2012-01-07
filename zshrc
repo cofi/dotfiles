@@ -128,3 +128,6 @@ if [[ -z "$SSH_CONNECTION" ]] {
 	source ~/.keychain/$HOST-sh
     source ~/.keychain/$HOST-sh-gpg
 }
+
+# only allow user to read and write by default
+umask 077

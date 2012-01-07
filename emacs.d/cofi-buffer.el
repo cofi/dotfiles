@@ -99,6 +99,33 @@ Diffs prefix-1 marked buffer with prefix buffer."
               (ibuffer-switch-to-saved-filter-groups "default")))
   )
 
+(define-ibuffer-column readable-size
+  (:name "Size"
+         :inline t
+         :header-mouse-map ibuffer-size-header-map
+         :summarizer (lambda (sizes)
+                       (format "%3dM"
+                               (/
+                                (apply #'+ (mapcar
+                                            (lambda (size)
+                                              (let ((unit (substring size -1))
+                                                    (num (substring size 0 -1)))
+                                                (cond
+                                                 ((string= unit "k") (* (expt 10 3) (read num)))
+                                                 ((string= unit "M") (* (expt 10 6) (read num)))
+                                                 (t (read size)))))
+                                            sizes))
+                                (expt 10 6)))))
+  (let ((size (buffer-size))
+        (sgroups `(("%4.1fM" ,(expt 10 6))
+                   ("%4.1fk" ,(expt 10 3))
+                   ("%4d" 1))))
+        (loop for (format limit) in sgroups
+              if (>= size limit)
+              return (if (= (% size limit) 0)
+                         (format "%6d" (/ size limit))
+                       (format format (/ size (float limit)))))))
+
 (require 'midnight)
 (setq midnight-period (* 3600 6))       ; every 6 hours
 

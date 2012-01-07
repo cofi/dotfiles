@@ -2,73 +2,83 @@
   (require-and-exec 'ibuf-ext)
   (setq ibuffer-expert t)
   (setq ibuffer-show-empty-filter-groups nil)
+  (setq ibuffer-jump-offer-only-visible-buffers t)
+  (setq ibuffer-maybe-show-predicates '("^\\*.*\\*$"))
+  (setq ibuffer-never-show-predicates '("^ "))
 
   (setq ibuffer-saved-filter-groups
-        (quote (("default"
-                 ("Config" (filename . ".emacs.d/"))
+        '(("default"
+           ("Config" (or
+                      (filename . "config/dotfiles/")
+                      (filename . ".emacs.d/")))
 
-                 ("Programming" (or
-                                 (mode . c-mode)
-                                 (mode . c++-mode)
-                                 (mode . java-mode)
-                                 (mode . lisp-mode)
-                                 (mode . clojure-mode)
-                                 (mode . python-mode)
-                                 (mode . haskell-mode)
-                                 (mode . emacs-lisp-mode)
-                                 (mode . sh-mode)
-                                 ))
-
-                 ("Writing" (or
-                             (mode . tex-mode)
-                             (mode . latex-mode)
-                             (mode . rst-mode)
-                             (mode . html-mode)
-                             (mode . nxhtml-mode)
-                             (mode . css-mode)
-                             (mode . nxml-mode)))
-
-                 ("Org-Agenda"
-                  (or
-                   (filename . "Org/")
-                   (mode . org-agenda-mode)
-                   ))
-                 ("Org" (mode . org-mode))
-
-                 ("Dired" (mode . dired-mode))
-
-                 ("Wanderlust" (or
-                                (mode . wl-folder-mode)
-                                (mode . wl-summary-mode)
-                                (name . "SMTP")
-                                (mode . bbdb-mode)
-                                (name . "bbdb$")
-                                ))
-                 ("Gnus" (or
-                          (mode . message-mode)
-                          (mode . gnus-group-mode)
-                          (mode . gnus-summary-mode)
-                          (mode . gnus-article-mode)))
-
-                 ("Terminals" (mode . term-mode))
-
-                 ("Shells" (or
-                            (mode . eshell-mode)
-                            (mode . shell-mode)
-                            (mode . slime-repl-mode)
-                            (name . "\\*Python.*\\*")
-                            (name . "\\*haskell.*\\*")
-                            ))
-
-                 ("Magit" (or
-                           (mode . magit-mode)
-                           (name . "\\*magit-.*\\*")
+           ("Programming" (or
+                           (mode . c-mode)
+                           (mode . c++-mode)
+                           (mode . java-mode)
+                           (mode . lisp-mode)
+                           (mode . clojure-mode)
+                           (mode . python-mode)
+                           (mode . haskell-mode)
+                           (mode . emacs-lisp-mode)
+                           (mode . sh-mode)
+                           (mode . slime-repl-mode)
+                           (name . "\\*Python.*\\*")
+                           (name . "\\*haskell.*\\*")
                            ))
 
-                 ("VC" (name . "\\*vc.*\\*"))
+           ("Writing" (or
+                       (mode . tex-mode)
+                       (mode . latex-mode)
+                       (mode . rst-mode)
+                       (mode . html-mode)
+                       (mode . nxhtml-mode)
+                       (mode . css-mode)
+                       (mode . nxml-mode)))
 
-                 ("Emacs" (name . "^\\*.*\\*$"))
-                 ))))
+           ("Org-Agenda"
+            (or
+             (filename . "Org/")
+             (mode . org-agenda-mode)
+             ))
+           ("Org" (mode . org-mode))
+
+           ("Dired" (mode . dired-mode))
+
+           ("Gnus" (or
+                    (mode . message-mode)
+                    (mode . gnus-group-mode)
+                    (mode . gnus-summary-mode)
+                    (mode . gnus-article-mode)))
+
+           ("Terminals" (mode . term-mode))
+
+           ("Shells" (or
+                      (mode . eshell-mode)
+                      (mode . shell-mode)
+                      ))
+
+           ("Magit" (or
+                     (mode . magit-mode)
+                     (name . "\\*magit-.*\\*")
+                     ))
+
+           ("VC" (name . "\\*vc.*\\*"))
+
+           ("Emacs" (name . "^\\*.*\\*$"))
+           )
+          ("projects"
+           ("BP"
+            (filename . "Uni/Bp"))
+           ("Python Tutorial"
+            (filename . "~/Projects/py-tutorial/"))
+           ("Python Insider"
+            (or
+             (filename . "~/Projects/python-insider")
+             (filename . "~/Projects/python-insider-en/")))
+           ("Uni"
+            (filename . "Uni/Bp"))
+           )))
 
   (require-and-exec 'ibuffer-git
     (setq ibuffer-formats

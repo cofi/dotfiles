@@ -81,11 +81,6 @@
                      "M-n"       'flymake-goto-next-error
                      "M-p"       'flymake-goto-prev-error
                      "C-c C-SPC" 'flymake-mode
-                     "M-?"       'rope-code-assist
-                     "C-M-?"     'rope-lucky-assist
-                     "C-c g"     'rope-goto-definition
-                     "C-c d"     'rope-show-doc
-                     "C-c t"     'rope-show-calltip
                      "C-c ?"     'pylookup-lookup)
                  )
 
@@ -108,7 +103,12 @@
               (pymacs-load "ropemacs" "rope-")
               ;; move useful global commands to local keymap
               (fill-keymap 'local
-                           "C-c p" ropemacs-local-keymap)
+                           "C-c p" ropemacs-local-keymap
+                           "M-?"   'rope-code-assist
+                           "C-M-?" 'rope-lucky-assist
+                           "C-c g" 'rope-goto-definition
+                           "C-c d" 'rope-show-doc
+                           "C-c t" 'rope-show-calltip)
               (fill-keymap ropemacs-local-keymap
                            "u"   'rope-undo
                            "C-r" 'rope-redo)))

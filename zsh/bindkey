@@ -18,3 +18,12 @@ bindkey -M menuselect "+" accept-and-menu-complete
 
 zmodload zsh/deltochar
 bindkey "\ez" zap-to-char
+
+# kill last directory, breaks on spaces
+backward-kill-dir() {
+    # remove / from word chars
+    local WORDCHARS="${WORDCHARS:s@/@}"
+    zle backward-kill-word
+}
+zle -N backward-kill-dir
+bindkey "\ew" backward-kill-dir

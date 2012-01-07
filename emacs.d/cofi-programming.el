@@ -27,8 +27,7 @@
     (unless (or (string-match "exited abnormally" desc)
                (progn (goto-char 0)
                       (re-search-forward "\\([wW]arning\\)\\|\\([eE]rror\\)" nil 'noerror)))
-      (bury-buffer buffer)
-      (winner-undo))))
+      (bury-buffer buffer))))
 
 (push 'cofi/close-after-successful-compilation compilation-finish-functions)
 

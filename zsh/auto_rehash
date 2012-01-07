@@ -8,7 +8,7 @@ rehash_preexec() {
         *apt-get*|*aptitude*)
             ;&                  # fall through
         # python
-        *pip*)
+        *pip*|*workon*|"source *activate*")
             ;&                  # fall through
         # hakell
         *cabal*)

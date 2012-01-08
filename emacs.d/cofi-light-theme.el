@@ -15,10 +15,9 @@
      'cofi-light
      ;; basic faces
      `(default ((((min-colors 4096)) (:background ,bg :foreground ,fg))))
-     `(italic ((t (:italic t :family "Dejavu Sans Mono" :height 80 :underline nil))))
      `(border ((t (:background "black"))))
      `(header-line ((t (:foreground ,fg :background ,bg :bold t))))
-     `(highlight ((t (:background "#c0d0e0"))))
+     `(highlight ((t (:background "#E5E5E5"))))
      `(fringe ((t (:background ,bg))))
 
      `(primary-selection ((t (:foreground "gold" :background "black"))))
@@ -27,16 +26,16 @@
      `(minibuffer-prompt ((t (:foreground "firebrick" :bold t))))
 
      `(region ((t (:background "#586e75"))))
-     `(hl-line ((t (:background "#c0d0e0"))))
+     `(hl-line ((t (:background "#E5E5E5"))))
      `(tooltip ((t (:background ,bg :foreground ,fg))))
 
      ;; modeline
-     `(mode-line ((t (:background "#8089a0" :foreground "black"))))
-     `(mode-line-inactive ((t (:background "gray80" :foreground "#8089a0"))))
-     `(mode-line-buffer-id ((t (:foreground "black" :background "#8089a0"))))
+     `(mode-line ((t (:background "#9099B0" :foreground "black"))))
+     `(mode-line-inactive ((t (:background "gray80" :foreground "#9099B0"))))
+     `(mode-line-buffer-id ((t (:foreground "black" :background "#9099B0"))))
      `(mode-line-buffer ((t (:bold t :foreground "black"))))
      `(mode-line-major-mode ((t (:bold t :foreground "gold"))))
-     `(mode-line-minor-mode ((t (:foreground "khaki2"))))
+     `(mode-line-minor-mode ((t (:foreground "khaki1"))))
 
      ;; diff
      `(diff-added-face ((t (:foreground ,vc-added))))
@@ -106,16 +105,16 @@
 
      ;; font lock -- syntax
      `(font-lock-builtin-face ((t (:foreground "#8B0017"))))
-     `(font-lock-comment-face ((t (:inherit italic :foreground "#526578"))))
+     `(font-lock-comment-face ((t (:foreground "#425568"))))
      `(font-lock-constant-face ((t (:foreground "#BF5E00"))))
      `(font-lock-doc-face ((t (:foreground "#75511A"))))
      `(font-lock-function-name-face ((t (:foreground "#2642D2"))))
      `(font-lock-keyword-face ((t (:foreground "#AC4311"))))
      `(font-lock-preprocessor-face ((t (:foreground "#3D355D"))))
      `(font-lock-string-face ((t (:foreground "#B20000"))))
-     `(font-lock-type-face ((t (:italic t :foreground "#802A00"))))
+     `(font-lock-type-face ((t (:foreground "#802A00"))))
      `(font-lock-variable-name-face ((t (:foreground "#1E5976"))))
-     `(font-lock-warning-face ((t (:bold t :foreground "red" :weight bold))))
+     `(font-lock-warning-face ((t (:bold t :foreground "red"))))
 
      `(makefile-space-face ((t (:background "hot pink"))))
 
@@ -127,7 +126,7 @@
 
      ;; isearch
      `(isearch ((t (:background "magenta4" :foreground "white"))))
-     `(isearch-lazy-highlight-face ((t (:background "pale turquoise"))))
+     `(isearch-lazy-highlight-face ((t (:background "#A8DDE0" :foreground ,fg))))
 
      ;; log view
      `(log-view-file-face ((t (:bold t :background "gray70" :weight bold))))
@@ -147,34 +146,38 @@
      `(smerge-mine-face ((t (:foreground "blue"))))
      `(smerge-other-face ((t (:foreground "DarkOliveGreen4"))))
 
-     ;; viper
-     `(viper-minibuffer-insert ((t (:background ,bg :foreground ,fg))))
-     `(viper-minibuffer-emacs ((t (:background ,bg :foreground ,fg))))
-     `(viper-minibuffer-vi ((t (:background ,bg :foreground ,fg))))
-
      ;; rst
-     `(rst-level-1-face ((t (:bold t :foreground "chocolate4" :background ,bg))))
-     `(rst-level-2-face ((t (:bold t :foreground "chocolate3" :background ,bg))))
-     `(rst-level-3-face ((t (:bold t :foreground "chocolate2" :background ,bg))))
-     `(rst-level-4-face ((t (:bold t :foreground "orange3" :background ,bg))))
-     `(rst-level-5-face ((t (:bold t :foreground "dark orange" :background ,bg))))
-     `(rst-level-6-face ((t (:bold t :foreground "dark khaki" :background ,bg))))
+     `(rst-level-1-face ((t (:bold t :foreground "#0057AE" :background ,bg))))
+     `(rst-level-2-face ((t (:bold t :foreground "#0066FF" :background ,bg))))
+     `(rst-level-3-face ((t (:bold t :foreground "#2C72C7" :background ,bg))))
+     `(rst-level-4-face ((t (:bold t :foreground "#6193CF" :background ,bg))))
+     `(rst-level-5-face ((t (:bold t :foreground "#80B3FF" :background ,bg))))
+     `(rst-level-6-face ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
+
+     ;; markdown
+     `(markdown-header-face   ((t (:bold t :foreground "#0057AE" :background ,bg))))
+     `(markdown-header-face-1 ((t (:bold t :foreground "#0057AE" :background ,bg))))
+     `(markdown-header-face-2 ((t (:bold t :foreground "#0066FF" :background ,bg))))
+     `(markdown-header-face-3 ((t (:bold t :foreground "#2C72C7" :background ,bg))))
+     `(markdown-header-face-4 ((t (:bold t :foreground "#6193CF" :background ,bg))))
+     `(markdown-header-face-5 ((t (:bold t :foreground "#80B3FF" :background ,bg))))
+     `(markdown-header-face-6 ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
 
      ;; org
      `(org-hide ((t (:foreground ,bg))))
-     `(org-level-1 ((t (:bold t :foreground "chocolate4"))))
-     `(org-level-2 ((t (:bold t :foreground "chocolate3"))))
-     `(org-level-3 ((t (:bold t :foreground "chocolate2"))))
-     `(org-level-4 ((t (:bold t :foreground "orange3"))))
-     `(org-level-5 ((t (:bold t :foreground "dark orange"))))
-     `(org-level-6 ((t (:bold t :foreground "dark khaki"))))
-     `(org-level-7 ((t (:bold t :foreground "khaki"))))
-     `(org-level-8 ((t (:bold t :foreground "khaki1"))))
-     `(org-date ((t (:underline t :foreground "forest green"))))
-     `(org-sexp-date ((t (:underline t :foreground "forest green"))))
+     `(org-level-1 ((t (:bold t :foreground "#8F6B32"))))
+     `(org-level-2 ((t (:bold t :foreground "#906F40"))))
+     `(org-level-3 ((t (:bold t :foreground "#9C7045"))))
+     `(org-level-4 ((t (:bold t :foreground "#AA7D50"))))
+     `(org-level-5 ((t (:bold t :foreground "#AE8C55"))))
+     `(org-level-6 ((t (:bold t :foreground "#BE9C65"))))
+     `(org-level-7 ((t (:bold t :foreground "#CEAC75"))))
+     `(org-level-8 ((t (:bold t :foreground "#DEBC85"))))
+     `(org-date ((t (:underline t :foreground "#006E29"))))
+     `(org-sexp-date ((t (:underline t :foreground "#006E29"))))
      `(org-link ((t (:underline t :foreground "blue4"))))
-     `(org-footnote ((t (:foreground "dark violet"))))
-     `(org-special-keyword ((t (:bold t :foreground "medium orchid"))))
+     `(org-footnote ((t (:foreground "#AC4311"))))
+     `(org-special-keyword ((t (:foreground "#AC4311"))))
      `(org-todo ((t (:bold t :foreground "firebrick"))))
      `(org-done ((t (:foreground "OliveDrab4" :strike-through t))))
      `(org-agenda-done ((t (:foreground "OliveDrab4"))))
@@ -210,7 +213,7 @@
      ;; misc
      `(which-func ((t (:foreground "gold"))))
 
-     `(linum ((t (:foreground "#000000" :background "#c0d0e0"))))
+     `(linum ((t (:foreground "#000000" :background "#B5C5D5"))))
 
      `(trailing-whitespace ((t (:background "red" :foreground "yellow"))))
 

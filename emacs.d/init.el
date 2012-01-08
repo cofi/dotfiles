@@ -10,9 +10,9 @@
 (setq initial-scratch-message (cofi/fortune2scratch))
 
 (setq custom-safe-themes '(;; cofi-dark
-                           "738d94df0acf64602bafea9c24a57050f5b9d705"
+                           "e77e80399143cc5fe28744824f774ea0505d3ddb"
                            ;; cofi-light
-                           "3a45cb5c3a9e99b83b49334c30ee12f28ed5e71d"
+                           "8193834d90b9929336ca61bac4d3dac243c41759"
                            ))
 (load-theme 'cofi-dark)
 

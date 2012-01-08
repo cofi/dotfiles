@@ -14,7 +14,6 @@
      'cofi-dark
      ;; basic faces
      `(default ((((min-colors 4096)) (:background ,bg :foreground ,fg))))
-     `(italic ((t (:italic t :family "Dejavu Sans Mono" :height 80 :underline nil))))
      `(border ((t (:background "black"))))
      `(header-line ((t (:foreground ,fg :background ,bg :bold t))))
      `(highlight ((t (:background "sienna"))))
@@ -32,7 +31,7 @@
      ;; modeline
      `(mode-line ((t (:background "#334B7D" :foreground ,fg))))
      `(mode-line-inactive ((t (:background ,fg :foreground "#000000"))))
-     `(mode-line-buffer ((t (:bold t :foreground "dark orange"))))
+     `(mode-line-buffer ((t (:bold t :foreground "#FFAA00"))))
      `(mode-line-major-mode ((t (:bold t :foreground "gold"))))
      `(mode-line-minor-mode ((t (:foreground "khaki"))))
 
@@ -102,19 +101,19 @@
      `(ediff-odd-diff-face-C ((t (:background "gray" :foreground "white"))))
 
      ;; font lock
-     `(font-lock-builtin-face ((t (:foreground "LightSalmon4"))))
-     `(font-lock-comment-face ((t (:inherit italic :foreground "burlywood"))))
+     `(font-lock-builtin-face ((t (:foreground "#B3925D"))))
+     `(font-lock-comment-face ((t (:foreground "burlywood"))))
      `(font-lock-constant-face ((t (:foreground "firebrick"))))
-     `(font-lock-doc-face ((t (:foreground "yellow"))))
-     `(font-lock-doc-string-face ((t (:foreground "yellow"))))
-     `(font-lock-function-name-face ((t (:foreground "steel blue"))))
-     `(font-lock-keyword-face ((t (:foreground "tomato2"))))
+     `(font-lock-doc-face ((t (:foreground "#FFDD00"))))
+     `(font-lock-doc-string-face ((t (:foreground "#FFDD00"))))
+     `(font-lock-function-name-face ((t (:foreground "#6193CF"))))
+     `(font-lock-keyword-face ((t (:foreground "#CF4913"))))
      `(font-lock-preprocessor-face ((t (:foreground "cadet blue"))))
      `(font-lock-reference-face ((t (:foreground "violet red"))))
      `(font-lock-string-face ((t (:foreground "sienna1"))))
-     `(font-lock-type-face ((t (:italic t :foreground "forest green"))))
+     `(font-lock-type-face ((t (:italic t :foreground "#00BB00"))))
      `(font-lock-variable-name-face ((t (:foreground "gold"))))
-     `(font-lock-warning-face ((t (:bold t :foreground "red" :weight bold))))
+     `(font-lock-warning-face ((t (:bold t :foreground "red"))))
 
      `(sh-heredoc-face ((t (:foreground "tan"))))
 
@@ -130,7 +129,7 @@
 
      ;; isearch
      `(isearch ((t (:background "magenta4" :foreground "light sky blue"))))
-     `(isearch-lazy-highlight-face ((t (:background "pale turquoise"))))
+     `(isearch-lazy-highlight-face ((t (:background "#A8DDE0" :foreground ,bg))))
 
      ;; log view
      `(log-view-file-face ((t (:bold t :background "gray70" :weight bold))))
@@ -150,29 +149,33 @@
      `(smerge-mine-face ((t (:foreground "blue"))))
      `(smerge-other-face ((t (:foreground "DarkOliveGreen4"))))
 
-     ;; viper
-     `(viper-minibuffer-insert ((t (:background "white" :foreground "black"))))
-     `(viper-minibuffer-emacs ((t (:background "gray13" :foreground "white"))))
-     `(viper-minibuffer-vi ((t (:background "gray" :foreground nil))))
-
      ;; rst
-     `(rst-level-1-face ((t (:bold t :foreground "chocolate4" :background ,bg))))
-     `(rst-level-2-face ((t (:bold t :foreground "chocolate3" :background ,bg))))
-     `(rst-level-3-face ((t (:bold t :foreground "chocolate2" :background ,bg))))
-     `(rst-level-4-face ((t (:bold t :foreground "orange3" :background ,bg))))
-     `(rst-level-5-face ((t (:bold t :foreground "dark orange" :background ,bg))))
-     `(rst-level-6-face ((t (:bold t :foreground "dark khaki" :background ,bg))))
+     `(rst-level-1-face ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
+     `(rst-level-2-face ((t (:bold t :foreground "#80B3FF" :background ,bg))))
+     `(rst-level-3-face ((t (:bold t :foreground "#6193CF" :background ,bg))))
+     `(rst-level-4-face ((t (:bold t :foreground "#2C72C7" :background ,bg))))
+     `(rst-level-5-face ((t (:bold t :foreground "#0066FF" :background ,bg))))
+     `(rst-level-6-face ((t (:bold t :foreground "#0057AE" :background ,bg))))
+
+     ;; markdown
+     `(markdown-header-face   ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
+     `(markdown-header-face-1 ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
+     `(markdown-header-face-2 ((t (:bold t :foreground "#80B3FF" :background ,bg))))
+     `(markdown-header-face-3 ((t (:bold t :foreground "#6193CF" :background ,bg))))
+     `(markdown-header-face-4 ((t (:bold t :foreground "#2C72C7" :background ,bg))))
+     `(markdown-header-face-5 ((t (:bold t :foreground "#0066FF" :background ,bg))))
+     `(markdown-header-face-6 ((t (:bold t :foreground "#0057AE" :background ,bg))))
 
      ;; Org
      `(org-hide ((t (:foreground ,bg))))
-     `(org-level-1 ((t (:bold t :foreground "chocolate4"))))
-     `(org-level-2 ((t (:bold t :foreground "chocolate3"))))
-     `(org-level-3 ((t (:bold t :foreground "chocolate2"))))
-     `(org-level-4 ((t (:bold t :foreground "orange3"))))
-     `(org-level-5 ((t (:bold t :foreground "dark orange"))))
-     `(org-level-6 ((t (:bold t :foreground "dark khaki"))))
-     `(org-level-7 ((t (:bold t :foreground "khaki"))))
-     `(org-level-8 ((t (:bold t :foreground "khaki1"))))
+     `(org-level-1 ((t (:bold t :foreground "#DEBC85"))))
+     `(org-level-2 ((t (:bold t :foreground "#CEAC75"))))
+     `(org-level-3 ((t (:bold t :foreground "#BE9C65"))))
+     `(org-level-4 ((t (:bold t :foreground "#AE8C55"))))
+     `(org-level-5 ((t (:bold t :foreground "#AA7D50"))))
+     `(org-level-6 ((t (:bold t :foreground "#9C7045"))))
+     `(org-level-7 ((t (:bold t :foreground "#906F40"))))
+     `(org-level-8 ((t (:bold t :foreground "#8F6B32"))))
      `(org-date ((t (:underline t :foreground "sky blue"))))
      `(org-sexp-date ((t (:underline t :foreground "sky blue"))))
      `(org-link ((t (:underline t :foreground "royal blue"))))

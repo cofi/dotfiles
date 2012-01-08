@@ -82,7 +82,7 @@
 ;;; ========================================
 ;;; recent files ====================
 (setq recentf-auto-cleanup 'never)
-(setq recentf-max-saved-items 500)
+(setq recentf-max-saved-items 200)
 (require-and-exec 'recentf
    (recentf-mode 1)
    (setq recentf-exclude '(

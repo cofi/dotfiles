@@ -17,10 +17,14 @@
            (and line-start  " ")
            ;; anything-buffer
            "*anything"
-           ;; echo area
-           " *Echo Area" " *Minibuf"
+           "*ac-mode-"
            "Map_Sym.txt"
-           )))
+           "*Ibuffer*"
+           "*Help*"
+           "*Pp Eval Output*"
+           "*Completions*"
+           "*Customize"
+           "*Messages*")))
 
 (setq anything-idle-delay 0.3
       anything-input-idle-delay 0

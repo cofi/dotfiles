@@ -13,7 +13,8 @@
       ido-create-new-buffer 'always
       ido-use-url-at-point nil
       ido-use-filename-at-point nil
-      ido-ignore-extensions t)
+      ido-ignore-extensions t
+      ido-save-directory-list-file (cofi/var-file "emacs/ido"))
 
 (eval-after-load "ido"
   '(progn
@@ -83,6 +84,7 @@
 ;;; recent files ====================
 (setq recentf-auto-cleanup 'never)
 (setq recentf-max-saved-items 200)
+(setq recentf-save-file (cofi/var-file "emacs/recentf"))
 (require-and-exec 'recentf
    (recentf-mode 1)
    (setq recentf-exclude '(
@@ -104,5 +106,7 @@
       (make-directory dir 'create-parents))))
 
 (add-hook 'before-save-hook 'cofi/create-directories-for-file)
+
+(setq bc-bookmark-file (cofi/var-file "emacs/breadcrumb"))
 
 (provide 'cofi-files)

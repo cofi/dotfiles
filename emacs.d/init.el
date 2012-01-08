@@ -27,9 +27,7 @@
                  "~/.elisp/vendor/pylookup")
 
 (require 'cofi-util)
-(when (or (and (version< emacs-version "24")
-               (load (expand-file-name "~/.emacs.d/elpa/package.el")))
-          (require 'package))
+(require-and-exec 'package
   (pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")
                                  ("elpa" . "http://tromey.com/elpa/")))
   (package-initialize)

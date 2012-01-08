@@ -34,6 +34,14 @@
       anything-allow-skipping-current-buffer nil)
 
 (setq anything-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
+
+(setq anything-c-default-info-index-list '("elisp" "cl" "org" "gnus" "tramp" "stumpwm"
+                                           "zsh" "coreutils" "find" "libc"
+                                           "make" "emacs" "eieio" "latex2e"
+                                           "gawk" "sed" "wget" "binutils" "ld"
+                                           "grep" "gzip" "libtool"
+                                           "texinfo" "info" "gdb"))
+
 ;;; collect candidates for M-x after startup
 (add-hook 'emacs-startup-hook #'alcs-make-candidates 'append)
 

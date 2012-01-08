@@ -29,9 +29,7 @@
       anything-su-or-sudo "sudo"
       anything-allow-skipping-current-buffer nil)
 
-(setq anything-c-locate-db-file (cofi/var-file "locate.db"))
-(setq anything-c-locate-command (format "locate -d %s -i -r %%s"
-                                        anything-c-locate-db-file))
+(setq anything-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
 ;;; collect candidates for M-x after startup
 (add-hook 'emacs-startup-hook #'alcs-make-candidates 'append)
 

@@ -116,12 +116,8 @@
     (defalias 'cofi/anything-buffers 'anything-buffers-list)
 
     (defun cofi/anything-files ()
-      "ffap -> recentf -> buffer -> bookmark -> file-cache -> files-in-current-dir -> locate"
       (interactive)
-      (anything :sources '( anything-c-source-ffap-line
-                            anything-c-source-ffap-guesser
-                            anything-c-source-recentf
-                            anything-c-source-bookmarks
+      (anything :sources '( anything-c-source-recentf
                             anything-c-source-file-cache
                             anything-c-source-files-in-current-dir+
                             anything-c-source-files-in-all-dired

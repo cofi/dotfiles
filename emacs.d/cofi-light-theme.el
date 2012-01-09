@@ -137,8 +137,8 @@
      `(sml-modeline-end-face ((t (:foreground "white" :background "#334B7D"))))
 
      ;; show paren
-     `(show-paren-match-face ((t (:background "forest green"))))
-     `(show-paren-mismatch-face ((t (:background "red" :foreground "white"))))
+     `(show-paren-match ((t (:background "#8BB300"))))
+     `(show-paren-mismatch ((t (:background "red" :foreground "white"))))
 
      ;; smerge
      `(smerge-base-face ((t (:foreground "red"))))

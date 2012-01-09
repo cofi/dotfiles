@@ -197,6 +197,8 @@
               '(find-file-hook
                 mumamo-after-change-major-mode-hook
                 change-major-mode-hook))
+
+(setq show-paren-style 'expression)
 (show-paren-mode t)
 (when on-mobile?
   (ignore-errors

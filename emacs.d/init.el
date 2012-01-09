@@ -10,9 +10,9 @@
 (setq initial-scratch-message (cofi/fortune2scratch))
 
 (setq custom-safe-themes '(;; cofi-dark
-                           "e77e80399143cc5fe28744824f774ea0505d3ddb"
+                           "ca0e4dd5e7cd6b12e850e30833cd19baa26f9634"
                            ;; cofi-light
-                           "8193834d90b9929336ca61bac4d3dac243c41759"
+                           "815d09e62772025db447646097e9d9cf4c5953f3"
                            ))
 (load-theme 'cofi-dark)
 
@@ -99,7 +99,8 @@
                                  "cofi-workgroups"
                                  "cofi-completion"))
 (defvar cofi/full-settings '("cofi-programming"
-                             "nxhtml/autostart.el"))
+;;                              "nxhtml/autostart.el"
+                             ))
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
 (defvar cofi/mail-instance nil "This is an email instance.")

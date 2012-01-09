@@ -2,10 +2,6 @@
   '(push '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t :help "Run Latexmk on file")
          TeX-command-list))
 
-(add-hook 'TeX-mode-hook (lambda ()
-                           (setq fill-column 80)
-                           (auto-fill-mode 1)))
-
 (add-hook 'LaTeX-mode-hook
           (gen-local-fill-keymap-hook
               "<f12>" (cmd-arg (override-confirm) "P"
@@ -48,15 +44,9 @@
         (?. ("\\cdot" "\\ldots"))
         ))
 
-(defun cofi/german-quotes ()
-  (interactive)
-  (setq TeX-open-quote "\"`")
-  (setq TeX-close-quote "\"'"))
-
-(defun cofi/english-quotes ()
-  (interactive)
-  (setq TeX-open-quote "``")
-  (setq TeX-close-quote "''"))
+(add-all-to-hook 'LaTeX-mode-hook
+                 (gen-local-fill-keymap-hook "." (cmd (insert ".\n")))
+                 (turn-on visual-line-mode))
 
 (require 'info-look)
 (info-lookup-add-help

@@ -6,7 +6,6 @@
                            (setq fill-column 80)
                            (auto-fill-mode 1)))
 
-(add-hook 'LaTeX-mode-hook (lambda () (setq autopair-dont-activate t)))
 (add-hook 'LaTeX-mode-hook
           (gen-local-fill-keymap-hook
               "<f12>" (cmd-arg (override-confirm) "P"
@@ -32,7 +31,7 @@
      (define-key cdlatex-mode-map "\t" nil)
      (define-key cdlatex-mode-map (kbd "C-<tab>") 'cdlatex-tab)))
 
-(setq cdlatex-paired-parens "$[({")
+(setq cdlatex-paired-parens "")
 
 (setq cdlatex-math-modify-alist
       '(

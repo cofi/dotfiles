@@ -55,8 +55,6 @@
                      keyfreq
                      keywiz
                      lacarte
-                     magit
-                     magithub
                      markdown-mode
                      multi-term
                      offlineimap

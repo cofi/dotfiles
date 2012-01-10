@@ -45,15 +45,11 @@
           (push 'escape unread-command-events))
        (t (push evt unread-command-events))))))
 
-(dolist (mode '(
-                inferior-emacs-lisp-mode
-                pylookup-mode
-                ))
-  (push mode evil-emacs-state-modes))
-
-(dolist (mode '(
-                ))
-  (push mode evil-insert-state-modes))
+(loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
+                              (pylookup-mode            . emacs)
+                              (comint-mode              . emacs)
+                              (shell-mode               . emacs))
+      do (evil-set-initial-state mode state))
 
 (fill-keymap evil-normal-state-map
              "Y"     (cmd (evil-yank-characters (point) (point-at-eol)))

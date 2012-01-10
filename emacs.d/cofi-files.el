@@ -57,6 +57,8 @@
 ;;; Show trailing whitespace in file-buffers
 (add-hook 'find-file-hook (lambda () (setq show-trailing-whitespace t)))
 
+(setq require-final-newline t)
+
 
 (defalias 'cofi/file 'ido-find-file)
 (defalias 'cofi/buffer-alternate 'ido-switch-buffer)

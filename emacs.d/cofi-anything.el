@@ -31,7 +31,8 @@
       anything-quick-update t
       anything-candidate-number-limit nil
       anything-su-or-sudo "sudo"
-      anything-allow-skipping-current-buffer nil)
+      anything-allow-skipping-current-buffer nil
+      anything-enable-shortcuts t)
 
 (setq anything-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
 

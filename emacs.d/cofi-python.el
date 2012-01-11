@@ -29,17 +29,47 @@
 (autoload 'pymacs-eval "pymacs" nil t)
 (autoload 'pymacs-exec "pymacs" nil t)
 (autoload 'pymacs-load "pymacs" nil t)
+
+(defkeymap cofi-rope-map
+  "u" 'rope-undo
+  "C-r" 'rope-redo
+
+  "C-f" 'rope-find-file
+  "4 C-f" 'rope-find-file
+  "O" 'rope-open-project
+  "C" 'rope-close-project
+
+  "D" 'rope-get-doc
+  "d" 'rope-show-calltip
+
+  "a" 'rope-auto-import
+  "i" 'rope-organize-imports
+  "A" 'rope-analyze-modules
+
+  "f" 'rope-find-occurrences
+  "F" 'rope-find-implementations
+  "TAB" 'rope-extended-completions
+
+  "r" 'rope-rename
+  "c" 'rope-change-signature)
+
 ;; setup ropemacs
 (setq ropemacs-enable-autoimport t
       ropemacs-autoimport-modules '( "os"
                                      "os.path"
                                      "sys"
+                                     "itertools"
+                                     "operator"
                                     )
       ropemacs-local-prefix nil
       ropemacs-global-prefix nil
       ropemacs-guess-project t
       ropemacs-separate-doc-buffer nil
       ropemacs-enable-shortcuts nil)
+
+(defadvice rope-open-project (after cofi-analyze-after-open activate)
+  (rope-analyze-modules))
+
 
 ;; based on https://bitbucket.org/birkenfeld/dotemacs/src/tip/auto-complete-python.el
 (defvar ac-ropemacs-docs nil)
@@ -78,6 +108,7 @@
                  (lambda ()
                    (setq evil-word "[:word:]"))
                  (gen-local-fill-keymap-hook
+                     "C-c p"     cofi-rope-keymap
                      "M-n"       'flymake-goto-next-error
                      "M-p"       'flymake-goto-prev-error
                      "C-c C-SPC" 'flymake-mode
@@ -103,15 +134,12 @@
               (pymacs-load "ropemacs" "rope-")
               ;; move useful global commands to local keymap
               (fill-keymap 'local
-                           "C-c p" ropemacs-local-keymap
                            "M-?"   'rope-code-assist
                            "C-M-?" 'rope-lucky-assist
                            "C-c g" 'rope-goto-definition
                            "C-c d" 'rope-show-doc
-                           "C-c t" 'rope-show-calltip)
-              (fill-keymap ropemacs-local-keymap
-                           "u"   'rope-undo
-                           "C-r" 'rope-redo)))
+                           "C-c t" 'rope-show-calltip)))
+
 
 (add-hook 'python-mode-hook 'highlight-80+-mode)
 

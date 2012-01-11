@@ -61,6 +61,7 @@
                                      "itertools"
                                      "operator"
                                     )
+      ropemacs-max-doc-buffer-height 40
       ropemacs-local-prefix nil
       ropemacs-global-prefix nil
       ropemacs-guess-project t

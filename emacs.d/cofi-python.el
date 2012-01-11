@@ -31,27 +31,27 @@
 (autoload 'pymacs-load "pymacs" nil t)
 
 (defkeymap cofi-rope-map
-  "u" 'rope-undo
-  "C-r" 'rope-redo
+  "u"     'rope-undo
+  "C-r"   'rope-redo
 
-  "C-f" 'rope-find-file
+  "C-f"   'rope-find-file
   "4 C-f" 'rope-find-file
-  "O" 'rope-open-project
-  "C" 'rope-close-project
+  "O"     'rope-open-project
+  "C"     'rope-close-project
 
-  "D" 'rope-get-doc
-  "d" 'rope-show-calltip
+  "D"     'rope-get-doc
+  "d"     'rope-show-calltip
 
-  "a" 'rope-auto-import
-  "i" 'rope-organize-imports
-  "A" 'rope-analyze-modules
+  "a"     'rope-auto-import
+  "i"     'rope-organize-imports
+  "A"     'rope-analyze-modules
 
-  "f" 'rope-find-occurrences
-  "F" 'rope-find-implementations
-  "TAB" 'rope-extended-completions
+  "f"     'rope-find-occurrences
+  "F"     'rope-find-implementations
+  "TAB"   'rope-extended-completions
 
-  "r" 'rope-rename
-  "c" 'rope-change-signature)
+  "r"     'rope-rename
+  "c"     'rope-change-signature)
 
 ;; setup ropemacs
 (setq ropemacs-enable-autoimport t

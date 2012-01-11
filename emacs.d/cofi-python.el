@@ -108,7 +108,7 @@
                  (lambda ()
                    (setq evil-word "[:word:]"))
                  (gen-local-fill-keymap-hook
-                     "C-c p"     cofi-rope-keymap
+                     "C-c p"     cofi-rope-map
                      "M-n"       'flymake-goto-next-error
                      "M-p"       'flymake-goto-prev-error
                      "C-c C-SPC" 'flymake-mode

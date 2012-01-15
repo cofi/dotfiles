@@ -16,6 +16,13 @@
                              'LaTeX-math-mode))
 (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
 
+(defun cofi-tex-use-makefile-if-present ()
+  (when (locate-dominating-file (buffer-file-name) "Makefile")
+    (make-variable-buffer-local LaTeX-mode-map)
+    (cofi/set-key 'local (kbd "C-c C-c") 'cofi/anything-make)))
+
+(add-hook 'LaTeX-mode-hook #'cofi-tex-use-makefile-if-present)
+
 (setq TeX-auto-save t
       TeX-save-query nil
       TeX-parse-self t

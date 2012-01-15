@@ -242,12 +242,12 @@ Major mode determines association."
        (cofi/ring-current cofi/colorschemes)
      (cofi/ring-next cofi/colorschemes))))
 
-(defun cofi/copy-sha1-of-buffer (buffer &optional start end)
+(defun cofi/copy-sha-of-buffer (buffer)
   (interactive "b")
   (let ((buffer (if (typep buffer 'buffer)
                     buffer
                   (get-buffer buffer))))
-    (kill-new (sha1 buffer start end))))
+    (kill-new (secure-hash 'sha256 (current-buffer)))))
 
 (defun NOP ()
   "Non-op."

@@ -116,7 +116,7 @@ Diffs prefix-1 marked buffer with prefix buffer."
          :inline t
          :header-mouse-map ibuffer-size-header-map
          :summarizer (lambda (sizes)
-                       (format "%3dM"
+                       (format "%3.1fM"
                                (/
                                 (apply #'+ (mapcar
                                             (lambda (size)
@@ -127,7 +127,7 @@ Diffs prefix-1 marked buffer with prefix buffer."
                                                  ((string= unit "M") (* (expt 10 6) (read num)))
                                                  (t (read size)))))
                                             sizes))
-                                (expt 10 6)))))
+                                (float (expt 10 6))))))
   (let ((size (buffer-size))
         (sgroups `(("%4.1fM" ,(expt 10 6))
                    ("%4.1fk" ,(expt 10 3))

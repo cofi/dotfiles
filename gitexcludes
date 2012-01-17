@@ -1,0 +1,13 @@
+*.elc
+
+*.pyc
+*.pyd
+*.pyo
+
+.o
+
+.class
+
+.aux
+.toc
+.out

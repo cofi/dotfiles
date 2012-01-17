@@ -5,6 +5,7 @@
 
 [core]
     whitespace = fix,-indent-with-non-tab,trailing-space
+    excludesfile = ~/.gitexcludes
 
 [apply]
     whitespace = fix

@@ -46,39 +46,55 @@
     tool = gvimdiff
     renames = copy
 [alias]
+    # abbrevs
     ad = add
-    ap = add -p
-    ai = add -i
+    ci = commit
+    br = branch
+    co = checkout
     pl = pull
     pr = pull --rebase
     ps = push
     fe = fetch
-    st = status
-    ci = commit
-    br = branch
-    co = checkout
-    d1 = diff HEAD^1..
     df = diff
-    dfc = diff --cached
-    wd1 = diff --word-diff=color HEAD^1.. #word-diff from last commit
-    wdf = diff --word-diff=color          #word-diff
-    wdfc = diff --word-diff=color --cached # word-diff cached
     gdf = difftool
     gdfc = difftool --cached
     mg = merge
     gmg = mergetool
+    st = status
+    lp = log -p
+
+    # adding
+    ap = add -p
+    ai = add -i
+
+    # status
+    bl = branch -av
     vu = ls-files -u                    #view unmerged files
+    ls-ignored = ls-files --exclude-standard --ignored --others
+
+    # diffing
+    d1 = diff HEAD^1..
+    dfc = diff --cached
+    wd1 = diff --word-diff=color HEAD^1.. #word-diff from last commit
+    wdf = diff --word-diff=color          #word-diff
+    wdfc = diff --word-diff=color --cached # word-diff cached
+
+    # logs
     l1 = log HEAD^1..                   #last commit
     l5 = log HEAD^5..                   # last 5 commits
     l5o = log --pretty=oneline HEAD^5.. # last 5 commits onlined
-    lp = log -p
-    slog = log --pretty=format:\"%h - %cr - %s (%cn)\"
+    slog = log --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset | %s %Cgreen%cr%Creset %C(bold blue)[%an]%Creset' --date=relative --no-merges --abbrev-commit
     stats = shortlog -s -n -e --no-merges
+    tree = log --graph --pretty=oneline --decorate --color --abbrev-commit
+    tree-all = log --graph --pretty=oneline --decorate --color --abbrev-commit --all
+    pc = log -p HEAD@{1}..  # pulled changes
+
+    # new commands
     in = incoming
     out = outgoing
     addr = addremove
+    zip = !git archive -o $(basename $(readlink -e .)).zip HEAD
+
+    # amending
     amend = commit --amend -C HEAD
     amendc = commit --amend
-    tree = log --graph --pretty=oneline --decorate
-    ls-ignored = ls-files --exclude-standard --ignored --others
-    zip = !git archive -o $(basename $(readlink -e .)).zip HEAD

@@ -29,6 +29,7 @@
 
            ("Writing" (or
                        (mode . tex-mode)
+                       (mode . plain-tex-mode)
                        (mode . latex-mode)
                        (mode . rst-mode)
                        (mode . html-mode)

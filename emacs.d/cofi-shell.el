@@ -5,10 +5,10 @@
                   (shell-command-completion-mode))
 
 (setq dirtrack-list '("[a-zA-Z@]+ \\(~.*?\\) %>" 1))
-(add-hook 'shell-mode-hook (turn-on dirtrack-mode))
-(add-hook 'shell-mode-hook
+(add-all-to-hook'shell-mode-hook
           (gen-local-fill-keymap-hook
-              "<home>" 'comint-bol))
+              "<home>" 'comint-bol)
+          #'dirtrack-mode)
 
 (add-hook 'comint-mode-hook
           (gen-local-fill-keymap-hook

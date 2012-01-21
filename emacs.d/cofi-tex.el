@@ -8,13 +8,11 @@
                         (TeX-command "latexmk" 'TeX-master-file override-confirm))
               "C-<f12>" (cmd (TeX-command "View" 'TeX-master-file t))))
 
-(defun turn-on-reftex () (reftex-mode 1))
-
 (setq reftex-plug-into-AUCTeX t)
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")
                               'cdlatex-mode
                              'LaTeX-math-mode))
-(add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+(add-hook 'LaTeX-mode-hook #'reftex-mode)
 
 (setq TeX-auto-save t
       TeX-save-query nil
@@ -46,7 +44,7 @@
 
 (add-all-to-hook 'LaTeX-mode-hook
                  (gen-local-fill-keymap-hook "." (cmd (insert ".\n")))
-                 (turn-on visual-line-mode))
+                 #'visual-line-mode)
 
 (require 'info-look)
 (info-lookup-add-help

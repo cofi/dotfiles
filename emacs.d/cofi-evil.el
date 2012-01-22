@@ -24,7 +24,12 @@
   (add-to-hooks (lambda ()
                   (make-local-variable 'surround-pairs-alist)
                   (push '(?~ . ("``" . "``")) surround-pairs-alist))
-                '(markdown-mode-hook rst-mode-hook)))
+                '(markdown-mode-hook rst-mode-hook))
+  (add-hook 'rst-mode-hook (lambda ()
+                             (push '(?c . (":class:`" . "`")) surround-pairs-alist)
+                             (push '(?f . (":func:`"  . "`")) surround-pairs-alist)
+                             (push '(?m . (":meth:`"  . "`")) surround-pairs-alist)
+                             (push '(?a . (":attr:`"  . "`")) surround-pairs-alist))))
 
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)

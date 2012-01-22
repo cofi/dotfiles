@@ -90,6 +90,7 @@
                                       "C-M-p" 'gnus-summary-prev-thread
                                       "A t"   'gnus-summary-refer-thread
                                       "M-t"   'gnus-summary-refer-thread
+                                      "~" (cmd (gnus-summary-mark-article nil ?R))
                                       ))
 (require 'offlineimap)
 (add-hook 'gnus-group-mode-hook

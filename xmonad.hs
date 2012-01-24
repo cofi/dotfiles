@@ -339,6 +339,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , pypi
                                                   , pep
                                                   , py
+                                                  , rtd
                                                   , S.youtube
                                                   , zdfMediathek
                                                   , S.hoogle
@@ -375,6 +376,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       duck = S.searchEngine "d" "http://duckduckgo.com/?q="
       rfc = S.searchEngine "rfc" "http://www.ietf.org/rfc/rfc"
       pep = formatSearch "pep" "http://www.python.org/dev/peps/pep-%04s"
+      rtd = S.searchEngine "rtd" "http://readthedocs.org/search/project/?q="
       py = S.searchEngineF "py" dopy
       amazon = S.searchEngine "ama" "http://www.amazon.de/s/url=search-alias%3Daps&x=0&y=0&field-keywords="
       duden = S.searchEngine "duden" "http://www.duden.de/suchen/dudenonline/"

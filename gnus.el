@@ -49,7 +49,7 @@
       gnus-sum-thread-tree-single-leaf     "╰─►"
       gnus-sum-thread-tree-indent          "    ")
 
-(setq mm-text-html-renderer 'w3m)
+(setq mm-text-html-renderer 'gnus-w3m)
 
 ;;; search
 (require 'nnir)

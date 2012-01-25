@@ -35,6 +35,8 @@ bind-key { pageup
 bind-key } pagedown
 bind-key c set-tag
 bind-key ^C clear-tag
+bind-key n toggle-article-read
+bind-key N mark-feed-read
 
 color background white  black
 color listnormal white  black

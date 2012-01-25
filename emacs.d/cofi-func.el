@@ -232,15 +232,17 @@ Major mode determines association."
       (call-interactively 'org-cdlatex-mode nil)
     (call-interactively 'cdlatex-mode nil)))
 
-(defvar cofi/colorschemes (cofi/make-ring [cofi-dark cofi-light]))
-(defun cofi/next-colorscheme (&optional arg)
+(defvar cofi/current-colorscheme nil)
+(defvar cofi/colorschemes '("cofi-dark" "cofi-light"))
+(defun cofi/colorscheme (scheme)
   "Move to next colorscheme. If `ARG' is non-nil reload current."
-  (interactive "P")
-  (disable-theme (cofi/ring-current cofi/colorschemes))
-  (load-theme
-   (if arg
-       (cofi/ring-current cofi/colorschemes)
-     (cofi/ring-next cofi/colorschemes))))
+  (interactive (list (completing-read "Colorscheme: " cofi/colorschemes)))
+  (setq scheme (if (stringp scheme)
+                   (intern scheme)
+                 scheme))
+  (disable-theme cofi/current-colorscheme)
+  (load-theme scheme)
+  (setq cofi/current-colorscheme scheme))
 
 (defun cofi/copy-sha-of-buffer (buffer)
   (interactive "b")

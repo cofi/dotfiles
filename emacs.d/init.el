@@ -120,7 +120,7 @@
                                   (mapc #'load cofi/full-settings)
                                   (workgroups-mode 1))))
 (cofi-next-file-assoc)
-(cofi/next-colorscheme)
+(cofi/colorscheme 'cofi-dark)
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Time needed to load: %s seconds."
                                          (emacs-uptime "%s")))

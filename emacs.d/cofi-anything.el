@@ -34,6 +34,8 @@
       anything-allow-skipping-current-buffer nil
       anything-enable-shortcuts t)
 
+(setq anything-M-x-requires-pattern 0)
+
 (setq anything-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
 
 (setq anything-c-default-info-index-list '("elisp" "cl" "org" "gnus" "tramp" "stumpwm"

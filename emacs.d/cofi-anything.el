@@ -6,7 +6,7 @@
       (rx (or
            ;; directories
            (and "/"
-              (or ".svn" "CVS" "_darcs" ".git" ".hg" "auto" "_region_" ".prv")
+              (or ".svn" "CVS" "_darcs" ".git" ".hg" "auto" "_region_" ".prv" "__pycache__")
               (or "/" eol))
            ;; files
            (and line-start  (or ".#" "."))
@@ -43,27 +43,13 @@
                                            "grep" "gzip" "libtool"
                                            "texinfo" "info" "gdb"))
 
-;;; collect candidates for M-x after startup
-(add-hook 'emacs-startup-hook #'alcs-make-candidates 'append)
-
-(setq anything-c-use-adaptative-sorting t
-      anything-c-adaptive-history-file (cofi/var-file "anything-adaptive-history"))
 ;; --------------------------------------------------
 (require-and-exec 'anything
     (require 'anything-config)
     (require 'anything-match-plugin)
-    (require 'anything-show-completion)
 
     (anything-completion-mode 1)
-
-    (require-and-exec 'anything-complete
-       (anything-read-string-mode '(buffer variable command))
-       (defadvice anything-execute-extended-command (after show-keybinding activate)
-         (let ((output (with-output-to-string (where-is this-command))))
-           (unless (string-match "is not on any key" output)
-             (if (current-message)
-                 (sit-for 2))
-             (message "%s" output)))))
+    (cofi/set-key 'global "M-x" 'anything-M-x)
 
     ;; From browse-kill-ring.el
     (defadvice yank-pop (around kill-ring-browse-maybe (arg) activate)
@@ -214,6 +200,6 @@
          (interactive)
          (anything :sources anything-c-source-current-buffer-lacarte
                    :buffer "*anything lacarte*"))
-       (global-set-key (kbd "<f10>") 'cofi/anything-lacarte))
+       (cofi/set-key 'global "<f10>" 'cofi/anything-lacarte))
     )
 (provide 'cofi-anything)

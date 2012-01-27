@@ -43,7 +43,8 @@
                                            "make" "emacs" "eieio" "latex2e"
                                            "gawk" "sed" "wget" "binutils" "ld"
                                            "grep" "gzip" "libtool"
-                                           "texinfo" "info" "gdb"))
+                                           "texinfo" "info" "gdb"
+                                           "sphinx" "python"))
 
 ;; --------------------------------------------------
 (require-and-exec 'anything

@@ -24,7 +24,7 @@
   (add-to-hooks (lambda ()
                   (make-local-variable 'surround-pairs-alist)
                   (push '(?~ . ("``" . "``")) surround-pairs-alist))
-                '(markdown-mode-hook rst-mode-hook python-mode-hookj))
+                '(markdown-mode-hook rst-mode-hook python-mode-hook))
   (add-to-hooks (lambda ()
                   (push '(?c . (":class:`" . "`")) surround-pairs-alist)
                   (push '(?f . (":func:`"  . "`")) surround-pairs-alist)

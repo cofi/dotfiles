@@ -24,14 +24,14 @@
   (add-to-hooks (lambda ()
                   (make-local-variable 'surround-pairs-alist)
                   (push '(?~ . ("``" . "``")) surround-pairs-alist))
-                '(markdown-mode-hook rst-mode-hook python-mode))
+                '(markdown-mode-hook rst-mode-hook python-mode-hookj))
   (add-to-hooks (lambda ()
                   (push '(?c . (":class:`" . "`")) surround-pairs-alist)
                   (push '(?f . (":func:`"  . "`")) surround-pairs-alist)
                   (push '(?m . (":meth:`"  . "`")) surround-pairs-alist)
                   (push '(?a . (":attr:`"  . "`")) surround-pairs-alist))
                 '(rst-mode-hook
-                  python-mode)))
+                  python-mode-hook)))
 
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)

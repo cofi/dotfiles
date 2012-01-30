@@ -135,9 +135,7 @@ Diffs prefix-1 marked buffer with prefix buffer."
                    ("%4d" 1))))
         (loop for (format limit) in sgroups
               if (>= size limit)
-              return (if (= (% size limit) 0)
-                         (format "%6d" (/ size limit))
-                       (format format (/ size (float limit)))))))
+              return (format format (/ size (float limit))))))
 
 (require 'midnight)
 (setq midnight-period (* 3600 6))       ; every 6 hours

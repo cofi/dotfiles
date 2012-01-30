@@ -118,6 +118,8 @@
       "-")))
 
 ;;; scan for news every 10 minutes
+(setq gnus-visible-headers (concat gnus-visible-headers "\\|^Archived-At:"))
+
 (gnus-demon-add-handler 'gnus-demon-scan-news 10 t)
 
 (require-and-exec 'gnus-desktop-notify

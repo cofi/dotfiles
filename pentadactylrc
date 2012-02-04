@@ -17,13 +17,12 @@ command! -nargs=* zdf tabopen http://www.zdf.de/ZDFmediathek/#/suche/<args>
 
 "sidebar
 command! bookstack sidebar! Bookstack
-map -g user <Leader>b -ex bookstack
-map -g user <Leader>c -ex sbclose
+map -g user ,b -ex bookstack
+map -g user ,c -ex sbclose
 
 set guioptions=sNTC
 set editor="emacsclient -c --alternate-editor=gvim"
 
-set mapleader=","
 set hlfind
 set hintmatching=contains
 set newtab+=help
@@ -34,13 +33,13 @@ map -g user <A-b> -silent -ex tabopen chrome://browser/content/places/places.xul
 map -g user <C-l> -silent -ex nohlfind
 
 " Tabs
-map -g user <leader>n -silent -ex tabnext
-map -g user <leader>p -silent -ex tabprev
+map -g user ,n -silent -ex tabnext
+map -g user ,p -silent -ex tabprev
 map -g user <C-right> -silent -ex tabnext
 map -g user <C-left> -silent -ex tabprev
-map -g user <leader>f -silent -ex tabrewind
-map -g user <leader>l -silent -ex tablast
-map -g user <leader>d -silent -ex tabduplicate
+map -g user ,f -silent -ex tabrewind
+map -g user ,l -silent -ex tablast
+map -g user ,d -silent -ex tabduplicate
 
 " Movement
 imap <C-f> <right>
@@ -74,10 +73,10 @@ map -g user <A-S-n> :set nst!=<A-Tab>
 
 " Instapaper -- depends on instapaper bookmarklet with `readlater' keyword
 command! instapaper open readlater
-map -g user <Leader>r -ex instapaper
+map -g user ,r -ex instapaper
 " Instapaper text -- depends on instapaper bookmarklet with `text' keyword
 command! instatext open text
-map -g user <leader>t -ex instatext
+map -g user ,t -ex instatext
 
 " Org
 command! store-link -javascript
@@ -98,8 +97,8 @@ command! save-link -javascript
    \ + encodeURIComponent(buffer.URL) + '/'
    \ + encodeURIComponent(buffer.title) + '"')
 
-map -g user <Leader>w -ex save-link
-map -g user <Leader>e -ex store-link
+map -g user ,w -ex save-link
+map -g user ,e -ex store-link
 
 " UTM trimmer, based on http://pentablg.blogspot.com/2011/05/tip-of-day-mapping-javascript.html
 command! yank-utm -javascript -desc 'yank utm-trimmed url'
@@ -110,7 +109,7 @@ command! yank-utm -javascript -desc 'yank utm-trimmed url'
    \     dactyl.clipboardWrite(url, true);
    \}
 
-map -g user <Leader>y -ex yank-utm
+map -g user ,y -ex yank-utm
 
 command! wide-margin -javascript -desc 'set wide margin on left and right'
    \ let body = buffer.doc.getElementsByTagName('body')[0];
@@ -127,8 +126,8 @@ command! no-margin -javascript -desc 'set no margin on left and right'
    \ body.style.marginLeft = '0';
    \ body.style.marginRight = '0';
 
-map -g user <Leader>m -ex wide-margin
-map -g user <Leader>M -ex no-margin
+map -g user ,m -ex wide-margin
+map -g user ,M -ex no-margin
 
 command! strip-anchor -javascript -desc 'reopen current url with anchor stripped'
    \ let url = buffer.URL;
@@ -136,7 +135,7 @@ command! strip-anchor -javascript -desc 'reopen current url with anchor stripped
    \ if (anchor > 0)
    \   dactyl.open(url.substring(0, anchor));
 
-map -g user <Leader>s -ex strip-anchor
+map -g user ,s -ex strip-anchor
 
 " C-g as ESC
 map  -g user <C-g> <ESC>

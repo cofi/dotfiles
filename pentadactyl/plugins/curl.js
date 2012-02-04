@@ -1,4 +1,4 @@
-"use strict";
+/* use strict */
 XML.ignoreWhitespace = false;
 XML.prettyPrinting = false;
 var INFO =
@@ -30,19 +30,21 @@ var INFO =
 
 hints.addMode('C', "Generate curl command for a form", function(elem) {
     if (elem.form)
-        var [url, data, , elems] = util.parseForm(elem);
+        var { url, postData, elements } = DOM(elem).formData;
     else
         var url = elem.getAttribute("href");
+
     if (!url || /^javascript:/.test(url))
         return;
+
     url = services.io.newURI(url, null, util.newURI(elem.ownerDocument.URL)).spec;
 
-    function escape(str) '"' + str.replace(/[\\"$]/g, "\\$&") + '"';
+    let escape = util.closure.shellEscape;
 
     dactyl.clipboardWrite(["curl"].concat(
         [].concat(
-            [["--form-string", escape(datum)] for ([n, datum] in Iterator(elems || []))],
-            data != null && !elems.length ? [["-d", escape("")]] : [],
+            [["--form-string", escape(datum)] for ([n, datum] in Iterator(elements || []))],
+            postData != null && !elements.length ? [["-d", escape("")]] : [],
             [["-H", escape("Cookie: " + elem.ownerDocument.cookie)],
              ["-A", escape(navigator.userAgent)],
              [escape(url)]]

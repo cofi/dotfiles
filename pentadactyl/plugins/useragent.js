@@ -1,4 +1,4 @@
-"use strict";
+/* use strict */
 XML.ignoreWhitespace = false;
 XML.prettyPrinting   = false;
 var INFO =
@@ -64,29 +64,34 @@ var INFO =
     </item>
 </plugin>;
 
-let UserAgent = Struct("name", "useragent", "appname", "appcodename",
-                       "appversion", "platform", "vendor", "vendorsub", "userset");
-UserAgent.prototype.__defineGetter__("options", function ()
-    opts.slice(1).map(function (opt) [opt.name, this[opt.name]], this)
-        .filter(function (opt) opt[1]));
-let useragents = array([
-    // From User Agent Switcher 0.7.2
-    ["ie-6", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
-        "Mozilla", "Microsoft Internet Explorer", "4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
-        "Win32"],
-    ["ie-7", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)",
-        "Mozilla", "Microsoft Internet Explorer", "4.0 (compatible; MSIE 7.0; Windows NT 6.0)",
-        "Win32"],
-    ["ie-8", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)",
-        "Mozilla", "Microsoft Internet Explorer", "4.0 (compatible; MSIE 8.0; Windows NT 6.1)",
-        "Win32"],
-    ["bot-googlebot-2.1", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"],
-    ["bot-msnbot-1.1", "msnbot/1.1 (+http://search.msn.com/msnbot.htm)"],
-    ["bot-yahoo", "Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)"],
-    ["iphone-3", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16",
-        "Mozilla", "Netscape", "5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16",
-        "iPhone", "Apple Computer, Inc.", ""]
-]).map(function (ua) [ua[0], UserAgent.fromArray(ua)]).toObject();
+let UserAgent, useragents;
+let init = function init_() {
+    init = function () {};
+
+    UserAgent = Struct("name", "useragent", "appname", "appcodename",
+                           "appversion", "platform", "vendor", "vendorsub", "userset");
+    UserAgent.prototype.__defineGetter__("options", function ()
+        opts.slice(1).map(function (opt) [opt.name, this[opt.name]], this)
+            .filter(function (opt) opt[1]));
+    useragents = array([
+        // From User Agent Switcher 0.7.2
+        ["ie-6", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
+            "Mozilla", "Microsoft Internet Explorer", "4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
+            "Win32"],
+        ["ie-7", "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)",
+            "Mozilla", "Microsoft Internet Explorer", "4.0 (compatible; MSIE 7.0; Windows NT 6.0)",
+            "Win32"],
+        ["ie-8", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)",
+            "Mozilla", "Microsoft Internet Explorer", "4.0 (compatible; MSIE 8.0; Windows NT 6.1)",
+            "Win32"],
+        ["bot-googlebot-2.1", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"],
+        ["bot-msnbot-1.1", "msnbot/1.1 (+http://search.msn.com/msnbot.htm)"],
+        ["bot-yahoo", "Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)"],
+        ["iphone-3", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16",
+            "Mozilla", "Netscape", "5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16",
+            "iPhone", "Apple Computer, Inc.", ""]
+    ]).map(function (ua) [ua[0], UserAgent.fromArray(ua)]).toObject();
+};
 
 let Opt = Struct("name", "description", "pref", "names");
 Opt.defaultValue("names", function () ["-" + this.name]);
@@ -104,13 +109,18 @@ group.options.add(["useragent", "ua"],
     "The current browser user-agent",
     "string", "default",
     {
+        initValue: function () {},
         completer: function (context, args) {
+            init();
+
             context.title = ["Name", "User-Agent"];
             context.keys = { text: "name", description: "useragent" };
             context.completions = array(values(useragents)).concat(
                 [{ name: "default", useragent: navigator.userAgent }]);
         },
         setter: function (value) {
+            init();
+
             let ua = useragents[value] ||
                 (value == "default" ? UserAgent("default")
                                     : UserAgent("", value));
@@ -126,6 +136,8 @@ group.options.add(["useragent", "ua"],
 group.commands.add(["useragent", "ua"],
     "Define a new useragent.",
     function (args) {
+        init();
+
         if (args.length < 2)
             commandline.commandOutput(template.tabular(["Name", "User-Agent"], ["padding-right: 1em; min-width: 8em;", "white-space: normal;"],
                 [[ua.name,
@@ -155,6 +167,8 @@ group.commands.add(["useragent", "ua"],
     }, {
         bang: true,
         completer: function (context, args) {
+            init();
+
             if (args.completeArg == 1)
                 context.completions = [[navigator.userAgent, "Default"]].concat(
                     [[v.useragent, k] for ([k, v] in Iterator(useragents))]);
@@ -165,29 +179,34 @@ group.commands.add(["useragent", "ua"],
             description: opt.description,
             completer: function (context, args)
                 array(values(useragents)).map(function (ua) ua[opt.name])
-                                         .uniq()
+                                         .compact().uniq()
                                          .map(function (val) [val, ""]).array,
             type: CommandOption.STRING
         })),
-        serialize: function () [
-            {
-                command: this.name,
-                arguments: [ua.name],
-                bang: true,
-                literalArg: ua.useragent,
-                options: array(
-                    [opt.names[0], ua[opt.name]]
-                    for (opt in values(opts.slice(1)))
-                    if (ua[opt.name] != null)
-                ).toObject()
-            }
-            for (ua in values(useragents)) if (ua.userset)
-        ]
+        serialize: function () {
+            init();
+            return [
+                {
+                    command: this.name,
+                    arguments: [ua.name],
+                    bang: true,
+                    literalArg: ua.useragent,
+                    options: array(
+                        [opt.names[0], ua[opt.name]]
+                        for (opt in values(opts.slice(1)))
+                        if (ua[opt.name] != null)
+                    ).toObject()
+                }
+                for (ua in values(useragents)) if (ua.userset)
+            ]
+        }
     }, true);
 
 group.commands.add(["deluseragent", "delua"],
     "Deletes a useragent.",
     function (args) {
+        init();
+
         dactyl.assert(Set.has(useragents, args[0]), "Invalid argument");
         if (options["useragent"] == args[0])
             options["useragent"] = "default";

@@ -78,7 +78,7 @@
       gnus-unbuttonized-mime-types '("text/plain"))
 (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
 
-(setq gnus-completing-read-function #'gnus-ido-completing-read)
+(setq gnus-completing-read-function #'anything-completing-read-default)
 
 (defun cofi-gnus-copy-archived-at ()
   "Copy archived-at url of current article to killring and clipboard."

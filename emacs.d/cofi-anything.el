@@ -1,7 +1,6 @@
 (add-to-loadpath "~/.elisp/vendor/anything"
                  "~/.elisp/vendor/anything/extensions/")
 ;; Settings ----------------------------------------
-(setq anything-command-map-prefix-key "<f7>")
 (setq anything-c-boring-file-regexp
       (rx (or
            ;; directories

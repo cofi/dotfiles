@@ -151,6 +151,7 @@
  "C-c q" cofi-quick-map
  "C-c o" cofi-org-mode-map
  "<f5>"  cofi-org-mode-map
+ "<f7>"  anything-command-map
  "<f8>"  cofi-project-map
  )
 

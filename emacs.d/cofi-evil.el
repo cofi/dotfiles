@@ -165,7 +165,7 @@
   "s" 'cofi/switch-file
   ";" 'cofi/end-prog-line
 
-  "." 'evil-ex-read-command)
+  "." 'evil-ex)
 
 (defun cofi/evil-cursor ()
   "Change cursor color according to evil-state."

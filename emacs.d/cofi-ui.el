@@ -197,6 +197,13 @@
               '(find-file-hook
                 mumamo-after-change-major-mode-hook
                 change-major-mode-hook))
+(defvar cofi/current-line 0)
+(defun cofi/relative-line (line-number)
+  (propertize (format "%2d" (abs (- line-number cofi/current-line)))
+              'face 'linum))
+(defadvice linum-update (before set-current-line activate)
+  (setq cofi/current-line (line-number-at-pos)))
+(setq linum-format #'cofi/relative-line)
 
 (setq show-paren-style 'expression)
 (show-paren-mode t)

@@ -80,6 +80,21 @@
 
 (setq gnus-completing-read-function #'gnus-ido-completing-read)
 
+(defun cofi-gnus-copy-archived-at ()
+  "Copy archived-at url of current article to killring and clipboard."
+  (interactive)
+  (let ((archived (gnus-with-article-headers
+                   (mail-extract-address-components
+                    (mail-fetch-field "Archived-At")))))
+    (when archived
+      (let ((x-select-enable-clipboard t)
+            (field (second archived)))
+        (let ((url (if (not (begins-with field "http:"))
+                       (concat "http:" (substring field 5))
+                     field)))
+          (kill-new url)
+          (message "Copied: %s" url))))))
+
 ;;; keys
 (add-hook 'gnus-summary-mode-hook
           (gen-local-fill-keymap-hook "M-p"   'gnus-summary-prev-article
@@ -90,7 +105,8 @@
                                       "C-M-p" 'gnus-summary-prev-thread
                                       "A t"   'gnus-summary-refer-thread
                                       "M-t"   'gnus-summary-refer-thread
-                                      "~" (cmd (gnus-summary-mark-article nil ?R))
+                                      "y"     'cofi-gnus-copy-archived-at
+                                      "~"     (cmd (gnus-summary-mark-article nil ?R))
                                       ))
 (require 'offlineimap)
 (add-hook 'gnus-group-mode-hook

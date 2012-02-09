@@ -22,6 +22,10 @@
 (eval-after-load "magit"
   '(fset 'magit-quit-window #'cofi/vcs-quit-window))
 
+(add-hook 'magit-status-mode-hook (lambda ()
+                                    (if (file-exists-p ".git/svn")
+                                        (magit-svn-mode))))
+
 ;;; (a)hg
 (eval-after-load "monky"
   '(fill-keymaps '(monky-status-mode-map

@@ -1,5 +1,5 @@
-(let ((modes `(flyspell-mode-on
-               turn-on-auto-fill
+(let ((modes `(flyspell-mode
+               auto-fill-mode
                auto-dictionary-mode)))
 
   (add-to-hook 'rst-mode-hook modes)

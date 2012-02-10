@@ -33,8 +33,8 @@
                         uniquify-ignore-buffers-re "^\\*"))
 
 (require-and-exec 'eldoc
-  (add-hook 'python-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-to-hooks 'eldoc-mode '(python-mode-hook
+                              emacs-lisp-mode-hook))
   (eldoc-add-command 'autopair-insert-opening))
 
 (setq doc-view-continuous t)

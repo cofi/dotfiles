@@ -99,9 +99,9 @@
     (requires   . 0)))
 
 (add-all-to-hook 'python-mode-hook
-                 (turn-on autopair-mode)
-                 (turn-on show-paren-mode)
-                 #'turn-on-auto-fill
+                 #'autopair-mode
+                 #'show-paren-mode
+                 #'auto-fill-mode
                  (lambda ()
                    (setq tab-width 4)
                    (setq mode-name "py"))

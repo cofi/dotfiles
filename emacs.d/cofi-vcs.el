@@ -9,7 +9,7 @@
 (setq magit-commit-signoff t
       magit-completing-read-function 'magit-ido-completing-read
       magit-commit-all-when-nothing-staged nil)
-(add-hook 'magit-commit-mode-hook (turn-on visual-line-mode))
+(add-hook 'magit-commit-mode-hook 'visual-line-mode)
 
 ;;; overwrite magit-quit-window with a more sensible fun
 (defun cofi/vcs-quit-window (&optional kill-buffer)

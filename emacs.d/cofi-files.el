@@ -48,7 +48,7 @@
       dired-dwim-target t
       wdired-allow-to-change-permissions t)
 (require-and-exec 'dired+)
-(add-hook 'dired-mode-hook 'turn-on-auto-revert-mode)
+(add-hook 'dired-mode-hook 'auto-revert-mode)
 ;;; ========================================
 
 (setq ack-prompt-for-directory 'unless-guessed)

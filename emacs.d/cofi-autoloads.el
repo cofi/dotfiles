@@ -19,7 +19,6 @@
 (autoload 'clojure-test-mode "clojure-test-mode.el" "clojure test minor mode" t)
 
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
-(autoload 'turn-on-cdlatex "cdlatex" "CDLaTeX Mode" nil)
 
 (autoload 'clipper-create "clipper" "Create a new clip." t)
 (autoload 'clipper-delete "clipper" "Delete an existing clip." t)

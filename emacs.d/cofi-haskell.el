@@ -2,8 +2,8 @@
                  "~/.elisp/ghc-mod/")
 
 (load-and-exec "haskell-site-file"
-  (add-all-to-hook 'haskell-mode-hook '(turn-on-haskell-doc-mode
-                                        turn-on-haskell-indentation)))
+  (add-all-to-hook 'haskell-mode-hook '(haskell-doc-mode
+                                        haskell-indentation-mode)))
 (require-and-exec 'ghc
   (add-hook 'haskell-mode-hook 'ghc-init))
 

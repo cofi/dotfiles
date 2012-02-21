@@ -17,6 +17,7 @@
   "r" 'auto-revert-mode
   "s" 'flyspell-mode
   "t" 'orgtbl-mode
+  "v" 'visual-line-mode
   "w" 'whitespace-mode)
 
 ;;; insert keymap

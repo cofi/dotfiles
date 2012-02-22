@@ -60,7 +60,7 @@
       do (evil-set-initial-state mode state))
 
 (fill-keymap evil-normal-state-map
-             "Y"     (cmd (evil-yank-characters (point) (point-at-eol)))
+             "Y"     (kbd "y$")
              "+"     'evil-numbers/inc-at-pt
              "-"     'evil-numbers/dec-at-pt
              "SPC"   'ace-jump-char-mode

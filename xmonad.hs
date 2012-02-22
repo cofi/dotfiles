@@ -52,7 +52,6 @@ main = do
   homeDir <- getHomeDirectory
   systemID <- getSystemID
   xmproc <- spawnPipe $ xmobar systemID
-  sp <- mkSpawner
   xmonad $ withUrgencyHook NoUrgencyHook $ ewmh $ defaultConfig { terminal = myTerm
                          , focusFollowsMouse = True
                          , borderWidth = 1
@@ -62,9 +61,9 @@ main = do
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = updatePointer (Relative 0.5 0.5) >> dynamicLogWithPP (myPP xmproc)
-                         , manageHook = manageSpawn sp <+> myManageHook
+                         , manageHook = myManageHook
                          , startupHook = myStartupHook
-                         } `additionalKeysP` myKeys homeDir sp
+                         } `additionalKeysP` myKeys homeDir
     where
       myStartupHook = setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false "
@@ -75,13 +74,13 @@ main = do
         _            -> "xmobar ~/.xmobar/default"
 
 myTerm = "urxvtcd"
-myKeys home sp = [ ("M-<Backspace>", spawn respawn)
+myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-<Backspace>", spawn logout)
                  , ("M-C-<Backspace>", spawn shutdown)
                    -- Prompts/Launcher
-                 , ("M-x", shellPromptHere sp promptConfig)
+                 , ("M-x", shellPromptHere promptConfig)
                  , ("M-S-x", spawn "krunner")
-                 , ("M-p", shellPromptHere sp promptConfig)
+                 , ("M-p", shellPromptHere promptConfig)
                  , ("M-S-p", spawn "krunner")
                  , ("M-y", spawn launcher)
                  , ("M-S-y", spawn termLauncher)
@@ -140,7 +139,7 @@ myKeys home sp = [ ("M-<Backspace>", spawn respawn)
                  , ("M-e", raiseMaybe (spawn "emacsclient -c") emacsQuery)
                  , ("M-S-e", spawn "emacsclient -c")
                  , ("M-S-m", raiseMaybe (spawn "gnus") gnusQuery)
-                 , ("M-f", raiseMaybe (spawnOn sp "2:browse" "firefox") firefoxQuery)
+                 , ("M-f", raiseMaybe (spawnOn "2:browse" "firefox") firefoxQuery)
                  , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
                  , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") weechatQuery)
                    -- Layoutjumper

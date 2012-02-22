@@ -1,9 +1,6 @@
 (add-to-loadpath "~/.elisp/vendor/gnus/lisp")
 (require 'gnus-load)
 
-(add-hook 'mail-citation-hook 'trivial-cite)
-(setq tc-make-attribution (function tc-simple-attribution-kai))
-
 ;;; offlineimap
 (setq offlineimap-command "offlineimap -u MachineUI")
 

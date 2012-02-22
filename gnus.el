@@ -38,6 +38,7 @@
 (add-hook 'message-mode-hook #'cofi/write-mail)
 (setq gnus-add-to-list t)
 
+(setq gnus-gcc-mark-as-read t)
 ;;; fancy summary
 (setq gnus-summary-line-format "%U|%R|%z|%ur|%(%-20&user-date;|%-30B%[%5L: %-40f%] %s%)\n")
 (setq gnus-summary-make-false-root 'dummy

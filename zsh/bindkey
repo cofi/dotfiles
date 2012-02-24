@@ -27,3 +27,5 @@ backward-kill-dir() {
 }
 zle -N backward-kill-dir
 bindkey "\ew" backward-kill-dir
+
+bindkey "\e;" pound-insert      # interactive_comments should be set

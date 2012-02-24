@@ -71,6 +71,7 @@ setopt prompt_subst
 setopt prompt_percent
 
 setopt emacs
+setopt interactive_comments
 
 ### cd options
 setopt auto_pushd pushd_ignore_dups

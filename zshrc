@@ -122,7 +122,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
 # correct prompt
-export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? (%Uy%ues, %Un%uo %Ua%ubort, %Ue%udit) "
+export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? (%Uy%ues, %Un%uo, %Ua%ubort, %Ue%udit) "
 
 if [[ -z "$SSH_CONNECTION" ]] {
 	source ~/.keychain/$HOST-sh

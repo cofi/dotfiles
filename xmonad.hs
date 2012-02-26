@@ -318,10 +318,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                    , ("d", wikiD)
                    , ("t", dict)
                    , ("l", leo)
-                   , ("s", scroogle)
                    ]
       multi = S.namedEngine "multi" $ foldr1 (!>) [ google
-                                                  , scroogle
                                                   , scholar
                                                   , duck
                                                   , wiki
@@ -363,7 +361,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       dict = S.searchEngine "dict" "http://www.dict.cc/?s="
       leo = S.searchEngine "leo" "http://dict.leo.org/ende?lp=ende&lang=de&searchLoc=0&cmpType=relaxed&sectHdr=on&spellToler=on&pinyin=diacritic&relink=on&search="
       imdb = S.searchEngine "imdb" "http://www.imdb.com/find?s=all&q="
-      scroogle = S.searchEngine "s" "https://ssl.scroogle.org/cgi-bin/nbbwssl.cgi?Gw="
       google = S.searchEngine "g" "https://encrypted.google.com/search?q="
       define = S.searchEngine "def" "https://encrypted.google.com/search?q=define:"
       images = S.searchEngine "img" "http://images.google.com/images?q="

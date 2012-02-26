@@ -109,7 +109,7 @@
      `(font-lock-constant-face ((t (:foreground "#BF5E00"))))
      `(font-lock-doc-face ((t (:foreground "#75511A"))))
      `(font-lock-function-name-face ((t (:foreground "#2642D2"))))
-     `(font-lock-keyword-face ((t (:foreground "#AC4311"))))
+     `(font-lock-keyword-face ((t (:foreground "#AC4311" :bold t))))
      `(font-lock-preprocessor-face ((t (:foreground "#3D355D"))))
      `(font-lock-string-face ((t (:foreground "#B20000"))))
      `(font-lock-type-face ((t (:foreground "#802A00"))))

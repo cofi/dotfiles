@@ -107,7 +107,7 @@
      `(font-lock-doc-face ((t (:foreground "#FFDD00"))))
      `(font-lock-doc-string-face ((t (:foreground "#FFDD00"))))
      `(font-lock-function-name-face ((t (:foreground "#6193CF"))))
-     `(font-lock-keyword-face ((t (:foreground "#CF4913"))))
+     `(font-lock-keyword-face ((t (:foreground "#CF4913" :bold t))))
      `(font-lock-preprocessor-face ((t (:foreground "cadet blue"))))
      `(font-lock-reference-face ((t (:foreground "violet red"))))
      `(font-lock-string-face ((t (:foreground "sienna1"))))

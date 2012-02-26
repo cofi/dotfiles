@@ -287,6 +287,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "agenda" "org-agenda" (title =? "Agenda Frame") orgFloat
               , NS "network" "urxvtcd -title wicd -e wicd-curses" (title =? "wicd") scratchFloat
               , NS "calc" "emacsclient -a '' -c -e '(cofi-full-calc)'" (title =? "calc") scratchFloat
+              , NS "dict" "urxvtcd -title dict -e pdictcc" (title =? "dict") scratchFloat
               ]
   where scratchFloat = customFloating size
         orgFloat = customFloating orgsize
@@ -302,6 +303,7 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("o", namedScratchpadAction scratchpads "capture")
                                         , ("a", namedScratchpadAction scratchpads "agenda")
                                         , ("n", namedScratchpadAction scratchpads "network")
+                                        , ("d", namedScratchpadAction scratchpads "dict")
                                         ]
 
 -- Search----------------------------------------

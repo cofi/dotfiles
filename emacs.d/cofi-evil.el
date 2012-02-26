@@ -56,7 +56,8 @@
                               (pylookup-mode            . emacs)
                               (comint-mode              . emacs)
                               (shell-mode               . emacs)
-                              (term-mode                . emacs))
+                              (term-mode                . emacs)
+                              (rdictcc-buffer-mode      . emacs))
       do (evil-set-initial-state mode state))
 
 (fill-keymap evil-normal-state-map
@@ -112,6 +113,14 @@
   (kbd "M-J") 'org-metadown
   (kbd "M-K") 'org-metaup
   (kbd "M-L") 'org-metaright)
+
+(evil-declare-key 'normal rdictcc-permanent-translation-mode
+  "j" 'rdictcc-next-line
+  "k" 'rdictcc-previous-line
+  "h" 'rdictcc-backward-char
+  "l" 'rdictcc-forward-char
+  "b" 'rdictcc-backward-word
+  "w" 'rdictcc-forward-word)
 
 (defadvice evil-goto-definition (around evil-clever-goto-def activate)
   "Make use of emacs', slime's and etags possibilities for finding definitions."

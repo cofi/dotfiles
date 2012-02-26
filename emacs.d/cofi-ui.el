@@ -46,6 +46,10 @@
 
 (require-and-exec 'keychain-environment
   (run-with-timer 100 (* 5 60) 'keychain/refresh))
+
+(require-and-exec 'rdictcc
+  (setq rdictcc-program "pdictcc"
+        rdictcc-program-args "-c"))
 ;; ==================================================
 
 ;; Settings ========================================

@@ -5,20 +5,22 @@
 
 ;;; mode keymap
 (defkeymap cofi-minor-mode-map
-  "c" 'cofi/cdlatex
-  "d" 'dedicated-mode
-  "f" 'auto-fill-mode
-  "g" 'glasses-mode
-  "h" 'hs-minor-mode
-  "i" 'toggle-input-method
-  "l" 'outline-minor-mode
-  "o" 'orgstruct++-mode
-  "p" 'pretty-mode
-  "r" 'auto-revert-mode
-  "s" 'flyspell-mode
-  "t" 'orgtbl-mode
-  "v" 'visual-line-mode
-  "w" 'whitespace-mode)
+  "c"   'cofi/cdlatex
+  "d"   'dedicated-mode
+  "f"   'auto-fill-mode
+  "g"   'glasses-mode
+  "h"   'hs-minor-mode
+  "i"   'toggle-input-method
+  "l"   'outline-minor-mode
+  "o"   'orgstruct++-mode
+  "p"   'pretty-mode
+  "r"   'auto-revert-mode
+  "s"   'flyspell-mode
+  "t"   'orgtbl-mode
+  "T"   'rdictcc-tooltip-mode
+  "C-t" 'rdictcc-permanent-translation-mode
+  "v"   'visual-line-mode
+  "w"   'whitespace-mode)
 
 ;;; insert keymap
 (defkeymap cofi-insert-map
@@ -143,6 +145,9 @@
  "C-c i" (if (fboundp 'anything-imenu)
              'anything-imenu
            'idomenu)
+ ;; rdictcc
+ "C-c t" 'rdictcc-translate-word-at-point
+
  "RET"   'newline-and-indent
  ;; maps
  "C-x m" cofi-minor-mode-map

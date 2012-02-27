@@ -18,11 +18,9 @@
 (require-and-exec 'surround
   (global-surround-mode 1)
   (add-to-hooks (lambda ()
-                  (make-local-variable 'surround-pairs-alist)
                   (push '(?` . ("`" . "'")) surround-pairs-alist))
                 '(emacs-lisp-mode-hook lisp-mode-hook))
   (add-to-hooks (lambda ()
-                  (make-local-variable 'surround-pairs-alist)
                   (push '(?~ . ("``" . "``")) surround-pairs-alist))
                 '(markdown-mode-hook rst-mode-hook python-mode-hook))
   (add-to-hooks (lambda ()

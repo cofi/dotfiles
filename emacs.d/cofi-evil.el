@@ -16,20 +16,30 @@
 
 ;;; evil-surround
 (require-and-exec 'surround
+
+  (defun cofi/surround-add-pair (trigger begin-or-fun &optional end)
+    "Add a surround pair.
+If `end' is nil `begin-or-fun' will be treated as a fun."
+    (push (cons (if (stringp trigger)
+                    (string-to-char trigger)
+                  trigger)
+                (if end
+                    (cons begin-or-fun end)
+                  (begin-or-fun)))))
+
   (global-surround-mode 1)
   (add-to-hooks (lambda ()
-                  (push '(?` . ("`" . "'")) surround-pairs-alist))
+                  (cofi/surround-add-pair "`" "`"  "'")
                 '(emacs-lisp-mode-hook lisp-mode-hook))
   (add-to-hooks (lambda ()
-                  (push '(?~ . ("``" . "``")) surround-pairs-alist))
+                  (cofi/surround-add-pair "~" "``"  "``")
                 '(markdown-mode-hook rst-mode-hook python-mode-hook))
   (add-to-hooks (lambda ()
-                  (push '(?c . (":class:`" . "`")) surround-pairs-alist)
-                  (push '(?f . (":func:`"  . "`")) surround-pairs-alist)
-                  (push '(?m . (":meth:`"  . "`")) surround-pairs-alist)
-                  (push '(?a . (":attr:`"  . "`")) surround-pairs-alist))
-                '(rst-mode-hook
-                  python-mode-hook)))
+                  (cofi/surround-add-pair "c" ":class:`" "`")
+                  (cofi/surround-add-pair "f" ":func:`" "`")
+                  (cofi/surround-add-pair "m" ":meth:`" "`")
+                  (cofi/surround-add-pair "a" ":attr:`" "`"))
+                '(rst-mode-hook python-mode-hook)))
 
 (evil-set-toggle-key "<pause>")
 (evil-mode 1)

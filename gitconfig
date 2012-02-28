@@ -81,9 +81,9 @@
     wdfc = diff --word-diff=color --cached # word-diff cached
 
     # logs
-    l1 = log HEAD^1..                   #last commit
-    l5 = log HEAD^5..                   # last 5 commits
-    l5o = log --pretty=oneline HEAD^5.. # last 5 commits onlined
+    l1 = log --max-count=1                   # last commit
+    l5 = log --max-count=5                   # last 5 commits
+    l5o = log --pretty=oneline --max-count=5 # last 5 commits onelined
     slog = log --pretty=format:'%Cred%h%Creset %C(yellow)%d%Creset | %s %Cgreen%cr%Creset %C(bold blue)[%an]%Creset' --date=relative --no-merges --abbrev-commit
     stats = shortlog -s -n -e --no-merges
     tree = log --graph --pretty=oneline --decorate --color --abbrev-commit

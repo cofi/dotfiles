@@ -7,7 +7,7 @@
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"
   (interactive)
-  (let ((attachment-regexp "[Aa]ttachment\\|[Aa]ttached\\|[Aa]nbei\\|[Bb]eiliegend\\|[Aa]anhang\\|angeh\\(ae\\|ä\\)ngt"))
+  (let ((attachment-regexp "^[^>].*\\(:?[Aa]ttachment\\|[Aa]ttached\\|[Aa]nbei\\|[Bb]eiliegend\\|[Aa]anhang\\|angeh\\(ae\\|ä\\)ngt\\)"))
     (save-excursion
       (goto-char 0)
       (unless (or (re-search-forward "^Content-Disposition: attachment" nil t)

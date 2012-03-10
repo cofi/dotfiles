@@ -16,6 +16,21 @@
 
 ;;; evil-surround
 (require-and-exec 'surround
+  (setq-default surround-pairs-alist '((?\( . ("(" . ")"))
+                                       (?\[ . ("[" . "]"))
+                                       (?\{ . ("{" . "}"))
+
+                                       (?\) . ("( " . " )"))
+                                       (?\] . ("[ " . " ]"))
+                                       (?\} . ("{ " . " }"))
+
+                                       (?# . ("#{" . "}"))
+                                       (?p . ("(" . ")"))
+                                       (?b . ("[" . "]"))
+                                       (?B . ("{" . "}"))
+                                       (?< . ("<" . ">"))
+                                       (?> . ("<" . ">"))
+                                       (?t . surround-read-tag)))
 
   (defun cofi/surround-add-pair (trigger begin-or-fun &optional end)
     "Add a surround pair.

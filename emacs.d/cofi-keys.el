@@ -13,7 +13,8 @@
   "i"   'toggle-input-method
   "l"   'outline-minor-mode
   "o"   'orgstruct++-mode
-  "p"   'pretty-mode
+  "p"   'autopair-mode
+  "P"   'pretty-mode
   "r"   'auto-revert-mode
   "s"   'flyspell-mode
   "t"   'orgtbl-mode

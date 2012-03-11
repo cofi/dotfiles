@@ -114,7 +114,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (require-and-exec 'sackspace
   (sack/install-in-evil))
 
-(evil-declare-key 'normal org-mode-map
+(evil-define-key 'normal org-mode-map
   (kbd "RET") 'org-open-at-point
   "za"        'org-cycle
   "zA"        'org-shifttab
@@ -131,7 +131,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (kbd "M-K") 'org-metaup
   (kbd "M-L") 'org-metaright)
 
-(evil-declare-key 'insert org-mode-map
+(evil-define-key 'insert org-mode-map
   (kbd "M-j") 'org-shiftleft
   (kbd "M-k") 'org-shiftright
   (kbd "M-H") 'org-metaleft
@@ -139,7 +139,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (kbd "M-K") 'org-metaup
   (kbd "M-L") 'org-metaright)
 
-(evil-declare-key 'normal rdictcc-permanent-translation-mode
+(evil-define-key 'normal rdictcc-permanent-translation-mode
   "j" 'rdictcc-next-line
   "k" 'rdictcc-previous-line
   "h" 'rdictcc-backward-char

@@ -108,7 +108,7 @@
                              mouse-face mode-line-highlight
                              help-echo "Minor mode\nmouse-1: Display minor mode menu\nmouse-2: Show help for minor mode, mouse-3: Toggle minor modes"
                              local-map ,mode-line-minor-mode-keymap)
-                "%])"
+                ")%]"
                 ;; which func mode
                 (which-func-mode (" " which-func-format))
                 " "

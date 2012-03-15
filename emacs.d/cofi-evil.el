@@ -111,6 +111,13 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              "C-y" 'yank
              "C-e" 'end-of-line)
 
+(fill-keymap evil-operator-state-map
+             ;; works like `t'
+             "SPC"   'ace-jump-char-mode
+             ;; works like `f'
+             "C-SPC" 'cofi/ace-jump-char-direct-mode
+             "S-SPC" 'ace-jump-word-mode)
+
 (require-and-exec 'sackspace
   (sack/install-in-evil))
 
@@ -255,5 +262,24 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
     "C-r" 'winner-reod
     ;; shadow rotating in evil-window-map
     "C-R" 'winner-redo)
+
+;; make ace jump look like a single command to evil
+(defadvice ace-jump-word-mode (after evil activate)
+  (recursive-edit))
+
+(defadvice ace-jump-char-mode (after evil activate)
+  (recursive-edit))
+
+(defadvice ace-jump-line-mode (after evil activate)
+  (recursive-edit))
+
+(defadvice ace-jump-done (after evil activate)
+  (exit-recursive-edit))
+
+(defun cofi/ace-jump-char-direct-mode ()
+  "Do a ace char-jump directly to the char."
+  (interactive)
+  (ace-jump-char-mode)
+  (forward-char 1))
 
 (provide 'cofi-evil)

@@ -287,7 +287,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "agenda" "org-agenda" (title =? "Agenda Frame") orgFloat
               , NS "network" "urxvtcd -title wicd -e wicd-curses" (title =? "wicd") scratchFloat
               , NS "calc" "emacsclient -a '' -c -e '(cofi-full-calc)'" (title =? "calc") scratchFloat
-              , NS "dict" "urxvtcd -title dict -e pdictcc" (title =? "dict") scratchFloat
+              , NS "dict" "urxvtcd -title dict -e pdictcc --limit 5" (title =? "dict") scratchFloat
               , NS "lisp" "urxvtcd -title lisp -e sbcl" (title =? "lisp") scratchFloat
               ]
   where scratchFloat = customFloating size

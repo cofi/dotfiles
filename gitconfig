@@ -6,6 +6,7 @@
 [core]
     whitespace = fix,-indent-with-non-tab,trailing-space
     excludesfile = ~/.gitexcludes
+    attributesfile = ~/.gitattributes
 
 [apply]
     whitespace = fix
@@ -99,3 +100,8 @@
     # amending
     amend = commit --amend -C HEAD
     amendc = commit --amend
+
+[diff "lisp"]
+    xfuncname="^(\\((def|test).*)$"
+[diff "python"]
+    xfuncname="^\\s*(class.*\\(.*\\)|def.*)(\\(|:)"

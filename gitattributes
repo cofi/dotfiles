@@ -1,0 +1,2 @@
+*.py diff=python
+*.lisp diff=lisp

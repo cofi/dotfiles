@@ -167,7 +167,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
 (defun cofi/clear-empty-lines ()
   (let ((line (buffer-substring (point-at-bol) (point-at-eol))))
-    (when (string-match "^\\( +\\)$" line)
+    (when (string-match "^ +$" line)
       (delete-region (point-at-bol) (point-at-eol)))))
 (add-hook 'evil-insert-state-exit-hook #'cofi/clear-empty-lines)
 

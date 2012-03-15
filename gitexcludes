@@ -4,10 +4,10 @@
 *.pyd
 *.pyo
 
-.o
+*.o
 
-.class
+*.class
 
-.aux
-.toc
-.out
+*.aux
+*.toc
+*.out

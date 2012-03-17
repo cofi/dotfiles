@@ -70,6 +70,9 @@
       eol-mnemonic-unix "U"
       eol-mnemonic-undecided "-")
 
+;; no, my sentences don't end with two instead of one space
+(setq sentence-end-double-space nil)
+
 (setq-default mode-line-format
               `(
                 (evil-mode (" " evil-mode-line-tag))

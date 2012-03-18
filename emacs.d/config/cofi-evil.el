@@ -182,7 +182,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "e" 'cofi/file
   "E" 'cofi/file-alternate
   "o" 'cofi-find-at-alias
-  "O" 'cofi-find-anything-at-alias
+  "O" 'cofi-find-helm-at-alias
   "b" 'cofi/buffer
   "B" 'cofi/buffer-alternate
   "w" 'save-buffer

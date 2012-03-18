@@ -63,11 +63,11 @@
 (defalias 'cofi/file 'ido-find-file)
 (defalias 'cofi/buffer-alternate 'ido-switch-buffer)
 
-(require 'cofi-anything)
-(if (featurep 'anything-config)
+(require 'cofi-helm)
+(if (featurep 'helm-config)
     (progn
-      (defalias 'cofi/buffer 'cofi/anything-buffers)
-      (defalias 'cofi/file-alternate 'anything-find-files))
+      (defalias 'cofi/buffer 'cofi/helm-buffers)
+      (defalias 'cofi/file-alternate 'helm-find-files))
   (defalias 'cofi/buffer 'ido-switch-buffer)
   (defalias 'cofi/file-alternate 'ido-find-file))
 

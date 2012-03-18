@@ -30,16 +30,16 @@
   "f" 'insert-file
   "s" 'yas/insert-snippet)
 
-;;; anything keymap
-(defkeymap cofi-anything-map
-    "C-b" 'anything-browse-code
-    "b"   'anything-bookmarks
-    "c"   'cofi/anything-config
-    "f"   'cofi/anything-files
-    "m"   'cofi/anything-make
-    "u"   'cofi/anything-uni
-    "M"   'cofi/anything-lacarte
-    "l"   'anything-locate)
+;;; helm keymap
+(defkeymap cofi-helm-map
+    "C-b" 'helm-browse-code
+    "b"   'helm-bookmarks
+    "c"   'cofi/helm-config
+    "f"   'cofi/helm-files
+    "m"   'cofi/helm-make
+    "u"   'cofi/helm-uni
+    "M"   'cofi/helm-lacarte
+    "l"   'helm-locate)
 
 ;;; keymap for often used commands
 (defkeymap cofi-quick-map
@@ -90,7 +90,7 @@
     "r" 'org-capture
     "l" 'org-store-link
     "v" 'cofi/visit-org-agenda-files
-    "V" 'cofi/anything-org-files
+    "V" 'cofi/helm-org-files
     "c" 'cfw:open-org-calendar
     "f" 'org-footnote-action
     "SPC" (cmd (let ((current-prefix-arg '(4))) (call-interactively 'org-todo))))
@@ -143,8 +143,8 @@
  "<home>" 'home-end-home
  "<end>"  'home-end-end
  ;; imenu
- "C-c i" (if (fboundp 'anything-imenu)
-             'anything-imenu
+ "C-c i" (if (fboundp 'helm-imenu)
+             'helm-imenu
            'idomenu)
  ;; rdictcc
  "C-c t" 'rdictcc-translate-word-at-point
@@ -154,11 +154,11 @@
  "C-x m" cofi-minor-mode-map
  "C-x i" cofi-insert-map
  "C-c b" cofi-breadcrumbs-map
- "C-c a" cofi-anything-map
+ "C-c a" cofi-helm-map
  "C-c q" cofi-quick-map
  "C-c o" cofi-org-mode-map
  "<f5>"  cofi-org-mode-map
- "<f7>"  anything-command-map
+ "<f7>"  helm-command-map
  "<f8>"  cofi-project-map
  )
 

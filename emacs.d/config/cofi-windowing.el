@@ -35,12 +35,12 @@
         ((<= (window-width w) (* 2 81))))))
 
 (setq winner-dont-bind-my-keys t
-      winner-boring-buffers '("*anything*"
-                              "*anything buffers*"
-                              "*anything bookmarks*"
-                              "*anything make*"
-                              "*anything uni*"
-                              "*anything config*"
+      winner-boring-buffers '("*helm*"
+                              "*helm buffers*"
+                              "*helm bookmarks*"
+                              "*helm make*"
+                              "*helm uni*"
+                              "*helm config*"
                               "*Completions*"
                               "*Help*"
                               "*compilation*"))

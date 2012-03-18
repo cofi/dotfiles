@@ -13,8 +13,8 @@
 (add-hook 'emacs-lisp-mode-hook
           (gen-local-fill-keymap-hook "C-c C-c" 'eval-buffer
                                       "C-c C-r" 'ielm
-                                      "M-TAB"   'anything-lisp-completion-at-point
-                                      [remap completion-at-point] 'anything-lisp-completion-at-point))
+                                      "M-TAB"   'helm-lisp-completion-at-point
+                                      [remap completion-at-point] 'helm-lisp-completion-at-point))
 
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 

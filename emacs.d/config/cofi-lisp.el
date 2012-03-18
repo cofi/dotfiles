@@ -51,9 +51,10 @@
 (require-and-exec 'slime-autoloads
   (slime-setup '(slime-fancy
                  slime-banner
-                 anything-slime))
+                 ;anything-slime
+                 ))
   (require 'slime)
-  (setq slime-complete-symbol-function (f-alt 'anything-slime-complete
+  (setq slime-complete-symbol-function (f-alt ; 'anything-slime-complete
                                               'slime-fuzzy-complete-symbol
                                               'slime-simple-complete-symbol))
   (setq slime-protocol-version 'ignore))

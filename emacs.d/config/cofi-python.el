@@ -118,7 +118,7 @@
 
 (setq pylookup-db-file (cofi/var-file "pylookup.db")
       pylookup-html-locations '("~/doc/python-2.7/")
-      pylookup-completing-read #'anything-completing-read)
+      pylookup-completing-read #'helm-completing-read-default)
 
 ;; Triple strings for autopair
 (add-hook 'python-mode-hook

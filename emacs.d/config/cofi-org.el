@@ -29,12 +29,12 @@ Note: This assumes all files are in the org-directory."
                                     (mapcar 'file-name-nondirectory (org-agenda-files)))))
   (find-file (concat org-directory fname)))
 
-(defun cofi/anything-org-files ()
+(defun cofi/helm-org-files ()
   (interactive)
-  (anything-other-buffer (cofi/anything-dir-deep "org-files"
+  (helm-other-buffer (cofi/helm-dir-deep "org-files"
                                                  org-directory t
                                                  "\.org\\(_archive\\)?")
-                         "*anything org*"))
+                         "*helm org*"))
 
 (add-hook 'org-mode-hook (lambda () (org-display-inline-images t)))
 (add-hook 'org-mode-hook

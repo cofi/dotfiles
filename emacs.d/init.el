@@ -77,7 +77,7 @@
 (require 'cofi-evil)
 
 (defvar cofi/standard-settings '(cofi-autoloads
-                                 cofi-anything
+                                 cofi-helm
                                  cofi-buffer
                                  cofi-calendar
                                  cofi-desktop

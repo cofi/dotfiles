@@ -28,9 +28,6 @@
 [submodule "elisp/vendor/clojure-mode"]
 	path = elisp/vendor/clojure-mode
 	url = git://github.com/technomancy/clojure-mode.git
-[submodule "elisp/vendor/anything"]
-	path = elisp/vendor/anything
-	url = git://repo.or.cz/anything-config.git
 [submodule "elisp/vendor/magit"]
 	path = elisp/vendor/magit
 	url = git://github.com/magit/magit.git
@@ -70,3 +67,6 @@
 [submodule "zsh/zsh-substring-search"]
 	path = zsh/zsh-substring-search
 	url = git://github.com/zsh-users/zsh-history-substring-search.git
+[submodule "elisp/vendor/helm"]
+	path = elisp/vendor/helm
+	url = git://github.com/emacs-helm/helm.git

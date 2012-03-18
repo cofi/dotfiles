@@ -86,7 +86,7 @@
           '((mark modified read-only git-status-mini " "
                   (name 20 20 :left :elide)
                   " "
-                  (readable-size 5 5 :right)
+                  (readable-size 6 6 :right)
                   " "
                   (mode 14 14 :left :elide)
                   " "

@@ -82,6 +82,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                               (comint-mode              . emacs)
                               (shell-mode               . emacs)
                               (term-mode                . emacs)
+                              (bc-menu-mode             . emacs)
                               (rdictcc-buffer-mode      . emacs))
       do (evil-set-initial-state mode state))
 
@@ -281,5 +282,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (interactive)
   (ace-jump-char-mode)
   (forward-char 1))
+
+(evil-add-hjkl-bindings *bc-menu-mode-map* 'emacs)
 
 (provide 'cofi-evil)

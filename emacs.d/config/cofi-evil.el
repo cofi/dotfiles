@@ -77,13 +77,14 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
           (push 'escape unread-command-events))
        (t (push evt unread-command-events))))))
 
-(loop for (mode . state) in '((inferior-emacs-lisp-mode . emacs)
-                              (pylookup-mode            . emacs)
-                              (comint-mode              . emacs)
-                              (shell-mode               . emacs)
-                              (term-mode                . emacs)
-                              (bc-menu-mode             . emacs)
-                              (rdictcc-buffer-mode      . emacs))
+(loop for (mode . state) in '((inferior-emacs-lisp-mode      . emacs)
+                              (pylookup-mode                 . emacs)
+                              (comint-mode                   . emacs)
+                              (shell-mode                    . emacs)
+                              (term-mode                     . emacs)
+                              (bc-menu-mode                  . emacs)
+                              (magit-branch-manager-mode-map . emacs)
+                              (rdictcc-buffer-mode           . emacs))
       do (evil-set-initial-state mode state))
 
 (fill-keymap evil-normal-state-map
@@ -284,5 +285,13 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (forward-char 1))
 
 (evil-add-hjkl-bindings *bc-menu-mode-map* 'emacs)
+
+(evil-add-hjkl-bindings magit-branch-manager-mode-map 'emacs
+  "K" 'magit-discard-item
+  "L" 'magit-key-mode-popup-logging)
+(evil-add-hjkl-bindings magit-status-mode-map 'emacs
+  "K" 'magit-discard-item
+  "l" 'magit-key-mode-popup-logging
+  "h" 'magit-toggle-diff-refine-hunk)
 
 (provide 'cofi-evil)

@@ -189,7 +189,7 @@
      `(org-meta-line ((t (:foreground "tan4"))))
 
      ;; anything
-     `(anything-header ((t (:foreground "gold" :background "black"))))
+     `(helm-header ((t (:foreground "gold" :background "black"))))
 
      ;; ido
      `(ido-first-match ((t (:foreground "#d0bf8f" :bold t))))

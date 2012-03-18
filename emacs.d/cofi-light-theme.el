@@ -191,7 +191,7 @@
 
 
      ;; anything
-     `(anything-header ((t (:foreground "gold" :background "black"))))
+     `(light-header ((t (:foreground "gold" :background "black"))))
 
      ;; ido
      `(ido-first-match ((t (:foreground "#798447" :bold t))))

@@ -1,4 +1,6 @@
-(add-to-loadpath "~/.elisp/vendor/helm")
+(add-to-loadpath "~/.elisp/vendor/helm"
+                 "~/.elisp/vendor/helm-descbinds"
+                 "~/.elisp/vendor/helm-slime")
 ;; Settings ----------------------------------------
 (setq helm-c-boring-file-regexp
       (rx (or
@@ -76,19 +78,9 @@
       (barf-if-buffer-read-only)
       ad-do-it))
 
-  (require-and-exec 'descbinds-helm
-    (descbinds-helm-install))
+  (require-and-exec 'helm-descbinds
+    (helm-descbinds-install))
   ;; Sources ----------------------------------------
-  (require-and-exec 'lacarte
-    (defvar helm-c-source-current-buffer-lacarte
-      '((name . "Lacarte")
-        (init . (lambda () (require 'lacarte)))
-        (candidates . (lambda ()
-                      (with-helm-current-buffer
-                        (delete '(nil) (lacarte-get-overall-menu-item-alist)))))
-        (candidate-number-limit . 9999)
-        (action . helm-c-call-interactively))))
-
   (defun cofi/helm-dir-deep (source-name dir &optional dotfiles fmatch dmatch)
     "Returns an helm source for a particular directory."
     `((name . ,(concat source-name))
@@ -194,11 +186,10 @@
     (helm :sources helm-makefile-targets
           :buffer "*helm make*"))
 
-  (when (fboundp 'lacarte-execute-command)
-    (defun cofi/helm-lacarte ()
-      (interactive)
-      (helm :sources helm-c-source-current-buffer-lacarte
-            :buffer "*helm lacarte*"))
-    (cofi/set-key 'global "<f10>" 'cofi/helm-lacarte))
+  (defun cofi/helm-lacarte ()
+    (interactive)
+    (helm :sources helm-c-source-lacarte
+          :buffer "*helm lacarte*"))
+  (cofi/set-key 'global "<f10>" 'cofi/helm-lacarte)
   )
 (provide 'cofi-helm)

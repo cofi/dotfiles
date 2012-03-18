@@ -70,3 +70,9 @@
 [submodule "elisp/vendor/helm"]
 	path = elisp/vendor/helm
 	url = git://github.com/emacs-helm/helm.git
+[submodule "elisp/vendor/helm-descbinds"]
+	path = elisp/vendor/helm-descbinds
+	url = git://github.com/emacs-helm/helm-descbinds.git
+[submodule "elisp/vendor/helm-slime"]
+	path = elisp/vendor/helm-slime
+	url = git://github.com/emacs-helm/helm-slime.git

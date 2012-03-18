@@ -237,8 +237,8 @@
 (add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
 (require-and-exec 'pretty-mode
   (dolist (mode '(python-mode c-mode java-mode cpp-mode))
-          (pretty-add-keywords mode '(("==" . "≡")
-                                      ("="  . "←"))))
+          (pretty-add-keywords mode '(("="  . "←")
+                                      ("==" . "≡"))))
   (global-pretty-mode 1))
 
 ;; ========================================

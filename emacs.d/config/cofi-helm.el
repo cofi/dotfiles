@@ -80,18 +80,14 @@
     (descbinds-helm-install))
   ;; Sources ----------------------------------------
   (require-and-exec 'lacarte
-    (defvar helm-c-lacarte-current-buffer nil)
     (defvar helm-c-source-current-buffer-lacarte
       '((name . "Lacarte")
-        (init . (lambda ()
-                  (setq helm-c-lacarte-current-buffer (current-buffer))))
-        (candidates .
-                    (lambda ()
-                      (with-current-buffer helm-c-lacarte-current-buffer
+        (init . (lambda () (require 'lacarte)))
+        (candidates . (lambda ()
+                      (with-helm-current-buffer
                         (delete '(nil) (lacarte-get-overall-menu-item-alist)))))
         (candidate-number-limit . 9999)
-        (action . (("Open" . (lambda (candidate)
-                               (call-interactively candidate))))))))
+        (action . helm-c-call-interactively))))
 
   (defun cofi/helm-dir-deep (source-name dir &optional dotfiles fmatch dmatch)
     "Returns an helm source for a particular directory."

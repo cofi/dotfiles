@@ -21,7 +21,7 @@
     (add-to-list 'load-path (expand-file-name dir) nil #'string=)))
 
 (add-to-loadpath "~/.elisp"
-                 "~/.emacs.d"
+                 "~/.emacs.d/config"
                  "~/.elisp/vendor/sackspace"
                  "~/.elisp/vendor/keychain-environment"
                  "~/.elisp/vendor/pylookup")
@@ -76,34 +76,33 @@
 (load "private" 'noerror)
 (require 'cofi-evil)
 
-(defvar cofi/standard-settings '("cofi-autoloads"
-                                 "cofi-anything"
-                                 "cofi-buffer"
-                                 "cofi-calendar"
-                                 "cofi-desktop"
-                                 "cofi-ediff"
-                                 "cofi-elisp"
-                                 "cofi-files"
-                                 "cofi-func"
-                                 "cofi-keys"
-                                 "cofi-mail"
-                                 "cofi-markup"
-                                 "cofi-project"
-                                 "cofi-snippets"
-                                 "cofi-ui"
-                                 "cofi-org"
-                                 "cofi-vcs"
-                                 "cofi-shell"
-                                 "cofi-workgroups"
-                                 "cofi-completion"))
-(defvar cofi/full-settings '("cofi-programming"
-;;                              "nxhtml/autostart.el"
+(defvar cofi/standard-settings '(cofi-autoloads
+                                 cofi-anything
+                                 cofi-buffer
+                                 cofi-calendar
+                                 cofi-desktop
+                                 cofi-ediff
+                                 cofi-elisp
+                                 cofi-files
+                                 cofi-func
+                                 cofi-keys
+                                 cofi-mail
+                                 cofi-markup
+                                 cofi-project
+                                 cofi-snippets
+                                 cofi-ui
+                                 cofi-org
+                                 cofi-vcs
+                                 cofi-shell
+                                 cofi-workgroups
+                                 cofi-completion))
+(defvar cofi/full-settings '(cofi-programming
                              ))
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
 (defvar cofi/mail-instance nil "This is an email instance.")
 
-(mapc #'load cofi/standard-settings)
+(mapc #'require cofi/standard-settings)
 
 (add-to-list 'command-switch-alist
              '("gnus" . (lambda (&rest ignore)
@@ -117,7 +116,7 @@
                                 (on-mail-instance
                                   (global-linum-mode -1))
                                 (on-full-instance
-                                  (mapc #'load cofi/full-settings)
+                                  (mapc #'require cofi/full-settings)
                                   (workgroups-mode 1))))
 (cofi-next-file-assoc)
 (cofi/colorscheme 'cofi-dark)

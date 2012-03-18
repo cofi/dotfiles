@@ -1,8 +1,9 @@
-;;; anything-slime.el --- anything-sources and some utilities for SLIME.
+;;; helm-slime.el --- helm-sources and some utilities for SLIME.
 
 ;; Copyright (C) 2009 Takeshi Banse <takebi@laafc.net>
+;;               2012 Michael Markert <markert.michael@googlemail.com>
 ;; Author: Takeshi Banse <takebi@laafc.net>
-;; Keywords: convenience, anything, slime
+;; Keywords: convenience, helm, slime
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,46 +22,50 @@
 
 ;;; Commentary:
 ;;
-;; Some Anything and SLIME Configurations for using SLIME within the
-;; Anything interface. (The `ascsa-' prefix comes here.)
+;; Some Helm and SLIME Configurations for using SLIME within the
+;; Helm interface. (The `ascsa-' prefix comes here.)
 
 ;;; Installation:
 ;;
-;; Put the anything-slime.el, anything.el and anything-complete.el to your
-;; load-path.
+;; Put the helm-slime.el, helm.el to your load-path.
 ;; Set up the SLIME properly.
-;; Call `slime-setup' and include 'anything-slime as the arguments:
+;; Call `slime-setup' and include 'helm-slime as the arguments:
 ;;
-;;   (slime-setup '([others contribs ...] anything-slime))
+;;   (slime-setup '([others contribs ...] helm-slime))
 ;;
-;; or simply require anything-slime in some appropriate manner.
+;; or simply require helm-slime in some appropriate manner.
 
 ;;; Commands:
 ;;
 ;; Below are complete command list:
 ;;
-;;  `anything-slime-complete'
+;;  `helm-slime-complete'
 ;;    Select a symbol from the SLIME's completion systems.
-;;  `anything-slime-list-connections'
-;;    Yet another `slime-list-connections' with `anything'.
-;;  `anything-slime-apropos'
-;;    Yet another `slime-apropos' with `anything'.
-;;  `anything-slime-repl-history'
+;;  `helm-slime-list-connections'
+;;    Yet another `slime-list-connections' with `helm'.
+;;  `helm-slime-apropos'
+;;    Yet another `slime-apropos' with `helm'.
+;;  `helm-slime-repl-history'
 ;;    Select an input from the SLIME repl's history and insert it.
 ;;
 
 ;;; Code:
 
-(require 'anything)
-(require 'anything-complete)
+(require 'helm)
 (require 'slime)
 (require 'slime-c-p-c)
 (require 'slime-fuzzy)
 (require 'slime-repl)
 
-(when (require 'anything-show-completion nil t)
-  (use-anything-show-completion 'anything-slime-complete
-                                '(length anything-complete-target)))
+
+(defvar ascsa-complete-target "")
+
+(defun ascsa-insert (candidate)
+  (let ((pt (point)))
+    (when (and (search-backward ascsa-complete-target nil t)
+               (string= (buffer-substring (point) pt) ascsa-complete-target))
+      (delete-region (point) pt)))
+  (insert candidate))
 
 (defun* ascsa-symbol-position-funcall
     (f &optional (end-pt (point)) (beg-pt (slime-symbol-start-pos)))
@@ -71,9 +76,9 @@
       (set-marker end nil)
       (set-marker beg nil))))
 
-(define-anything-type-attribute 'anything-slime-complete
+(define-helm-type-attribute 'helm-slime-complete
   '((action
-     . (("Insert" . ac-insert)
+     . (("Insert" . ascsa-insert)
         ("Describe symbol" . slime-describe-symbol)
         ("Edit definition" . slime-edit-definition)))
     (persistent-action . slime-describe-symbol)
@@ -86,13 +91,13 @@
   (let ((put-text-property1 (lambda (s)
                               (put-text-property (point-at-bol 0)
                                                  (point-at-eol 0)
-                                                 'anything-realvalue
+                                                 'helm-realvalue
                                                  s))))
-    (let* ((completion-result (with-current-buffer anything-current-buffer
+    (let* ((completion-result (with-current-buffer helm-current-buffer
                                 (funcall complete-fn)))
            (completions (first completion-result))
            (base  (second completion-result)))
-      (with-current-buffer (anything-candidate-buffer 'global)
+      (with-current-buffer (helm-candidate-buffer 'global)
         (funcall insert-fn completions base put-text-property1)))))
 (defun ascsa-asc-init-candidates-buffer-basic-insert-function (completions base put-text-property1)
   (let ((len (length base)))
@@ -106,7 +111,7 @@
         (funcall put-text-property1 c)))))
 (defun ascsa-asc-simple-init ()
   (ascsa-asc-init-candidates-buffer-base
-   (slime-curry 'slime-simple-completions anything-complete-target)
+   (slime-curry 'slime-simple-completions ascsa-complete-target)
    'ascsa-asc-init-candidates-buffer-basic-insert-function))
 (defun ascsa-asc-compound-init ()
   (ascsa-asc-init-candidates-buffer-base
@@ -116,60 +121,53 @@
                               (insert-choice-fn
                                'slime-fuzzy-insert-completion-choice))
   (ascsa-asc-init-candidates-buffer-base
-   (slime-curry 'slime-fuzzy-completions anything-complete-target)
+   (slime-curry 'slime-fuzzy-completions ascsa-complete-target)
    (lambda (completions _ put-text-property1)
-     (with-current-buffer (anything-candidate-buffer 'global)
+     (with-current-buffer (helm-candidate-buffer 'global)
        (let ((max-len (loop for (x _) in completions maximize (length x))))
          (dolist (c completions)
            (funcall insert-choice-fn c max-len)
            (funcall put-text-property1 (car c))))))))
-;; These sources are private for the use of the `anything-slime-complete'
-;; command, so I should not make `anything-c-source-*' symbols.
-(defvar anything-slime-simple-complete-source
+;; These sources are private for the use of the `helm-slime-complete'
+;; command, so I should not make `helm-c-source-*' symbols.
+(defvar helm-slime-simple-complete-source
   '((name . "SLIME simple complete")
     (init . ascsa-asc-simple-init)
-    (type . anything-slime-complete)))
-(defvar anything-slime-compound-complete-source
+    (type . helm-slime-complete)))
+(defvar helm-slime-compound-complete-source
   '((name . "SLIME compound complete")
     (init . ascsa-asc-compound-init)
-    (type . anything-slime-complete)))
-(defvar anything-slime-fuzzy-complete-source
+    (type . helm-slime-complete)))
+(defvar helm-slime-fuzzy-complete-source
   '((name . "SLIME fuzzy complete")
     (init . ascsa-asc-fuzzy-init)
-    (type . anything-slime-complete)))
-(defvar anything-slime-complete-sources
-  '(anything-slime-simple-complete-source
-    anything-slime-fuzzy-complete-source
-    anything-slime-compound-complete-source))
+    (type . helm-slime-complete)))
+(defvar helm-slime-complete-sources
+  '(helm-slime-simple-complete-source
+    helm-slime-fuzzy-complete-source
+    helm-slime-compound-complete-source))
 
-;; Copied from the anything-complete.el and added an optional parameter
-;; TARGET-IS-DEFAULT-INPUT-P to not defaulting the target for some kind of
-;; the compound/fuzzy completes.
-(defun ascsa-anything-noresume (&optional any-sources any-input any-prompt any-resume any-preselect any-buffer)
-  (let (anything-last-sources anything-compiled-sources anything-last-buffer)
-    (anything any-sources any-input any-prompt any-resume any-preselect any-buffer)))
-
-(defun ascsa-anything-complete (sources target &optional limit idle-delay input-idle-delay target-is-default-input-p)
-  (let ((anything-candidate-number-limit (or limit anything-candidate-number-limit))
-        (anything-idle-delay (or idle-delay anything-idle-delay))
-        (anything-input-idle-delay (or input-idle-delay anything-input-idle-delay))
-        (anything-complete-target target)
-        (anything-execute-action-at-once-if-one t)
+(defun ascsa-helm-complete (sources target &optional limit idle-delay input-idle-delay target-is-default-input-p)
+  (let ((helm-candidate-number-limit (or limit helm-candidate-number-limit))
+        (helm-idle-delay (or idle-delay helm-idle-delay))
+        (helm-input-idle-delay (or input-idle-delay helm-input-idle-delay))
+        (helm-complete-targettarget target)
+        (helm-execute-action-at-once-if-one t)
+        (ascsa-complete-target target)
         (enable-recursive-minibuffers t)
-        anything-samewindow)
-    (ascsa-anything-noresume sources (if target-is-default-input-p target nil)
-                             nil nil nil "*anything complete*")))
+        helm-samewindow)
+    (helm :sources sources
+          :input (if target-is-default-input-p target nil)
+          :buffer "*helm complete*")))
 
-(defalias 'ascsa-complete 'ascsa-anything-complete)
-
-(defun anything-slime-complete ()
+(defun helm-slime-complete ()
   "Select a symbol from the SLIME's completion systems."
   (interactive)
-  (ascsa-complete anything-slime-complete-sources
-                  (ascsa-symbol-position-funcall
-                   #'buffer-substring-no-properties)))
+  (ascsa-helm-complete helm-slime-complete-sources
+                       (ascsa-symbol-position-funcall
+                        #'buffer-substring-no-properties)))
 
-(defvar anything-c-source-slime-connection
+(defvar helm-c-source-slime-connection
   '((name . "SLIME connections")
     (candidates
      . (lambda ()
@@ -194,17 +192,17 @@
         ("Restart" . slime-restart-connection-at-point)
         ("Quit" . slime-quit-connection-at-point)))))
 
-(defun anything-slime-list-connections ()
-  "Yet another `slime-list-connections' with `anything'."
+(defun helm-slime-list-connections ()
+  "Yet another `slime-list-connections' with `helm'."
   (interactive)
-  (anything 'anything-c-source-slime-connection))
+  (helm 'helm-c-source-slime-connection))
 
-(defadvice anything-slime-update-connection-list (around ignore activate)
-  "Don't call slime-update-connection-list if anythinging. (This is iffy.)"
-  (when (not anything-source-name)
+(defadvice helm-slime-update-connection-list (around ignore activate)
+  "Don't call slime-update-connection-list if helming. (This is iffy.)"
+  (when (not helm-source-name)
     ad-do-it))
 
-(define-anything-type-attribute 'anything-slime-apropos
+(define-helm-type-attribute 'helm-slime-apropos
   '((action
      . (("Describe symbol" . slime-describe-symbol)
         ("Edit definition" . slime-edit-definition)))
@@ -217,79 +215,79 @@
   `((name . ,name)
     (candidates
      . (lambda ()
-         (with-current-buffer anything-current-buffer
+         (with-current-buffer helm-current-buffer
            (loop for plist in (slime-eval ,slime-expressions)
                  collect (plist-get plist :designator)))))
-    (type . anything-slime-apropos)))
-(defvar anything-c-source-slime-apropos-symbol-current-package
+    (type . helm-slime-apropos)))
+(defvar helm-c-source-slime-apropos-symbol-current-package
   (ascsa-apropos-source "SLIME apropos (current package)"
                         (quote
                          `(swank:apropos-list-for-emacs
-                           ,anything-pattern
+                           ,helm-pattern
                            nil
                            nil
                            ,(or slime-buffer-package
                                 (slime-current-package))))))
-(defvar anything-c-source-slime-apropos-symbol-current-external-package
+(defvar helm-c-source-slime-apropos-symbol-current-external-package
   (ascsa-apropos-source "SLIME apropos (current external package)"
                         (quote
                          `(swank:apropos-list-for-emacs
-                           ,anything-pattern
+                           ,helm-pattern
                            t
                            nil
                            ,(or slime-buffer-package
                                 (slime-current-package))))))
-(defvar anything-c-source-slime-apropos-symbol-all-external-package
+(defvar helm-c-source-slime-apropos-symbol-all-external-package
   (ascsa-apropos-source "SLIME apropos (all external package)"
                         (quote
                          `(swank:apropos-list-for-emacs
-                           ,anything-pattern
+                           ,helm-pattern
                            t
                            nil
                            nil))))
-(defvar anything-c-source-slime-apropos-symbol-all-package
+(defvar helm-c-source-slime-apropos-symbol-all-package
   (ascsa-apropos-source "SLIME apropos (all package)"
                         (quote
                          `(swank:apropos-list-for-emacs
-                           ,anything-pattern
+                           ,helm-pattern
                            nil
                            nil
                            nil))))
-(defvar anything-slime-apropos-sources
-  '(anything-c-source-slime-apropos-symbol-current-package
-    anything-c-source-slime-apropos-symbol-current-external-package
-    anything-c-source-slime-apropos-symbol-all-external-package
-    anything-c-source-slime-apropos-symbol-all-package))
+(defvar helm-slime-apropos-sources
+  '(helm-c-source-slime-apropos-symbol-current-package
+    helm-c-source-slime-apropos-symbol-current-external-package
+    helm-c-source-slime-apropos-symbol-all-external-package
+    helm-c-source-slime-apropos-symbol-all-package))
 
-(defun anything-slime-apropos ()
-  "Yet another `slime-apropos' with `anything'."
+(defun helm-slime-apropos ()
+  "Yet another `slime-apropos' with `helm'."
   (interactive)
-  (anything-other-buffer anything-slime-apropos-sources
-                         "*anything SLIME apropos*"))
+  (helm :sources helm-slime-apropos-sources
+        :buffer "*helm SLIME apropos*"))
 
-(defvar anything-c-source-slime-repl-history
+(defvar helm-c-source-slime-repl-history
   `((name . "SLIME repl history")
     (candidates
      . (lambda ()
-         (with-current-buffer anything-current-buffer
+         (with-current-buffer helm-current-buffer
            slime-repl-input-history)))
     ;;(multiline)
     (action
      . (lambda (cand)
          (slime-repl-history-replace 'backward
                                      (concat "^" (regexp-quote cand) "$"))))))
-(defun anything-slime-repl-history ()
+(defun helm-slime-repl-history ()
   "Select an input from the SLIME repl's history and insert it."
   (interactive)
-  (ascsa-complete 'anything-c-source-slime-repl-history
-                  (ascsa-symbol-position-funcall
-                   #'buffer-substring-no-properties
-                   (point)
-                   slime-repl-input-start-mark)
-                  nil nil nil t))
+  (ascsa-helm-complete helm-c-source-slime-repl-history
+                       (ascsa-symbol-position-funcall
+                        #'buffer-substring-no-properties
+                        (point)
+                        slime-repl-input-start-mark)
+                       nil nil nil t))
 
-(defun anything-slime-init ()
-  (run-hooks 'anything-slime-init-hook))
+(defun helm-slime-init ()
+  (run-hooks 'helm-slime-init-hook))
 
-(provide 'anything-slime)
-;;; anything-slime.el ends here
+(provide 'helm-slime)
+;;; helm-slime.el ends here

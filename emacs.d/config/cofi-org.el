@@ -276,8 +276,8 @@ Note: This assumes all files are in the org-directory."
   '(52 1))
 
 (defconst cofi-org-ss-boundary
-  '(2011 4 11
-    2011 7 15))
+  '(2012 4 11
+    2012 7 13))
 (defconst cofi-org-ss-pause-weeks
   '())
 

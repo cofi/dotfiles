@@ -51,6 +51,7 @@
   "g" 'ack
   "G" 'ack-same
   "s" 'sort-lines
+  "u" 'cofi-update-all-buffers
   "w" 'count-words-region)
 
 ;;; breadcrumbs keymap

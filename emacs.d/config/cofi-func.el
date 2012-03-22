@@ -290,4 +290,15 @@ With a prefix argument you can force to move back to indentation."
       (beginning-of-line))
      (t (back-to-indentation)))))
 
+(defun cofi-update-all-buffers ()
+  "Update all buffers that are visiting a file, have no unsaved changes but are
+modifier outside of Emacs."
+  (interactive)
+  (loop for buffer in (buffer-list)
+        when (and (buffer-file-name buffer)
+                  (not (buffer-modified-p buffer))
+                  (not (verify-visited-file-modtime buffer)))
+        do (with-current-buffer buffer
+             (revert-buffer t t t))))
+
 (provide 'cofi-func)

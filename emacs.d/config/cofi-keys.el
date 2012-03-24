@@ -49,7 +49,11 @@
   "d" 'adict-guess-dictionary
   "r" 're-builder
   "g" 'ack
-  "G" 'ack-same
+  "G" (cmd (let ((ack-prompt-for-directory 'always))
+             (call-interactively #'ack)))
+  "M-g" 'ack-same
+  "M-G" (cmd (let ((ack-prompt-for-directory 'always))
+               (call-interactively #'ack-same)))
   "s" 'sort-lines
   "u" 'cofi-update-all-buffers
   "w" 'count-words-region)

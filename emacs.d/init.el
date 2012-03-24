@@ -9,6 +9,7 @@
      "\n")))
 (setq initial-scratch-message (cofi/fortune2scratch))
 
+(setq custom-theme-directory "~/.emacs.d/themes/")
 (setq custom-safe-themes '(;; cofi-dark
                            "d9d7a7c76f3d552f1c6da90736dd818b9423ad1e6047feeb8e1851a1b5191420"
                            ;; cofi-light

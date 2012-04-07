@@ -107,7 +107,7 @@
     (interactive)
     (helm :sources '( helm-c-source-recentf
                       helm-c-source-file-cache
-                      helm-c-source-files-in-current-dir+
+                      helm-c-source-files-in-current-dir
                       helm-c-source-files-in-all-dired
                       helm-c-source-locate)
           :buffer "*helm with files*"

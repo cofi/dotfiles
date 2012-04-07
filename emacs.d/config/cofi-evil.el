@@ -140,7 +140,32 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (kbd "M-K") 'org-metaup
   (kbd "M-L") 'org-metaright)
 
+(evil-define-key 'normal orgstruct-mode-map
+  (kbd "RET") 'org-open-at-point
+  "za"        'org-cycle
+  "zA"        'org-shifttab
+  "zm"        'hide-body
+  "zr"        'show-all
+  "zo"        'show-subtree
+  "zO"        'show-all
+  "zc"        'hide-subtree
+  "zC"        'hide-all
+  (kbd "M-j") 'org-shiftleft
+  (kbd "M-k") 'org-shiftright
+  (kbd "M-H") 'org-metaleft
+  (kbd "M-J") 'org-metadown
+  (kbd "M-K") 'org-metaup
+  (kbd "M-L") 'org-metaright)
+
 (evil-define-key 'insert org-mode-map
+  (kbd "M-j") 'org-shiftleft
+  (kbd "M-k") 'org-shiftright
+  (kbd "M-H") 'org-metaleft
+  (kbd "M-J") 'org-metadown
+  (kbd "M-K") 'org-metaup
+  (kbd "M-L") 'org-metaright)
+
+(evil-define-key 'insert orgstruct-mode-map
   (kbd "M-j") 'org-shiftleft
   (kbd "M-k") 'org-shiftright
   (kbd "M-H") 'org-metaleft

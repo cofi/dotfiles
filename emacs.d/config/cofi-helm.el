@@ -51,9 +51,9 @@
   (require 'helm-config)
   (require 'helm-match-plugin)
 
+  (helm-mode 1)
   ;; helm for ffap behaves broken
   (push  '(find-file-at-point . ido-completing-read) helm-completing-read-handlers-alist)
-  (helm-mode 1)
   (cofi/set-key 'global "M-x" 'helm-M-x)
 
   ;; From browse-kill-ring.el

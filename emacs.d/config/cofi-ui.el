@@ -75,7 +75,8 @@
 
 (setq-default mode-line-format
               `(
-                (evil-mode (" " evil-mode-line-tag))
+                (evil-mode ("" evil-mode-line-tag))
+                " "
                 ;; buffer name and file name as help
                 (:propertize "%b " face mode-line-buffer
                              help-echo (buffer-file-name))

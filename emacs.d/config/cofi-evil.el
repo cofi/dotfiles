@@ -14,6 +14,12 @@
 (require 'evil-leader)
 (require 'evil)
 
+(setq evil-normal-state-tag   (propertize "n" 'face '((:background "green" :foreground "black")))
+      evil-emacs-state-tag    (propertize "e" 'face '((:background "orange" :foreground "black")))
+      evil-insert-state-tag   (propertize "i" 'face '((:background "red")))
+      evil-motion-state-tag   (propertize "m" 'face '((:background "blue")))
+      evil-operator-state-tag (propertize "o" 'face '((:background "purple"))))
+
 ;;; evil-surround
 (require-and-exec 'surround
   (setq-default surround-pairs-alist '((?\( . ("(" . ")"))

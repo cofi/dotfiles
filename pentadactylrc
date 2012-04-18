@@ -61,10 +61,10 @@ nmap -count <C-S-u> <scroll-down>
 nmap -count <C-S-f> <C-b>
 nmap -count <C-S-b> <C-f>
 
-nnoremap j 5j
-nnoremap k 5k
-nnoremap <C-e> 10<C-e>
-nnoremap <C-y> 10<C-y>
+nmap -builtin j 5j
+nmap -builtin k 5k
+nmap -builtin <C-e> 10<C-e>
+nmap -builtin <C-y> 10<C-y>
 
 " NoScript
 map -g user <A-n> :set nss!=<A-Tab>

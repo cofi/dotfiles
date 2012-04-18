@@ -27,6 +27,8 @@
 
 (autoload 'dired-jump "dired" "Jump to current buffer's file in dired" t)
 
+(autoload 'goto-last-change "goto-chg" nil t)
+
 (autoload 'home-end-end "home-end" "Go to end of line/window/buffer." t)
 (autoload 'home-end-home "home-end" "Go to beginning of line/window/buffer." t)
 

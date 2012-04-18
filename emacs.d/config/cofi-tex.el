@@ -18,6 +18,7 @@
       TeX-save-query nil
       TeX-parse-self t
       TeX-newline-function #'reindent-then-newline-and-indent
+      TeX-master 'dwim
       TeX-PDF-mode t)
 
 (eval-after-load "cdlatex"

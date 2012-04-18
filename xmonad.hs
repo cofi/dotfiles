@@ -323,6 +323,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                    ]
       multi = S.namedEngine "multi" $ foldr1 (!>) [ google
                                                   , scholar
+                                                  , acm
+                                                  , ieee
                                                   , ixquick
                                                   , duck
                                                   , wiki
@@ -387,6 +389,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       duden = S.searchEngine "duden" "http://www.duden.de/suchen/dudenonline/"
       sourceforge = S.searchEngine "sf" "http://sourceforge.net/search/?q="
       scholar = S.searchEngine "scholar" "https://scholar.google.de/scholar?q="
+      acm = S.searchEngine "acm" "https://dl.acm.org/results.cfm?query="
+      ieee= S.searchEngine "ieee" "http://ieeexplore.ieee.org/search/searchresult.jsp?queryText="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
       code = S.namedEngine "code" S.codesearch

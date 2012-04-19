@@ -289,6 +289,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "calc" "emacsclient -a '' -c -e '(cofi-full-calc)'" (title =? "calc") scratchFloat
               , NS "dict" "urxvtcd -title dict -e pdictcc --limit 5" (title =? "dict") scratchFloat
               , NS "lisp" "urxvtcd -title lisp -e sbcl" (title =? "lisp") scratchFloat
+              , NS "tmux" "urxvtcd -e sh -c 'tmux attach -t tmux || tmux new -s tmux'" (prefixTitle "tmux") scratchFloat
               ]
   where scratchFloat = customFloating size
         orgFloat = customFloating orgsize
@@ -306,6 +307,7 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("a", namedScratchpadAction scratchpads "agenda")
                                         , ("n", namedScratchpadAction scratchpads "network")
                                         , ("d", namedScratchpadAction scratchpads "dict")
+                                        , ("x", namedScratchpadAction scratchpads "tmux")
                                         ]
 
 -- Search----------------------------------------

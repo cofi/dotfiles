@@ -29,8 +29,7 @@
 
 (require 'cofi-util)
 (require-and-exec 'package
-  (pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")
-                                 ("elpa" . "http://tromey.com/elpa/")))
+  (pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")))
   (package-initialize)
   (dolist (package '(
                      all

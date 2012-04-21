@@ -86,8 +86,6 @@
                 "%*"
                 ;; appt
                 appt-mode-string
-                ;; battery
-                battery-mode-line-string
                 " "
                 ;; sml modeline
                 (sml-modeline-mode (:eval (list (sml-modeline-create))))
@@ -115,9 +113,6 @@
                 ")%]"
                 ;; which func mode
                 (which-func-mode (" " which-func-format))
-                " "
-                ;; time
-                display-time-string
                 " %-"
                 ))
 

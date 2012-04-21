@@ -221,7 +221,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "w" 'save-buffer
   "W" 'save-some-buffers
   "k" 'kill-buffer-and-window
-  "K" 'kill-this-buffer
+  "K" (cmd (kill-buffer (current-buffer)))
   "<" 'cofi-cd-alias
   "d" 'dired-jump
   "D" 'cofi-dired-alias

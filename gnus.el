@@ -116,6 +116,9 @@
 (add-hook 'message-mode-hook
           (gen-local-fill-keymap-hook "M-RET" 'yas/expand))
 
+(setq message-citation-line-function #'message-insert-formatted-citation-line)
+(setq message-citation-line-format "On %a, %b %d %Y (%H:%M), %f wrote: \n")
+
 (defun gnus-user-format-function-r (headers)
   "Classify headers on how I'm adressed."
   (let ((to (gnus-extra-header 'To headers))

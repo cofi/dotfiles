@@ -47,8 +47,19 @@
 (setq dired-recursive-copies 'always
       dired-dwim-target t
       wdired-allow-to-change-permissions t)
+(defvar cofi/dired-find-file-external-program "kde-open")
+(defun cofi/dired-find-file-external ()
+  (interactive)
+  (start-process "*cofi-dired-find-filed-external*"
+                 nil
+                 cofi/dired-find-file-external-program
+                 (dired-get-file-for-visit)))
+
 (require-and-exec 'dired+)
 (add-hook 'dired-mode-hook 'auto-revert-mode)
+(add-hook 'dired-mode-hook (gen-local-fill-keymap-hook
+                            "C-<return>" #'cofi/dired-find-file-external))
+
 ;;; ========================================
 
 (setq ack-prompt-for-directory 'unless-guessed)

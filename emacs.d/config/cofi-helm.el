@@ -49,6 +49,7 @@
 ;; --------------------------------------------------
 (require-and-exec 'helm
   (require 'helm-config)
+  (require 'helm-misc)
   (require 'helm-match-plugin)
 
   (helm-mode 1)

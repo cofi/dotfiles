@@ -239,6 +239,8 @@ Note: This assumes all files are in the org-directory."
 (setq org-export-latex-listings t)
 (setq org-export-latex-default-class "koma-article")
 
+(setq org-latex-to-pdf-process '("latexmk -bibtex -pdf %b"))
+
 (eval-after-load "org-latex"
   '(add-to-list 'org-export-latex-classes
                 '("koma-article"

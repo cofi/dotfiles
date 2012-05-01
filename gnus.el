@@ -2,7 +2,20 @@
 (require-and-exec 'org-contacts
   (org-contacts-gnus-insinuate)
   ;; deactivate store last mail
-  (fset 'org-contacts-gnus-store-last-mail #'NOP))
+  (fset 'org-contacts-gnus-store-last-mail #'NOP)
+
+  (defvar cofi/org-contacts-ignore-mail-rx
+    (rx "@public.gmane.org" string-end))
+
+  ;; override to include the ignore rx
+  (defun org-contacts-check-mail-address (mail)
+    "Add MAIL address to contact at point if it does not have it."
+    (let ((mails (org-entry-get (point) org-contacts-email-property)))
+      (unless (or  (member mail (split-string mails))
+                  (string-match-p cofi/org-contacts-ignore-mail-rx mail))
+        (when (yes-or-no-p
+               (format "Do you want to add this address to %s?" (org-get-heading t)))
+          (org-set-property org-contacts-email-property (concat mails " " mail)))))))
 
 ;;; methods
 (setq imap-shell-program "/usr/lib/dovecot/imap -c ~/config/dovecot.conf"

@@ -18,8 +18,8 @@
       TeX-save-query nil
       TeX-parse-self t
       TeX-newline-function #'reindent-then-newline-and-indent
-      TeX-master 'dwim
       TeX-PDF-mode t)
+(setq-default TeX-master 'dwim)
 
 (eval-after-load "cdlatex"
   '(progn

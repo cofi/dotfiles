@@ -19,6 +19,7 @@
               "cofi-tex"
               "cofi-c"
               "cofi-java"
+              "cofi-xml"
               ))
 
 (defun cofi/close-after-successful-compilation (buffer desc)

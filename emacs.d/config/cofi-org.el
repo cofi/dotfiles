@@ -82,11 +82,14 @@ Note: This assumes all files are in the org-directory."
   (if (fboundp 'x-focus-frame)
       (x-focus-frame nil))
   (let ((org-agenda-window-setup 'current-window))
-    (make-variable-frame-local 'org-agenda-mode-map)
-    (fill-keymap org-agenda-mode-map
-                 "x" (cmd (org-agenda-exit)
-                          (delete-frame)))
     (org-agenda-list)))
+
+(add-hook 'org-agenda-mode-hook (lambda ()
+                                  (if (string= (frame-parameter nil 'name)
+                                               "Agenda Frame")
+                                      (cofi/set-key 'local "x" (cmd (org-agenda-exit)
+                                                                    (delete-frame)))
+                                    (cofi/set-key 'local "x" 'org-agenda-exit))))
 
 (setq org-google-weather-format "%L: %i %c, %l-%h %s")
 

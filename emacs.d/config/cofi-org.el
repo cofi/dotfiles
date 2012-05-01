@@ -249,14 +249,21 @@ Note: This assumes all files are in the org-directory."
                           "C-[" 'reftex-citation))
 
 (eval-after-load "org-latex"
-  '(add-to-list 'org-export-latex-classes
-                '("koma-article"
+  '(pour-lists org-export-latex-classes
+               '(("koma-article"
                   "\\documentclass[a4paper,10pt]{scrartcl}"
                   ("\\section{%s}"       . "\\section*{%s}")
                   ("\\subsection{%s}"    . "\\subsection*{%s}")
                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                   ("\\paragraph{%s}"     . "\\paragraph*{%s}")
-                  ("\\subparagraph{%s}"  . "\\subparagraph*{%s}"))))
+                  ("\\subparagraph{%s}"  . "\\subparagraph*{%s}"))
+                 ("sig-alternate"
+                  "\\documentclass{sig-alternate}"
+                  ("\\section{%s}"       . "\\section*{%s}")
+                  ("\\subsection{%s}"    . "\\subsection*{%s}")
+                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                  ("\\paragraph{%s}"     . "\\paragraph*{%s}")
+                  ("\\subparagraph{%s}"  . "\\subparagraph*{%s}")))))
 
 (require 'org-protocol)
 

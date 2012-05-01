@@ -60,6 +60,9 @@
 (add-hook 'dired-mode-hook (gen-local-fill-keymap-hook
                             "C-<return>" #'cofi/dired-find-file-external))
 
+(add-hook 'dired-mode-hook (lambda ()
+                             (when cofi/mail-instance
+                               (turn-on-gnus-dired-mode))))
 ;;; ========================================
 
 (setq ack-prompt-for-directory 'unless-guessed)

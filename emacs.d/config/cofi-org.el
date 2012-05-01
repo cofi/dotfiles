@@ -189,15 +189,10 @@ Note: This assumes all files are in the org-directory."
   (interactive)
   (cofi/capture-wrap #'org-capture-refile))
 
-(add-hook 'org-capture-mode-hook
-          (lambda ()
-            (define-key org-capture-mode-map (kbd "C-c C-c")
-                        #'cofi/capture-frame-finalize)
-            (define-key org-capture-mode-map (kbd "C-c C-k")
-                        #'cofi/capture-frame-kill)
-            (define-key org-capture-mode-map (kbd "C-c C-w")
-                        #'cofi/capture-frame-refile)
-            ))
+(add-hook 'org-capture-mode-hook (gen-local-fill-keymap-hook
+                                  "C-c C-c" #'cofi/capture-frame-finalize
+                                  "C-c C-k" #'cofi/capture-frame-kill
+                                  "C-c C-w" #'cofi/capture-frame-refile))
 
 (setq org-capture-templates
       '(("t" "Todo" entry (file (format "%s/todo.org" org-directory))

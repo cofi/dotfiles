@@ -342,7 +342,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , leo
                                                   , S.maps
                                                   , images
-                                                  , code
                                                   , pypi
                                                   , pep
                                                   , py
@@ -395,7 +394,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       ieee= S.searchEngine "ieee" "http://ieeexplore.ieee.org/search/searchresult.jsp?queryText="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
-      code = S.namedEngine "code" S.codesearch
 
       (!>) :: SearchEngine -> SearchEngine -> SearchEngine
       (SearchEngine name1 site1) !> (SearchEngine name2 site2) =

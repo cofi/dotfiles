@@ -40,11 +40,12 @@
   (import-from :gray *gray-stream-symbols* :swank-backend)
 
   (import-swank-mop-symbols :clos
-    '(:eql-specializer
+    `(:eql-specializer
       :eql-specializer-object
       :generic-function-declarations
       :specializer-direct-methods
-      :compute-applicable-methods-using-classes)))
+      ,@(unless (fboundp 'clos:compute-applicable-methods-using-classes)
+         '(:compute-applicable-methods-using-classes)))))
 
 
 ;;;; TCP Server
@@ -62,13 +63,13 @@
   (car (sb-bsd-sockets:host-ent-addresses
         (sb-bsd-sockets:get-host-by-name name))))
 
-(defimplementation create-socket (host port)
+(defimplementation create-socket (host port &key backlog)
   (let ((socket (make-instance 'sb-bsd-sockets:inet-socket
 			       :type :stream
 			       :protocol :tcp)))
     (setf (sb-bsd-sockets:sockopt-reuse-address socket) t)
     (sb-bsd-sockets:socket-bind socket (resolve-hostname host) port)
-    (sb-bsd-sockets:socket-listen socket 5)
+    (sb-bsd-sockets:socket-listen socket (or backlog 5))
     socket))
 
 (defimplementation local-port (socket)
@@ -84,7 +85,13 @@
   (sb-bsd-sockets:socket-make-stream (accept socket)
                                      :output t
                                      :input t
-                                     :buffering buffering
+                                     :buffering (ecase buffering
+                                                  ((t) :full)
+                                                  ((nil) :none)
+                                                  (:line line))
+                                     :element-type (if external-format
+                                                       'character 
+                                                       '(unsigned-byte 8))
                                      :external-format external-format))
 (defun accept (socket)
   "Like socket-accept, but retry on EAGAIN."
@@ -470,7 +477,8 @@
   (third (elt *backtrace* frame-number)))
 
 (defimplementation frame-locals (frame-number)
-  (loop for (name . value) in (nth-value 2 (frame-decode-env (elt *backtrace* frame-number)))
+  (loop for (name . value) in (nth-value 2 (frame-decode-env 
+                                            (elt *backtrace* frame-number)))
         with i = 0
         collect (list :name name :id (prog1 i (incf i)) :value value)))
 
@@ -729,7 +737,7 @@
         "STOPPED"))
 
   (defimplementation make-lock (&key name)
-    (mp:make-lock :name name))
+    (mp:make-lock :name name :recursive t))
 
   (defimplementation call-with-lock-held (lock function)
     (declare (type function function))

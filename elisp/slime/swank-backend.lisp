@@ -160,7 +160,6 @@ Backends implement these functions using DEFIMPLEMENTATION."
        ,(if (null default-body)
             `(pushnew ',name *unimplemented-interfaces*)
             (gen-default-impl))
-       ;; see <http://www.franz.com/support/documentation/6.2/doc/pages/variables/compiler/s_cltl1-compile-file-toplevel-compatibility-p_s.htm>
        (eval-when (:compile-toplevel :load-toplevel :execute)
          (export ',name :swank-backend))
        ',name)))
@@ -240,19 +239,21 @@ EXCEPT is a list of symbol names which should be ignored."
 
 (defmacro with-struct ((conc-name &rest names) obj &body body)
   "Like with-slots but works only for structs."
-  (flet ((reader (slot) (intern (concatenate 'string
-					     (symbol-name conc-name)
-					     (symbol-name slot))
-				(symbol-package conc-name))))
+  (flet ((reader (slot)
+           ;; Use read-from-string instead of intern so that
+           ;; conc-name can be a string such as ext:struct- and not
+           ;; cause errors and not force interning ext::struct-
+           (read-from-string
+            (concatenate 'string (string conc-name) (string slot)))))
     (let ((tmp (gensym "OO-")))
-    ` (let ((,tmp ,obj))
-        (symbol-macrolet
-            ,(loop for name in names collect 
-                   (typecase name
-                     (symbol `(,name (,(reader name) ,tmp)))
-                     (cons `(,(first name) (,(reader (second name)) ,tmp)))
-                     (t (error "Malformed syntax in WITH-STRUCT: ~A" name))))
-          ,@body)))))
+      ` (let ((,tmp ,obj))
+          (symbol-macrolet
+              ,(loop for name in names collect 
+                     (typecase name
+                       (symbol `(,name (,(reader name) ,tmp)))
+                       (cons `(,(first name) (,(reader (second name)) ,tmp)))
+                       (t (error "Malformed syntax in WITH-STRUCT: ~A" name))))
+            ,@body)))))
 
 (defmacro when-let ((var value) &body body)
   `(let ((,var ,value))
@@ -266,10 +267,186 @@ EXCEPT is a list of symbol names which should be ignored."
       '(:or)))
 
 
+;;;; UFT8
+
+(deftype octet () '(unsigned-byte 8))
+(deftype octets () '(simple-array octet (*)))
+
+;; Helper function.  Decode the next N bytes starting from INDEX.
+;; Return the decoded char and the new index.
+(defun utf8-decode-aux (buffer index limit byte0 n)
+  (declare (type octets buffer) (fixnum index limit byte0 n))
+  (if (< (- limit index) n)
+      (values nil index)
+      (do ((i 0 (1+ i))
+           (code byte0 (let ((byte (aref buffer (+ index i))))
+                         (cond ((= (ldb (byte 2 6) byte) #b10)
+                                (+ (ash code 6) (ldb (byte 6 0) byte)))
+                               (t
+                                (error "Invalid encoding"))))))
+          ((= i n)
+           (values (cond ((<= code #xff) (code-char code))
+                         ((<= #xd800 code #xdfff)
+                          (error "Invalid Unicode code point: #x~x" code))
+                         ((and (< code char-code-limit) 
+                               (code-char code)))
+                         (t
+                          (error
+                           "Can't represent code point: #x~x ~
+                            (char-code-limit is #x~x)" 
+                           code char-code-limit)))
+                   (+ index n))))))
+
+;; Decode one character in BUFFER starting at INDEX.
+;; Return 2 values: the character and the new index.
+;; If there aren't enough bytes between INDEX and LIMIT return nil. 
+(defun utf8-decode (buffer index limit)
+  (declare (type octets buffer) (fixnum index limit))
+  (if (= index limit)
+      (values nil index)
+      (let ((b (aref buffer index)))
+        (if (<= b #x7f)
+            (values (code-char b) (1+ index))
+            (macrolet ((try (marker else)
+                         (let* ((l (integer-length marker))
+                                (n (- l 2)))
+                           `(if (= (ldb (byte ,l ,(- 8 l)) b) ,marker)
+                                (utf8-decode-aux buffer (1+ index) limit
+                                                 (ldb (byte ,(- 8 l) 0) b)
+                                                 ,n)
+                                ,else))))
+              (try #b110
+                   (try #b1110
+                        (try #b11110
+                             (try #b111110
+                                  (try #b1111110
+                                       (error "Invalid encoding")))))))))))
+
+;; Decode characters from BUFFER and write them to STRING.
+;; Return 2 values: LASTINDEX and LASTSTART where
+;; LASTINDEX is the last index in BUFFER that was not decoded
+;; and LASTSTART is the last index in STRING not written.
+(defun utf8-decode-into (buffer index limit string start end)
+  (declare (string string) (fixnum index limit start end) (type octets buffer))
+  (loop
+   (cond ((= start end)
+          (return (values index start)))
+         (t
+          (multiple-value-bind (c i) (utf8-decode buffer index limit)
+            (cond (c
+                   (setf (aref string start) c)
+                   (setq index i)
+                   (setq start (1+ start)))
+                  (t
+                   (return (values index start)))))))))
+
+(defun default-utf8-to-string (octets)
+  (let* ((limit (length octets))
+         (str (make-string limit)))
+    (multiple-value-bind (i s) (utf8-decode-into octets 0 limit str 0 limit)
+      (if (= i limit)
+          (if (= limit s)
+              str
+              (adjust-array str s))
+          (loop
+           (let ((end (+ (length str) (- limit i))))
+             (setq str (adjust-array str end))
+             (multiple-value-bind (i2 s2)
+                 (utf8-decode-into octets i limit str s end)
+               (cond ((= i2 limit)
+                      (return (adjust-array str s2)))
+                     (t
+                      (setq i i2)
+                      (setq s s2))))))))))
+
+(defmacro utf8-encode-aux (code buffer start end n)
+  `(cond ((< (- ,end ,start) ,n)
+          ,start)
+         (t
+          (setf (aref ,buffer ,start)
+                (dpb (ldb (byte ,(- 7 n) ,(* 6 (1- n))) ,code)
+                     (byte ,(- 7 n) 0)
+                     ,(dpb 0 (byte 1 (- 7 n)) #xff)))
+          ,@(loop for i from 0 upto (- n 2) collect
+                  `(setf (aref ,buffer (+ ,start ,(- n 1 i)))
+                         (dpb (ldb (byte 6 ,(* 6 i)) ,code)
+                              (byte 6 0)
+                              #b10111111)))
+          (+ ,start ,n))))
+
+(defun utf8-encode (char buffer start end)
+  (declare (character char) (type octets buffer) (fixnum start end))
+  (let ((code (char-code char)))
+    (cond ((<= code #x7f)
+           (cond ((< start end)
+                  (setf (aref buffer start) code)
+                  (1+ start))
+                 (t start)))
+          ((<= code #x7ff) (utf8-encode-aux code buffer start end 2))
+          ((<= #xd800 code #xdfff)
+           (error "Invalid Unicode code point (surrogate): #x~x" code))
+          ((<= code #xffff) (utf8-encode-aux code buffer start end 3))
+          ((<= code #x1fffff) (utf8-encode-aux code buffer start end 4))
+          ((<= code #x3ffffff) (utf8-encode-aux code buffer start end 5))
+          ((<= code #x7fffffff) (utf8-encode-aux code buffer start end 6))
+          (t (error "Can't encode ~s (~x)" char code)))))
+
+(defun utf8-encode-into (string start end buffer index limit)
+  (declare (string string) (type octets buffer) (fixnum start end index limit))
+  (loop
+   (cond ((= start end)
+          (return (values start index)))
+         ((= index limit)
+          (return (values start index)))
+         (t
+          (let ((i2 (utf8-encode (char string start) buffer index limit)))
+            (cond ((= i2 index)
+                   (return (values start index)))
+                  (t
+                   (setq index i2)
+                   (incf start))))))))
+
+(defun default-string-to-utf8 (string)
+  (let* ((len (length string))
+         (b (make-array len :element-type 'octet)))
+    (multiple-value-bind (s i) (utf8-encode-into string 0 len b 0 len)
+      (if (= s len)
+          b
+          (loop
+           (let ((limit (+ (length b) (- len s))))
+             (setq b (coerce (adjust-array b limit) 'octets))
+             (multiple-value-bind (s2 i2)
+                 (utf8-encode-into string s len b i limit)
+               (cond ((= s2 len)
+                      (return (coerce (adjust-array b i2) 'octets)))
+                     (t
+                      (setq i i2)
+                      (setq s s2))))))))))
+
+(definterface string-to-utf8 (string)
+  "Convert the string STRING to a (simple-array (unsigned-byte 8))"
+  (default-string-to-utf8 string))
+
+(definterface utf8-to-string (octets)
+  "Convert the (simple-array (unsigned-byte 8)) OCTETS to a string."
+  (default-utf8-to-string octets))
+
+;;; Codepoint length
+
+;; we don't need this anymore.
+(definterface codepoint-length (string)
+  "Return the number of codepoints in STRING.
+With some Lisps, like cmucl, LENGTH returns the number of UTF-16 code
+units, but other Lisps return the number of codepoints. The slime
+protocol wants string lengths in terms of codepoints."
+  (length string))
+
+
 ;;;; TCP server
 
-(definterface create-socket (host port)
-  "Create a listening TCP socket on interface HOST and port PORT .")
+(definterface create-socket (host port &key backlog)
+  "Create a listening TCP socket on interface HOST and port PORT.
+BACKLOG queue length for incoming connections.")
 
 (definterface local-port (socket)
   "Return the local port number of SOCKET.")
@@ -280,7 +457,13 @@ EXCEPT is a list of symbol names which should be ignored."
 (definterface accept-connection (socket &key external-format
                                         buffering timeout)
    "Accept a client connection on the listening socket SOCKET.  
-Return a stream for the new connection.")
+Return a stream for the new connection.
+If EXTERNAL-FORMAT is nil return a binary stream
+otherwise create a character stream.
+BUFFERING can be one of:
+  nil   ... no buffering
+  t     ... enable buffering
+  :line ... enable buffering with automatic flushing on eol.")
 
 (definterface add-sigio-handler (socket fn)
   "Call FN whenever SOCKET is readable.")
@@ -573,10 +756,12 @@ additional information on the specifiers defined in ANSI Common Lisp.")
       (type           '(type-specifier &rest args))
       (ftype          '(type-specifier &rest function-names))
       (otherwise
-       (flet ((typespec-p (symbol) (member :type (describe-symbol-for-emacs symbol))))
+       (flet ((typespec-p (symbol) 
+                (member :type (describe-symbol-for-emacs symbol))))
          (cond ((and (symbolp decl-identifier) (typespec-p decl-identifier))
                 '(&rest variables))
-               ((and (listp decl-identifier) (typespec-p (first decl-identifier)))
+               ((and (listp decl-identifier) 
+                     (typespec-p (first decl-identifier)))
                 '(&rest variables))
                (t :not-available)))))))
 
@@ -599,7 +784,8 @@ additional information on the specifiers defined in ANSI Common Lisp.")
 (definterface function-name (function)
   "Return the name of the function object FUNCTION.
 
-The result is either a symbol, a list, or NIL if no function name is available."
+The result is either a symbol, a list, or NIL if no function name is
+available."
   (declare (ignore function))
   nil)
 
@@ -778,6 +964,12 @@ frame which invoked the debugger.
 The return value is the result of evaulating FORM in the
 appropriate context.")
 
+(definterface frame-package (frame-number)
+  "Return the package corresponding to the frame at FRAME-NUMBER.
+Return nil if the backend can't figure it out."
+  (declare (ignore frame-number))
+  nil)
+
 (definterface frame-call (frame-number)
   "Return a string representing a call to the entry point of a frame.")
 
@@ -878,7 +1070,8 @@ returns.")
   (cond ((typep datum 'condition)
          `(:error ,(format nil "Error: ~A" datum)))
         ((symbolp datum)
-         `(:error ,(format nil "Error: ~A" (apply #'make-condition datum args))))
+         `(:error ,(format nil "Error: ~A" 
+                           (apply #'make-condition datum args))))
         (t
          (assert (stringp datum))
          `(:error ,(apply #'format nil datum args)))))
@@ -908,9 +1101,10 @@ respective DEFSTRUCT definition, and so on."
   (make-error-location "FIND-DEFINITIONS is not yet implemented on ~
                         this implementation."))
 
-
 (definterface buffer-first-change (filename)
-  "Called for effect the first time FILENAME's buffer is modified."
+  "Called for effect the first time FILENAME's buffer is modified.
+CMUCL/SBCL use this to cache the unmodified file and use the
+unmodified text to improve the precision of source locations."
   (declare (ignore filename))
   nil)
 
@@ -1011,6 +1205,19 @@ functions recorded.
 When called with arguments :METHODS T, profile all methods of all
 generic functions having names in the given package.  Generic functions
 themselves, that is, their dispatch functions, are left alone.")
+
+
+;;;; Trace
+
+(definterface toggle-trace (spec)
+  "Toggle tracing of the function(s) given with SPEC.
+SPEC can be:
+ (setf NAME)                            ; a setf function
+ (:defmethod NAME QUALIFIER... (SPECIALIZER...)) ; a specific method
+ (:defgeneric NAME)                     ; a generic function with all methods
+ (:call CALLER CALLEE)                  ; trace calls from CALLER to CALLEE.
+ (:labels TOPLEVEL LOCAL) 
+ (:flet TOPLEVEL LOCAL) ")
 
 
 ;;;; Inspector
@@ -1115,19 +1322,6 @@ have to be unique."
   (declare (ignore thread))
   '())
 
-(definterface make-lock (&key name)
-   "Make a lock for thread synchronization.
-Only one thread may hold the lock (via CALL-WITH-LOCK-HELD) at a time
-but that thread may hold it more than once."
-   (declare (ignore name))
-   :null-lock)
-
-(definterface call-with-lock-held (lock function)
-   "Call FUNCTION with LOCK held, queueing if necessary."
-   (declare (ignore lock)
-            (type function function))
-   (funcall function))
-
 (definterface current-thread ()
   "Return the currently executing thread."
   0)
@@ -1151,7 +1345,8 @@ Don't execute unwind-protected sections, don't raise conditions.
   nil)
 
 (definterface send (thread object)
-  "Send OBJECT to thread THREAD.")
+  "Send OBJECT to thread THREAD."
+  object)
 
 (definterface receive (&optional timeout)
   "Return the next message from current thread's mailbox."
@@ -1159,6 +1354,18 @@ Don't execute unwind-protected sections, don't raise conditions.
 
 (definterface receive-if (predicate &optional timeout)
   "Return the first message satisfiying PREDICATE.")
+
+(definterface register-thread (name thread)
+  "Associate the thread THREAD with the symbol NAME.
+The thread can then be retrieved with `find-registered'.
+If THREAD is nil delete the association."
+  (declare (ignore name thread))
+  nil)
+
+(definterface find-registered (name)
+  "Find the thread that was registered for the symbol NAME.
+Return nil if the no thread was registred or if the tread is dead."
+  nil)
 
 (definterface set-default-initial-binding (var form)
   "Initialize special variable VAR by default with FORM.
@@ -1192,56 +1399,37 @@ Backends can use this function to abort slow operations.")
 (definterface wait-for-input (streams &optional timeout)
   "Wait for input on a list of streams.  Return those that are ready.
 STREAMS is a list of streams
-TIMEOUT nil, t, or real number. If TIMEOUT is t, return
-those streams which are ready immediately, without waiting.
+TIMEOUT nil, t, or real number. If TIMEOUT is t, return those streams
+which are ready (or have reached end-of-file) without waiting.
 If TIMEOUT is a number and no streams is ready after TIMEOUT seconds,
 return nil.
 
-Return :interrupt if an interrupt occurs while waiting."
-  (assert (member timeout '(nil t)))
-  (cond #+(or)
-        ((null (cdr streams)) 
-         (wait-for-one-stream (car streams) timeout))
-        (t
-         (wait-for-streams streams timeout))))
+Return :interrupt if an interrupt occurs while waiting.")
 
-(defun wait-for-streams (streams timeout)
-  (loop
-   (when (check-slime-interrupts) (return :interrupt))
-   (let ((ready (remove-if-not #'stream-readable-p streams)))
-     (when ready (return ready)))
-   (when timeout (return nil))
-   (sleep 0.1)))
+
+;;;;  Locks 
 
-;; Note: Usually we can't interrupt PEEK-CHAR cleanly.
-(defun wait-for-one-stream (stream timeout)
-  (ecase timeout
-    ((nil)
-     (cond ((check-slime-interrupts) :interrupt)
-           (t (peek-char nil stream nil nil) 
-              (list stream))))
-    ((t) 
-     (let ((c (read-char-no-hang stream nil nil)))
-       (cond (c 
-              (unread-char c stream) 
-              (list stream))
-             (t '()))))))
+;; Please use locks only in swank-gray.lisp.  Locks are too low-level
+;; for our taste.
 
-(defun stream-readable-p (stream)
-  (let ((c (read-char-no-hang stream nil :eof)))
-    (cond ((not c) nil)
-          ((eq c :eof) t)
-          (t (unread-char c stream) t))))
+(definterface make-lock (&key name)
+   "Make a lock for thread synchronization.
+Only one thread may hold the lock (via CALL-WITH-LOCK-HELD) at a time
+but that thread may hold it more than once."
+   (declare (ignore name))
+   :null-lock)
 
-(definterface toggle-trace (spec)
-  "Toggle tracing of the function(s) given with SPEC.
-SPEC can be:
- (setf NAME)                            ; a setf function
- (:defmethod NAME QUALIFIER... (SPECIALIZER...)) ; a specific method
- (:defgeneric NAME)                     ; a generic function with all methods
- (:call CALLER CALLEE)                  ; trace calls from CALLER to CALLEE.
- (:labels TOPLEVEL LOCAL) 
- (:flet TOPLEVEL LOCAL) ")
+(definterface call-with-lock-held (lock function)
+   "Call FUNCTION with LOCK held, queueing if necessary."
+   (declare (ignore lock)
+            (type function function))
+   (funcall function))
+
+;; Same here: don't use this outside of swank-gray.lisp.
+(definterface call-with-io-timeout (function &key seconds)
+  "Calls function with the specified IO timeout."
+  (declare (ignore seconds))
+  (funcall function))
 
 
 ;;;; Weak datastructures
@@ -1316,19 +1504,3 @@ RESTART-FUNCTION, if non-nil, should be called when the image is loaded.")
   "Request saving a heap image to the file FILENAME.
 RESTART-FUNCTION, if non-nil, should be called when the image is loaded.
 COMPLETION-FUNCTION, if non-nil, should be called after saving the image.")
-
-;;; Codepoint length
-
-(definterface codepoint-length (string)
-  "Return the number of codepoints in STRING.
-With some Lisps, like cmucl, LENGTH returns the number of UTF-16 code
-units, but other Lisps return the number of codepoints. The slime
-protocol wants string lengths in terms of codepoints."
-  (length string))
-
-;;; Timeouts
-
-(definterface call-with-io-timeout (function &key seconds)
-  "Calls function with the specified IO timeout."
-  (declare (ignore seconds))
-  (funcall function))

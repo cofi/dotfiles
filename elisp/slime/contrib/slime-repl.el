@@ -27,10 +27,10 @@ maintain."
   (:authors "too many to mention")
   (:license "GPL")
   (:on-load
-   (add-hook 'slime-event-hooks 'slime-repl-event-hook-function)
-   (add-hook 'slime-connected-hook 'slime-repl-connected-hook-function)
+   (slime-repl-add-hooks) 
    (setq slime-find-buffer-package-function 'slime-repl-find-buffer-package))
-  (:on-unload (slime-repl-remove-hooks)))
+  (:on-unload (slime-repl-remove-hooks))
+  (:swank-dependencies swank-repl))
 
 ;;;;; slime-repl
 
@@ -180,15 +180,17 @@ maintain."
 
 (defvar slime-open-stream-hooks)
 
-(defun slime-open-stream-to-lisp (port)
+(defun slime-open-stream-to-lisp (port coding-system)
   (let ((stream (open-network-stream "*lisp-output-stream*" 
                                      (slime-with-connection-buffer ()
                                        (current-buffer))
-				     slime-lisp-host port)))
+				     slime-lisp-host port))
+        (emacs-coding-system (car (find coding-system
+                                        slime-net-valid-coding-systems
+                                        :key #'third))))
     (slime-set-query-on-exit-flag stream)
     (set-process-filter stream 'slime-output-filter)
-    (let ((pcs (process-coding-system (slime-current-connection))))
-      (set-process-coding-system stream (car pcs) (cdr pcs)))
+    (set-process-coding-system stream emacs-coding-system emacs-coding-system)
     (when-let (secret (slime-secret))
       (slime-net-send secret stream))
     (run-hook-with-args 'slime-open-stream-hooks stream)
@@ -411,9 +413,10 @@ joined together."))
   ("\C-z" 'slime-switch-to-output-buffer)
   ("\M-p" 'slime-repl-set-package))
 
-(slime-define-keys slime-mode-map 
+(slime-define-keys slime-mode-map
   ("\C-c~" 'slime-sync-package-and-default-directory)
-  ("\C-c\C-y" 'slime-call-defun))
+  ("\C-c\C-y" 'slime-call-defun)
+  ("\C-c\C-j" 'slime-eval-last-expression-in-repl))
 
 (slime-define-keys slime-connection-list-mode-map
   ((kbd "RET") 'slime-goto-connection)
@@ -551,26 +554,32 @@ joined together."))
           (slime-repl-insert-prompt))))
     (slime-repl-show-maximum-output)))
 
+(defvar slime-repl-suppress-prompt nil
+  "Supresses Slime REPL prompt when bound to T.")
+
 (defun slime-repl-insert-prompt ()
   "Insert the prompt (before markers!).
-Set point after the prompt.  
-Return the position of the prompt beginning."
+Set point after the prompt.
+Return the position of the prompt beginning.
+
+If `slime-repl-suppress-prompt' is true, does nothing and returns nil."
   (goto-char slime-repl-input-start-mark)
-  (slime-save-marker slime-output-start
-    (slime-save-marker slime-output-end
-      (unless (bolp) (insert-before-markers "\n"))
-      (let ((prompt-start (point))
-            (prompt (format "%s> " (slime-lisp-package-prompt-string))))
-        (slime-propertize-region
-            '(face slime-repl-prompt-face read-only t intangible t
-                   slime-repl-prompt t
-                   ;; emacs stuff
-                   rear-nonsticky (slime-repl-prompt read-only face intangible)
-                   ;; xemacs stuff
-                   start-open t end-open t)
-          (insert-before-markers prompt))
-        (set-marker slime-repl-prompt-start-mark prompt-start)
-        prompt-start))))
+  (unless slime-repl-suppress-prompt
+    (slime-save-marker slime-output-start
+      (slime-save-marker slime-output-end
+        (unless (bolp) (insert-before-markers "\n"))
+        (let ((prompt-start (point))
+              (prompt (format "%s> " (slime-lisp-package-prompt-string))))
+          (slime-propertize-region
+              '(face slime-repl-prompt-face read-only t intangible t
+                     slime-repl-prompt t
+                     ;; emacs stuff
+                     rear-nonsticky (slime-repl-prompt read-only face intangible)
+                     ;; xemacs stuff
+                     start-open t end-open t)
+            (insert-before-markers prompt))
+          (set-marker slime-repl-prompt-start-mark prompt-start)
+          prompt-start)))))
 
 (defun slime-repl-show-maximum-output ()
   "Put the end of the buffer at the bottom of the window."
@@ -745,7 +754,6 @@ If NEWLINE is true then add a newline at the end of the input."
     (let ((overlay (make-overlay slime-repl-input-start-mark end)))
       ;; These properties are on an overlay so that they won't be taken
       ;; by kill/yank.
-      (overlay-put overlay 'read-only t)
       (overlay-put overlay 'face 'slime-repl-input-face)))
   (let ((input (slime-repl-current-input)))
     (goto-char (point-max))
@@ -800,6 +808,45 @@ earlier in the buffer."
   (interactive)
   (delete-region slime-repl-input-start-mark (point-max)))
 
+(defun slime-eval-last-expression-in-repl (prefix)
+  "Evaluates last expression in the Slime REPL.
+
+Switches REPL to current package of the source buffer for the duration. If
+used with a prefix argument (C-u), doesn't switch back afterwards."
+  (interactive "P")
+  (let ((expr (slime-last-expression))
+        (buffer-name (buffer-name (current-buffer)))
+        (new-package (slime-current-package))
+        (old-package (slime-lisp-package))
+        (slime-repl-suppress-prompt t)
+        (yank-back nil))
+    (save-excursion
+      (set-buffer (slime-output-buffer))
+      (unless (eq (current-buffer) (window-buffer))
+        (pop-to-buffer (current-buffer) t))
+      (end-of-buffer)
+      ;; Kill pending input in the REPL
+      (when (< (marker-position slime-repl-input-start-mark) (point))
+        (kill-region slime-repl-input-start-mark (point))
+        (setq yank-back t))
+      (unwind-protect
+          (progn
+            (insert-before-markers (format "\n;;; from %s\n" buffer-name))
+            (when new-package
+              (slime-repl-set-package new-package))
+            (let ((slime-repl-suppress-prompt nil))
+              (slime-repl-insert-prompt))
+            (insert expr)
+            (slime-repl-return))
+        (unless (or prefix (equal (slime-lisp-package) old-package))
+          ;; Switch back.
+          (slime-repl-set-package old-package)
+          (let ((slime-repl-suppress-prompt nil))
+            (slime-repl-insert-prompt))))
+      ;; Put pending input back.
+      (when yank-back
+        (yank)))))
+
 (defun slime-repl-kill-input ()
   "Kill all text from the prompt to point."
   (interactive)
@@ -817,7 +864,13 @@ earlier in the buffer."
     (goto-char slime-repl-input-start-mark)
     (line-beginning-position)))
 
+(defun slime-clear-repl-variables ()
+  (interactive)
+  (slime-eval-async `(swank:clear-repl-variables)))
+
 (defvar slime-repl-clear-buffer-hook)
+
+(add-hook 'slime-repl-clear-buffer-hook 'slime-clear-repl-variables)
 
 (defun slime-repl-clear-buffer ()
   "Delete the output generated by the Lisp process."
@@ -833,11 +886,13 @@ earlier in the buffer."
 (defun slime-repl-clear-output ()
   "Delete the output inserted since the last input."
   (interactive)
-  (let ((start (save-excursion 
-                 (slime-repl-previous-prompt)
-                 (ignore-errors (forward-sexp))
-                 (forward-line)
-                 (point)))
+  (let ((start (save-excursion
+                (when (>= (point) slime-repl-input-start-mark)
+                  (goto-char slime-repl-input-start-mark))
+                (slime-repl-previous-prompt)
+                (ignore-errors (forward-sexp))
+                (forward-line)
+                (point)))
         (end (1- (slime-repl-input-line-beginning-position))))
     (when (< start end)
       (let ((inhibit-read-only t))
@@ -853,13 +908,15 @@ earlier in the buffer."
                             (p (and (not (equal p (slime-lisp-package))) p)))
                        (slime-read-package-name "Package: " p))))
   (with-current-buffer (slime-output-buffer)
-    (let ((previouse-point (- (point) slime-repl-input-start-mark)))
+    (let ((previouse-point (- (point) slime-repl-input-start-mark))
+          (previous-prompt (slime-lisp-package-prompt-string)))
       (destructuring-bind (name prompt-string)
           (slime-repl-shortcut-eval `(swank:set-package ,package))
         (setf (slime-lisp-package) name)
-        (setf (slime-lisp-package-prompt-string) prompt-string)
         (setf slime-buffer-package name)
-        (slime-repl-insert-prompt)
+        (unless (equal previous-prompt prompt-string)
+          (setf (slime-lisp-package-prompt-string) prompt-string)
+          (slime-repl-insert-prompt))
         (when (plusp previouse-point)
           (goto-char (+ previouse-point slime-repl-input-start-mark)))))))
 
@@ -1601,10 +1658,21 @@ expansion will be added to the REPL's history.)"
            (pop-to-buffer repl-buffer)
            (goto-char (point-max))))))
 
+(defun slime-repl-choose-coding-system ()
+  (let ((candidates (slime-connection-coding-systems)))
+    (or (find (symbol-name (car default-process-coding-system))
+	      candidates
+	      :test (lambda (s1 s2)
+		      (if (fboundp 'coding-system-equal)
+			  (coding-system-equal (intern s1) (intern s2)))))
+	(car candidates)
+	(error "Can't find suitable coding-system"))))
+
 (defun slime-repl-connected-hook-function ()
   (destructuring-bind (package prompt) 
-      (let ((slime-current-thread t))
-	(slime-eval '(swank:create-repl nil)))
+      (let ((slime-current-thread t)
+	    (cs (slime-repl-choose-coding-system)))
+	(slime-eval `(swank:create-repl nil :coding-system ,cs)))
     (setf (slime-lisp-package) package)
     (setf (slime-lisp-package-prompt-string) prompt))
   (slime-hide-inferior-lisp-buffer)
@@ -1622,8 +1690,8 @@ expansion will be added to the REPL's history.)"
     ((:read-aborted thread tag)
      (slime-repl-abort-read thread tag)
      t)
-    ((:open-dedicated-output-stream port)
-     (slime-open-stream-to-lisp port)
+    ((:open-dedicated-output-stream port coding-system)
+     (slime-open-stream-to-lisp port coding-system)
      t)
     ((:new-package package prompt-string)
      (setf (slime-lisp-package) package)
@@ -1635,13 +1703,26 @@ expansion will be added to the REPL's history.)"
      t)
     (t nil)))
 
+(defun slime-change-repl-to-default-connection ()
+  "Change current REPL to the REPL of the default connection.
+If the current buffer is not a REPL, don't do anything."
+  (when (equal major-mode 'slime-repl-mode)
+    (let ((slime-buffer-connection slime-default-connection))
+      (pop-to-buffer-same-window (slime-connection-output-buffer)))))
+
 (defun slime-repl-find-buffer-package ()
   (or (slime-search-buffer-package)
       (slime-lisp-package)))
 
+(defun slime-repl-add-hooks ()
+  (add-hook 'slime-event-hooks 'slime-repl-event-hook-function)
+  (add-hook 'slime-connected-hook 'slime-repl-connected-hook-function)
+  (add-hook 'slime-cycle-connections-hook 'slime-change-repl-to-default-connection))
+
 (defun slime-repl-remove-hooks ()
   (remove-hook 'slime-event-hooks 'slime-repl-event-hook-function)
-  (remove-hook 'slime-connected-hook 'slime-repl-connected-hook-function))
+  (remove-hook 'slime-connected-hook 'slime-repl-connected-hook-function)
+  (remove-hook 'slime-cycle-connections-hook 'slime-change-repl-to-default-connection))
 
 (let ((byte-compile-warnings '()))
   (mapc #'byte-compile

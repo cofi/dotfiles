@@ -26,9 +26,10 @@
 (defimplementation preferred-communication-style ()
   :spawn)
 
-(defimplementation create-socket (host port)
+(defimplementation create-socket (host port &key backlog)
   (let ((addr (resolve-hostname host)))
-    (ext:create-inet-listener port :stream :host addr :reuse-address t)))
+    (ext:create-inet-listener port :stream :host addr :reuse-address t
+                              :backlog (or backlog 5))))
 
 (defimplementation local-port (socket)
   (nth-value 1 (ext::get-socket-host-and-port (socket-fd socket))))
@@ -38,8 +39,7 @@
 
 (defimplementation accept-connection (socket 
                                       &key external-format buffering timeout)
-  (let ((external-format (or external-format :default))
-        (buffering (or buffering :full))
+  (let ((buffering (or buffering :full))
         (fd (socket-fd socket)))
       (loop
        (let ((ready (sys:wait-until-fd-usable fd :input timeout)))
@@ -47,7 +47,11 @@
            (error "Timeout accepting connection on socket: ~S~%" socket)))
        (let ((new-fd (ignore-errors (ext:accept-tcp-connection fd))))
          (when new-fd
-           (return (make-socket-io-stream new-fd external-format buffering)))))))
+           (return (make-socket-io-stream new-fd external-format 
+                                          (ecase buffering
+                                            ((t) :full)
+                                            ((nil) :none)
+                                            (:line :line)))))))))
 
 (defimplementation set-stream-timeout (stream timeout)
   (check-type timeout (or null real))
@@ -82,15 +86,22 @@
 
 (defun make-socket-io-stream (fd external-format buffering)
   "Create a new input/output fd-stream for 'fd."
-  (let* ((stream (sys:make-fd-stream fd :input t :output t
-                                     :element-type 'base-char
-                                     :buffering buffering
-                                     :external-format external-format)))
-    ;; Ignore character conversion errors.  Without this the communication
-    ;; channel is prone to lockup if a character conversion error occurs.
-    (setf (lisp::character-conversion-stream-input-error-value stream) #\?)
-    (setf (lisp::character-conversion-stream-output-error-value stream) #\?)
-    stream))
+  (cond ((not external-format)
+         (sys:make-fd-stream fd :input t :output t :buffering buffering
+                             :element-type '(unsigned-byte 8)))
+        (t
+         (let* ((stream (sys:make-fd-stream fd :input t :output t
+                                            :element-type 'base-char
+                                            :buffering buffering
+                                            :external-format external-format)))
+           ;; Ignore character conversion errors.  Without this the
+           ;; communication channel is prone to lockup if a character
+           ;; conversion error occurs.
+           (setf (lisp::character-conversion-stream-input-error-value stream)
+                 #\?)
+           (setf (lisp::character-conversion-stream-output-error-value stream)
+                 #\?)
+           stream))))
 
 
 ;;;; Stream handling
@@ -306,7 +317,8 @@
                     (funcall output-fn (make-string fill-size
                                                     :initial-element #\space))
                     (setf (slot-value stream 'position) target-position))
-                  (setf (slot-value stream 'last-write) (get-internal-real-time))
+                  (setf (slot-value stream 'last-write) 
+                        (get-internal-real-time))
                   t)
                  (t
                   nil))))
@@ -545,7 +557,8 @@
       (let ((file (c::compiler-error-context-file-name context))
             (source (c::compiler-error-context-original-source context))
             (path
-             (reverse (c::compiler-error-context-original-source-path context))))
+             (reverse 
+              (c::compiler-error-context-original-source-path context))))
         (or (locate-compiler-note file source path)
             (note-error-location)))))
 
@@ -1041,7 +1054,8 @@ Signal an error if no constructor can be found."
          (name (clos:generic-function-name gf))
          (specializers (clos:method-specializers method))
          (qualifiers (clos:method-qualifiers method)))
-    `(method ,name ,@qualifiers ,specializers #+nil (clos::unparse-specializers specializers))))
+    `(method ,name ,@qualifiers ,specializers 
+             #+nil (clos::unparse-specializers specializers))))
 
 ;; XXX maybe special case setters/getters
 (defun method-location (method)
@@ -1546,8 +1560,9 @@ Signal an error if no constructor can be found."
                (list (1st sc)))))))))
 
 (defun mv-function-end-breakpoint-values (sigcontext)
-  (let ((sym (find-symbol (symbol-name '#:function-end-breakpoint-values/standard)
-                          :debug-internals)))
+  (let ((sym (find-symbol 
+              (symbol-name '#:function-end-breakpoint-values/standard)
+              :debug-internals)))
     (cond (sym (funcall sym sigcontext))
           (t (di::get-function-end-breakpoint-values sigcontext)))))
 
@@ -1941,7 +1956,8 @@ The `symbol-value' of each element is a type tag.")
   (sys:without-interrupts
     (thread:with-lock-held (*mailbox-lock*)
       (or (getf (thread:thread-plist thread) 'mailbox)
-          (setf (getf (thread:thread-plist thread) 'mailbox) (make-mailbox))))))
+          (setf (getf (thread:thread-plist thread) 'mailbox)
+                (make-mailbox))))))
   
 (defimplementation send (thread message)
   (let* ((mbox (mailbox thread))

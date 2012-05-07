@@ -38,7 +38,7 @@
 
 (setq helm-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
 
-(setq helm-c-default-info-index-list '("elisp" "cl" "org" "gnus" "tramp" "stumpwm"
+(setq helm-c-default-info-index-list '("ansicl" "elisp" "cl" "org" "gnus" "tramp" "stumpwm"
                                        "zsh" "coreutils" "find" "libc"
                                        "make" "emacs" "eieio" "latex2e"
                                        "gawk" "sed" "wget" "binutils" "ld"

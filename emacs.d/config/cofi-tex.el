@@ -47,13 +47,13 @@
                  (gen-local-fill-keymap-hook "." (cmd (insert ".\n")))
                  #'visual-line-mode)
 
-(require 'info-look)
-(info-lookup-add-help
- :mode 'latex-mode
- :regexp ".*"
- :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
- :doc-spec '(("(latex2e)Concept Index" )
-             ("(latex2e)Command Index")))
+(require-and-exec 'info-look
+  (info-lookup-add-help
+   :mode 'latex-mode
+   :regexp ".*"
+   :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
+   :doc-spec '(("(latex2e)Concept Index")
+               ("(latex2e)Command Index"))))
 
 
 (provide 'cofi-tex)

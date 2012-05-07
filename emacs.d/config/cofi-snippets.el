@@ -10,8 +10,7 @@
     (setq yas/indent-line 'fixed)
     (setq yas/fallback-behavior 'call-other-command)
     (setq yas/triggers-in-field t)
-    (setq-default yas/trigger-key "SPC")
-    (yas/define-snippets 'nxhtml-mode nil 'html-mode))
+    (setq-default yas/trigger-key "SPC"))
 
 (define-key yas/minor-mode-map "\C-c&" nil)
 

@@ -19,6 +19,13 @@
                                     (switch-to-buffer buf))))
           'append)
 
+(require-and-exec 'info-look
+  (info-lookup-add-help
+   :mode 'lisp-mode
+   :regexp "[^][()'\" \t\n]+"
+   :ignore-case t
+   :doc-spec '(("(ansicl)Symbol Index"))))
+
 ;;; paredit
 (require 'paredit)
 (let ((paredit-mode-hooks '(lisp-mode-hook

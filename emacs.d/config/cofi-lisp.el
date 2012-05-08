@@ -65,6 +65,18 @@
 (when (fboundp 'anything-slime-complete)
   (setq slime-complete-symbol-function #'anything-slime-complete))
 
+                 slime-autodoc
+                 slime-editing-commands
+                 slime-fancy-inspector
+                 slime-fancy
+                 slime-fontifying-fu
+                 slime-fuzzy
+                 slime-indentation
+                 slime-package-fu
+                 slime-references
+                 slime-scratch
+                 slime-xref-browser
+                 slime-presentations
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 
 ;;; from http://bc.tech.coop/blog/070425.html

@@ -19,6 +19,9 @@
                                     (switch-to-buffer buf))))
           'append)
 
+(setq lisp-lambda-list-keyword-alignment t
+      lisp-lambda-list-keyword-parameter-alignment t)
+
 (require-and-exec 'info-look
   (info-lookup-add-help
    :mode 'lisp-mode

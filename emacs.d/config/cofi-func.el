@@ -301,4 +301,24 @@ modifier outside of Emacs."
         do (with-current-buffer buffer
              (revert-buffer t t t))))
 
+(defun cofi/mail-return-keep-citation-markers (dont-fill)
+  "RETURN that keeps citation markers.
+Fill new sentence unless called with prefix or was at eol."
+  (interactive "P")
+  (let* ((bol (point-at-bol))
+         (s (buffer-substring bol (point)))
+         (match (save-match-data
+                  (if (string-match "^\\(>+ \\)" s)
+                      (match-string 1 s)))))
+    (if (and  (/= (point) (point-at-eol)) match)
+        (progn
+          (newline)
+          (insert match)
+          (save-excursion
+            (unless dont-fill
+              (fill-region-as-paragraph (point-at-bol) (progn (forward-sentence)
+                                                              (point))))
+            (delete-trailing-whitespace bol (point))))
+      (newline))))
+
 (provide 'cofi-func)

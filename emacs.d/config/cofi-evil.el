@@ -1,4 +1,5 @@
 (require 'cofi-util)
+(require 'cofi-func)
 (add-to-loadpath "~/.elisp/vendor/evil/"
                  "~/.elisp/vendor/evil-surround/"
                  "~/.elisp/vendor/evil-leader/")
@@ -302,6 +303,9 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
     "C-r" 'winner-reod
     ;; shadow rotating in evil-window-map
     "C-R" 'winner-redo)
+
+(evil-define-key 'insert message-mode-map
+  (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 
 ;; make ace jump look like a single command to evil
 (defadvice ace-jump-word-mode (after evil activate)

@@ -47,6 +47,7 @@
   "A" 'align
   "c" 'calc
   "d" 'adict-guess-dictionary
+  "e" 'eval-and-replace
   "r" 're-builder
   "g" 'ack
   "G" (cmd (let ((ack-prompt-for-directory 'always))

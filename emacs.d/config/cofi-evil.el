@@ -94,6 +94,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                               (ebib-entry-mode               . emacs)
                               (ebib-index-mode               . emacs)
                               (ebib-log-mode                 . emacs)
+                              (gtags-select-mode             . emacs)
                               (shell-mode                    . emacs)
                               (term-mode                     . emacs)
                               (bc-menu-mode                  . emacs)

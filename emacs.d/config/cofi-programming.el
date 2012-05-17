@@ -11,6 +11,7 @@
                           ))
 
 (mapc 'load '(
+              "cofi-cedet"
               "cofi-markers"
               "cofi-flymake"
               "cofi-haskell"

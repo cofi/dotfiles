@@ -1,0 +1,1018 @@
+2012-04-10  Eric Ludlam <zappo@gnu.org>
+
+	* srecode/templates/Makefile:
+	* srecode/srecode.el:
+	* srecode/Project.ede:
+	* srecode/Makefile:
+	* semantic/wisent/Makefile:
+	* semantic/tests/Makefile:
+	* semantic/symref/Makefile:
+	* semantic/semantic.el:
+	* semantic/doc/Makefile:
+	* semantic/ctags/Makefile:
+	* semantic/bovine/Makefile:
+	* semantic/Project.ede:
+	* semantic/Makefile:
+	* eieio/eieio.el:
+	* eieio/Project.ede:
+	* eieio/Makefile:
+	* ede/templates/Makefile:
+	* ede/ede.el:
+	* ede/Project.ede:
+	* ede/Makefile:
+	* contrib/cedet-contrib.el:
+	* contrib/Project.ede:
+	* contrib/Makefile:
+	* common/icons/Makefile:
+	* common/cedet.el:
+	* common/Project.ede:
+	* common/Makefile:
+	* cogre/tests/Makefile:
+	* cogre/templates/Makefile:
+	* cogre/cogre.el:
+	* cogre/Project.ede:
+	* cogre/Makefile: Update to CEDET version 1.1.
+
+2012-03-14  Eric Ludlam <zappo@gnu.org>
+
+	* srecode/templates/Makefile:
+	* srecode/Makefile:
+	* semantic/wisent/Makefile:
+	* semantic/tests/Makefile:
+	* semantic/symref/Makefile:
+	* semantic/doc/Makefile:
+	* semantic/ctags/Makefile:
+	* semantic/bovine/Makefile:
+	* semantic/Makefile:
+	* eieio/Makefile:
+	* ede/templates/Makefile:
+	* ede/Makefile:
+	* contrib/Makefile:
+	* common/icons/Makefile:
+	* common/Makefile:
+	* cogre/tests/Makefile:
+	* cogre/templates/Makefile:
+	* cogre/Makefile (VERSION): Update to match Project.ede
+
+	* contrib/Project.ede (Contrib): Update version to 1.1beta2
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Update version
+	to 1.1beta2
+
+2012-01-21  Eric Ludlam <zappo@gnu.org>
+
+	[Branch merge]
+
+	New function ede-add-project-autoload to add all the various
+	project types to the list of projects EDE will use.  Keeps generic
+	projects at the end.
+
+	Additional feature will prevent ede-linux and emacs.el from
+	loading if not in use.
+
+
+	* contrib/ede-gnustep.el (ede-project-autoload): Use
+	ede-add-project-autoload to install.
+
+2011-01-27  David Engster <dengste@eml.cc>
+
+	* srecode/templates/Makefile:
+	* srecode/srecode.el:
+	* srecode/Project.ede:
+	* srecode/Makefile:
+	* speedbar/speedbar.el:
+	* speedbar/Project.ede:
+	* speedbar/Makefile:
+	* semantic/wisent/Makefile:
+	* semantic/tests/Makefile:
+	* semantic/symref/Makefile:
+	* semantic/semantic.el:
+	* semantic/doc/Makefile:
+	* semantic/ctags/Makefile:
+	* semantic/bovine/Makefile:
+	* semantic/Project.ede:
+	* semantic/Makefile:
+	* eieio/eieio.el:
+	* eieio/Project.ede:
+	* eieio/Makefile:
+	* ede/templates/Makefile:
+	* ede/ede.el:
+	* ede/Project.ede:
+	* ede/Makefile:
+	* contrib/cedet-contrib.el:
+	* contrib/Project.ede:
+	* contrib/Makefile:
+	* common/icons/Makefile:
+	* common/cedet.el:
+	* common/Project.ede:
+	* common/Makefile:
+	* cogre/tests/Makefile:
+	* cogre/templates/Makefile:
+	* cogre/cogre.el:
+	* cogre/Project.ede:
+	* cogre/Makefile (all packages): Bump version numbers to next
+	beta.
+
+2010-07-18  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/wisent-csharp.el (wisent-csharp-lex-ignore-region)
+	(wisent-csharp-lex-ignore-endregion): Enforce these expressions as
+	occuring at the beginning of a line.
+
+2010-06-12  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/ede-gnustep.el (ede-step-target-ctool)
+	(ede-step-target-tool, ede-step-target-clibrary)
+	(ede-step-target-library, ede-step-target-application)
+	(ede-step-target-documentation): Quote initforms that are lists of
+	symbols.
+
+2010-04-18  Eric M. Ludlam <zappo@gnu.org>
+
+	* ede/Makefile:
+	* contrib/Makefile:
+	* cogre/templates/Makefile:
+	* cogre/Makefile (VERSION): Update to 1.0
+
+	* contrib/Project.ede ("Contrib"): Update to 1.0
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Update to 1.0
+
+2010-04-09  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-tag-folding.el (semantic-tag-folding-mode):
+	call cedet-called-interactively-p instead of interactive-p
+
+2010-03-15  Lluís <xscript@users.sourceforge.net>
+
+	* srecode/srecode-template-mode.el:
+	* srecode/srecode-table.el:
+	* srecode/srecode-srt.el:
+	* srecode/srecode-semantic.el:
+	* srecode/srecode-map.el:
+	* srecode/srecode-insert.el:
+	* srecode/srecode-getset.el:
+	* srecode/srecode-extract.el:
+	* srecode/srecode-document.el:
+	* srecode/srecode-document-vars.el:
+	* srecode/srecode-dictionary.el:
+	* srecode/srecode-compile.el:
+	* srecode/srecode-args.el:
+	* semantic/wisent/wisent.el:
+	* semantic/wisent/wisent-python.el:
+	* semantic/wisent/wisent-java-tags.el:
+	* semantic/wisent/semantic-wisent.el:
+	* semantic/symref/semantic-symref.el:
+	* semantic/symref/semantic-symref-list.el:
+	* semantic/symref/semantic-symref-grep.el:
+	* semantic/symref/semantic-symref-filter.el:
+	* semantic/senator.el:
+	* semantic/semanticdb.el:
+	* semantic/semanticdb-typecache.el:
+	* semantic/semanticdb-javascript.el:
+	* semantic/semanticdb-global.el:
+	* semantic/semanticdb-find.el:
+	* semantic/semanticdb-file.el:
+	* semantic/semanticdb-el.el:
+	* semantic/semanticdb-ebrowse.el:
+	* semantic/semanticdb-debug.el:
+	* semantic/semantic.el:
+	* semantic/semantic-util.el:
+	* semantic/semantic-util-modes.el:
+	* semantic/semantic-texi.el:
+	* semantic/semantic-tag.el:
+	* semantic/semantic-tag-write.el:
+	* semantic/semantic-tag-ls.el:
+	* semantic/semantic-tag-file.el:
+	* semantic/semantic-scope.el:
+	* semantic/semantic-sb.el:
+	* semantic/semantic-mru-bookmark.el:
+	* semantic/semantic-lex.el:
+	* semantic/semantic-lex-spp.el:
+	* semantic/semantic-idle.el:
+	* semantic/semantic-ia-sb.el:
+	* semantic/semantic-html.el:
+	* semantic/semantic-grammar.el:
+	* semantic/semantic-grammar-wy.el:
+	* semantic/semantic-fw.el:
+	* semantic/semantic-format.el:
+	* semantic/semantic-find.el:
+	* semantic/semantic-edit.el:
+	* semantic/semantic-ede-grammar.el:
+	* semantic/semantic-doc.el:
+	* semantic/semantic-dep.el:
+	* semantic/semantic-decorate-mode.el:
+	* semantic/semantic-decorate-include.el:
+	* semantic/semantic-debug.el:
+	* semantic/semantic-ctxt.el:
+	* semantic/semantic-complete.el:
+	* semantic/semantic-chart.el:
+	* semantic/semantic-analyze.el:
+	* semantic/semantic-analyze-refs.el:
+	* semantic/semantic-analyze-fcn.el:
+	* semantic/semantic-analyze-debug.el:
+	* semantic/semantic-analyze-complete.el:
+	* semantic/semantic-adebug.el:
+	* semantic/doc/user-guide.texi:
+	* semantic/doc/minor-modes.texi:
+	* semantic/doc/lang-support-guide.texi:
+	* semantic/ctags/semantic-ectag-util.el:
+	* semantic/ctags/semantic-ectag-lang.el:
+	* semantic/bovine/semantic-skel.el:
+	* semantic/bovine/semantic-make.el:
+	* semantic/bovine/semantic-java.el:
+	* semantic/bovine/semantic-gcc.el:
+	* semantic/bovine/semantic-erlang.el:
+	* semantic/bovine/semantic-el.el:
+	* semantic/bovine/semantic-c.el:
+	* semantic/bovine/semantic-bovine.el:
+	* ede/project-am.el:
+	* ede/makefile-edit.el:
+	* ede/ede.el:
+	* ede/ede-util.el:
+	* ede/ede-speedbar.el:
+	* ede/ede-source.el:
+	* ede/ede-shell.el:
+	* ede/ede-projects.texi:
+	* ede/ede-proj.el:
+	* ede/ede-proj-shared.el:
+	* ede/ede-proj-prog.el:
+	* ede/ede-proj-obj.el:
+	* ede/ede-proj-misc.el:
+	* ede/ede-proj-elisp.el:
+	* ede/ede-proj-comp.el:
+	* ede/ede-proj-aux.el:
+	* ede/ede-pmake.el:
+	* ede/ede-pconf.el:
+	* ede/ede-locate.el:
+	* ede/ede-linux.el:
+	* ede/ede-files.el:
+	* ede/ede-emacs.el:
+	* ede/ede-dired.el:
+	* ede/ede-custom.el:
+	* ede/ede-cpp-root.el:
+	* ede/ede-base.el:
+	* ede/ede-auto.el:
+	* ede/autoconf-edit.el:
+	* contrib/semantic-tag-folding.el:
+	* contrib/ede-gnustep.el:
+	* common/mode-local.el:
+	* common/data-debug.el:
+	* common/cedet.el:
+	* common/cedet-idutils.el:
+	* common/cedet-global.el:
+	* common/cedet-files.el:
+	* common/cedet-cscope.el: Import CEDET changes from Emacs' trunk.
+
+2010-02-08  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/eassist.el: Patch from Kiwon Um
+	(eassist-switch-h-cpp): If destination file is in a different
+	frame, then switch frames.
+
+2010-01-30  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/eassist.el: Patch from Kiwon Um:
+	(eassist-switch-h-cpp): If switching to a file that is already in
+	a window, just switch to that window.
+
+2010-01-09  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* ede-step-target:makefile attribute unitialized, to set it during
+	(ede-step-project::project-rescan).
+	* inserted commented subsitution for `makefile-macro-file-list',
+	but don't work. Let it commented and still using
+	`makefile-macro-file-list'.
+	* Try to use `ede-object-project' variable, but don't work. Still
+	to use absolute :path in targets to get parent project.
+
+2009-10-17  Eric M. Ludlam <zappo@gnu.org>
+
+	* semantic/Makefile:
+	* contrib/Makefile (LOADPATH): Fix generation issue.
+
+2009-10-16  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (ELISPPRELOAD): New
+	(init,lisp): Use above.
+
+	* contrib/Project.ede (init,lisp): Use preload compiler, and
+	preloads.
+
+2009-10-08  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* contrib/ede-gnustep.el: Added several function for parsing using
+	`semantic--find-tag-by-function'.  Removed :makefile from
+	`ede-step-project'.
+
+2009-09-22  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* contrib/ede-gnustep.el: A lot of restyling.  Return to use only
+	one class.  Introduce a :project-mode for scanner or writer.
+	Provide 3 variants autoload, via :load-type or :initializers.
+	heavily changed: project-rescan and loading funcs.
+
+2009-08-09  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/ede-gnustep.el (ede-step-project): Remove stray . in
+	project-mode which broke compilation.
+
+	* contrib/semantic-tag-folding.el (cl): Change how it is required.
+
+	* contrib/Makefile (lisp_LISP): ectag scala support.
+
+	* contrib/Project.ede ("lisp"): ectag scala support.
+
+2009-08-05  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* Begin a restyling.  A new approch for scanning GNUmakefile to
+	write ProjStep.ede or scanning ProjStep.ede to write GNUmakefile,
+	based on :project-mode attribute of project.
+	* TODO FIX many Bugs.
+
+2009-07-27  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-ectag-scala.el: New file. Scala support
+	contributed by Raymond Racine
+
+2009-03-19  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/cedet-contrib.el:
+	* contrib/Project.ede:
+	* contrib/Makefile (cedet-contrib-version): Update version.
+
+2009-03-05  Alex Ott <alexott@gmail.com>
+
+	* tests/.cvsignore: New file.
+	* srecode/.cvsignore: New file.
+	* speedbar/.cvsignore: New file.
+	* semantic/wisent/.cvsignore: New file.
+	* semantic/symref/.cvsignore: New file.
+	* semantic/ctags/.cvsignore: New file.
+	* semantic/bovine/.cvsignore: New file.
+	* semantic/.cvsignore: New file.
+	* eieio/.cvsignore: New file.
+	* ede/.cvsignore: New file.
+	* contrib/.cvsignore: New file.
+	* common/.cvsignore: New file.
+	* cogre/.cvsignore: New file. add ignore files to not show
+	auxiliary scripts, not included into CVS
+
+2009-02-24  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (EMACSFLAGS): New variable
+	(init,setup,lisp): Use above.
+
+2009-01-29  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Project.ede (contrib): Updated to 1.0pre6.
+
+	* ede/templates/Makefile:
+	* ede/Makefile:
+	* contrib/Makefile:
+	* common/Makefile (VERSION): Updated to 1.0pre6.
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Updated to
+	1.0pre6.
+
+2009-01-24  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/wisent-php.el (wisent-php-default-setup): Remove traces
+	of old 'document' tool.
+
+2009-01-05  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/ede-gnustep.el (ede-step-project): Fix doc
+
+2008-12-11  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/ede-gnustep.el (ede-step-load): Save the directory on
+	load.
+
+2008-10-21  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* contrib/ede-gnustep.el: Added header files support.
+
+2008-09-04  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (wy_SEMANTIC_GRAMMAR, wy_SEMANTIC_GRAMMAR_EL)
+	(lisp_LISP): Remove javascript support.
+
+	* contrib/Project.ede ("wy", "lisp"): Remove javascript support.
+
+	* contrib/semanticdb-javascript.el: Removed. Move to semantic.
+
+	* contrib/wisent-javascript.el: Removed.
+	* contrib/wisent-javascript-jv.wy: Removed. Moving to
+	semantic/wisent directory.
+
+2008-09-03  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el: Removed. Moving to a different
+	project.
+
+2008-08-28  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* contrib/ede-gnustep.el: removed (require 'ede-pmake) from
+	`ede-proj-setup-buidenvironment'
+
+2008-08-07  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (lisp_LISP): Add ede-gnustep.el
+
+	* contrib/Project.ede ("lisp"): Add ede-gnustep.el
+
+	* contrib/ede-gnustep.el (require ede): Unquote.  Move require of
+	ede-proj here.
+
+2008-08-04  Marco (Bj) Bardelli <safanaj@users.sourceforge.net>
+
+	* contrib/ede-gnustep.el: New file. Initial import.  create a
+	basic GNUmakefile to work with GNUstep-Make.
+
+2008-07-03  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/wisent-php.el (copyright): Fix FSF name.
+
+2008-06-28  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/wisent-php.wy: Replaced all occurances of php-tag to
+	just php in comments.
+	(wisent-php-lexer): Renamed.
+
+2008-06-26  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (wy_SEMANTIC_GRAMMAR): Add wisent-php.wy
+	(wy_SEMANTIC_GRAMMAR_EL): Add wisent-php-wy.el
+	(lisp_LISP): Add wisent-php.el
+
+	* contrib/Project.ede ("wy"): Add wisent-php.wy
+	("lisp"): Add wisent-php.el
+
+	* contrib/wisent-php.wy: New file.
+	* contrib/wisent-php.el: New file. PHP parser support.
+
+2008-05-19  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el: Replace contents with notify.
+
+2008-05-16  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el (semantic-matlab-match-function-re):
+	Update to handle a non-bracketed output variable.
+
+2008-05-14  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el (semantic-matlab-match-function-re):
+	Fix.
+	(semantic-matlab-function-tags): Wrap error prone fcns in
+	condition-case Add omit-nulls arg to split-string.
+	(semantic-matlab-parse-region): Make sure the parse functions
+	doesn't throw an error.
+
+2008-04-14  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (LOADPATH): Added ede to load path.
+	(VERSION): Udated to 1.0pre5
+
+	* contrib/Project.ede ("Contrib"): Updated to 1.0pre5
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Updated to
+	1.0pre5
+
+2008-02-23  Anton V. Belyaev <kpoxman@users.sourceforge.net>
+
+	* contrib/eassist.el: EAssist: set line to current function
+	initially
+
+2008-02-21  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el (semantic-matlab-match-function-re):
+	Fix expression to handle space between fcn name and optional arg
+	list.
+
+2007-08-31  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/wisent-ruby.el (semantic-lex-ruby-hashes): Fix space
+	finding regexps.
+	(semantic-lex-ruby-assigned-vars): New var to fix byte-compiler
+	(wisent-ruby-expand-tags): Fix quote-in of .
+
+2007-08-29  Anton V. Belyaev <kpoxman@users.sourceforge.net>
+
+	* contrib/eassist.el: Header-body switch improvement
+
+	* contrib/eassist.el:
+	* contrib/INSTALL: Some fixes in EAssist documentation
+
+2007-08-26  Dan Debertin <airboss@users.sourceforge.net>
+
+	* contrib/Makefile: Added wisent-ruby.el/wy.
+
+	* contrib/Project.ede: Added wisent-ruby.el/wy
+
+	* contrib/wisent-ruby.wy: New file.
+	* contrib/wisent-ruby.el: New file. Initial import.
+
+2007-08-09  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (lisp_LISP): Added eassist.
+
+	* contrib/Project.ede ("Contrib"): Add eassist.
+
+	* contrib/eassist.el: Fixed spelling in commentary.
+	(eassist-buffer, eassist-names-column, eassist-methods)
+	(eassist-actual-methods)
+	(eassist-search-string, eassist-overlays): Added to silence
+	warnings.
+
+	* contrib/eassist.el: New file. EAssist, as emailed to me by Anton
+	Belyaev on June 23, 2007.
+
+	* contrib/INSTALL: Add eassist install instructions.
+
+2007-06-06  Eric M. Ludlam <zappo@gnu.org>
+
+	* ede/Makefile:
+	* contrib/Makefile (VERSION): Regress version to prerelease 4.
+
+	* contrib/Project.ede ("Contrib"): Regress version to prerelease
+	4.
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Regress back
+	to prerelease 4
+
+2007-03-18  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (LOADPATH): Stripped out dups
+	(wy_SEMANTIC_GRAMMAR_EL, dist): Spelling fix
+
+2007-02-18  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (lisp_LISP): Add semanticdb-javascript.el
+
+	* contrib/Project.ede ("lisp"): Add semanticdb-javascript.el
+
+	* contrib/wisent-csharp.el (semantic-format): Fix byte-comp
+	warnings
+
+2007-02-03  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semanticdb-javascript.el: Added better commentary.
+
+	* contrib/semantidb-javascript.el: Removed. File name typo.
+
+	* contrib/semantidb-javascript.el: New file.
+	* contrib/semanticdb-javascript.el: New file. Semanticdb
+	Javascript support.
+
+2006-07-29  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/wisent-csharp.el
+	(wisent-csharp-lex-ignore-region,wisent-csharp-lex-ignore-endregion):
+	Analyze begin/end region
+	(wisent-csharp-lexer): Use new lexers
+
+2006-02-08  Eric M. Ludlam <zappo@gnu.org>
+
+	* semantic/wisent/Makefile:
+	* semantic/tests/Makefile:
+	* semantic/doc/Makefile:
+	* semantic/bovine/Makefile:
+	* semantic/Makefile:
+	* eieio/Makefile:
+	* ede/Makefile:
+	* contrib/Makefile:
+	* common/Makefile (VERSION): updated
+
+	* eieio/Project.ede:
+	* ede/Project.ede:
+	* contrib/Project.ede (:version): updated (removed means 1.0)
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Updated
+
+2005-09-30  Eric M. Ludlam <zappo@gnu.org>
+
+	* speedbar/speedbar.texi:
+	* speedbar/speedbar.el:
+	* speedbar/speedbar-load.el:
+	* speedbar/sb-w3.el:
+	* speedbar/sb-texinfo.el:
+	* speedbar/sb-image.el:
+	* speedbar/sb-html.el:
+	* speedbar/sb-ant.el:
+	* speedbar/rpm.el:
+	* speedbar/fsum.el:
+	* speedbar/dframe.el:
+	* speedbar/bigclock.el:
+	* semantic/wisent/wisent.el:
+	* semantic/wisent/wisent-python.wy:
+	* semantic/wisent/wisent-python.el:
+	* semantic/wisent/wisent-java.wy:
+	* semantic/wisent/wisent-java.el:
+	* semantic/wisent/wisent-java-tags.wy:
+	* semantic/wisent/wisent-java-tags.el:
+	* semantic/wisent/wisent-grammar.el:
+	* semantic/wisent/wisent-grammar-macros.el:
+	* semantic/wisent/wisent-expr.el:
+	* semantic/wisent/wisent-debug.el:
+	* semantic/wisent/wisent-comp.el:
+	* semantic/wisent/wisent-cim.wy:
+	* semantic/wisent/wisent-calc.wy:
+	* semantic/wisent/wisent-calc.el:
+	* semantic/wisent/wisent-c.wy:
+	* semantic/wisent/wisent-c.el:
+	* semantic/wisent/wisent-awk.wy:
+	* semantic/wisent/semantic-wisent.el:
+	* semantic/wisent/bison-wisent.el:
+	* semantic/senator.el:
+	* semantic/semanticdb.sh:
+	* semantic/semanticdb.el:
+	* semantic/semanticdb-system.el:
+	* semantic/semanticdb-skel.el:
+	* semantic/semanticdb-search.el:
+	* semantic/semanticdb-mk.el:
+	* semantic/semanticdb-java.el:
+	* semantic/semanticdb-find.el:
+	* semantic/semanticdb-file.el:
+	* semantic/semanticdb-el.el:
+	* semantic/semanticdb-ebrowse.el:
+	* semantic/semantic.el:
+	* semantic/semantic-util.el:
+	* semantic/semantic-util-modes.el:
+	* semantic/semantic-texi.el:
+	* semantic/semantic-tag.el:
+	* semantic/semantic-tag-ls.el:
+	* semantic/semantic-tag-file.el:
+	* semantic/semantic-sort.el:
+	* semantic/semantic-sb.el:
+	* semantic/semantic-regtest.el:
+	* semantic/semantic-load.el:
+	* semantic/semantic-lex.el:
+	* semantic/semantic-inc.el:
+	* semantic/semantic-imenu.el:
+	* semantic/semantic-idle.el:
+	* semantic/semantic-ia.el:
+	* semantic/semantic-ia-sb.el:
+	* semantic/semantic-html.el:
+	* semantic/semantic-grammar.wy:
+	* semantic/semantic-grammar.el:
+	* semantic/semantic-grammar-wy.el:
+	* semantic/semantic-fw.el:
+	* semantic/semantic-format.el:
+	* semantic/semantic-fold.el:
+	* semantic/semantic-find.el:
+	* semantic/semantic-example.el:
+	* semantic/semantic-edit.el:
+	* semantic/semantic-ede-grammar.el:
+	* semantic/semantic-doc.el:
+	* semantic/semantic-decorate.el:
+	* semantic/semantic-decorate-mode.el:
+	* semantic/semantic-debug.el:
+	* semantic/semantic-ctxt.el:
+	* semantic/semantic-complete.el:
+	* semantic/semantic-chart.el:
+	* semantic/semantic-cb.el:
+	* semantic/semantic-ast.el:
+	* semantic/semantic-analyze.el:
+	* semantic/document.el:
+	* semantic/document-vars.el:
+	* semantic/bovine/skeleton.by:
+	* semantic/bovine/semantic-skeleton-by.el:
+	* semantic/bovine/semantic-skel.el:
+	* semantic/bovine/semantic-scm.el:
+	* semantic/bovine/semantic-make.el:
+	* semantic/bovine/semantic-java.el:
+	* semantic/bovine/semantic-erlang.el:
+	* semantic/bovine/semantic-el.el:
+	* semantic/bovine/semantic-c.el:
+	* semantic/bovine/semantic-bovine.el:
+	* semantic/bovine/scheme.by:
+	* semantic/bovine/make.by:
+	* semantic/bovine/erlang.by:
+	* semantic/bovine/erlang-edoc.el:
+	* semantic/bovine/c.by:
+	* semantic/bovine/bovine-grammar.el:
+	* semantic/bovine/bovine-grammar-macros.el:
+	* semantic/bovine/bovine-debug.el:
+	* eieio/tree.el:
+	* eieio/lmcompile.el:
+	* eieio/linemark.el:
+	* eieio/eieiocomp.el:
+	* eieio/eieio.el:
+	* eieio/eieio-tests.el:
+	* eieio/eieio-test-methodinvoke.el:
+	* eieio/eieio-speedbar.el:
+	* eieio/eieio-opt.el:
+	* eieio/eieio-load.el:
+	* eieio/eieio-doc.el:
+	* eieio/eieio-custom.el:
+	* eieio/eieio-comp.el:
+	* eieio/eieio-base.el:
+	* eieio/chart.el:
+	* eieio/call-tree.el:
+	* ede/project-am.el:
+	* ede/ede.el:
+	* ede/ede-util.el:
+	* ede/ede-system.el:
+	* ede/ede-speedbar.el:
+	* ede/ede-source.el:
+	* ede/ede-proj.el:
+	* ede/ede-proj-skel.el:
+	* ede/ede-proj-shared.el:
+	* ede/ede-proj-scheme.el:
+	* ede/ede-proj-prog.el:
+	* ede/ede-proj-obj.el:
+	* ede/ede-proj-misc.el:
+	* ede/ede-proj-info.el:
+	* ede/ede-proj-elisp.el:
+	* ede/ede-proj-comp.el:
+	* ede/ede-proj-aux.el:
+	* ede/ede-proj-archive.el:
+	* ede/ede-pmake.el:
+	* ede/ede-pconf.el:
+	* ede/ede-load.el:
+	* ede/ede-dired.el:
+	* ede/autoconf-edit.el:
+	* ede/autoconf-compat.el:
+	* contrib/wisent-javascript.el:
+	* contrib/wisent-javascript-jv.wy:
+	* contrib/wisent-csharp.wy:
+	* contrib/wisent-csharp.el:
+	* contrib/semantic-tag-folding.el:
+	* contrib/semantic-matlab.el:
+	* contrib/cedet-contrib.el:
+	* contrib/cedet-contrib-load.el:
+	* common/working.el: Update all GPL headers with script from
+	savannah.gnu.org.
+
+2005-06-30  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Updated.
+
+	* speedbar/Makefile:
+	* semantic/wisent/Makefile:
+	* semantic/tests/Makefile:
+	* semantic/doc/Makefile:
+	* semantic/bovine/Makefile:
+	* semantic/Makefile:
+	* eieio/Makefile:
+	* ede/Makefile:
+	* contrib/Makefile:
+	* common/icons/Makefile:
+	* common/Makefile (VERSION): Updated.
+
+	* speedbar/Project.ede:
+	* semantic/Project.ede:
+	* eieio/Project.ede:
+	* ede/Project.ede:
+	* contrib/Project.ede:
+	* common/Project.ede (:version): Updated.
+
+	* contrib/semantic-tag-folding.el: toplevel: Ran checkdoc, cleaned
+	out errant white space.
+	(semantic-tag-folding-get-fold-state): Doc fix.
+
+2005-05-11  Suraj Acharya <sacharya@gmail.com>
+
+	* contrib/semantic-tag-folding.el
+	(semantic-tag-folding-mode-setup): set line-move-ignore-invisible
+	to t in xemacs so that the cursor does not go into hidden
+	text. This is the default in Gnu Emacs.
+	(semantic-tag-folding-get-fold-state)
+	(semantic-tag-folding-set-fold-state)
+	(semantic-tag-folding-get-attribute-overlay,
+	(semantic-tag-folding-get-folding-attribute): new functions to get
+	and set the fold state along with some helper functions. The fold
+	state now goes into an overlay at the start of the tag so that
+	full reparse does not lose the fold state.
+	(semantic-tag-folding-create-folding-overlays)
+	(semantic-tag-folding-set-overlay-visibility): use the new fold
+	state get/set functions instead of having the code inline. Also
+	some better comments.
+
+2005-05-08  Suraj Acharya <sacharya@gmail.com>
+
+	* contrib/semantic-tag-folding.el
+	(semantic-tag-folding-create-folding-overlays,semantic-tag-folding-get-overlay)
+	(semantic-tag-folding-highlight-overlay): use the compatability
+	layer in semantic-fw instead of calling the Gnu Emacs overlay-*
+	functions.
+	(semantic-tag-folding-mode-setup,semantic-tag-folding-highlight-default):
+	removed errors when these functions are run under Xemacs.
+	(semantic-tag-folding-highlight-default): check if we reach the
+	beginning of the buffer while moving backwards over comments to
+	determine the extent of comment blocks. Gnu Emacs doesn't require
+	this check because (forward-comment -1) returns nil when point is
+	at the beginning of the buffer.
+
+2005-05-06  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Project.ede ("Contrib"): Updated version number.
+
+	* contrib/Makefile (VERSION): Update version
+	(autoloads, init, setup, lisp): Quotes around EMACS.
+
+	* contrib/INSTALL: Remove matlab, it doesn't work yet.
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Update
+	version.
+
+2005-05-05  Suraj Acharya <sacharya@gmail.com>
+
+	* contrib/semantic-tag-folding.el
+	(global-semantic-tag-folding-mode): throw an error if
+	define-fringe-bitmap is not present
+	(semantic-tag-folding-mode-setup): throw different errors for the
+	cases when the current buffer is not parsable by semantic and when
+	define-fringe-bitmap is not present.
+
+	* contrib/semantic-tag-folding.el
+	(semantic-tag-folding-set-fringe-image-style): XEmacs doesn't
+	recognize #B..... as a binary number, so I changed it to
+	#b.... which both Gnu Emacs and XEmacs can read.
+
+2005-04-29  Suraj Acharya <sacharya@gmail.com>
+
+	* contrib/semantic-tag-folding.el: Use functionp instead of
+	symbolp to distinguish between the cases where
+	semantic-tag-folding-function is a t or nil rather than a function
+	name. The values t and nil are used in semantic-tag-fold-all and
+	semantic-tag-show-all respectively.  Minor edit in function
+	semantic-tag-folding-fold-or-show-tags to put the when and
+	lexical-let on separate lines.
+
+	* contrib/semantic-tag-folding.el: The default value of
+	semantic-tag-folding-allow-folding-of says that everything is to
+	be considered for folding and but nothing is folded by default.
+	Allow `block tags to folded.  Fixed a fold state determining bug
+	in semantic-tag-folding-create-folding-overlays where
+	semantic-tag-folding-allow-folding-of was mostly ignored.  Wrap a
+	(when (semantic-tag-buffer tag) ...) around the body of
+	semantic-tag-folding-highlight-default. This was throwing an error
+	when the revert-file command was run.  Removed the compilation
+	warning in function semantic-tag-folding-set-fringe-image-style by
+	not refering directly to variable
+	semantic-tag-folding-fringe-image-style.
+
+2005-04-24  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (lisp_LISP): Removed semantic-matlab.el
+
+	* contrib/Project.ede: Removed semantic-matlab.el - it is too
+	buggy.
+
+2005-04-22  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Update
+	Version.
+
+2005-04-19  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile (lisp_LISP): Added semantic-tag-folding.el
+	(VERSION): Updated.
+
+	* contrib/Project.ede ("Contrib"): Update Name and version number.
+
+	* contrib/INSTALL: New file. Provides specific install
+	instructions for all files in contrib.
+
+2005-04-18  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el (semantic-matlab-match-function-re):
+	Simplified
+	(semantic-matlab-function-tags): Tidy up to use above.
+
+	* contrib/semantic-tag-folding.el
+	(semantic-tag-folding-fringe-image-style): Moved (again).
+	(semantic-tag-folding-allow-folding-of)
+	(semantic-tag-folding-set-fringe-image-style)
+	(semantic-tag-folding-function-default)
+	(semantic-tag-folding-p-default)
+	(semantic-tag-folding-highlight-default)
+	(semantic-tag-folding-create-folding-overlays): Reindented some
+	lines.
+
+	* contrib/semantic-tag-folding.el
+	(global-semantic-tag-folding-mode): Add autoload cookie.
+
+	* contrib/semantic-tag-folding.el
+	(global-semantic-tag-folding-mode): Swapped location of var/fcn.
+	(semantic-tag-folding-decoration-mode-hook-enabled): Moved
+	(semantic-decoration-mode-hook): Moved
+	(semantic-tag-folding-fringe-image-style): Moved
+
+	* contrib/Project.ede: Added semantic-tag-folding.el
+
+	* contrib/semantic-tag-folding.el: New file. New minor mode by
+	Suraj Acharya.
+
+2005-02-03  Eric M. Ludlam <zappo@gnu.org>
+
+	* eieio/Makefile:
+	* ede/Makefile:
+	* contrib/Makefile:
+	* common/icons/Makefile (VERSION): Updated version number
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): Updated
+	version number
+
+	* contrib/Project.ede (Contrib): Update version number.
+
+2005-01-16  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/semantic-matlab.el (matlab): Make matlab.el optional.
+
+	* contrib/Makefile: Updated from project file (v 1.7)
+
+	* contrib/Project.ede: Added semantic-matlab.el, and javascript
+	support.
+
+	* contrib/wisent-javascript-jv.wy: New file. Javascript parsing.
+	Large portions translated by Joakim Verona.
+
+	* contrib/wisent-javascript.el: New file. Support parsing of
+	Javascript with wisent-javascript-jv.wy
+
+	* contrib/semantic-matlab.el: New file. Simple parser for handling
+	MATLAB M code files with new nested functions.
+
+2004-07-20  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile:
+	* common/Makefile (misc_AUX): New
+	(dist): Add misc_AUX
+
+	* contrib/Project.ede:
+	* common/Project.ede ("misc"): New target.
+
+2004-05-25  David Ponce <david@dponce.com>
+
+	* semantic/wisent/Makefile:
+	* semantic/tests/Makefile:
+	* semantic/bovine/Makefile:
+	* semantic/Makefile:
+	* contrib/Makefile:
+	* cogre/Makefile: Re-generated to start Emacs with --no-site-file.
+
+2004-04-06  Eric M. Ludlam <zappo@gnu.org>
+
+	* semantic/Makefile:
+	* eieio/Makefile:
+	* ede/Makefile:
+	* contrib/Makefile:
+	* common/Makefile:
+	* cogre/Makefile (dist): Distribute the autoload file
+
+2004-03-30  David Ponce <david@dponce.com>
+
+	* semantic/doc/Makefile:
+	* contrib/Makefile: Rebuild.
+
+	* contrib/Project.ede ("Contrib"): Set :metasubproject to true.
+
+2004-03-28  David Ponce <david@dponce.com>
+
+	* semantic/wisent/Makefile:
+	* contrib/Makefile: Rebuild.
+
+	* contrib/Project.ede (ede-proj-project): Add :version.
+	(init, setup): New targets.
+	(lisp): Move cedet-contrib.el to setup target.  Add dependency on
+	inversion and speedbar.
+	(Wisent_Languages): Rename target to "wy".
+
+	* contrib/wisent-csharp.el (wisent-csharp-default-setup): Add
+	autoload cookie.
+
+	* contrib/cedet-contrib.el (cedet-contrib-version): New variable.
+	(load): Move into cedet-contrib-load.el.
+
+	* contrib/cedet-contrib-load.el: New file. New file.
+
+2004-03-28  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/cedet-contrib.el: New file. Bootstrapping for the
+	contrib directory.
+
+	* contrib/Makefile: Regenerated from project file.
+
+	* contrib/Project.ede: Add needed bits to make this compile.
+
+2004-03-25  David Ponce <david@dponce.com>
+
+	* contrib/wisent-csharp.el:
+	* cogre/wisent-dot.el (semantic-wisent): Require instead of
+	wisent-bovine.
+
+2003-12-21  Eric M. Ludlam <zappo@gnu.org>
+
+	* contrib/Makefile: New file. Contrib directory Makefile
+
+	* contrib/Project.ede: Removed space from a target name.
+
+	* contrib/Project.ede: New file. Project for contributed files.
+
+	* contrib/wisent-csharp.el: New file. CSharp Wisent support code.
+
+	* contrib/wisent-csharp.wy: New file. CSharp Wisent definition.

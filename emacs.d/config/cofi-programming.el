@@ -17,6 +17,7 @@
               "cofi-haskell"
               "cofi-lisp"
               "cofi-python"
+              "cofi-tags"
               "cofi-tex"
               "cofi-c"
               "cofi-java"

@@ -44,6 +44,7 @@
                      cdlatex
                      dedicated
                      diminish
+                     eldoc-eval
                      elein
                      evil-numbers
                      flymake-cursor
@@ -63,6 +64,7 @@
                      rainbow-mode
                      scratch
                      sml-modeline
+                     twittering-mode
                      undo-tree
                      workgroups
                      yaml-mode

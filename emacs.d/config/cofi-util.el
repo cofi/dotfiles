@@ -406,7 +406,7 @@ Returns nil if `X' not in `XS'."
   "Test functions in `alternatives' and return first bound."
   (catch 'found
     (dolist (f alternatives)
-      (if (fboundp f)
+      (if (functionp f)
           (throw 'found f)))))
 
 (defmacro pour-lists (place &rest lists)

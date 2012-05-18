@@ -191,8 +191,8 @@ Neither dir nor alias may contain spaces.")
   "Switch to file associated to current file.
 Major mode determines association."
   (interactive)
-  (let* ((modes '((c-mode    . (f-alt #'eassist-switch-h-cpp (lambda () (cofi/open-header buffer-file-name)))
-                  (c++-mode  . (f-alt #'eassist-switch-h-cpp (lambda () (cofi/open-header buffer-file-name))))))
+  (let* ((modes `((c-mode    . ,(f-alt #'eassist-switch-h-cpp (lambda () (cofi/open-header buffer-file-name))))
+                  (c++-mode  . ,(f-alt #'eassist-switch-h-cpp (lambda () (cofi/open-header buffer-file-name))))))
          (fun (cdr (assq major-mode modes))))
     (if (boundp 'cofi-switched-from)
         (find-file cofi-switched-from)

@@ -9,10 +9,10 @@ and `create' is passed (or command is interactively called with
 prefix."
   (interactive "P")
   (if (= 0 (shell-command "global -p"))
-      (shell-command "global -u")
+      (start-process "update global" nil "global" "-u")
     (when create
       (let ((default-directory (read-directory-name "Source directory: ")))
-        (shell-command "gtags")))))
+        (start-process "create global" nil "gtags")))))
 
 (add-hook 'c-mode-common-hookmmon-hook #'gtags-mode)
 (add-hook 'c-mode-common-hook #'cofi/update-or-create-gtags)

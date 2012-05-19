@@ -8,7 +8,7 @@
 and `create' is passed (or command is interactively called with
 prefix."
   (interactive "P")
-  (if (= 0 (shell-command "global -p"))
+  (if (= 0 (call-process "global" nil nil nil "-p"))
       (start-process "update global" nil "global" "-u")
     (when create
       (let ((default-directory (read-directory-name "Source directory: ")))

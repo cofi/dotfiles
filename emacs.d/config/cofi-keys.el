@@ -6,7 +6,8 @@
 ;;; mode keymap
 (defkeymap cofi-minor-mode-map
   "c"   'cofi/cdlatex
-  "d"   'dedicated-mode
+  "d"   'rdictcc-tooltip-mode
+  "D"   'rdictcc-permanent-translation-mode
   "f"   'auto-fill-mode
   "g"   'glasses-mode
   "h"   'hs-minor-mode
@@ -18,8 +19,7 @@
   "r"   'auto-revert-mode
   "s"   'flyspell-mode
   "t"   'orgtbl-mode
-  "T"   'rdictcc-tooltip-mode
-  "C-t" 'rdictcc-permanent-translation-mode
+  "T"   'gtags-mode
   "v"   'visual-line-mode
   "w"   'whitespace-mode)
 

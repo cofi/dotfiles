@@ -210,9 +210,11 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                                 (error ad-do-it)))))
     (otherwise
      (let ((tag (symbol-name (symbol-at-point))))
-       (if (find-tag-noselect tag)
-           (find-tag tag)
-         ad-do-it)))))
+       (if (and (boundp 'gtags-mode) gtags-mode)
+           (gtags-goto-tag tag nil)
+         (if (and tags-file-name (find-tag-noselect tag))
+             (find-tag tag)
+           ad-do-it))))))
 
 (defun cofi/clear-empty-lines ()
   (let ((line (buffer-substring (point-at-bol) (point-at-eol))))

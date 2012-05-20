@@ -34,6 +34,10 @@
     (do ((w nil (split-window w 81 dir)))
         ((<= (window-width w) (* 2 81))))))
 
+(defun cofi/window-toggle-dedicate ()
+  (interactive)
+  (set-window-dedicated-p nil (not (window-dedicated-p nil))))
+
 (setq winner-dont-bind-my-keys t
       winner-boring-buffers '("*helm*"
                               "*helm buffers*"

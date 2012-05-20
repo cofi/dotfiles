@@ -270,13 +270,14 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (global-set-key (kbd "C-c w") evil-window-map)
 ;; Windowing
 (fill-keymap evil-window-map
+    "d" 'cofi/window-toggle-dedicate
     ;; Splitting
     "\\" 'split-window-vertically
     "|" 'split-window-horizontally
     "/" 'smart-split
 
     ;; Deleting
-    "d" 'delete-window
+    "D" 'delete-window
     "1" 'delete-other-windows
 
     ;; Sizing

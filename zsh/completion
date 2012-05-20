@@ -153,6 +153,8 @@ zstyle ':completion:*:man:*' separate-sections true
 # add gnu default completions
 compdef _gnu_generic ctags
 
+compdef g=git
+
 # automagic url quoter
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic

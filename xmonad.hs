@@ -346,6 +346,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , pep
                                                   , py
                                                   , nullege
+                                                  , lispdoc
                                                   , rtd
                                                   , S.youtube
                                                   , zdfMediathek
@@ -386,6 +387,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       rtd = S.searchEngine "rtd" "http://readthedocs.org/search/project/?q="
       py = S.searchEngineF "py" dopy
       nullege = S.searchEngine "null" "http://nullege.com/codes/search/"
+      lispdoc = S.searchEngine "ld" "http://lispdoc.com/?q="
       amazon = S.searchEngine "ama" "http://www.amazon.de/s/url=search-alias%3Daps&x=0&y=0&field-keywords="
       duden = S.searchEngine "duden" "http://www.duden.de/suchen/dudenonline/"
       sourceforge = S.searchEngine "sf" "http://sourceforge.net/search/?q="

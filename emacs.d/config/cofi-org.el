@@ -26,7 +26,8 @@
   "Visit agenda files.
 Note: This assumes all files are in the org-directory."
   (interactive (list (completing-read "Visit file: "
-                                    (mapcar 'file-name-nondirectory (org-agenda-files)))))
+                                    (mapcar 'file-name-nondirectory (org-agenda-files))
+                                    nil t)))
   (find-file (concat org-directory fname)))
 
 (defun cofi/helm-org-files ()

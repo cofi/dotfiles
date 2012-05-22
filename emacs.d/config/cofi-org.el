@@ -48,6 +48,16 @@ Note: This assumes all files are in the org-directory."
                                                  (end-of-line)
                                                  (org-meta-return))))
 
+(defun cofi/org-get-full-formatted-outline-path ()
+  (mapconcat #'identity (append
+                         (org-get-outline-path)
+                         (list (substring-no-properties (org-get-heading))))
+             " > "))
+
+(add-hook 'org-mode-hook (lambda ()
+                           (setq header-line-format
+                                 '((:eval (cofi/org-get-full-formatted-outline-path))))))
+
 ;; Agenda
 (setq org-agenda-skip-unavailable-files t
       org-agenda-skip-deadline-if-done t

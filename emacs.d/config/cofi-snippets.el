@@ -10,6 +10,7 @@
     (setq yas/indent-line 'fixed)
     (setq yas/fallback-behavior 'call-other-command)
     (setq yas/triggers-in-field t)
+    (setq yas/verbosity 2)
     (setq-default yas/trigger-key "SPC"))
 
 (define-key yas/minor-mode-map "\C-c&" nil)

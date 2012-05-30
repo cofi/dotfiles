@@ -260,21 +260,21 @@ Note: This assumes all files are in the org-directory."
                           "C-[" 'reftex-citation))
 
 (eval-after-load "org-latex"
-  '(pour-lists org-export-latex-classes
-               '(("koma-article"
-                  "\\documentclass[a4paper,10pt]{scrartcl}"
-                  ("\\section{%s}"       . "\\section*{%s}")
-                  ("\\subsection{%s}"    . "\\subsection*{%s}")
-                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                  ("\\paragraph{%s}"     . "\\paragraph*{%s}")
-                  ("\\subparagraph{%s}"  . "\\subparagraph*{%s}"))
-                 ("sig-alternate"
-                  "\\documentclass{sig-alternate}"
-                  ("\\section{%s}"       . "\\section*{%s}")
-                  ("\\subsection{%s}"    . "\\subsection*{%s}")
-                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                  ("\\paragraph{%s}"     . "\\paragraph*{%s}")
-                  ("\\subparagraph{%s}"  . "\\subparagraph*{%s}")))))
+  '(let ((sections '(("\\section{%s}"       . "\\section*{%s}")
+                     ("\\subsection{%s}"    . "\\subsection*{%s}")
+                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                     ("\\paragraph{%s}"     . "\\paragraph*{%s}")
+                     ("\\subparagraph{%s}"  . "\\subparagraph*{%s}"))))
+     (pour-lists org-export-latex-classes
+                 `(("koma-article"
+                    "\\documentclass[a4paper,10pt]{scrartcl}"
+                    ,@sections)
+                   ("sig-alternate"
+                    "\\documentclass{sig-alternate}"
+                    ,@sections)
+                   ("sig-strict"
+                    "\\documentclass{sig-strict}"
+                    ,@sections)))))
 
 (require 'org-protocol)
 

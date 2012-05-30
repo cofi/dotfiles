@@ -6,7 +6,7 @@
           (gen-local-fill-keymap-hook
               "<f12>" (cmd-arg (override-confirm) "P"
                         (TeX-command "latexmk" 'TeX-master-file override-confirm))
-              "C-<f12>" (cmd (TeX-command "View" 'TeX-master-file t))))
+              "C-<f12>" 'TeX-view))
 
 (setq reftex-plug-into-AUCTeX t)
 (setq reftex-bibliography-commands '("addbibresource" "bibliography"))

@@ -277,8 +277,9 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
     "/" 'smart-split
 
     ;; Deleting
-    "D" 'delete-window
-    "1" 'delete-other-windows
+    "D"   'delete-window
+    "C-d" 'delete-window
+    "1"   'delete-other-windows
 
     ;; Sizing
     "RET" 'enlarge-window

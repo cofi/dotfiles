@@ -131,7 +131,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              "C-y" 'yank
              "C-e" 'end-of-line)
 
-(fill-keymap evil-operator-state-map
+(fill-keymaps (list evil-operator-state-map
+                    evil-visual-state-map)
              ;; works like `t'
              "SPC"   'ace-jump-char-mode
              ;; works like `f'

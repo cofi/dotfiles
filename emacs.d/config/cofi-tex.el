@@ -9,10 +9,24 @@
               "C-<f12>" (cmd (TeX-command "View" 'TeX-master-file t))))
 
 (setq reftex-plug-into-AUCTeX t)
+(setq reftex-bibliography-commands '("addbibresource" "bibliography"))
+(setq reftex-cite-prompt-optional-args t)
+(setq reftex-cite-format '((?t . "\\textcite[]{%l}")
+                           (?a . "\\autocite[]{%l}")
+                           (?A . "\\citeauthor[]{%l}")
+                           (?c . "\\cite[]{%l}")
+                           (?s . "\\smartcite[]{%l}")
+                           (?f . "\\footcite[]{%l}")
+                           (?n . "\\nocite{%l}")
+                           (?b . "\\blockcquote[]{%l}{}")))
+
+(eval-after-load 'reftex-vars
+  '(setcdr (assoc 'caption reftex-default-context-regexps) "\\\\\\(rot\\|sub\\)?caption\\*?[[{]"))
+(add-hook 'LaTeX-mode-hook #'reftex-mode)
+
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")
                               'cdlatex-mode
                              'LaTeX-math-mode))
-(add-hook 'LaTeX-mode-hook #'reftex-mode)
 
 (setq TeX-auto-save t
       TeX-save-query nil

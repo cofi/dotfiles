@@ -22,6 +22,6 @@
            (concat "/" (mapconcat 'identity path "/")))))
 
      (eval-after-load "which-func"
-       '(pushnew nxml-which-xpath which-func-functions))))
+       '(pushnew #'nxml-which-xpath which-func-functions))))
 
 (provide 'cofi-xml)

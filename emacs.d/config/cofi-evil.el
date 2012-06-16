@@ -345,4 +345,36 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "l" 'magit-key-mode-popup-logging
   "h" 'magit-toggle-diff-refine-hunk)
 
+(defvar cofi/current-line 0
+  "Stores the current line before linum numbers the lines.")
+
+(defadvice linum-update (before set-current-line activate)
+  (setq cofi/current-line (line-number-at-pos)))
+
+(defun cofi/relative-line (line-number)
+  (propertize (format "%2d" (abs (- line-number cofi/current-line)))
+              'face 'linum))
+
+(defun cofi/evil-toggle-relative-lines ()
+  (if (eq linum-format #'cofi/relative-line)
+      (setq linum-format #'cofi/linum-dynamic-lines)
+    (setq linum-format #'cofi/relative-line))
+  (linum-update-current))
+
+(defface linum-current-line '((t (:bold t :background "#202020" :foreground "yellow")))
+  "Face linum uses for the current line"
+  :group 'linum)
+
+(defun cofi/linum-dynamic-lines (line-number)
+  (let ((width (ceiling (log (count-lines (point-min) (point-max)) 10))))
+    (propertize (format (format "%%%dd" width) line-number)
+                'face (if (= cofi/current-line line-number)
+                          'linum-current-line
+                        'linum))))
+
+(add-to-hooks #'cofi/evil-toggle-relative-lines '(evil-operator-state-entry-hook
+                                                  evil-operator-state-exit-hook))
+
+;;; TODO: Figure out how a fun can be run if emacs is waiting for more input
+
 (provide 'cofi-evil)

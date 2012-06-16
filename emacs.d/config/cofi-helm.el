@@ -34,6 +34,8 @@
       helm-allow-skipping-current-buffer nil
       helm-enable-shortcuts t)
 
+(setq helm-ff-transformer-show-only-basename nil)
+
 (setq helm-M-x-requires-pattern 0)
 
 (setq helm-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))

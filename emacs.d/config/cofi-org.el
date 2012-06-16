@@ -255,8 +255,6 @@ Note: This assumes all files are in the org-directory."
 (setq org-latex-to-pdf-process '("latexmk -bibtex -pdf %b"))
 
 (add-hook 'org-mode-hook 'reftex-mode)
-(add-hook 'org-mode-hook (gen-local-fill-keymap-hook
-                          "C-[" 'reftex-citation))
 
 (eval-after-load "org-latex"
   '(let ((sections '(("\\section{%s}"       . "\\section*{%s}")

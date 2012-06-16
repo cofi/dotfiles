@@ -22,6 +22,10 @@
 
 (eval-after-load 'reftex-vars
   '(setcdr (assoc 'caption reftex-default-context-regexps) "\\\\\\(rot\\|sub\\)?caption\\*?[[{]"))
+(eval-after-load 'reftex
+  '(progn
+     (define-key reftex-mode-map (kbd "C-c -") nil)))
+
 (add-hook 'LaTeX-mode-hook #'reftex-mode)
 
 (add-hook 'LaTeX-mode-hook (if (locate-library "cdlatex")

@@ -36,7 +36,8 @@
 
 (defun cofi/window-toggle-dedicate ()
   (interactive)
-  (set-window-dedicated-p nil (not (window-dedicated-p nil))))
+  (set-window-dedicated-p nil (not (window-dedicated-p)))
+  (message "Window is now %s" (if (window-dedicated-p) "dedicated" "undedicated")))
 
 (setq winner-dont-bind-my-keys t
       winner-boring-buffers '("*helm*"

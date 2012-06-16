@@ -6,7 +6,6 @@
 (setq org-modules '(org-bibtex org-docview org-gnus org-info org-w3m org-toc org-contacts))
 
 (require 'org-install)
-(require 'calfw-org)
 (require 'cofi-autoloads)
 
 (if (file-directory-p "~/Org")

@@ -276,9 +276,10 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (fill-keymap evil-window-map
     "d" 'cofi/window-toggle-dedicate
     ;; Splitting
+    "s" 'cofi/smart-split
     "\\" 'split-window-vertically
     "|" 'split-window-horizontally
-    "/" 'smart-split
+    "/" 'cofi/multi-split
 
     ;; Deleting
     "D"   'delete-window

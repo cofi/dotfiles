@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (autoload 'windmove-find-other-window "windmove")
 (defun swap-window (direction)
   "Swap current window with the one in `direction'."
@@ -24,15 +26,24 @@
 (defun swap-with-up () (interactive) (swap-window 'up))
 (defun swap-with-right () (interactive) (swap-window 'right))
 
-(defun smart-split (horizontal)
-  "Split the frame into 80-column sub-windows, and make sure no window has
+(let ((min-window-width (* 2 81)))
+  (defun cofi/multi-split (horizontal)
+    "Split the frame into 80-column sub-windows, and make sure no window has
    fewer than 80 columns."
-  (interactive "P")
-  (let ((dir (if horizontal
-                 'below
-               'right)))
-    (do ((w nil (split-window w 81 dir)))
-        ((<= (window-width w) (* 2 81))))))
+    (interactive "P")
+    (let ((dir (if horizontal
+                   'below
+                 'right)))
+      (do ((w nil (split-window w 81 dir)))
+          ((<= (window-width w) min-window-width)))))
+
+  (defun cofi/smart-split ()
+    "Split window vertically or horizontally in a smart way."
+    (interactive)
+    (if (or (< (frame-width) min-window-width)
+           (< (window-width) min-window-width))
+        (split-window-vertically)
+      (split-window-horizontally))))
 
 (defun cofi/window-toggle-dedicate ()
   (interactive)

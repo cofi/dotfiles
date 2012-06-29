@@ -132,6 +132,10 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-<D>", sendMessage $ IncreaseDown 10)
                  , ("M-C-<D>", sendMessage $ DecreaseDown 10)
 
+                 , ("M-C-1", screenWorkspace 0 >>= flip whenJust (windows . W.view))
+                 , ("M-C-2", screenWorkspace 1 >>= flip whenJust (windows . W.view))
+                 , ("M-C-3", screenWorkspace 2 >>= flip whenJust (windows . W.view))
+
                  , ("M-<Escape>", kill)
                  , ("M-S-<Escape>", kill1)
                  , ("M-c", windows copyToAll)

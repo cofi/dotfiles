@@ -119,7 +119,7 @@ CONTRIBS is a list of contrib packages to load."
     "Return the datestring of the latest entry in the ChangeLog file.
 Return nil if the ChangeLog file cannot be found."
     (interactive "p")
-    (let ((changelog (concat slime-path "ChangeLog"))
+    (let ((changelog (expand-file-name "ChangeLog" slime-path))
           (date nil))
       (when (file-exists-p changelog)
         (with-temp-buffer 
@@ -786,7 +786,7 @@ It should be used for \"background\" messages such as argument lists."
   "Return STRING truncated to fit in a single echo-area line."
   (substring string 0 (min (length string)
                            (or (position ?\n string) most-positive-fixnum)
-                           (1- (frame-width)))))
+                           (1- (window-width (minibuffer-window))))))
 
 ;; Interface
 (defun slime-set-truncate-lines ()
@@ -4297,6 +4297,13 @@ Use `slime-re-evaluate-defvar' if the from starts with '(defvar'"
    `(swank:interactive-eval-region 
      ,(buffer-substring-no-properties start end))))
 
+(defun slime-pprint-eval-region (start end)
+  "Evaluate region; pprint the value in a buffer."
+  (interactive "r")
+  (slime-eval-describe
+   `(swank:pprint-eval
+     ,(buffer-substring-no-properties start end))))
+
 (defun slime-eval-buffer ()
   "Evaluate the current buffer.
 The value is printed in the echo area."
@@ -4554,6 +4561,16 @@ If PACKAGE is NIL, then search in all packages."
     (error "No symbol given"))
   (slime-eval-describe `(swank:describe-function ,symbol-name)))
 
+(defface slime-apropos-symbol
+  '((t (:inherit bold)))
+  "Face for the symbol name in Apropos output."
+  :group 'slime)
+
+(defface slime-apropos-label
+  '((t (:inherit italic)))
+  "Face for label (`Function', `Variable' ...) in Apropos output."
+  :group 'slime)
+
 (defun slime-apropos-summary (string case-sensitive-p package only-external-p)
   "Return a short description for the performed apropos search."
   (concat (if case-sensitive-p "Case-sensitive " "")
@@ -4614,7 +4631,7 @@ With prefix argument include internal symbols."
   (dolist (plist plists)
     (let ((designator (plist-get plist :designator)))
       (assert designator)
-      (slime-insert-propertized `(face ,apropos-symbol-face) designator))
+      (slime-insert-propertized `(face slime-apropos-symbol) designator))
     (terpri)
     (loop for (prop namespace)
           in '((:variable "Variable")
@@ -4635,7 +4652,7 @@ With prefix argument include internal symbols."
                 (start (point)))
             (when value
               (princ "  ")
-              (slime-insert-propertized `(face ,apropos-label-face) namespace)
+              (slime-insert-propertized `(face slime-apropos-label) namespace)
               (princ ": ")
               (princ (etypecase value
                        (string value)
@@ -7149,6 +7166,7 @@ is setup, unless the user already set one explicitly."
        [ "Eval Last Expression"    slime-eval-last-expression ,C ]
        [ "Eval And Pretty-Print"   slime-pprint-eval-last-expression ,C ]
        [ "Eval Region"             slime-eval-region ,C ]
+       [ "Eval Region And Pretty-Print" slime-pprint-eval-region ,C ]
        [ "Interactive Eval..."     slime-interactive-eval ,C ]
        [ "Edit Lisp Value..."      slime-edit-value ,C ]
        [ "Call Defun"              slime-call-defun ,C ])
@@ -8285,7 +8303,7 @@ the buffer's undo-list."
   (undo-boundary)
   (call-interactively name))
 
-(def-slime-test macroexpand 
+(def-slime-test macroexpand
     (macro-defs bufcontent expansion1 search-str expansion2)
     "foo"
     '((("(defmacro qwertz (&body body) `(list :qwertz ',body))"
@@ -8298,33 +8316,41 @@ the buffer's undo-list."
   (setq slime-buffer-package ":swank")
   (with-temp-buffer
     (lisp-mode)
-    (dolist (def macro-defs) 
+    (dolist (def macro-defs)
       (slime-compile-string def 0)
       (slime-sync-to-top-level 5))
     (insert bufcontent)
     (goto-char (point-min))
     (slime-execute-as-command 'slime-macroexpand-1)
-    (slime-wait-condition "Macroexpansion buffer visible" 
-                          (lambda () 
-                            (slime-buffer-visible-p 
+    (slime-wait-condition "Macroexpansion buffer visible"
+                          (lambda ()
+                            (slime-buffer-visible-p
                              (slime-buffer-name :macroexpansion)))
                           5)
     (with-current-buffer (get-buffer (slime-buffer-name :macroexpansion))
       (slime-test-expect "Initial macroexpansion is correct"
-                         expansion1 
-                         (downcase (buffer-string)))
+                         expansion1
+                         (downcase (buffer-string))
+                         #'slime-test-macroexpansion=)
       (search-forward search-str)
       (backward-up-list)
       (slime-execute-as-command 'slime-macroexpand-1-inplace)
       (slime-sync-to-top-level 3)
       (slime-test-expect "In-place macroexpansion is correct"
-                         expansion2 
-                         (downcase (buffer-string)))
+                         expansion2
+                         (downcase (buffer-string))
+                         #'slime-test-macroexpansion=)
       (slime-execute-as-command 'slime-macroexpand-undo)
       (slime-test-expect "Expansion after undo is correct"
                          expansion1
-                         (downcase (buffer-string)))))
+                         (downcase (buffer-string))
+                         #'slime-test-macroexpansion=)))
     (setq slime-buffer-package ":cl-user"))
+
+(defun slime-test-macroexpansion= (string1 string2)
+  (let ((string1 (replace-regexp-in-string " *\n *" " " string1))
+        (string2 (replace-regexp-in-string " *\n *" " " string2)))
+    (equal string1 string2)))
 
 (def-slime-test indentation (buffer-content point-markers)
         "Check indentation update to work correctly."
@@ -8507,7 +8533,18 @@ CONTINUES  ... how often the continue restart should be invoked"
     (slime-check "Debugger closed" (slime-sldb-level= nil)))
   (slime-sync-to-top-level 8))
 
-;;; FIXME: reconnection is broken since the recent io-redirection changes.    
+(def-slime-test sbcl-world-lock
+    (n delay)
+    "Print something inside WITH-COMPILATION-UNIT.
+In SBCL, WITH-COMPILATION-UNIT grabs the world lock and this tests that
+we can grab it recursivly."
+    '((10 0.03))
+  (slime-test-expect "no error"
+                     t
+                     (slime-eval `(cl:with-compilation-unit ()
+                                    (swank:flow-control-test ,n ,delay)
+                                    t))))
+
 (def-slime-test (disconnect-one-connection (:style :spawn)) ()
     "`slime-disconnect' should disconnect only the current connection"
     '(())

@@ -1,3 +1,96 @@
+2012-06-19  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-ecl.lisp (wait-for-input): Provide implementation
+	that doesn't need serve-event.
+
+2012-06-12  Stas Boukarev  <stassats@gmail.com>
+
+	* slime.el (slime-changelog-date): Use
+	(expand-file-name "ChangeLog" slime-path) instead of
+	(concat slime-path "ChangeLog"), slime-path may not have a
+	trailing /.
+	Reported by Paul Sexton (lp#1011935).
+
+2012-05-25  Stas Boukarev  <stassats@gmail.com>
+
+	* slime.el (slime-oneliner): Use minibuffer width instead of the
+	width of the current frame, minibuffer can be in a separate frame
+	with a different width.
+	Patch by Greg Pfeil (lp#1004252).
+
+2012-05-21  Helmut Eller  <heller@common-lisp.net>
+
+	Reduce dependecy on pre-defined faces.
+
+	* slime.el (slime-apropos-symbol, slime-apropos-label): New faces.
+	(slime-print-apropos): Use them.
+
+	Reported by: Daimrod <daimrod@gmail.com>
+
+2012-05-12  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (stream-force-output): Undo last few changes.
+
+2012-05-11  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (stream-force-output): Use with-world-lock
+	i.e. with-recursive-lock instead of with-mutex.
+	* slime.el (sbcl-world-lock): New test.
+
+2012-05-11  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (stream-force-output): Don't use
+	with-deadline. Grab the world-lock instead.
+	(condition-timed-wait): Use the :timeout argument for real.
+
+2012-05-11  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-backend.lisp (call-with-io-timeout): Not used. Deleted.
+	* swank-sbcl.lisp (call-with-io-timeout): Deleted.
+
+2012-05-07  Helmut Eller  <heller@common-lisp.net>
+
+	Ignore linebreaks for the macroexpand test.
+	SBCL should now also pass it.
+
+	* slime.el (slime-test-macroexpansion=): New function.
+	([test] macroexpand): Use it.
+
+2012-05-06  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (condition-timed-wait): Undo previous change.
+	The :timeout arg doesn't seem ready for production use.
+
+2012-05-06  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (condition-timed-wait): Use the :timeout
+	argument of sb-thread:condition-wait if supported.
+
+
+2012-05-06  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (with-definition-source): Forgot to commit this
+	one.
+
+	* swank-allegro.lisp (string-to-utf8): Set the :null-terminate
+	argument of excl:string-to-octets to nil.
+
+2012-05-06  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-backend.lisp (with-struct): Undo damage.
+	* swank-sbcl.lisp (with-definition-source): New macro.
+
+2012-05-06  Helmut Eller  <heller@common-lisp.net>
+
+	* swank.lisp, swank-rpc.lisp: iso-8859-1 is not same as
+	latin-1-unix.
+
+2012-05-06  Cyrus Harmon <ch-slime@bobobeach.com>
+	    Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (slime-pprint-eval-region): New command. No keybinding
+	though.
+
 2012-05-04  Nikodemus Siivola  <nikodemus@random-state.net>
 
 	* swank-sbcl.lisp: Remove the SB-C::MERGE-TAIL-CALLS proclamation.

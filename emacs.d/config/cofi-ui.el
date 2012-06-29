@@ -141,8 +141,18 @@
 (setq browse-url-browser-function '(("hyperspec" . w3m-browse-url)
                                     ("."         . browse-url-firefox)))
 ;; Spelling ====================
-(setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra" "--run-together"))
+(setq ispell-program-name "hunspell"
+      ispell-silently-savep t
+      ispell-local-dictionary-alist (let ((dicts '((nil "A-Za-z" "en_US")
+                                                   ("default" "A-Za-z" "en_US")
+                                                   ("english" "A-Za-z" "en_US")
+                                                   ("british" "A-Za-z" "en_GB")
+                                                   ("german" "A-ZÄÖÜa-zäöüß" "en_GB"))))
+                                      (loop for (name chars dict) in dicts
+                                            collect `(,name
+                                                      ,(format "[%s]" chars)
+                                                      ,(format "[^%s]" chars)
+                                                      "[']" t ("-d" ,dict) nil utf-8))))
 ;;; ========================================
 
 ;; tab settings

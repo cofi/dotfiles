@@ -340,6 +340,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , urbanDictionary
                                                   , dict
                                                   , leo
+                                                  , thesaurus
                                                   , S.maps
                                                   , images
                                                   , pypi
@@ -394,6 +395,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       scholar = S.searchEngine "scholar" "https://scholar.google.de/scholar?q="
       acm = S.searchEngine "acm" "https://dl.acm.org/results.cfm?query="
       ieee= S.searchEngine "ieee" "http://ieeexplore.ieee.org/search/searchresult.jsp?queryText="
+      thesaurus = S.searchEngine "th" "http://thesaurus.com/browse/"
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
 

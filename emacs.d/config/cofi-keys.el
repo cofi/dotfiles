@@ -19,6 +19,7 @@
   "P"   'pretty-mode
   "r"   'auto-revert-mode
   "s"   'flyspell-mode
+  "S"   'flyspell-prog-mode
   "t"   'orgtbl-mode
   "T"   'gtags-mode
   "v"   'visual-line-mode
@@ -203,7 +204,8 @@
 
 (global-set-key [remap move-beginning-of-line] 'cofi-dwim-bol)
 
-(provide 'cofi-keys)
 (defkeymap flyspell-mode-map
   "M-n"       'flyspell-goto-next-error
   "C-M-<tab>" 'cofi/helm-flyspell-correct)
+
+(provide 'cofi-keys)

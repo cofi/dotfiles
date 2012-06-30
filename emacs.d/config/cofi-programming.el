@@ -10,18 +10,18 @@
                           java-mode-hook
                           ))
 
-(mapc 'load '(
-              "cofi-cedet"
-              "cofi-markers"
-              "cofi-flymake"
-              "cofi-haskell"
-              "cofi-lisp"
-              "cofi-python"
-              "cofi-tags"
-              "cofi-tex"
-              "cofi-c"
-              "cofi-java"
-              "cofi-xml"
+(mapc 'require '(
+              cofi-cedet
+              cofi-markers
+              cofi-flymake
+              cofi-haskell
+              cofi-lisp
+              cofi-python
+              cofi-tags
+              cofi-tex
+              cofi-c
+              cofi-java
+              cofi-xml
               ))
 
 (defun cofi/close-after-successful-compilation (buffer desc)

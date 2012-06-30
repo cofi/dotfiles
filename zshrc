@@ -25,7 +25,7 @@ zmodload -i zsh/complist
 setopt correct no_correct_all
 #Do hashing
 setopt hash_cmds hash_dirs hash_list_all
-unset print_exit_value
+unsetopt print_exit_value
 #dont wait or ask when `rm *`
 setopt no_rm_star_wait rm_star_silent
 setopt short_loops
@@ -34,7 +34,7 @@ setopt short_loops
 setopt brace_ccl brace_expand
 setopt equals
 setopt rc_expand_param
-unset magic_equal_subst mark_dirs nomatch sh_glob
+unsetopt magic_equal_subst mark_dirs nomatch sh_glob
 
 ### history options
 setopt append_history

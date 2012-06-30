@@ -185,6 +185,10 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
         programBindings = prefixKeymap "M-o" [ ("m", spawn "smplayer")
                                              , ("t", spawn "tome")
                                              , ("w", spawn "wesnoth")
+                                             , ("d", spawn "dolphin")
+                                             , ("o", spawn "okular")
+                                             , ("c", spawn "calibre")
+                                             , ("a", spawn "amarok")
                                              ]
 
 -- PrettyPrinter ----------------------------------------

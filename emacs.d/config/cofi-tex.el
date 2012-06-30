@@ -1,5 +1,5 @@
 (eval-after-load "tex"
-  '(push '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t :help "Run Latexmk on file")
+  '(push '("latexmk" "latexmk -pdf %t" TeX-run-TeX nil t :help "Run Latexmk on file")
          TeX-command-list))
 
 (add-hook 'LaTeX-mode-hook

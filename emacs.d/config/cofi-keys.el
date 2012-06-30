@@ -2,6 +2,7 @@
 (require 'cofi-autoloads)
 (require 'cofi-windowing)
 (require 'cofi-org)
+(require 'cofi-helm)
 
 ;;; mode keymap
 (defkeymap cofi-minor-mode-map
@@ -203,3 +204,6 @@
 (global-set-key [remap move-beginning-of-line] 'cofi-dwim-bol)
 
 (provide 'cofi-keys)
+(defkeymap flyspell-mode-map
+  "M-n"       'flyspell-goto-next-error
+  "C-M-<tab>" 'cofi/helm-flyspell-correct)

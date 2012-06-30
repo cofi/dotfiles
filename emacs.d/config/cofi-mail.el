@@ -4,6 +4,9 @@
 ;;; offlineimap
 (setq offlineimap-command "offlineimap -u MachineUI")
 
+(on-mail-instance
+ (run-with-timer (* 60 10) (* 60 10) #'offlineimap))
+
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"
   (interactive)

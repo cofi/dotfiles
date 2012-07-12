@@ -14,6 +14,10 @@
              (pysmell-get-all-completions))))
       "Source for PySmell")
 
+    ;; override original faulting fun
+    (defun ac-yasnippet-candidates ()
+      (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas/get-snippet-tables))))
+
     (setq ac-fuzzy-enable t)
     (setq-default ac-auto-start 2)
     (fill-keymap ac-complete-mode-map

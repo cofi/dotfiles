@@ -373,6 +373,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                           'linum-current-line
                         'linum))))
 
+(setq linum-format #'cofi/linum-dynamic-lines)
 (add-to-hooks #'cofi/evil-toggle-relative-lines '(evil-operator-state-entry-hook
                                                   evil-operator-state-exit-hook))
 

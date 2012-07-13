@@ -37,6 +37,7 @@ Note: This assumes all files are in the org-directory."
                          "*helm org*"))
 
 (add-hook 'org-mode-hook (lambda () (org-display-inline-images t)))
+(add-hook 'org-mode-hook #'visual-line-mode)
 (add-hook 'org-mode-hook
           (gen-local-fill-keymap-hook
                                 "M-n" 'outline-next-visible-heading

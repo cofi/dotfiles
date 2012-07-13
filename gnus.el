@@ -161,3 +161,5 @@
                                        (x-urgency-hint (selected-frame) t)
                                        (gnus-desktop-notify-send groups)))
   (gnus-desktop-notify-mode))
+
+(setq gnus-check-new-newsgroups nil)

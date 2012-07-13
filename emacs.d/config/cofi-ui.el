@@ -147,7 +147,8 @@
                                                    ("default" "A-Za-z" "en_US")
                                                    ("english" "A-Za-z" "en_US")
                                                    ("british" "A-Za-z" "en_GB")
-                                                   ("german" "A-ZÄÖÜa-zäöüß" "en_GB"))))
+                                                   ("german" "A-ZÄÖÜa-zäöüß" "de_DE")
+                                                   ("deutsch" "A-ZÄÖÜa-zäöüß" "de_DE"))))
                                       (loop for (name chars dict) in dicts
                                             collect `(,name
                                                       ,(format "[%s]" chars)

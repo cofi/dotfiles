@@ -11,6 +11,26 @@
       '((depends . pysmell)
         (candidates . pysmell-get-all-completions)))
 
+    (defun ac-org-contacts-candidates ()
+      (loop for (name _ properties) in (org-contacts-filter)
+            for email = (cdr (assoc org-contacts-email-property properties))
+            when email
+            collect (format "%s <%s>" (org-no-properties name) email)))
+
+    (defun ac-email-prefix ()
+      (when (save-excursion (re-search-backward "^\\(?:To\\|Cc\\|Bcc\\): \\(.*\\)" nil t))
+        (let ((simple-match-point (match-beginning 1)))
+          ;; check for multiple addresses
+          (if (re-search-backward ", \\(.*\\)" simple-match-point t)
+              (match-beginning 1)
+            simple-match-point))))
+
+    (ac-define-source org-contacts
+      '((depends . org-contacts)
+        (candidates . ac-org-contacts-candidates)
+        (prefix . ac-email-prefix)
+        (cache . t)))
+
     ;; override original faulting fun
     (defun ac-yasnippet-candidates ()
       (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas/get-snippet-tables))))
@@ -35,6 +55,7 @@
             latex-mode
             text-mode
             org-mode
+            message-mode
             ))
 
     (defvar cofi/ac-base-sources '(ac-source-semantic
@@ -61,7 +82,10 @@
         (java-mode       . (ac-source-words-in-buffer
                             ac-source-eclim))
         (html-mode       . (ac-source-words-in-buffer
-                            ac-source-css-property))))
+                            ac-source-css-property))
+        (message-mode    . (ac-source-words-in-buffer
+                            ac-source-org-contacts))
+        ))
 
     (defvar cofi/ac-mode-aliases
       '(((inferior-emacs-lisp-mode lisp-interaction-mode) . emacs-lisp-mode)

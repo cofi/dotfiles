@@ -321,4 +321,8 @@ Fill new sentence unless called with prefix or was at eol."
             (delete-trailing-whitespace bol (point))))
       (newline))))
 
+(defun kill-current-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+
 (provide 'cofi-func)

@@ -138,8 +138,8 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-(setq browse-url-browser-function '(("hyperspec" . w3m-browse-url)
-                                    ("."         . browse-url-firefox)))
+(setq browse-url-browser-function '(("/usr/share/doc/hyperspec" . w3m-browse-url)
+                                    ("."                        . browse-url-firefox)))
 ;; Spelling ====================
 (setq ispell-program-name "hunspell"
       ispell-silently-savep t

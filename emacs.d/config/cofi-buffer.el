@@ -126,7 +126,7 @@ Diffs prefix-1 marked buffer with prefix buffer."
                                                 (cond
                                                  ((string= unit "k") (* (expt 10 3) (read num)))
                                                  ((string= unit "M") (* (expt 10 6) (read num)))
-                                                 (t (read size)))))
+                                                 (t (string-to-int size)))))
                                             sizes))
                                 (float (expt 10 6))))))
   (let ((size (buffer-size))

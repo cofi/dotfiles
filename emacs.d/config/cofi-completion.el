@@ -18,8 +18,11 @@
     (defun ac-yasnippet-candidates ()
       (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas/get-snippet-tables))))
 
-    (setq ac-fuzzy-enable t)
-    (setq-default ac-auto-start 2)
+    (setq ac-fuzzy-enable t
+          ac-auto-start 2
+          ac-delay 0.05
+          ac-quick-help-delay 1)
+
     (fill-keymap ac-complete-mode-map
                  "C-l" 'ac-expand-common
                  "C-j" 'ac-next

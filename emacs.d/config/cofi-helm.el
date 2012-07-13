@@ -38,6 +38,9 @@
 
 (setq helm-M-x-requires-pattern 0)
 
+(on-full-instance
+ (run-with-timer 10 1800  #'start-process "updatedb" "*updatedb*" "python" (expand-file-name "~/dev/updatedb.py")))
+
 (setq helm-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
 
 (setq helm-c-default-info-index-list '("ansicl" "elisp" "cl" "org" "gnus" "tramp" "stumpwm"

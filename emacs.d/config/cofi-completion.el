@@ -7,12 +7,9 @@
     (add-hook 'LaTeX-mode-hook #'ac-l-setup)
     (require 'ac-slime)
 
-    (defvar ac-source-pysmell
-      '((candidates
-         . (lambda ()
-             (require 'pysmell)
-             (pysmell-get-all-completions))))
-      "Source for PySmell")
+    (ac-define-source pysmell
+      '((depends . pysmell)
+        (candidates . pysmell-get-all-completions)))
 
     ;; override original faulting fun
     (defun ac-yasnippet-candidates ()

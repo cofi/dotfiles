@@ -84,11 +84,15 @@
 (defun ac-ropemacs-document (name)
   (assoc-default name ac-ropemacs-docs))
 
+(defun ac-ropemacs-available ()
+  (locate-dominating-file buffer-file-name ".rope"))
+
 (ac-define-source nropemacs
   '((candidates . ac-ropemacs-candidates)
     (symbol     . "p")
     (document   . ac-ropemacs-document)
-    (cache      . t)))
+    (cache      . t)
+    (available .  ac-ropemacs-available)))
 
 (ac-define-source nropemacs-dot
   '((candidates . ac-ropemacs-candidates)
@@ -96,7 +100,8 @@
     (document   . ac-ropemacs-document)
     (cache      . t)
     (prefix     . c-dot)
-    (requires   . 0)))
+    (requires   . 0)
+    (available . ac-ropemacs-available)))
 
 (add-all-to-hook 'python-mode-hook
                  #'autopair-mode

@@ -37,7 +37,7 @@
 
     (setq ac-fuzzy-enable t
           ac-auto-start 2
-          ac-delay 0.05
+          ac-auto-show-menu t
           ac-quick-help-delay 1)
 
     (fill-keymap ac-complete-mode-map

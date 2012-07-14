@@ -57,7 +57,7 @@
       slime-repl-history-remove-duplicates t)
 
 ;;; spare me this fasl
-(let ((fasl-dir (expand-file-name "~/tmp/slime-fasls")))
+(let ((fasl-dir (expand-file-name "~/tmp/slime-fasls/")))
   (make-directory fasl-dir t)
   (setq slime-compile-file-options `(:fasl-directory ,fasl-dir)))
 

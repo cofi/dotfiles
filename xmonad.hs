@@ -135,6 +135,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-C-1", screenWorkspace 0 >>= flip whenJust (windows . W.view))
                  , ("M-C-2", screenWorkspace 1 >>= flip whenJust (windows . W.view))
                  , ("M-C-3", screenWorkspace 2 >>= flip whenJust (windows . W.view))
+                 , ("M-d", spawn "disper -C")
 
                  , ("M-<Escape>", kill)
                  , ("M-S-<Escape>", kill1)

@@ -99,4 +99,16 @@
         (slime-connect slime-lisp-host port))
     (error "Not connected")))
 
+(defslime-repl-shortcut slime-quickload ("quickload" "ql")
+  (:handler #'cofi/slime-repl-quickload)
+  (:one-liner "Load system from quickload distribution"))
+
+(defun cofi/slime-repl-quickload ()
+  (interactive)
+  (let ((system-name (completing-read "System: " (slime-eval '(cl:mapcar 'ql-dist:system-file-name
+                                                                         (ql:system-list)))
+                                      nil t)))
+    (slime-eval-async `(cl:progn (ql:quickload ,system-name)
+                                 (cl:format t "; Loaded system \"~A\".~%" ,system-name)))))
+
 (provide 'cofi-lisp)

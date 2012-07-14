@@ -139,6 +139,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
 
                  , ("M-<Escape>", kill)
                  , ("M-S-<Escape>", kill1)
+                 , ("M-C-<Escape>", spawn "xkill")
                  , ("M-c", windows copyToAll)
                  , ("M-S-c", killAllOtherCopies)
                  , ("M-C-d", removeWorkspace)

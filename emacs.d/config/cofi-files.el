@@ -92,8 +92,8 @@
 ;;; ========================================
 ;;; backups & autosave
 (setq backup-directory-alist `(("" . ,(cofi/var-file "emacs/backups"))))
-(setq auto-save-default nil
-      auto-save-list-file-prefix (cofi/var-file "emacs/auto-save-list/save-"))
+(add-hook 'find-file-hook 'auto-save-mode)
+(setq auto-save-timeout 20)
 ;;; ========================================
 ;;; recent files ====================
 (setq recentf-auto-cleanup 'never)

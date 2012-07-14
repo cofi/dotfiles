@@ -9,7 +9,6 @@
 
 ;;; idle
 (setq semantic-idle-scheduler-idle-time 1)
-(global-semantic-idle-completions-mode 1)
 (setq semantic-idle-work-parse-neighboring-files-flag t)
 
 ;;; decoration

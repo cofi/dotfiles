@@ -69,16 +69,24 @@
            ("Emacs" (name . "^\\*.*\\*$"))
            )
           ("projects"
-           ("BP"
-            (filename . "Uni/Bp"))
+           ("Thesis"
+            (filename . "Uni/thesis"))
+           ("Evil"
+            (filename . "Projects/evil"))
+           ("PDictCC"
+            (filename . "Projects/pdictcc"))
            ("Python Tutorial"
-            (filename . "~/Projects/py-tutorial/"))
+            (filename . "Projects/py-tutorial/"))
            ("Python Insider"
             (or
-             (filename . "~/Projects/python-insider")
-             (filename . "~/Projects/python-insider-en/")))
+             (filename . "Projects/python-insider")
+             (filename . "Projects/python-insider-en/")))
+           ("Misc. Projects"
+            (filename . "Projects/"))
+           ("Dev"
+            (filename . "~/dev/"))
            ("Uni"
-            (filename . "Uni/Bp"))
+            (filename . "Uni/"))
            )))
 
   (require-and-exec 'ibuffer-git

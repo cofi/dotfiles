@@ -72,6 +72,7 @@
 ;; hide citations
 (setq gnus-treat-hide-citation t
       gnus-cited-lines-visible '(2 . 5))
+(setq gnus-cited-closed-text-button-line-format "%(%{[%n lines snipped]%}%)\n")
 ;; fill long lines on first part or text/plain
 (setq gnus-treat-fill-long-lines '(or first (typep "text/plain")))
 

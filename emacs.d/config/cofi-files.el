@@ -74,17 +74,15 @@
 (setq require-final-newline t)
 
 
-(defalias 'cofi/file 'ido-find-file)
-(defalias 'cofi/buffer-alternate 'ido-switch-buffer)
-
 (require 'cofi-helm)
-(if (featurep 'helm-config)
-    (progn
-      (defalias 'cofi/buffer 'cofi/helm-buffers)
-      (defalias 'cofi/file-alternate 'helm-find-files))
-  (defalias 'cofi/buffer 'ido-switch-buffer)
-  (defalias 'cofi/file-alternate 'ido-find-file))
-
+(defalias 'cofi/file (f-alt 'helm-find-files
+                            'ido-find-file))
+(defalias 'cofi/file-alternate (f-alt 'ido-find-file
+                                      'helm-find-files))
+(defalias 'cofi/buffer (f-alt 'cofi/helm-buffers
+                              'ido-switch-buffer))
+(defalias 'cofi/buffer-alternate (f-alt 'ido-switch-buffer
+                                        'cofi/helm-buffers))
 ;; bookmarks ==============================
 (setq bookmark-default-file "~/var/emacs/bookmarks"
       bmkp-bmenu-commands-file "~/var/emacs/bmkp-bmenu-commands.el"

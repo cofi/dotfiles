@@ -52,11 +52,12 @@
 (setq gnus-add-to-list t)
 
 (setq gnus-gcc-mark-as-read t)
+(setq gnus-group-line-format "%M%S%p%P%5y[%T]:%B%(%G%)\n")
 ;;; fancy summary
-(setq gnus-summary-line-format "%U|%R|%z|%ur|%(%-20&user-date;|%-30B%[%5L: %-40f%] %s%)\n")
+(setq gnus-summary-line-format "%U|%R|%z|%ur|%(%-20&user-date;|%-30B%[%5L: %-40n%] %s%)\n")
 (setq gnus-summary-make-false-root 'dummy
       gnus-sum-thread-tree-false-root      "┈─►"
-      gnus-sum-thread-tree-single-indent   "●   "
+      gnus-sum-thread-tree-single-indent   "◈   "
       gnus-sum-thread-tree-root            "●   "
       gnus-sum-thread-tree-vertical        "│   "
       gnus-sum-thread-tree-leaf-with-other "├─►"

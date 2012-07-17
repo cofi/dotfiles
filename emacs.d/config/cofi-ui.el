@@ -140,22 +140,6 @@
 
 (setq browse-url-browser-function '(("/usr/share/doc/hyperspec" . w3m-browse-url)
                                     ("."                        . browse-url-firefox)))
-;; Spelling ====================
-(setq ispell-program-name "hunspell"
-      ispell-silently-savep t
-      ispell-local-dictionary-alist (let ((dicts '((nil "A-Za-z" "en_US")
-                                                   ("default" "A-Za-z" "en_US")
-                                                   ("english" "A-Za-z" "en_US")
-                                                   ("british" "A-Za-z" "en_GB")
-                                                   ("german" "A-ZÄÖÜa-zäöüß" "de_DE")
-                                                   ("deutsch" "A-ZÄÖÜa-zäöüß" "de_DE"))))
-                                      (loop for (name chars dict) in dicts
-                                            collect `(,name
-                                                      ,(format "[%s]" chars)
-                                                      ,(format "[^%s]" chars)
-                                                      "[']" t ("-d" ,dict) nil utf-8))))
-;;; ========================================
-
 ;; tab settings
 (setq-default tab-stop-list (range 4 160 4)
               indent-tabs-mode nil     ; no nasty tabs i say!
@@ -243,10 +227,6 @@ Intended as `kill-buffer-query-functions' fun."
   (not (string= "*scratch*" (buffer-name))))
 
 (push #'save-a-scratch kill-buffer-query-functions)
-;;; ==============================
-;;; input method ====================
-(setq default-input-method 'german-postfix)
-;;; C-x m i to toggle input-method, see cofi-keys.el
 ;;; ==============================
 
 ;;; use same colors in ansi-term as in term

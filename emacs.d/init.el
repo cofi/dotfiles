@@ -91,7 +91,6 @@
                                  cofi-func
                                  cofi-keys
                                  cofi-mail
-                                 cofi-markup
                                  cofi-project
                                  cofi-snippets
                                  cofi-ui
@@ -102,6 +101,7 @@
                                  cofi-completion))
 (defvar cofi/full-settings '(cofi-programming
                              ))
+                                 cofi-write
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
 (defvar cofi/mail-instance nil "This is an email instance.")

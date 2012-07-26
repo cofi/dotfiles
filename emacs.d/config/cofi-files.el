@@ -46,6 +46,7 @@
 ;;; Dired ==============================
 (setq dired-recursive-copies 'always
       dired-dwim-target t
+      dired-listing-switches "-alh"
       wdired-allow-to-change-permissions t)
 (defvar cofi/dired-find-file-external-program "kde-open")
 (defun cofi/dired-find-file-external ()

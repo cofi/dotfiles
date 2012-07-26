@@ -62,7 +62,7 @@
                             "C-<return>" #'cofi/dired-find-file-external))
 
 (add-hook 'dired-mode-hook (lambda ()
-                             (when cofi/mail-instance
+                             (on-mail-instance
                                (turn-on-gnus-dired-mode))))
 ;;; ========================================
 

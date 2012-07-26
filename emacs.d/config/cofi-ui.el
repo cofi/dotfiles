@@ -93,7 +93,6 @@
 (setq-default major-mode 'text-mode)
 (setq-default cursor-type 'bar)
 
-(setq compilation-scroll-output 'first-error)
 (setq font-lock-verbose nil)
 ;; ==================================================
 

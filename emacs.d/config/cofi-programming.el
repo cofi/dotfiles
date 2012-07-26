@@ -34,4 +34,7 @@
 
 (push 'cofi/close-after-successful-compilation compilation-finish-functions)
 
+(setq compilation-auto-jump-to-first-error t
+      compilation-scroll-output 'first-error)
+
 (provide 'cofi-programming)

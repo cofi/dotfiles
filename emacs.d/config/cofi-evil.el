@@ -317,6 +317,13 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (evil-define-key 'insert message-mode-map
   (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 
+(defadvice ace-jump-word-mode (before evil-jump activate)
+  (push (point) evil-jump-list))
+(defadvice ace-jump-char-mode (before evil-jump activate)
+  (push (point) evil-jump-list))
+(defadvice ace-jump-line-mode (before evil-jump activate)
+  (push (point) evil-jump-list))
+
 ;; make ace jump look like a single command to evil
 (defadvice ace-jump-word-mode (after evil activate)
   (recursive-edit))

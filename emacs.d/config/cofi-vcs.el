@@ -8,6 +8,7 @@
 (cofi/set-key 'global "C-c g" 'magit-status)
 (setq magit-commit-signoff t
       magit-completing-read-function 'magit-ido-completing-read
+      magit-remote-ref-format 'remote-slash-name
       magit-commit-all-when-nothing-staged nil)
 (add-hook 'magit-commit-mode-hook 'visual-line-mode)
 

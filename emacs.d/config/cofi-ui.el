@@ -48,6 +48,8 @@
 
 (setq comment-style 'align)
 
+(setq x-select-enable-primary t)
+
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
 ;;; Use string syntax for re-builder

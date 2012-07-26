@@ -107,7 +107,8 @@ Note: This assumes all files are in the org-directory."
 
 (setq org-google-weather-format "%L: %i %c, %l-%h %s")
 
-(setq org-footnote-auto-label 'plain)
+(setq org-footnote-auto-label 'plain
+      org-footnote-auto-adjust t)
 
 (setq org-special-ctrl-a/e t)
 

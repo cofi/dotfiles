@@ -7,21 +7,6 @@
 ;; ==================================================
 
 ;; other packages ========================================
-(require-and-exec 'diminish
-  (loop for (file mode lighter) in '(("yasnippet" 'yas/minor-mode " Y")
-                                     ("autopair" 'autopair-mode " p")
-                                     ("eldoc" 'eldoc-mode " elD")
-                                     ("highlight-parentheses" 'highlight-parentheses-mode)
-                                     ("undo-tree" 'undo-tree-mode)
-                                     ("paredit" 'paredit-mode " pE"))
-        do
-        (eval-after-load file
-             `(diminish ,mode ,lighter))))
-
-(require-and-exec 'sml-modeline
-                  (setq sml-modeline-len  8)
-                  (sml-modeline-mode 1))
-
 (setq hl-paren-colors '("#9C0F0F" "#BF0303" "#E20800" "#E85752" "#F08682" "#F9CCCA"))
 (require-and-exec 'highlight-parentheses
                   (add-hook 'find-file-hook 'highlight-parentheses-mode))
@@ -53,70 +38,11 @@
 ;; ==================================================
 
 ;; Settings ========================================
-(setq display-time-24hr-format t
-      display-time-format "%H:%M %d.%m"
-      display-time-mail-file 'none
-      display-time-default-load-average nil)
-
 (setq frame-title-format "emacs %b - <%f>"
       icon-title-format "emacs %b")
 
-(setq global-mode-string '("" display-time-string
-                           battery-mode-line-string
-                           appt-mode-string))
-
-(setq eol-mnemonic-dos "W"
-      eol-mnemonic-mac "M"
-      eol-mnemonic-unix "U"
-      eol-mnemonic-undecided "-")
-
 ;; no, my sentences don't end with two instead of one space
 (setq sentence-end-double-space nil)
-
-(setq-default mode-line-format
-              `(
-                (evil-mode ("" evil-mode-line-tag))
-                " "
-                ;; buffer name and file name as help
-                (:propertize "%b " face mode-line-buffer
-                             help-echo (buffer-file-name))
-                ;; coding and line ends
-                mode-line-mule-info
-                ;; buffer modified
-                "%*"
-                ;; appt
-                appt-mode-string
-                " "
-                ;; sml modeline
-                (sml-modeline-mode (:eval (list (sml-modeline-create))))
-                ;; workgroup
-                (wg-mode-line-on (:eval (wg-mode-line-string)))
-                ;; line and column
-                "<%l,%c>"
-                (cofi/mail-instance (:eval (offlineimap-mode-line)))
-                " "
-                ;; recursive edit
-                "%[("
-                ;; major mode
-                (:propertize ("" mode-name)
-                             face mode-line-major-mode
-                             mouse-face mode-line-highlight
-                             help-echo "Major mode\nmouse-1: Display minor mode menu\nmouse-2: Show help for minor mode, mouse-3: Toggle minor modes"
-                             local-map ,mode-line-major-mode-keymap)
-
-                ;; minor modes
-                (:propertize ("" minor-mode-alist)
-                             face mode-line-minor-mode
-                             mouse-face mode-line-highlight
-                             help-echo "Minor mode\nmouse-1: Display minor mode menu\nmouse-2: Show help for minor mode, mouse-3: Toggle minor modes"
-                             local-map ,mode-line-minor-mode-keymap)
-                ")%]"
-                ;; which func mode
-                (which-func-mode (" " which-func-format))
-                " %-"
-                ))
-
-(setq battery-mode-line-format " [%L %p%%]")
 
 (mouse-avoidance-mode 'cat-and-mouse)
 
@@ -179,11 +105,9 @@
 (require-and-exec 'saveplace
                   (setq save-place-file (cofi/var-file "emacs/places"))
                   (setq-default save-place t))
-(transient-mark-mode t)
-(display-time-mode t)
-(global-font-lock-mode t)
-(global-hl-line-mode t)
-(column-number-mode 1)
+(transient-mark-mode 1)
+(global-font-lock-mode 1)
+(global-hl-line-mode 1)
 ;; enable (and re-enable) linum-mode only on real files
 (add-to-hooks (turn-on-file linum-mode)
               '(find-file-hook

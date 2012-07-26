@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t -*-
 
+(setq windmove-wrap-around t)
 (autoload 'windmove-find-other-window "windmove")
 (defun swap-window (direction)
   "Swap current window with the one in `direction'."

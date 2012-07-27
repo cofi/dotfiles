@@ -151,4 +151,7 @@
 (global-set-key (kbd "M-/") 'cofi/complete)
 (global-set-key (kbd "C-M-/") 'cofi/uncommon-complete)
 
+
+(add-to-list 'completion-styles 'substring 'append)
+
 (provide 'cofi-completion)

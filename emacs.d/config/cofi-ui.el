@@ -50,6 +50,8 @@
 
 (setq x-select-enable-primary t)
 
+(setq use-dialog-box nil)
+
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
 ;;; Use string syntax for re-builder

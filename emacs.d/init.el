@@ -117,6 +117,7 @@
                         (setq cofi/mail-instance t)
                         (setq cofi/full-emacs nil)
                         (add-hook 'emacs-startup-hook 'gnus 'append)
+                        (run-with-timer 10 600 'offlineimap)
                         ;; Exit Emacs after quitting gnus
                         (add-hook 'gnus-after-exiting-gnus-hook 'save-buffers-kill-emacs)
                         (add-hook 'emacs-startup-hook #'cofi/dont-mess-with-history 'append))))

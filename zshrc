@@ -4,7 +4,7 @@ export ZSHDIR=$HOME/config/dotfiles/zsh
 export LOCALDIR=$HOME/.zsh_local
 export PATH=$PATH:$HOME/.bin
 
-fpath=($ZSHDIR/zsh-completions $fpath)
+fpath=($ZSHDIR/zsh-completions/src $fpath)
 
 function load_config() {
     if [[ -f $1 ]] {

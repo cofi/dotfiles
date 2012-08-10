@@ -52,10 +52,10 @@
   "e" 'eval-and-replace
   "r" 're-builder
   "g" 'ack
-  "G" (cmd (let ((ack-prompt-for-directory 'always))
+  "G" (cmd ack (let ((ack-prompt-for-directory 'always))
              (call-interactively #'ack)))
   "M-g" 'ack-same
-  "M-G" (cmd (let ((ack-prompt-for-directory 'always))
+  "M-G" (cmd ack-same (let ((ack-prompt-for-directory 'always))
                (call-interactively #'ack-same)))
   "s" 'sort-lines
   "u" 'cofi-update-all-buffers
@@ -88,11 +88,10 @@
 
 (defkeymap cofi-org-mode-map
     "a" 'org-agenda-list
-    "t" (lambda () (interactive) (org-todo-list 0))
-    "o a" (lambda () (interactive)
-             (let ((org-indirect-buffer-display 'other-window))
+    "t" (cmd todo (org-todo-list 0))
+    "o a" (cmd agenda-other (let ((org-indirect-buffer-display 'other-window))
                (org-agenda-list)))
-    "o t" (lambda () (interactive)
+    "o t" (cmd todo-other
              (let ((org-indirect-buffer-display 'other-window))
                (org-todo-list 0)))
     "r" 'org-capture
@@ -101,7 +100,7 @@
     "V" 'cofi/helm-org-files
     "c" 'cfw:open-org-calendar
     "f" 'org-footnote-action
-    "SPC" (cmd (let ((current-prefix-arg '(4))) (call-interactively 'org-todo))))
+    "SPC" (cmd set-todo (let ((current-prefix-arg '(4))) (call-interactively 'org-todo))))
 
 (fill-keymap 'global
  ;; buffer
@@ -146,7 +145,7 @@
  "C-<f11>" 'multi-term-next
  ;; scratch
  "<f12>" 'scratch
- "C-<f12>" (cmd (switch-to-buffer "*scratch*"))
+ "C-<f12>" (cmd to-scratch (switch-to-buffer "*scratch*"))
  ;; home-end
  "<home>" 'home-end-home
  "<end>"  'home-end-end

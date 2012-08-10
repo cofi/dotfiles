@@ -278,19 +278,19 @@ See `pour-mappings-to'."
       (setq  lst (cdr lst)))
     (nreverse acc)))
 
-(defmacro cmd (&rest code)
+(defmacro cmd (name &rest code)
   "Macro for shorter keybindings."
-  `(lambda ()
+  `(defun ,(intern (concat "cofi-cmd/" (symbol-name name))) ()
      (interactive)
      ,@code))
 
-(defmacro cmd-arg (args iflag &rest code)
+(defmacro cmd-arg (name args iflag &rest code)
   "Macro for shorter keybindings with argument.
 
 For example:
-  (cmd-arg (num) \"p\"
+  (cmd-arg foo (num) \"p\"
     (message \"num-prefix: %d\" num)"
-  `(lambda ,args
+  `(defun ,(intern (concat "cofi-cmd/" (symbol-name name))) ,args
      (interactive ,iflag)
      ,@code))
 

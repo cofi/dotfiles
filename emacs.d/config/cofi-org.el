@@ -42,8 +42,10 @@ Note: This assumes all files are in the org-directory."
           (gen-local-fill-keymap-hook
                                 "M-n" 'outline-next-visible-heading
                                 "M-p" 'outline-previous-visible-heading
-                                "M-d" (cmd (org-todo "DONE"))
+                                "M-d" (cmd done (org-todo "DONE"))
                                 "C-c M-g" 'org-toc-show
+                                "C-c M-e" 'org-export-as-pdf
+                                "C-c C-M-e" 'org-export-as-pdf-and-open
                                 "C-M-<return>" (lambda ()
                                                  (interactive)
                                                  (end-of-line)
@@ -101,7 +103,7 @@ Note: This assumes all files are in the org-directory."
 (add-hook 'org-agenda-mode-hook (lambda ()
                                   (if (string= (frame-parameter nil 'name)
                                                "Agenda Frame")
-                                      (cofi/set-key 'local "x" (cmd (org-agenda-exit)
+                                      (cofi/set-key 'local "x" (cmd agenda-frame-exit (org-agenda-exit)
                                                                     (delete-frame)))
                                     (cofi/set-key 'local "x" 'org-agenda-exit))))
 

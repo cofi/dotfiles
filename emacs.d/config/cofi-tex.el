@@ -4,7 +4,7 @@
 
 (add-hook 'LaTeX-mode-hook
           (gen-local-fill-keymap-hook
-              "<f12>" (cmd-arg (override-confirm) "P"
+              "<f12>" (cmd-arg latexmk (override-confirm) "P"
                         (TeX-command "latexmk" 'TeX-master-file override-confirm))
               "C-<f12>" 'TeX-view))
 
@@ -62,7 +62,7 @@
         ))
 
 (add-all-to-hook 'LaTeX-mode-hook
-                 (gen-local-fill-keymap-hook "." (cmd (insert ".\n")))
+                 (gen-local-fill-keymap-hook "." (cmd dot-newline (insert ".\n")))
                  #'visual-line-mode)
 
 (require-and-exec 'info-look

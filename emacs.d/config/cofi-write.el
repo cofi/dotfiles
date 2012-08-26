@@ -27,6 +27,6 @@
                                           (if (member ispell-current-dictionary '("german" "deutsch"))
                                               (activate-input-method 'german-postfix)
                                             (when (eql current-input-method 'german-postfix)
-                                              (inactivate-input-method)))))
+                                              (deactivate-input-method)))))
 
 (provide 'cofi-write)

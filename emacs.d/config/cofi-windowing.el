@@ -51,6 +51,14 @@
   (set-window-dedicated-p nil (not (window-dedicated-p)))
   (message "Window is now %s" (if (window-dedicated-p) "dedicated" "undedicated")))
 
+(defun cofi/goto-window ()
+  "Select window by buffer name."
+  (interactive)
+  (let ((window-alist (mapcar (lambda (window) (cons (buffer-name (window-buffer window))
+                                                window))
+                               (window-list))))
+    (select-window (cdr (assoc (completing-read "Window: " window-alist nil t) window-alist)))))
+
 (setq winner-dont-bind-my-keys t
       winner-boring-buffers-rx '("\\*helm")
       winner-boring-buffers '("*Completions*"

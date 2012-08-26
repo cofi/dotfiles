@@ -308,6 +308,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
     "S-<right>" 'swap-with-right
     "SPC"       'swap-window
 
+    "g" 'cofi/goto-window
+
     ;; winner-mode
     "u" 'winner-undo
     "C-r" 'winner-reod

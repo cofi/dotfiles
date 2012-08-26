@@ -12,12 +12,6 @@
 (add-major-mode "\\.cl$" 'lisp-mode)
 (add-hook 'lisp-mode-hook (lambda ()
                             (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)))
-(add-hook 'lisp-mode-hook (lambda () (unless (slime-connected-p)
-                                  (let ((buf (current-buffer)))
-                                    (slime)
-                                    (other-window 1)
-                                    (switch-to-buffer buf))))
-          'append)
 
 (setq lisp-lambda-list-keyword-alignment t
       lisp-lambda-list-keyword-parameter-alignment t)
@@ -40,6 +34,36 @@
   "Call `SLIME-EVAL-PRINT-LAST-EXPRESSION' in slime scratch."
   (if (and slime-mode (string= "*slime-scratch*" (buffer-name)))
       (call-interactively #'slime-eval-print-last-expression)))
+
+;;; TODO: This maybe needs integration
+;; (defvar common-lisp-octothorpe-quotation-characters '(?P))
+;; (defvar common-lisp-octothorpe-parameter-parenthesis-characters '(?A))
+;; (defvar common-lisp-octothorpe-parenthesis-characters '(?+ ?- ?C))
+
+;; (defun paredit-space-for-delimiter-predicate-common-lisp (endp delimiter)
+;;   (or endp
+;;       (let ((case-fold-search t)
+;;             (look
+;;              (lambda (prefix characters n)
+;;                (looking-back
+;;                 (concat prefix (regexp-opt (mapcar 'string characters)))
+;;                 (min n (point))))))
+;;         (let ((oq common-lisp-octothorpe-quotation-characters)
+;;               (op common-lisp-octothorpe-parenthesis-characters)
+;;               (opp common-lisp-octothorpe-parameter-parenthesis-characters))
+;;           (cond ((eq (char-syntax delimiter) ?\()
+;;                  (and (not (funcall look "#" op 2))
+;;                       (not (funcall look "#[0-9]*" opp 20))))
+;;                 ((eq (char-syntax delimiter) ?\")
+;;                  (not (funcall look "#" oq 2)))
+;;                 (t t))))))
+
+;; (add-hook 'lisp-mode-hook
+;;   (defun common-lisp-mode-hook-paredit ()
+;;     (make-local-variable 'paredit-space-for-delimiter-predicates)
+;;     (add-to-list 'paredit-space-for-delimiter-predicates
+;;                  'paredit-space-for-delimiter-predicate-common-lisp)))
+;;; integration end
 
 ;;; slime
 (setq slime-lisp-implementations
@@ -65,16 +89,6 @@
   (slime-setup '(slime-fancy
                  slime-banner
                  helm-slime
-                 ))
-  (require 'slime)
-  (setq slime-complete-symbol-function (f-alt 'helm-slime-complete
-                                              'slime-fuzzy-complete-symbol
-                                              'slime-simple-complete-symbol))
-  (setq slime-protocol-version 'ignore))
-
-(when (fboundp 'anything-slime-complete)
-  (setq slime-complete-symbol-function #'anything-slime-complete))
-
                  slime-autodoc
                  slime-editing-commands
                  slime-fancy-inspector
@@ -87,6 +101,16 @@
                  slime-scratch
                  slime-xref-browser
                  slime-presentations
+                 ))
+  (require 'slime)
+  (setq slime-complete-symbol-function (f-alt 'helm-slime-complete
+                                              'slime-fuzzy-complete-symbol
+                                              'slime-simple-complete-symbol))
+  (setq slime-protocol-version 'ignore))
+
+(when (fboundp 'anything-slime-complete)
+  (setq slime-complete-symbol-function #'anything-slime-complete))
+
 (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 
 ;;; from http://bc.tech.coop/blog/070425.html

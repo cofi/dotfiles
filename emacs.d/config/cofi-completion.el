@@ -38,7 +38,8 @@
     (setq ac-fuzzy-enable t
           ac-auto-start 2
           ac-auto-show-menu t
-          ac-quick-help-delay 1)
+          ac-quick-help-delay 1
+          ac-quick-help-height 50)
 
     (fill-keymap ac-complete-mode-map
                  "C-l" 'ac-expand-common

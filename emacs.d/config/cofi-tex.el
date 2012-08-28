@@ -18,7 +18,7 @@
                            (?s . "\\smartcite[]{%l}")
                            (?f . "\\footcite[]{%l}")
                            (?n . "\\nocite{%l}")
-                           (?b . "\\blockcquote[]{%l}{}")))
+                           (?b . "\\blockquote[]{%l}{}")))
 
 (eval-after-load 'reftex-vars
   '(setcdr (assoc 'caption reftex-default-context-regexps) "\\\\\\(rot\\|sub\\)?caption\\*?[[{]"))

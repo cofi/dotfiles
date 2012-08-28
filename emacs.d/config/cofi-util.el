@@ -392,7 +392,7 @@ Returns nil if `X' not in `XS'."
   ;; ignore error if string smaller than begin
   (ignore-errors
     (string= begin
-             (substring string (length begin)))))
+             (substring string 0 (length begin)))))
 
 (setq byte-compile-warnings '(not cl-functions))
 

@@ -98,6 +98,8 @@
   (push type mm-attachment-override-types))
 (setq mm-inline-large-images 'resize)
 
+(setq mm-uu-diff-groups-regexp ".")
+
 (setq gnus-completing-read-function #'helm-completing-read-default)
 
 (defun cofi-gnus-copy-archived-at ()

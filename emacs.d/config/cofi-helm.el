@@ -107,7 +107,11 @@
       (type . file)))
   ;; --------------------------------------------------
   ;; helms ----------------------------------------
-  (defalias 'cofi/helm-buffers 'helm-buffers-list)
+  (defun cofi/helm-buffers ()
+    (interactive)
+    (funcall (if (string= (frame-parameter nil 'name) "ERC")
+                 'cofi/erc-buffer
+               'helm-buffers-list)))
 
   (defun cofi/helm-files ()
     (interactive)

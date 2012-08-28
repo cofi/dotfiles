@@ -87,6 +87,7 @@
                                  cofi-desktop
                                  cofi-ediff
                                  cofi-elisp
+                                 cofi-erc
                                  cofi-files
                                  cofi-func
                                  cofi-keys

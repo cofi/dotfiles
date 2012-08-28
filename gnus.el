@@ -94,6 +94,10 @@
       gnus-unbuttonized-mime-types '("text/plain"))
 (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
 
+(dolist (type '("image/.*" "message/rfc822" "text/x-patch"))
+  (push type mm-attachment-override-types))
+(setq mm-inline-large-images 'resize)
+
 (setq gnus-completing-read-function #'helm-completing-read-default)
 
 (defun cofi-gnus-copy-archived-at ()

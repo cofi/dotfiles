@@ -203,8 +203,4 @@
 
 (global-set-key [remap move-beginning-of-line] 'cofi-dwim-bol)
 
-(defkeymap flyspell-mode-map
-  "M-n"       'flyspell-goto-next-error
-  "C-M-<tab>" 'cofi/helm-flyspell-correct)
-
 (provide 'cofi-keys)

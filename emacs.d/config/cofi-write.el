@@ -20,6 +20,19 @@
                                                       ,(format "[^%s]" chars)
                                                       "[']" t ("-d" ,dict) nil utf-8))))
 
+(defun cofi/flyspell-correct-previous-word (position)
+  "Autocorrect previous word and return to current position.
+But you can't cycle corrections."
+  (interactive "d")
+  (unwind-protect
+      (flyspell-auto-correct-previous-word position)
+   (goto-char position)))
+
+(defkeymap flyspell-mode-map
+  "M-n"       'flyspell-goto-next-error
+  "C-<tab>"   'cofi/flyspell-correct-previous-word
+  "C-M-<tab>" 'cofi/helm-flyspell-correct)
+
 ;;; input method ====================
 (setq default-input-method 'german-postfix)
 

@@ -50,9 +50,14 @@
 ;;; writing
 (add-hook 'message-mode-hook #'cofi/write-mail)
 (setq gnus-add-to-list t)
+(setq message-elide-ellipsis "\n[%l lines snipped]\n")
+
+(setq message-kill-buffer-on-exit t
+      message-dont-reply-to-names user-mail-rx)
 
 (setq gnus-gcc-mark-as-read t)
 (setq gnus-group-line-format "%M%S%p%P%5y[%T]:%B%(%G%)\n")
+
 ;;; fancy summary
 (setq gnus-summary-line-format "%U|%R|%z|%ur|%(%-20&user-date;|%-30B%[%5L: %-40n%] %s%)\n")
 (setq gnus-summary-make-false-root 'dummy

@@ -69,6 +69,22 @@
       gnus-sum-thread-tree-single-leaf     "╰─►"
       gnus-sum-thread-tree-indent          "    ")
 
+
+(setq gnus-cached-mark ?☍
+      gnus-canceled-mark ?↗
+      gnus-del-mark ?✗
+      gnus-dormant-mark ?⚐
+      gnus-expirable-mark ?♻
+      gnus-forwarded-mark ?↪
+      gnus-killed-mark ?☠
+      gnus-process-mark ?⚙
+      gnus-read-mark ?✓
+      gnus-recent-mark ?✩
+      gnus-replied-mark ?↺
+      gnus-unread-mark ?✉
+      gnus-unseen-mark ?★
+      gnus-ticked-mark ?⚑)
+
 (setq mm-text-html-renderer 'gnus-w3m)
 
 ;;; search

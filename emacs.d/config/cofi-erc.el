@@ -137,4 +137,16 @@
 
 (add-hook 'erc-text-matched-hook #'cofi/erc-frame-urgency)
 
+(defun cofi/erc-ignore-lines ()
+  (let ((s (buffer-substring-no-properties (point-min) (point-max))))
+    (when (string-match-p (rx (or "has joined"
+                                  "has quit"
+                                  "is now known as"
+                                  "has left")) s)
+      (goto-char (point-min))
+      (insert (format-time-string erc-timestamp-format))
+      (put-text-property (point-min) (point-max) 'invisible t))))
+
+(add-hook 'erc-insert-modify-hook #'cofi/erc-ignore-lines)
+
 (provide 'cofi-erc)

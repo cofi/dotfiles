@@ -192,3 +192,13 @@
   (gnus-desktop-notify-mode))
 
 (setq gnus-check-new-newsgroups nil)
+
+
+(gnus-add-configuration '(reply-yank (vertical 1.0
+                                               (horizontal 1.0
+                                                           (message .5 point)
+                                                           (article 1.0)))))
+(gnus-add-configuration '(reply (vertical 1.0
+                                          (horizontal 1.0
+                                                      (message .5 point)
+                                                      (article 1.0)))))

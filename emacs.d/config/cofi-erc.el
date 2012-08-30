@@ -83,12 +83,14 @@
 
 (defun cofi/erc ()
   (interactive)
-  (select-frame (make-frame '((name . "ERC"))))
-  (erc-tls
-   :server "irc.freenode.net"
-   :port 7000)
-  (erc
-   :server "localhost"))
+  (unless (find "ERC" (make-frame-names-alist) :key #'car :test #'string=)
+    (select-frame (make-frame '((name . "ERC")
+                                (alpha . (85 70)))))
+    (erc-tls
+     :server "irc.freenode.net"
+     :port 7000)
+    (erc
+     :server "localhost")))
 
 (defun bitlbee-identify ()
   (when (and (string= "localhost" erc-session-server)

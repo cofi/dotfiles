@@ -99,11 +99,7 @@
 
 (add-hook 'erc-join-hook 'bitlbee-identify)
 
-(defun cofi/erc-set-dictionary ()
-  (when (member (erc-default-target) '("#tud-ersties"))
-    (ispell-change-dictionary "german")))
-
-(add-hook 'erc-join-hook #'cofi/erc-set-dictionary)
+(setq erc-spelling-dictionaries '(("#tud-ersties" . "german")))
 
 (defun cofi/erc-previous-url-button ()
   "Go to the previous URL button in this buffer."

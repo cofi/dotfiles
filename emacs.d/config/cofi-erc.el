@@ -92,16 +92,7 @@
     (erc
      :server "localhost")))
 
-(defun bitlbee-identify ()
-  (when (and (string= "localhost" erc-session-server)
-           (string= "&bitlbee" (buffer-name)))
-    (erc-message "PRIVMSG" (format "%s identify %s"
-                                   (erc-default-target)
-                                   bitlbee-password))))
-
-(add-hook 'erc-join-hook 'bitlbee-identify)
-
-(setq erc-spelling-dictionaries '(("#tud-ersties" . "german")))
+(setq erc-spelling-dictionaries '(("#tud-ersties" "german")))
 
 (defun cofi/erc-previous-url-button ()
   "Go to the previous URL button in this buffer."

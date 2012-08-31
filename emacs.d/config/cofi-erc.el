@@ -147,4 +147,8 @@
 
 (add-hook 'erc-insert-modify-hook #'cofi/erc-ignore-lines)
 
+(add-hook 'erc-mode-hook (gen-local-fill-keymap-hook
+                          "C-n" 'erc-next-command
+                          "C-p" 'erc-previous-command))
+
 (provide 'cofi-erc)

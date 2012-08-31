@@ -151,4 +151,32 @@
                           "C-n" 'erc-next-command
                           "C-p" 'erc-previous-command))
 
+(defun cofi/erc-mode-line ()
+  (setq mode-line-format
+        `(
+          (evil-mode ("" evil-mode-line-tag))
+          " "
+          (:propertize "%b " face mode-line-buffer
+                       help-echo (buffer-file-name))
+          (:eval (let ((ops 0)
+                       (members 0))
+                   (maphash (lambda (k v)
+                              (when (erc-channel-user-op-p k)
+                                (incf ops))
+                              (incf members))
+                            erc-channel-users)
+                   (format "%s(@%s) " members ops)))
+
+          (current-input-method
+           ("" current-input-method-title))
+
+          appt-mode-string
+          " "
+          (:eval (let* ((users (mapcar (lambda (user-data) (erc-server-user-nickname (car user-data)))
+                                       (erc-sort-channel-users-by-activity (erc-get-channel-user-list))))
+                        (user-string (mapconcat #'identity users ", ")))
+                   (propertize user-string 'help-echo user-string))))))
+
+(add-hook 'erc-mode-hook #'cofi/erc-mode-line)
+
 (provide 'cofi-erc)

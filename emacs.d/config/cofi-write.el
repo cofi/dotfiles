@@ -1,3 +1,9 @@
+(defvar cofi/ispell-change-dictionary-hook nil
+  "Run after ispell dictionary is changed via ispell-change-dictionary")
+
+(defadvice ispell-change-dictionary (after run-change-hooks activate)
+  (run-hooks 'cofi/ispell-change-dictionary-hook))
+
 (let ((modes `(flyspell-mode
                auto-fill-mode
                auto-dictionary-mode)))
@@ -53,11 +59,10 @@ But you can't cycle corrections."
 
 ;;; input method ====================
 (setq default-input-method 'german-postfix)
-
-(add-hook 'adict-change-dictionary-hook (lambda ()
-                                          (if (member ispell-current-dictionary '("german" "deutsch"))
-                                              (activate-input-method 'german-postfix)
-                                            (when (eql current-input-method 'german-postfix)
-                                              (deactivate-input-method)))))
-
+(add-hook 'cofi/ispell-change-dictionary-hook
+          (defun cofi/update-input-method-after-dictionary-change ()
+            (if (member ispell-current-dictionary '("german" "deutsch"))
+                (activate-input-method 'german-postfix)
+              (when (eq current-input-method 'german-postfix)  ; we changed from a german dictionary
+                (deactivate-input-method)))))
 (provide 'cofi-write)

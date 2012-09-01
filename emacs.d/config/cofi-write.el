@@ -3,8 +3,26 @@
                auto-dictionary-mode)))
 
   (add-to-hook 'rst-mode-hook modes)
-
   (add-to-hook 'markdown-mode-hook modes))
+
+
+(require 'rst)
+
+(defun cofi/rst-imenu-create-index ()
+  (rst-reset-section-caches)
+  (cl-flet ((headerp (x) (and (consp x) (stringp (first x)) (markerp (second x)))))
+    (cl-loop for subtree in (cdr (rst-section-tree))
+             if (and (headerp (first subtree))
+                     (consp (rest subtree)))
+             collect (cons (first (first subtree))
+                           (cofi/rst-create-subtree
+                            (cons (list (list "." (second (first subtree))))
+                                  (rest subtree))))
+             else
+             collect (cons (first (first subtree)) (second (first subtree))))))
+
+(add-hook 'rst-mode-hook (lambda ()
+                           (setq imenu-create-index-function 'cofi/rst-imenu-create-index)))
 
 (setq ispell-program-name "hunspell"
       ispell-silently-savep t

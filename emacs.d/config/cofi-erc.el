@@ -170,4 +170,33 @@
 
 (add-hook 'erc-mode-hook #'cofi/erc-mode-line)
 
+(defun cofi/erc-color-nick (&optional user channel-data)
+  (cl-flet* ((luminance (r g b) (floor (+ (* 0.299 r) (* 0.587 g) (* 0.117 b))))
+             (to-hex (r g b) (format "#%02x%02x%02x" r g b))
+             (invert (r g b) (list (- 255 r) (- 255 g) (- 255 b)))
+             (nick-to-rgb (nick)
+                          (let ((hash (sha1 nick)))
+                            (list (mod (string-to-number (substring hash 0 13) 16) 256)
+                                  (mod (string-to-number (substring hash 13 26) 16) 256)
+                                  (mod (string-to-number (substring hash 26 40) 16) 256))))
+             (generate-color (nick)
+                             (let ((rgb (nick-to-rgb nick)))
+                               (apply #'to-hex
+                                (if (< (apply #'luminance rgb) 85)
+                                    (apply #'invert rgb)
+                                  rgb)))))
+    (when user
+      (let ((nick (erc-server-user-nickname user))
+            (op (and channel-data (erc-channel-user-op channel-data) "@")))
+        (propertize (concat op nick) 'face (list :foreground (generate-color nick)))))))
+
+(setq erc-format-nick-function #'cofi/erc-color-nick)
+
+;;; redefine erc function to stop overriding face
+(defun erc-format-privmessage (nick msg privp msgp)
+  (let* ((msg-face (if privp 'erc-direct-msg-face 'erc-default-face))
+         (mark-s (propertize (if msgp (if privp "*" "<") "-") 'face msg-face))
+         (mark-e (propertize (if msgp (if privp "*" ">") "-") 'face msg-face)))
+    (format "%s%s%s %s" mark-s nick mark-e msg)))
+
 (provide 'cofi-erc)

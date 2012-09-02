@@ -31,9 +31,12 @@
         (prefix . ac-email-prefix)
         (cache . t)))
 
-    ;; override original faulting fun
+    ;; override original faulting funs
+    (defun ac-yasnippet-table-hash (table)
+      (yas--table-hash table))
+
     (defun ac-yasnippet-candidates ()
-      (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas/get-snippet-tables))))
+      (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas--get-snippet-tables))))
 
     (setq ac-fuzzy-enable t
           ac-auto-start 2

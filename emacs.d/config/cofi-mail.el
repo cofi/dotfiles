@@ -48,7 +48,7 @@ Also wraps in `save-excursion' and `save-restriction'."
   (setq fill-column 72)
   (auto-fill-mode)
   (auto-complete-mode)
-  (yas/minor-mode)
+  (yas-minor-mode)
   (auto-dictionary-mode)
   (mail-abbrevs-mode)
   (flyspell-mode))

@@ -1,5 +1,5 @@
 (require-and-exec 'diminish
-  (loop for (file mode lighter) in '(("yasnippet" 'yas/minor-mode " Y")
+  (loop for (file mode lighter) in '(("yasnippet" 'yas-minor-mode " Y")
                                      ("autopair" 'autopair-mode " p")
                                      ("eldoc" 'eldoc-mode " elD")
                                      ("highlight-parentheses" 'highlight-parentheses-mode)

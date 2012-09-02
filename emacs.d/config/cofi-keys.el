@@ -30,7 +30,7 @@
   "b" 'insert-buffer
   "c" 'clipper-insert
   "f" 'insert-file
-  "s" 'yas/insert-snippet)
+  "s" 'yas-insert-snippet)
 
 ;;; helm keymap
 (defkeymap cofi-helm-map

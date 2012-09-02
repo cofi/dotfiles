@@ -1,0 +1,228 @@
+#!/usr/bin/python
+''' atdtool
+Command-line client for After the Deadline:
+http://www.afterthedeadline.com
+
+Based on AtD module by Miguel Ventura:
+http://bitbucket.org/miguelventura/after_the_deadline/wiki/Home
+'''
+
+from optparse import OptionParser
+import re
+import sys
+import httplib
+import urllib
+import base64
+from xml.etree import ElementTree
+
+
+PROGRAM_NAME = "atdtool"
+PROGRAM_VERSION = "1.1"
+
+
+def checkDocument(cfg, fd):
+    '''Invoke checkDocument service and return a list of errors.'''
+
+    server = re.sub(r'^https?://', '', cfg.server)
+
+    if cfg.atdlang != '':
+        server = cfg.atdlang + '.' + server
+
+    if cfg.server.startswith('https'):
+        service = httplib.HTTPSConnection(server, cfg.port)
+    else:
+        service = httplib.HTTPConnection(server, cfg.port)
+
+    headers = {"Content-Type":"application/x-www-form-urlencoded"}
+    if cfg.username:
+        headers["Authorization"] = "Basic %s" % (base64.b64encode("%s:%s" % (cfg.username, cfg.password)))
+
+    params = { 'key': cfg.key, 'data': fd.read()}
+    if cfg.lang != '':
+        params['lang'] = cfg.lang
+
+    service.request(method='POST',
+                    url='/checkDocument',
+                    body=urllib.urlencode(params),
+                    headers=headers)
+    response = service.getresponse()
+    if response.status != httplib.OK:
+        service.close()
+        raise Exception('Unexpected response code from AtD server %s: %d' % (cfg.server, response.status))
+
+    et = ElementTree.fromstring(response.read())
+    service.close()
+
+    errs = et.findall('message')
+    if len(errs) > 0:
+        raise Exception('Server returned an error: %s' % errs[0].text)
+    return [ Error(e) for e in et.findall('error') ]
+
+
+
+class Error:
+    '''Error objects.'''
+
+    def __init__(self, e):
+        self.string = e.find('string').text
+        self.description = e.find('description').text
+        self.precontext = e.find('precontext').text
+        self.type = e.find('type').text
+        self.url = ''
+        if not e.find('url') is None:
+            self.url = e.find('url').text
+        self.suggestions = []
+        if not e.find('suggestions') is None:
+            self.suggestions = [ o.text for o in e.find('suggestions').findall('option') ]
+
+
+
+class FileWords:
+    '''Parser class, keeps line and column position.'''
+
+    def __init__(self, fd):
+        fd.seek(0)
+        self.re = re.compile('([^a-z0-9A-Z_-])')
+        self.skipre = re.compile('[^a-z0-9A-Z_-]+')
+        self.text = self.re.split(fd.read())
+        self.len = len(self.text)
+        self.reset()
+
+    def reset(self):
+        '''Goes to start of file.'''
+        self.i = 0
+        self.line = 1
+        self.col = 0
+        self.eof = False
+
+    def next(self):
+        '''Goes to next token.'''
+        if self.eof:
+            return
+        self.col = self.col + len(self.text[self.i])
+        self.i = self.i + 1
+        if self.i >= self.len:
+            self.eof = True
+            return
+        if self.text[self.i] == '\n':
+            self.line = self.line + 1
+            self.col = 0
+
+    def skipnw(self):
+        '''Skips non-word tokens.'''
+        while self.skipre.match(self.text[self.i]) or self.text[self.i] == '':
+            self.next()
+
+    def checkpos(self, words0):
+        '''Checks if words0 is in current position.'''
+        words = tuple(self.re.split(words0))
+        text = self.text
+        t = []
+        j = 0
+        w = ''
+        while len(t) < len(words):
+            if self.i + j == self.len:
+                self.eof = True
+                return False, ''
+            t.append(text[self.i+j])
+            w = w + text[self.i+j]
+            if self.i + j + 1 < self.len and text[self.i+j+1] == '.':
+                t.append(t.pop() + text[self.i+j+2])
+                w = w + '.' + text[self.i+j+2]
+            j = j + 1
+        return tuple(t) == words, w
+
+    def goto(self, prec, words):
+        '''Goes to words preceded by prec; returns False and stays at eof if not found.'''
+        found = False
+        w = ''
+        if prec:
+            target = prec
+        else:
+            target = words
+        while not self.eof and not found:
+            found, w = self.checkpos(target)
+            if not found:
+                self.next()
+            elif prec:
+                self.next()
+                self.skipnw()
+                found, w = self.checkpos(words)
+        if found:
+            self.words = w
+            return True
+        return False
+
+    def find(self, prec, words):
+        '''Tries to find words preceded by prec from current position, then from start of file.'''
+        found = self.goto(prec, words)
+        if not found:
+            self.reset()
+            found = self.goto(prec, words)
+        return found
+
+
+
+def showerrs(filename, fd, errs):
+    '''Shows the errors found, in the context of the file.'''
+    t = FileWords(fd)
+    for e in errs:
+        exactstr = ''
+        if not t.find(e.precontext, e.string):
+            exactstr = ' (?)'
+        print('%s:%d:%d:%s %s "%s"' % (filename, t.line, t.col, exactstr, e.description, t.words))
+        if len(e.suggestions) > 0:
+            print('  suggestions: %s' % ', '.join(e.suggestions))
+
+
+
+def main():
+    parser = OptionParser(usage='Usage: %prog <file>',
+                          version="%prog "+PROGRAM_VERSION,
+                          description='''\
+atdtool submits the given file to the After the Deadline language checking
+service at http://www.afterthedeadline.com/ and presents the results in
+the same format as gcc, making integration with other tools (vi, emacs, etc.)
+straightforward.
+''')
+    parser.add_option('-s', '--server', dest='server', help='Select AtD server', default='service.afterthedeadline.com')
+    parser.add_option('-P', '--port', dest='port', help='Server port (default: 80)', default='80')
+    parser.add_option('-l', '--atdlang', dest='atdlang', help='Select language server [fr/de/pt/es], used for official AtD server', default='')
+    parser.add_option('-L', '--lang', dest='lang', help='Language parameter, used for other servers', default='')
+    parser.add_option('-e', '--error', dest='error', help='Exit with error if any mistakes are found', default=False)
+    parser.add_option('-k', '--key', dest='key', help='Key to use', default='')
+    parser.add_option('-u', '--username', dest='username', help='Username (if required by server)', default='')
+    parser.add_option('-p', '--password', dest='password', help='Password (if required by server)', default='')
+
+    (cfg, args) = parser.parse_args()
+
+    if len(args) == 0:
+        parser.error('expecting file argument')
+
+    if cfg.server != 'service.afterthedeadline.com' and cfg.atdlang != '':
+        parser.error('The atdlang option selects an official AtD server, there is no reason to specify both.')
+
+    if (cfg.password or cfg.username) and not (cfg.password and cfg.username):
+        parser.error("Username and password both have to be set (or none).")
+
+    founderr = False
+    for filename in args:
+        fd = None
+        try:
+            fd = open(filename)
+        except IOError:
+            print('%s: No such file or directory' % filename)
+        if not fd:
+            continue
+        errs = checkDocument(cfg, fd)
+        founderr = founderr or len(errs) > 0
+        fd.seek(0)
+        showerrs(filename, fd, errs)
+        fd.close()
+    if cfg.error and founderr:
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()
+

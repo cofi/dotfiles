@@ -11,6 +11,17 @@
   (add-to-hook 'rst-mode-hook modes)
   (add-to-hook 'markdown-mode-hook modes))
 
+(defun cofi/atd-compile ()
+  (interactive)
+  (let ((language (def-assoc
+                    (or ispell-local-dictionary ispell-dictionary)
+                    '(("german" . "de")
+                      ("deutsch" . "de"))
+                    "en")))
+    (when (executable-find "atdtool")
+      (compile (format "atdtool --atdlang=%s %s"
+                       language
+                       (shell-quote-argument buffer-file-name))))))
 
 (require 'rst)
 

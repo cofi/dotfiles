@@ -44,7 +44,7 @@
 (erc-track-mode 1)
 
 (setq erc-keywords nil)
-(setq erc-join-buffer nil)
+(setq erc-join-buffer 'window-noselect)
 (setq erc-header-line-format "%t(%m): %o")
 
 (defun cofi/erc-monthly-log-directory (&rest ignore)

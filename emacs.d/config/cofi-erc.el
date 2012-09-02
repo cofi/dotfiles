@@ -205,4 +205,9 @@
          (mark-e (propertize (if msgp (if privp "*" ">") "-") 'face msg-face)))
     (format "%s%s%s %s" mark-s nick mark-e msg)))
 
+(defun cofi/erc-signal-new-day ()
+  (erc-display-line (format-time-string "A new day has come, it is now %A, %y-%m-%d") 'all))
+
+(run-at-time "00:00" (* 24 60 60) #'cofi/erc-signal-new-day)
+
 (provide 'cofi-erc)

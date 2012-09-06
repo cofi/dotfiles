@@ -27,10 +27,13 @@
 
 (defun cofi/rst-imenu-create-index ()
   (rst-reset-section-caches)
+  (cofi/rst-create-subtree (cdr (rst-section-tree))))
+
+(defun cofi/rst-create-subtree (tree)
   (cl-flet ((headerp (x) (and (consp x) (stringp (first x)) (markerp (second x)))))
-    (cl-loop for subtree in (cdr (rst-section-tree))
+    (cl-loop for subtree in tree
              if (and (headerp (first subtree))
-                     (consp (rest subtree)))
+                   (consp (rest subtree)))
              collect (cons (first (first subtree))
                            (cofi/rst-create-subtree
                             (cons (list (list "." (second (first subtree))))

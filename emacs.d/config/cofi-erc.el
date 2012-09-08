@@ -1,16 +1,28 @@
 (require 'erc)
+(setq erc-modules '(
+                    autoaway
+                    autojoin
+                    button
+                    completion
+                    irccontrols
+                    keep-place
+                    list
+                    log
+                    match
+                    move-to-prompt
+                    netsplit
+                    networks
+                    noncommands
+                    pcomplete
+                    readonly
+                    ring
+                    services
+                    smiley
+                    spelling
+                    stamp
+                    track
+                    truncate))
 
-(pour-lists erc-modules
-            '(
-              autoaway
-              keep-place
-              log
-              services
-              smiley
-              spelling
-              stamp
-              truncate
-              ))
 (erc-update-modules)
 (erc-autojoin-mode 1)
 (erc-services-mode 1)

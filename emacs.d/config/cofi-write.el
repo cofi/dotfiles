@@ -73,10 +73,16 @@ But you can't cycle corrections."
 
 ;;; input method ====================
 (setq default-input-method 'german-postfix)
-(add-hook 'cofi/ispell-change-dictionary-hook
-          (defun cofi/update-input-method-after-dictionary-change ()
-            (if (member ispell-current-dictionary '("german" "deutsch"))
-                (activate-input-method 'german-postfix)
-              (when (eq current-input-method 'german-postfix)  ; we changed from a german dictionary
-                (deactivate-input-method)))))
+(defun cofi/update-input-method-after-dictionary-change ()
+  (if (member ispell-current-dictionary '("german" "deutsch"))
+      (activate-input-method 'german-postfix)
+    (when (eq current-input-method 'german-postfix)  ; we changed from a german dictionary
+      (deactivate-input-method))))
+
+(add-hook 'cofi/ispell-change-dictionary-hook #'cofi/update-input-method-after-dictionary-change)
+
+(defadvice flyspell-mode (after set-input-method activate)
+  (when flyspell-mode
+    (cofi/update-input-method-after-dictionary-change)))
+
 (provide 'cofi-write)

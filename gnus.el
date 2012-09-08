@@ -121,8 +121,6 @@
 
 (setq mm-uu-diff-groups-regexp ".")
 
-(setq gnus-completing-read-function #'helm-completing-read-default)
-
 (defun cofi-gnus-copy-archived-at ()
   "Copy archived-at url of current article to killring and clipboard."
   (interactive)

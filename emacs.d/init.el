@@ -11,14 +11,6 @@
      "\n")))
 (setq initial-scratch-message (cofi/fortune2scratch))
 
-(setq custom-theme-directory "~/.emacs.d/themes/")
-(setq custom-safe-themes '(;; cofi-dark
-                           "d9d7a7c76f3d552f1c6da90736dd818b9423ad1e6047feeb8e1851a1b5191420"
-                           ;; cofi-light
-                           "7ec2d1c73249c206cce9ebcadee61dc5469b566eea1fe095b78273c96f28c0ca"
-                           ))
-(load-theme 'cofi-dark)
-
 (defun add-to-loadpath (&rest dirs)
   (dolist (dir dirs load-path)
     (add-to-list 'load-path (expand-file-name dir) nil #'string=)))
@@ -80,7 +72,8 @@
 (load "private" 'noerror)
 (require 'cofi-evil)
 
-(defvar cofi/standard-settings '(cofi-autoloads
+(defvar cofi/standard-settings '(cofi-color
+                                 cofi-autoloads
                                  cofi-helm
                                  cofi-buffer
                                  cofi-calendar
@@ -135,7 +128,6 @@
                                   (mapc #'require cofi/full-settings)
                                   (workgroups-mode 1))))
 (cofi-next-file-assoc)
-(cofi/colorscheme 'cofi-dark)
 (add-hook 'emacs-startup-hook (lambda ()
                                 (message "Time needed to load: %s seconds."
                                          (emacs-uptime "%s")))

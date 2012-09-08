@@ -13,7 +13,7 @@
 
 (define-key yas-minor-mode-map "\C-c&" nil)
 
-(defun yas/org-very-safe-expand ()
+(defun yas-org-very-safe-expand ()
   (let ((yas-fallback-behavior 'return-nil)) (yas-expand)))
 (add-hook 'org-mode-hook
           (lambda ()

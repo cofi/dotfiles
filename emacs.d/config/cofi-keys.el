@@ -102,6 +102,12 @@
     "f" 'org-footnote-action
     "SPC" (cmd set-todo (let ((current-prefix-arg '(4))) (call-interactively 'org-todo))))
 
+(defkeymap cofi-diff-map
+  "b" 'ediff-buffers
+  "d" 'diff
+  "e" 'ediff-files
+  "f" 'ediff-files)
+
 (fill-keymap 'global
  ;; buffer
  "C-c y"     'bury-buffer
@@ -167,6 +173,7 @@
  "<f5>"  cofi-org-mode-map
  "<f7>"  helm-command-map
  "<f8>"  cofi-project-map
+ "C-="   cofi-diff-map
  )
 
 (add-hook 'diff-mode-hook '(lambda ()

@@ -313,4 +313,11 @@ Fill new sentence unless called with prefix or was at eol."
   (interactive)
   (kill-buffer (current-buffer)))
 
+(defun cofi/narrow-to-paragraph ()
+  (interactive)
+  (save-excursion
+    (let ((beg (progn (backward-paragraph) (point)))
+          (end (progn (forward-paragraph) (point))))
+      (narrow-to-region beg end))))
+
 (provide 'cofi-func)

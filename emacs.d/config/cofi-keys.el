@@ -176,6 +176,10 @@
  "C-="   cofi-diff-map
  )
 
+(fill-keymap narrow-map
+             "p" #'cofi/narrow-to-paragraph
+             "P" #'narrow-to-page)
+
 (add-hook 'diff-mode-hook '(lambda ()
                             (local-set-key (kbd "q") 'kill-this-buffer)))
 

@@ -182,12 +182,8 @@
 
 (gnus-demon-add-handler 'gnus-demon-scan-news 10 t)
 
-(require-and-exec 'gnus-desktop-notify
-  (setq gnus-desktop-notify-function (lambda (groups)
-                                       ;; set urgency hint on news
-                                       (x-urgency-hint (selected-frame) t)
-                                       (gnus-desktop-notify-send groups)))
-  (gnus-desktop-notify-mode))
+(setq gnus-notifications-use-google-contacts nil)
+(add-hook 'gnus-after-getting-new-news-hook 'gnus-notifications)
 
 (setq gnus-check-new-newsgroups nil)
 

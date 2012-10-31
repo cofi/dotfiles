@@ -377,6 +377,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , S.prefixAware google
                                                   ]
 
+                                                  , wow
       -- new ones
       wiki = S.searchEngine "wp" "http://en.wikipedia.org/wiki/Special:Search?go=Go&search="
       wikiD = S.searchEngine "wpd" "http://de.wikipedia.org/wiki/Special:Search?go=Go&search="
@@ -413,6 +414,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
 
+      wow = S.searchEngine "wow" "http://www.wowhead.com/search?q="
       (!>) :: SearchEngine -> SearchEngine -> SearchEngine
       (SearchEngine name1 site1) !> (SearchEngine name2 site2) =
         SearchEngine (name1 ++ "/" ++ name2) (\ s -> if (name1++":") `isPrefixOf` s

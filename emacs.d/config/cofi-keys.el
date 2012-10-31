@@ -152,9 +152,6 @@
  ;; scratch
  "<f12>" 'scratch
  "C-<f12>" (cmd to-scratch (switch-to-buffer "*scratch*"))
- ;; home-end
- "<home>" 'home-end-home
- "<end>"  'home-end-end
  ;; imenu
  "C-c i" (if (fboundp 'helm-imenu)
              'helm-imenu

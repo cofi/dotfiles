@@ -44,6 +44,8 @@
                      flymake-cursor
                      full-ack
                      gist
+                     gitconfig-mode
+                     gitignore-mode
                      highlight-parentheses
                      highlight-80+
                      htmlize

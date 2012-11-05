@@ -183,7 +183,20 @@
 (gnus-demon-add-handler 'gnus-demon-scan-news 10 t)
 
 (setq gnus-notifications-use-google-contacts nil)
+(require 'gnus-notifications)
 (add-hook 'gnus-after-getting-new-news-hook 'gnus-notifications)
+
+(add-hook 'gnus-after-getting-new-news-hook
+          (defun cofi/set-mail-urgency ()
+            (loop for (group . rest) in gnus-newsrc-alist
+                  when (and (<= (gnus-group-level group) gnus-notifications-minimum-level)
+                          (let ((unread (gnus-group-unread group)))
+                            (and (numberp unread)
+                               (> unread 0))))
+
+                  do (prog1
+                         (x-urgency-hint (selected-frame) t)
+                       (return)))))
 
 (setq gnus-check-new-newsgroups nil)
 

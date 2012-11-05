@@ -5,7 +5,6 @@
 (setq load-path (remove-if  (p (string-match "/usr/share/emacs/.*/org" x)) load-path))
 (setq org-modules '(org-bibtex org-docview org-gnus org-info org-w3m org-toc org-contacts))
 
-(require 'org-install)
 (require 'cofi-autoloads)
 
 (if (file-directory-p "~/Org")
@@ -134,13 +133,7 @@ Note: This assumes all files are in the org-directory."
 
 ;; Babel
 (setq org-src-fontify-natively t
-      org-src-preserve-indentation t
-      org-babel-load-languages '((emacs-lisp . t)
-                                 (python . t)
-                                 (clojure . t)
-                                 (gnuplot . t)
-                                 (latex . t)
-                                 (sh . t)))
+      org-src-preserve-indentation t)
 
 ;; Appt
 (setq appt-message-warning-time 15 ;; warn 15 min in advance

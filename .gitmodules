@@ -40,9 +40,6 @@
 [submodule "elisp/vendor/gnus"]
 	path = elisp/vendor/gnus
 	url = http://git.gnus.org/gnus.git
-[submodule "elisp/vendor/monky"]
-	path = elisp/vendor/monky
-	url = git://github.com/ananthakumaran/monky.git
 [submodule "elisp/vendor/evil"]
 	path = elisp/vendor/evil
 	url = git://gitorious.org/evil/evil.git
@@ -76,3 +73,6 @@
 [submodule "elisp/vendor/helm-slime"]
 	path = elisp/vendor/helm-slime
 	url = git://github.com/emacs-helm/helm-slime.git
+[submodule "elisp/vendor/monky"]
+	path = elisp/vendor/monky
+	url = git://github.com/ananthakumaran/monky.git

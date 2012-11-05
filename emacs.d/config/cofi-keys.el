@@ -153,9 +153,7 @@
  "<f12>" 'scratch
  "C-<f12>" (cmd to-scratch (switch-to-buffer "*scratch*"))
  ;; imenu
- "C-c i" (if (fboundp 'helm-imenu)
-             'helm-imenu
-           'idomenu)
+ "C-c i" (f-alt 'helm-imenu 'idomenu)
  ;; rdictcc
  "C-c t" 'rdictcc-translate-word-at-point
 

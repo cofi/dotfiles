@@ -33,9 +33,6 @@
 
 (autoload 'goto-last-change "goto-chg" nil t)
 
-(autoload 'home-end-end "home-end" "Go to end of line/window/buffer." t)
-(autoload 'home-end-home "home-end" "Go to beginning of line/window/buffer." t)
-
 (autoload 'monky-status "monky" nil t)
 
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))

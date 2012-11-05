@@ -62,6 +62,7 @@
                      undo-tree
                      workgroups
                      yaml-mode
+                     zencoding-mode
                      ))
     (unless (package-installed-p package)
       (package-install package))))

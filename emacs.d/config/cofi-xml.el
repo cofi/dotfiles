@@ -24,4 +24,7 @@
      (eval-after-load "which-func"
        '(pushnew #'nxml-which-xpath which-func-functions))))
 
+(defkeymap zencoding-mode-keymap
+  "C-c C-j" 'zencoding-expand-line)
+
 (provide 'cofi-xml)

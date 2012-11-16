@@ -46,6 +46,7 @@
 
 [merge]
     tool = ediff-windowed
+    stat = true
 
 [diff]
     tool = gvimdiff

@@ -8,6 +8,9 @@
     excludesfile = ~/.gitexcludes
     attributesfile = ~/.gitattributes
 
+[include]
+    path = ~/.githubconfig
+
 [apply]
     whitespace = fix
 

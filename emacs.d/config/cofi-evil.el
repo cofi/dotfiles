@@ -274,6 +274,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (global-set-key (kbd "C-c w") evil-window-map)
 ;; Windowing
 (fill-keymap evil-window-map
+    "C-h" nil
     "d" 'cofi/window-toggle-dedicate
     ;; Splitting
     "s" 'cofi/smart-split

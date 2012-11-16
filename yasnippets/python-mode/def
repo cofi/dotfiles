@@ -11,8 +11,9 @@ def ${1:name}($2):
                                        (split-string (replace-regexp-in-string "[[:blank:]]*" "" text)
                                                      "," t)))))
         (mapconcat (lambda (x)
-                     (format ":param %s:" x))
+                     (format ":param %s:%s:type %s:" x indent x))
                    args
+
                    indent))
     }
     :returns: $4

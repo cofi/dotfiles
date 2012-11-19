@@ -126,6 +126,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              "C-y"   nil)
 
 (fill-keymap evil-insert-state-map
+             "SPC" 'cofi/yas-expand-or-spc
              "j"   'cofi/evil-maybe-exit
              "C-h" 'backward-delete-char
              "C-y" 'yank

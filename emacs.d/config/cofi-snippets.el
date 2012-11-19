@@ -6,8 +6,6 @@
 (setq yas-indent-line 'fixed)
 (setq yas-triggers-in-field t)
 (setq yas-verbosity 2)
-(setq-default yas-trigger-key "SPC")
-(make-variable-buffer-local 'yas-trigger-key)
 (require-and-exec 'yasnippet
   (yas-global-mode 1))
 
@@ -20,6 +18,12 @@
             ;; yasnippet (using the new org-cycle hooks)
             (add-to-list 'org-tab-first-hook 'yas-org-very-safe-expand)
             (define-key yas-keymap [tab] 'yas-next-field)))
+
+(defun cofi/yas-expand-or-spc (count)
+  (interactive "p")
+  (let ((yas-fallback-behavior 'return-nil))
+    (unless (yas-expand)
+      (insert (make-string count ? )))))
 
 (defun cofi/no-yas ()
   (setq yas--dont-activate t))

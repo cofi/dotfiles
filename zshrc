@@ -108,7 +108,7 @@ load_config $ZSHDIR/zsh-substring-search/zsh-history-substring-search.zsh
 unfunction load_config
 
 HISTFILE=~/.zshhistory
-HISTSIZE=5000
+HISTSIZE=500000
 SAVEHIST=8000
 
 export EDITOR=vim

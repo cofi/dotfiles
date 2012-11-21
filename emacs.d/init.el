@@ -45,6 +45,7 @@
                      full-ack
                      gist
                      gitconfig-mode
+                     git-commit-mode
                      gitignore-mode
                      highlight-parentheses
                      highlight-80+

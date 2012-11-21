@@ -314,7 +314,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
     ;; winner-mode
     "u" 'winner-undo
-    "C-r" 'winner-reod
+    "C-r" 'winner-redo
     ;; shadow rotating in evil-window-map
     "C-R" 'winner-redo)
 

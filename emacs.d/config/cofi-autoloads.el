@@ -1,7 +1,3 @@
-(autoload 'ace-jump-char-mode "ace-jump-mode" nil t)
-(autoload 'ace-jump-line-mode "ace-jump-mode" nil t)
-(autoload 'ace-jump-word-mode "ace-jump-mode" nil t)
-
 (autoload 'any-ini-mode "any-ini-mode")
 (add-to-list 'auto-mode-alist '("\\.ini\\'" . any-ini-mode))
 (add-to-list 'auto-mode-alist '("\\.conf\\'" . any-ini-mode))

@@ -237,4 +237,12 @@
 
 (run-at-time "00:00" (* 24 60 60) #'cofi/erc-signal-new-day)
 
+;;; curse you erc for not letting me setup buffers via a function
+(defun erc-setup-buffer (buffer)
+  ;; show buffer in erc frame if possible
+  (let ((old-frame (selected-frame)))
+    (select-frame (or (cofi/erc-find-erc-frame) old-frame))
+    (display-buffer buffer)
+    (select-frame old-frame)))
+
 (provide 'cofi-erc)

@@ -17,4 +17,8 @@
            "C-n" 'comint-next-input
            "M-n" 'comint-next-matching-input-from-input))
 
+(add-hook 'term-mode-hook
+          (gen-local-fill-keymap-hook
+           "C-<backspace>" 'term-send-backward-kill-word))
+
 (provide 'cofi-shell)

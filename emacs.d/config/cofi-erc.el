@@ -245,6 +245,10 @@
     (display-buffer buffer)
     (select-frame old-frame)))
 
+(defadvice show-paren-function (around dont-paren-my-erc activate)
+  (unless (eq major-mode 'erc-mode)
+    ad-do-it))
+
 (defun cofi/erc-bitlbee-query ()
   (interactive)
   (with-current-buffer "&bitlbee"

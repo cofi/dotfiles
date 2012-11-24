@@ -245,4 +245,13 @@
     (display-buffer buffer)
     (select-frame old-frame)))
 
+(defun cofi/erc-bitlbee-query ()
+  (interactive)
+  (with-current-buffer "&bitlbee"
+    (erc-query (completing-read "Chat with: "
+                                (remove-if (p (member x (list "root" (erc-current-nick))))
+                                           (erc-get-channel-nickname-list))
+                                nil t)
+               (erc-server-buffer))))
+
 (provide 'cofi-erc)

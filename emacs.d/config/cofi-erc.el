@@ -55,6 +55,9 @@
       erc-track-visibility 'selected-visible)
 (erc-track-mode 1)
 
+(setq erc-server-reconnect-attempts 4
+      erc-server-reconnect-timeout 5)
+
 (setq erc-keywords nil)
 (setq erc-join-buffer 'window-noselect)
 (setq erc-header-line-format "%t(%m): %o")

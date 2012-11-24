@@ -120,6 +120,11 @@
     (when url-pos
       (goto-char url-pos))))
 
+(setq erc-button-url-regexp
+  (concat "\\(www\\.\\|\\(s?https?\\|ftp\\|file\\|gopher\\|news\\|telnet\\|wais\\|mailto\\):\\)" ; protocol
+          "\\(//[-a-zA-Z0-9_.]+:[0-9]\\)?"  ;
+          "[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;.,()]+[-a-zA-Z0-9_=#$@~`%&*+\\/()|]"))
+
 (cofi/set-key erc-mode-map (kbd "<backtab>") 'cofi/erc-previous-url-button)
 
 (defun cofi/erc-buffer ()

@@ -81,7 +81,6 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-x", shellPromptHere promptConfig)
                  , ("M-S-x", spawn "krunner")
                  , ("M-p", shellPromptHere promptConfig)
-                 , ("M-S-p", spawn "krunner")
                  , ("M-y", spawn launcher)
                  , ("M-S-y", spawn termLauncher)
                  , ("M-g", windowPromptGoto acPromptConfig)
@@ -161,6 +160,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  ++ searchBindings
                  ++ scratchpadBindings
                  ++ programBindings
+                 ++ mpdBindings
 
   where shutdown = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 2 0"
         logout = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 3 0"
@@ -192,6 +192,17 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                                              , ("c", spawn "calibre")
                                              , ("a", spawn "amarok")
                                              ]
+        mpdBindings = prefixKeymap "M-S-p" [ ("l", spawn "mpc volume -10")
+                                           , ("h", spawn "mpc volume +10")
+                                           , ("s", spawn "mpc stop")
+                                           , ("S-<Space>", spawn "mpc pause")
+                                           , ("<Space>", spawn "mpc play")
+                                           , ("n", spawn "mpc next")
+                                           , ("p", spawn "mpc prev")
+                                           , ("o", spawn "mpd ~/.mpdconf")
+                                           , ("k", spawn "mpd ~/.mpdconf --kill")
+                                           , ("q", spawn "qmpdclient")
+                                           ]
 
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"

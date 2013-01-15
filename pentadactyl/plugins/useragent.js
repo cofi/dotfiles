@@ -1,68 +1,59 @@
-/* use strict */
-XML.ignoreWhitespace = false;
-XML.prettyPrinting   = false;
+"use strict";
 var INFO =
-<plugin name="useragent" version="0.2"
-        href="http://dactyl.sf.net/pentadactyl/plugins#useragent-plugin"
-        summary="User Agent Switcher"
-        xmlns={NS}>
-    <author email="maglione.k@gmail.com">Kris Maglione</author>
-    <license href="http://opensource.org/licenses/mit-license.php">MIT</license>
-    <project name="Pentadactyl" min-version="1.0"/>
-    <p>
-        Ths plugin allows you to switch the browser's reported user-agent to a
-        number of preset values.
-    </p>
-    <item>
-        <tags>:ua :useragent</tags>
-        <spec>:useragent <oa>name</oa> <oa>useragent</oa></spec>
-        <description>
-            <p>
-                With zero or one arguments, list the currently defined
-                user-agent values.
-            </p>
+["plugin", { name: "useragent",
+             version: "0.2",
+             href: "http://dactyl.sf.net/pentadactyl/plugins#useragent-plugin",
+             summary: "User Agent Switcher",
+             xmlns: "dactyl" },
+    ["author", { email: "maglione.k@gmail.com" },
+        "Kris Maglione"],
+    ["license", { href: "http://opensource.org/licenses/mit-license.php" },
+        "MIT"],
+    ["project", { name: "Pentadactyl", "min-version": "1.0" }],
+    ["p", {},
+        "Ths plugin allows you to switch the browser's reported user-agent to a ",
+        "number of preset values."],
+    ["item", {},
+        ["tags", {}, ":ua :useragent"],
+        ["spec", {}, ":useragent ", ["oa", {}, "name"], " ", ["oa", {}, "useragent"]],
+        ["description", {},
+            ["p", {},
+                "With zero or one arguments, list the currently defined ",
+                "user-agent values."],
 
-            <p>
-                With two arguments, defines a new user-agent for use in the
-                <o>useragent</o> option. When <o>useragent</o> is set to
-                <oa>name</oa>, the <tt>User-Agent</tt> value sent to web
-                servers, and the value returned by
-                <tt>navigator.userAgent</tt> will be <oa>useragent</oa>.
-                Additionally, the following options are available:
-            </p>
+            ["p", {},
+                "With two arguments, defines a new user-agent for use in the ",
+                ["o", {}, "useragent"], " option. When ", ["o", {}, "useragent"], " is set to ",
+                "", ["oa", {}, "name"], ", the ", ["tt", {}, "User-Agent"], " value sent to web ",
+                "servers, and the value returned by ",
+                ["tt", {}, "navigator.userAgent"], " will be ", ["oa", {}, "useragent"], ". ",
+                "Additionally, the following options are available:"],
 
-            <dl>
-                <dt>-appcodename</dt> <dd>The value of <tt>navigator.appCodeName</tt></dd>
-                <dt>-appname</dt>     <dd>The value of <tt>navigator.appName</tt></dd>
-                <dt>-appversion</dt>  <dd>The value of <tt>navigator.appVersion</tt></dd>
-                <dt>-platform</dt>    <dd>The value of <tt>navigator.platform</tt></dd>
-                <dt>-vendor</dt>      <dd>The value of <tt>navigator.vendor</tt></dd>
-                <dt>-vendorsub</dt>   <dd>The value of <tt>navigator.vendorsub</tt></dd>
-            </dl>
-        </description>
-    </item>
-    <item>
-        <tags>:deluseragent :delua</tags>
-        <spec>:deluseragent <a>name</a></spec>
-        <description>
-            <p>Deletes a useragent created by <ex>:useragent</ex>.</p>
-        </description>
-    </item>
-    <item>
-        <tags>'useragent' 'ua'</tags>
-        <spec>'useragent' 'ua'</spec>
-        <type>string</type> <default>default</default>
-        <description>
-            <p>
-                Changes the User-Agent string sent to the web server and
-                returned by <tt>navigator.userAgent</tt>. If the value is the
-                name of a user-agent defined by <ex>:useragent</ex>, or one of
-                the predefined values, then the defined value is used.
-                Otherwise, the value itself is used.
-            </p>
-        </description>
-    </item>
-</plugin>;
+            ["dl", {},
+                ["dt", {}, "-appcodename"], ["dd", {}, "The value of ", ["tt", {}, "navigator.appCodeName"]],
+                ["dt", {}, "-appname"],     ["dd", {}, "The value of ", ["tt", {}, "navigator.appName"]],
+                ["dt", {}, "-appversion"],  ["dd", {}, "The value of ", ["tt", {}, "navigator.appVersion"]],
+                ["dt", {}, "-platform"],    ["dd", {}, "The value of ", ["tt", {}, "navigator.platform"]],
+                ["dt", {}, "-vendor"],      ["dd", {}, "The value of ", ["tt", {}, "navigator.vendor"]],
+                ["dt", {}, "-vendorsub"],   ["dd", {}, "The value of ", ["tt", {}, "navigator.vendorsub"]]]]],
+
+    ["item", {},
+        ["tags", {}, ":deluseragent :delua"],
+        ["spec", {}, ":deluseragent ", ["a", {}, "name"]],
+        ["description", {},
+            ["p", {},
+                "Deletes a useragent created by ", ["ex", {}, ":useragent"], "."]]],
+
+    ["item", {},
+        ["tags", {}, "'useragent' 'ua'"],
+        ["spec", {}, "'useragent' 'ua'"],
+        ["description", {},
+            ["p", {},
+                "Changes the User-Agent string sent to the web server and ",
+                "returned by ", ["tt", {}, "navigator.userAgent"], ". If the value is the ",
+                "name of a user-agent defined by ", ["ex", {}, ":useragent"], ", or one of ",
+                "the predefined values, then the defined value is used. ",
+                "Otherwise, the value itself is used."]]]];
 
 let UserAgent, useragents;
 let init = function init_() {
@@ -141,19 +132,18 @@ group.commands.add(["useragent", "ua"],
         if (args.length < 2)
             commandline.commandOutput(template.tabular(["Name", "User-Agent"], ["padding-right: 1em; min-width: 8em;", "white-space: normal;"],
                 [[ua.name,
-                  <>
-                    {ua.useragent}
-                    {
-                        !ua.options.length ? "" :
-                        <span class="extra-info">
-                            ({
-                                template.map(ua.options, function (o)
-                                <><span highlight="Key Normal">{o[0]}</span>=<span highlight="String">{o[1]}</span></>,
-                                <>&#xa0;</>)
-                            })
-                        </span>
-                    }
-                  </>]
+                  ["",
+                    ua.useragent,
+                    !ua.options.length ? "" :
+                    ["span", { highlight: "URLExtra" },
+                        " (",
+                        template.map(ua.options, function (o)
+                            [["span", { highlight: "Key Normal" }, o[0]],
+                             "=",
+                             ["span", { highlight: "String" }, o[1]]],
+                            "\u00a0"),
+                        ")"]]
+                 ]
                  for (ua in values(useragents))
                  if (!args[0] || ua.name.indexOf(args[0]) >= 0)]));
         else {

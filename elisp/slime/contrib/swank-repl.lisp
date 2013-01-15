@@ -85,6 +85,15 @@ This is an optimized way for Lisp to deliver output to Emacs."
       (when socket
         (close-socket socket)))))
 
+(defmethod thread-for-evaluation ((connection multithreaded-connection)
+				  (id (eql :find-existing)))
+  (or (car (mconn.active-threads connection))
+      (find-repl-thread connection)))
+
+(defmethod thread-for-evaluation ((connection multithreaded-connection)
+				  (id (eql :repl-thread)))
+  (find-repl-thread connection))
+
 (defun find-repl-thread (connection)
   (cond ((not (use-threads-p))
          (current-thread))
@@ -156,8 +165,11 @@ This is an optimized way for Lisp to deliver output to Emacs."
 
 (defvar *listener-eval-function* 'repl-eval)
 
-(defslimefun listener-eval (string)
-  (funcall *listener-eval-function* string))
+(defslimefun listener-eval (string &key (window-width nil window-width-p))
+  (if window-width-p
+      (let ((*print-right-margin* window-width))
+        (funcall *listener-eval-function* string))
+      (funcall *listener-eval-function* string)))
 
 (defvar *send-repl-results-function* 'send-repl-results-to-emacs)
 

@@ -1,4 +1,5 @@
 (add-to-loadpath "~/.elisp/slime/"
+                 "~/.elisp/slime/contrib"
                  "~/.elisp/vendor/clojure-mode/")
 
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
@@ -30,6 +31,7 @@
                             slime-repl-mode-hook)))
   (add-to-hooks #'enable-paredit-mode paredit-mode-hooks))
 
+(require 'slime)
 (defadvice paredit-newline (before slime-eval-print-in-scratch activate)
   "Call `SLIME-EVAL-PRINT-LAST-EXPRESSION' in slime scratch."
   (if (and slime-mode (string= "*slime-scratch*" (buffer-name)))
@@ -102,7 +104,6 @@
                  slime-xref-browser
                  slime-presentations
                  ))
-  (require 'slime)
   (setq slime-complete-symbol-function (f-alt 'helm-slime-complete
                                               'slime-fuzzy-complete-symbol
                                               'slime-simple-complete-symbol))
@@ -123,6 +124,7 @@
         (slime-connect slime-lisp-host port))
     (error "Not connected")))
 
+(require 'slime-repl)
 (defslime-repl-shortcut slime-quickload ("quickload" "ql")
   (:handler #'cofi/slime-repl-quickload)
   (:one-liner "Load system from quickload distribution"))

@@ -463,24 +463,23 @@ information."
                                (sb-c::find-error-context nil))))
 
 (defun signal-compiler-condition (condition context)
-  (signal (make-condition
-           'compiler-condition
-           :original-condition condition
-           :severity (etypecase condition
-                       (sb-ext:compiler-note :note)
-                       (sb-c:compiler-error  :error)
-                       (reader-error         :read-error)
-                       (error                :error)
-                       #+#.(swank-backend:with-symbol redefinition-warning 
-                             sb-kernel)
-                       (sb-kernel:redefinition-warning
-                                             :redefinition)
-                       (style-warning        :style-warning)
-                       (warning              :warning))
-           :references (condition-references condition)
-           :message (brief-compiler-message-for-emacs condition)
-           :source-context (compiler-error-context context)
-           :location (compiler-note-location condition context))))
+  (signal 'compiler-condition
+          :original-condition condition
+          :severity (etypecase condition
+                      (sb-ext:compiler-note :note)
+                      (sb-c:compiler-error  :error)
+                      (reader-error         :read-error)
+                      (error                :error)
+                      #+#.(swank-backend:with-symbol redefinition-warning 
+                            sb-kernel)
+                      (sb-kernel:redefinition-warning
+                       :redefinition)
+                      (style-warning        :style-warning)
+                      (warning              :warning))
+          :references (condition-references condition)
+          :message (brief-compiler-message-for-emacs condition)
+          :source-context (compiler-error-context context)
+          :location (compiler-note-location condition context)))
 
 (defun real-condition (condition)
   "Return the encapsulated condition or CONDITION itself."
@@ -1069,16 +1068,19 @@ Return a list of the form (NAME LOCATION)."
 
 (defimplementation call-with-debugging-environment (debugger-loop-fn)
   (declare (type function debugger-loop-fn))
-  (let* ((*sldb-stack-top* (if *debug-swank-backend*
-                               (sb-di:top-frame)
-                               (or sb-debug:*stack-top-hint*
-                                   (sb-di:top-frame))))
-         (sb-debug:*stack-top-hint* nil))
+  (let ((*sldb-stack-top*
+          (if (and (not *debug-swank-backend*)
+                   sb-debug:*stack-top-hint*)
+              #+#.(swank-backend:with-symbol 'resolve-stack-top-hint 'sb-debug)
+              (sb-debug::resolve-stack-top-hint)
+              #-#.(swank-backend:with-symbol 'resolve-stack-top-hint 'sb-debug)
+              sb-debug:*stack-top-hint*
+              (sb-di:top-frame)))
+        (sb-debug:*stack-top-hint* nil))
     (handler-bind ((sb-di:debug-condition
-		    (lambda (condition)
-                      (signal (make-condition
-                               'sldb-condition
-                               :original-condition condition)))))
+                     (lambda (condition)
+                       (signal 'sldb-condition
+                               :original-condition condition))))
       (funcall debugger-loop-fn))))
 
 #+#.(swank-backend::sbcl-with-new-stepper-p)
@@ -1857,10 +1859,5 @@ stack."
                     (assert (sb-posix:wifexited status))
                     (funcall completion-function
                              (zerop (sb-posix:wexitstatus status))))))))))))
-
-(defun deinit-log-output ()
-  ;; Can't hang on to an fd-stream from a previous session.
-  (setf (symbol-value (find-symbol "*LOG-OUTPUT*" 'swank))
-        nil))
 
 (pushnew 'deinit-log-output sb-ext:*save-hooks*)

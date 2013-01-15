@@ -1,3 +1,187 @@
+2012-12-27  Stas Boukarev  <stassats@gmail.com>
+
+	* swank.lisp (find-definitions-find-symbol-or-package): Rename
+	from `find-definitions-find-symbol'. Packages are not named by
+	symbols and an uninterned string can refer to a package. In case
+	it finds a package, return a new uninterned symbol.
+
+2012-12-17  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-ecl.lisp (swank-mop): MOP works well now on ECL, import
+	all symbols.
+
+	* swank.lisp (thread-for-evaluation): Use INTEGER, not FIXNUM, as
+	a specializer, FIXNUM is not a standard class.
+
+2012-12-16  Helmut Eller  <heller@common-lisp.net>
+
+	* swank.lisp (thread-for-evaluation): Make generic. Remove keyword
+	arg. Don't call find-repl-thread.
+
+2012-12-16  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (slime-attempt-connection): Show the attempt counter.
+
+2012-12-03  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-backend.lisp (deinit-log-output): Move from swank-sbcl,
+	use it on CCL in ccl:*save-exit-functions* as well.
+
+	* swank-allegro.lisp (macroexpand-all): USe walk-form, not walk
+	on >= 8.2.
+	Patch by Utz-Uwe Haus.
+
+2012-11-23  Stas Boukarev  <stassats@gmail.com>
+
+	* slime.el (slime-edit-definition): Don't ask the user for a name
+	to search if it's missing before running slime-edit-definition-hooks
+	(slime-open-inspector): pop-to-buffer before inserting anything,
+	otherwise the point is not moved into the desired position.
+
+2012-11-13  Francois-Rene Rideau <tunes@google.com>
+
+	* swank.lisp (*compile-file-for-emacs-hook*): A hook for
+	compile-file-for-emacs, so that ASDF can hook its compilation
+	functions.
+
+2012-11-12  Stas Boukarev  <stassats@gmail.com>
+
+	* swank.lisp (with-panic-handler): Abort the condition after
+	closing the connection, otherwise it ends up in the slime debugger
+	causing nested errors.
+
+2012-11-11  Stas Boukarev  <stassats@gmail.com>
+
+	* swank.lisp (interrupt-worker-thread): Solve *send-counter*
+	binding problem.
+	find-worker-thread: Merge with `thread-for-evaluation'.
+
+2012-11-11  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el ([test] find-definition.3): Mark as expected to fail.
+	([test] arglist): Adjust regexp so that CCL passes.
+	(slime-execute-tests): Insert summary table at the the end.
+	(slime-check): Don't change counters here, as that would count
+	multiple times per test.  Instead to the counting in
+	slime-execute-tests.
+
+2012-11-11  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-allegro.lisp (ldb-code-to-src-loc): Scan backward to the
+	first code point with a non-nil start-char.
+	(frame-package): Also match for ((:internal foo ...)).
+
+2012-11-08  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (slime-timer-call): Use debug marker in
+	condition-case.
+
+2012-11-02  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (find-definition.3): Fix syntax.
+
+2012-11-02  Helmut Eller  <heller@common-lisp.net>
+
+	* swank.lisp (condition-message): New. Binds *print-cirlce.
+	(safe-condition-message): Move binding of printer vars to
+	condition-message.
+	(*sldb-condition-printer*): Set it to #'condition-message.
+
+2012-11-02  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-allegro.lisp (frame-source-location, ldb-code-to-src-loc):
+	Use function-source-location for some cases that used to cause
+	errors.
+	(frame-package): New.
+	(format-sldb-condition, call-with-syntax-hooks): Deleted. Did just
+	the same as the default implementation.
+
+2012-11-02  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el ([test] find-definition): Test defstruct and defvar.
+	([test] find-definition.3): New.
+
+2012-10-30  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-cmucl.lisp (dd-location): Use info db as fallback.
+	(struct-constructor): Return the name not the function.
+
+2012-10-27  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (report-condition-with-circular-list): New test.
+	* swank.lisp (safe-condition-message): Bind *print-length* and
+	truncate the string after 64KB.
+
+2012-10-20  Stas Boukarev  <stassats@gmail.com>
+
+	* slime.el (slime-location-offset): When going to a position
+	causes an error, for example, trying to move beyond the end of the
+	buffer, move the point to 0 and then try to use the hints.
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (slime-insert-threads): Some cleanups.
+	(slime-insert-table, slime-insert-table-row)
+	(slime-transpose-lists) New helpers.
+	(slime-threads-table-properties): Renamed from
+	*slime-threads-table-properties*
+	(slime-thread-index-to-id, slime-longest-lines)
+	(slime-format-threads-labels, slime-insert-thread): Deleted.
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+
+	Avoid some unused variable warnings.
+
+	* slime.el (slime-xref-group, slime-all-contribs, [selector] ??):
+	Use _ as prefix or in loop-destructuring: (loop for (nil) in ...).
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (slime-goto-source-location-buffer-and-file): Delete
+	unused function.
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+	Avoid flet.
+
+	* slime.el (with-struct, slime-compute-policy)
+	(slime-create-note-overlay, slime-merge-note-into-overlay)
+	(slime-file-name-merge-source-root)
+	(slime-highlight-differences-in-dirname)
+	(slime-check-location-filename-sanity, slime-macroexpand-undo)
+	(slime-read-connection)
+	(slime-inspector-property-at-point): Use macrolet or a
+	comibination of let and funcall as replacement for flet.
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+	Avoid labels.
+
+	* hyperspec.el (hyperspec--get-one-line): New function.
+
+2012-10-14  Helmut Eller  <heller@common-lisp.net>
+
+	* swank.lisp (close-connection%): Let *debugger-hook* be nil
+	across the entire function to that we don't call our own debugger
+	if we ever get some error during CLOSE or somesuch.
+
+2012-09-04  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-loader.lisp (lisp-version-string): Add "s" to Allegro with
+	SMP support.
+	Patch by Dave Cooper.
+
+2012-08-18  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-abcl.lisp (find-definitions): Call ext:resolve before
+	finding definitions, for the symbol may be not autoloaded yet.
+
+2012-08-04  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-sbcl.lisp (call-with-debugging-environment): Use
+	sb-debug::resolve-stack-top-hint instead of just
+	sb-debug:*stack-top-hint*, because now it can contain things other
+	than just frames.
+	* clean up: (signal (make-condition ...)) => (signal ...)
+
 2012-07-13  Helmut Eller  <heller@common-lisp.net>
 
 	* slime.el: Don't compile functions that are now in other files.

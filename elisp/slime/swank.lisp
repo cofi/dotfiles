@@ -291,8 +291,8 @@ Backend code should treat the connection structure as opaque.")
   (:report (lambda (c s) (princ (swank-error.condition c) s)))
   (:documentation "Condition which carries a backtrace."))
 
-(defun make-swank-error (condition &optional (backtrace (safe-backtrace)))
-  (make-condition 'swank-error :condition condition :backtrace backtrace))
+(defun signal-swank-error (condition &optional (backtrace (safe-backtrace)))
+  (error 'swank-error :condition condition :backtrace backtrace))
 
 (defvar *debug-on-swank-protocol-error* nil
   "When non-nil invoke the system debugger on errors that were
@@ -317,11 +317,12 @@ to T unless you want to debug swank internals.")
 (defmacro with-panic-handler ((connection) &body body)
   "Close the connection on unhandled `serious-condition's."
   (let ((conn (gensym)))
-  `(let ((,conn ,connection))
-     (handler-bind ((serious-condition
-                     (lambda (condition)
-                       (close-connection ,conn condition (safe-backtrace)))))
-       . ,body))))
+    `(let ((,conn ,connection))
+       (handler-bind ((serious-condition
+                        (lambda (condition)
+                          (close-connection ,conn condition (safe-backtrace))
+                          (abort condition))))
+         . ,body))))
 
 (add-hook *new-connection-hook* 'notify-backend-of-connection)
 (defun notify-backend-of-connection (connection)
@@ -879,7 +880,7 @@ if the file doesn't exist; otherwise the first line of the file."
   "Read an S-expression from STREAM using the SLIME protocol."
   (log-event "decode-message~%")
   (without-slime-interrupts
-    (handler-bind ((error (lambda (c) (error (make-swank-error c)))))
+    (handler-bind ((error #'signal-swank-error))
       (handler-case (read-message stream *swank-io-package*)
         (swank-reader-error (c) 
           `(:reader-error ,(swank-reader-error.packet c)
@@ -889,7 +890,7 @@ if the file doesn't exist; otherwise the first line of the file."
   "Write an S-expression to STREAM using the SLIME protocol."
   (log-event "encode-message~%")
   (without-slime-interrupts
-    (handler-bind ((error (lambda (c) (error (make-swank-error c)))))
+    (handler-bind ((error #'signal-swank-error))
       (write-message message *swank-io-package* stream))))
 
 
@@ -944,32 +945,34 @@ The processing is done in the extent of the toplevel restart."
 
 (defun close-connection% (c condition backtrace)
   (let ((*debugger-hook* nil))
-    (log-event "close-connection: ~a ...~%" condition))
-  (format *log-output* "~&;; swank:close-connection: ~A~%"
-          (escape-non-ascii (safe-condition-message condition)))
-  (stop-serving-requests c)
-  (close (connection.socket-io c))
-  (when (connection.dedicated-output c)
-    (close (connection.dedicated-output c)))
-  (setf *connections* (remove c *connections*))
-  (run-hook *connection-closed-hook* c)
-  (when (and condition (not (typep condition 'end-of-file)))
+    (log-event "close-connection: ~a ...~%" condition)
+    (format *log-output* "~&;; swank:close-connection: ~A~%"
+            (escape-non-ascii (safe-condition-message condition)))
+    (stop-serving-requests c)
+    (close (connection.socket-io c))
+    (when (connection.dedicated-output c)
+      (close (connection.dedicated-output c)))
+    (setf *connections* (remove c *connections*))
+    (run-hook *connection-closed-hook* c)
+    (when (and condition (not (typep condition 'end-of-file)))
+      (finish-output *log-output*)
+      (format *log-output* "~&;; Event history start:~%")
+      (dump-event-history *log-output*)
+      (format *log-output* "~
+;; Event history end.~%~
+;; Backtrace:~%~{~A~%~}~
+;; Connection to Emacs lost. [~%~
+;;  condition: ~A~%~
+;;  type: ~S~%~
+;;  style: ~S]~%"
+              (loop for (i f) in backtrace collect 
+                    (ignore-errors 
+                      (format nil "~d: ~a" i (escape-non-ascii f))))
+              (escape-non-ascii (safe-condition-message condition) )
+              (type-of condition)
+              (connection.communication-style c)))
     (finish-output *log-output*)
-    (format *log-output* "~&;; Event history start:~%")
-    (dump-event-history *log-output*)
-    (format *log-output* ";; Event history end.~%~
-                        ;; Backtrace:~%~{~A~%~}~
-                        ;; Connection to Emacs lost. [~%~
-                        ;;  condition: ~A~%~
-                        ;;  type: ~S~%~
-                        ;;  style: ~S]~%"
-            (loop for (i f) in backtrace collect 
-                  (ignore-errors (format nil "~d: ~a" i (escape-non-ascii f))))
-            (escape-non-ascii (safe-condition-message condition) )
-            (type-of condition)
-            (connection.communication-style c)))
-  (finish-output *log-output*)
-  (log-event "close-connection ~a ... done.~%" condition))
+    (log-event "close-connection ~a ... done.~%" condition)))
 
 ;;;;;; Thread based communication
 
@@ -994,24 +997,21 @@ The processing is done in the extent of the toplevel restart."
    (force-output stream)
    (sleep *auto-flush-interval*)))
 
-;; FIXME: drop dependency on find-repl-thread
-;; FIXME: and don't add and any more 
-(defun find-worker-thread (connection id)
-  (etypecase id
-    ((member t)
-     (etypecase connection
-       (multithreaded-connection (or (car (mconn.active-threads connection))
-                                     (find-repl-thread connection)))
-       (singlethreaded-connection (current-thread))))
-    ((member :repl-thread) 
-     (find-repl-thread connection))
-    (fixnum
-     (find-thread id))))
+(defgeneric thread-for-evaluation (connection id)
+  (:documentation "Find or create a thread to evaluate the next request.")
+  (:method ((connection multithreaded-connection) (id (eql t)))
+    (spawn-worker-thread connection))
+  (:method ((connection multithreaded-connection) (id (eql :find-existing)))
+    (car (mconn.active-threads connection)))
+  (:method (connection (id integer))
+    (find-thread id))
+  (:method ((connection singlethreaded-connection) id)
+    (current-thread)))
 
-;; FIXME: the else branch does look like it was written by someone who
-;; doesn't know what he is doeing.
 (defun interrupt-worker-thread (connection id)
-  (let ((thread (find-worker-thread connection id)))
+  (let ((thread (thread-for-evaluation connection
+                                       (cond ((eq id t) :find-existing)
+                                             (t id)))))
     (log-event "interrupt-worker-thread: ~a ~a~%" id thread)
     (if thread
         (etypecase connection
@@ -1022,22 +1022,10 @@ The processing is done in the extent of the toplevel restart."
                                (invoke-or-queue-interrupt #'simple-break))))
           (singlethreaded-connection
            (simple-break)))
-        (let ((*send-counter* 0)) ;; shouldn't be necessary, but it is
-          (send-to-emacs (list :debug-condition (current-thread-id)
-                               (format nil "Thread with id ~a not found" 
-                                       id)))))))
-
-(defun thread-for-evaluation (connection id)
-  "Find or create a thread to evaluate the next request."
-  (etypecase id
-    ((member t)
-     (etypecase connection
-       (multithreaded-connection (spawn-worker-thread connection))
-       (singlethreaded-connection (current-thread))))
-    ((member :repl-thread)
-     (find-repl-thread connection))
-    (fixnum
-     (find-thread id))))
+        (encode-message (list :debug-condition (current-thread-id)
+                              (format nil "Thread with id ~a not found" 
+                                      id))
+                        (current-socket-io)))))
 
 (defun spawn-worker-thread (connection)
   (spawn (lambda () 
@@ -2156,20 +2144,28 @@ conditions are simply reported."
     (send-to-emacs `(:debug-condition ,(current-thread-id)
                                       ,(princ-to-string real-condition)))))
 
-(defvar *sldb-condition-printer* #'format-sldb-condition
+(defun condition-message (condition)
+  (let ((*print-pretty* t)
+        (*print-right-margin* 65)
+        (*print-circle* t))
+    (format-sldb-condition condition)))
+
+(defvar *sldb-condition-printer* #'condition-message
   "Function called to print a condition to an SLDB buffer.")
 
 (defun safe-condition-message (condition)
   "Safely print condition to a string, handling any errors during
 printing."
-  (let ((*print-pretty* t) (*print-right-margin* 65))
-    (handler-case
-        (funcall *sldb-condition-printer* condition)
-      (error (cond)
-        ;; Beware of recursive errors in printing, so only use the condition
-        ;; if it is printable itself:
-        (format nil "Unable to display error condition~@[: ~A~]"
-                (ignore-errors (princ-to-string cond)))))))
+  (truncate-string
+   (handler-case
+       (funcall *sldb-condition-printer* condition)
+     (error (cond)
+       ;; Beware of recursive errors in printing, so only use the condition
+       ;; if it is printable itself:
+       (format nil "Unable to display error condition~@[: ~A~]"
+               (ignore-errors (princ-to-string cond)))))
+   (ash 1 16)
+   "..."))
 
 (defun debugger-condition-for-emacs ()
   (list (safe-condition-message *swank-debugger-condition*)
@@ -2424,24 +2420,36 @@ The time is measured in seconds."
                                    :loadp (if loadp t)
                                    :faslfile faslfile))))))
 
-(defslimefun compile-file-for-emacs (filename load-p &rest options &key policy
-                                              &allow-other-keys)
+(defun compile-file-with-compile-file (pathname load-p &rest options
+                                       &key policy
+                                       &allow-other-keys)
+  (multiple-value-bind (output-pathname warnings? failure?)
+      (swank-compile-file pathname
+                          (fasl-pathname pathname options)
+                          nil
+                          (or (guess-external-format pathname)
+                              :default)
+                          :policy policy)
+    (declare (ignore warnings?))
+    (values t (not failure?) load-p output-pathname)))
+
+(defvar *compile-file-for-emacs-hook* '(compile-file-with-compile-file))
+
+(defslimefun compile-file-for-emacs (filename load-p &rest options)
   "Compile FILENAME and, when LOAD-P, load the result.
 Record compiler notes signalled as `compiler-condition's."
   (with-buffer-syntax ()
     (collect-notes
      (lambda ()
        (let ((pathname (filename-to-pathname filename))
-             (*compile-print* nil) (*compile-verbose* t))
-         (multiple-value-bind (output-pathname warnings? failure?)
-             (swank-compile-file pathname
-                                 (fasl-pathname pathname options)
-                                 nil
-                                 (or (guess-external-format pathname)
-                                     :default)
-                                 :policy policy)
-           (declare (ignore warnings?))
-           (values (not failure?) load-p output-pathname)))))))
+             (*compile-print* nil)
+             (*compile-verbose* t))
+         (loop for hook in *compile-file-for-emacs-hook*
+               do
+               (multiple-value-bind (tried success load? output-pathname)
+                   (apply hook pathname load-p options)
+                 (when tried
+                   (return (values success load? output-pathname))))))))))
 
 (defvar *fasl-pathname-function* nil
   "In non-nil, use this function to compute the name for fasl-files.")
@@ -2919,17 +2927,22 @@ Include the nicknames if NICKNAMES is true."
     ((:sldb frame var)
      (frame-var-value frame var))))
 
-(defvar *find-definitions-right-trim* ",:.")
-(defvar *find-definitions-left-trim* "#:")
+(defvar *find-definitions-right-trim* ",:.>")
+(defvar *find-definitions-left-trim* "#:<")
 
-(defun find-definitions-find-symbol (name)
+(defun find-definitions-find-symbol-or-package (name)
   (flet ((do-find (name)
-           (multiple-value-bind (symbol found)
+           (multiple-value-bind (symbol found name)
                (with-buffer-syntax ()
                  (parse-symbol name))
-             (when found
-               (return-from find-definitions-find-symbol
-                 (values symbol found))))))
+             (cond (found
+                    (return-from find-definitions-find-symbol-or-package
+                      (values symbol found)))
+                   ;; Packages are not named by symbols, so
+                   ;; not-interned symbols can refer to packages
+                   ((find-package name)
+                    (return-from find-definitions-find-symbol-or-package
+                      (values (make-symbol name) t)))))))
     (do-find name)
     (do-find (string-right-trim *find-definitions-right-trim* name))
     (do-find (string-left-trim *find-definitions-left-trim* name))
@@ -2941,7 +2954,7 @@ Include the nicknames if NICKNAMES is true."
   "Return a list ((DSPEC LOCATION) ...) of definitions for NAME.
 DSPEC is a string and LOCATION a source location. NAME is a string."
   (multiple-value-bind (symbol found)
-      (find-definitions-find-symbol name)
+      (find-definitions-find-symbol-or-package name)
     (when found
       (mapcar #'xref>elisp (find-definitions symbol)))))
 
@@ -3388,7 +3401,15 @@ a time.")
 (defslimefun list-threads ()
   "Return a list (LABELS (ID NAME STATUS ATTRS ...) ...).
 LABELS is a list of attribute names and the remaining lists are the
-corresponding attribute values per thread."
+corresponding attribute values per thread.  
+Example: 
+  ((:id :name :status :priority)
+   (6 \"swank-indentation-cache-thread\" \"Semaphore timed wait\" 0)
+   (5 \"reader-thread\" \"Active\" 0)
+   (4 \"control-thread\" \"Semaphore timed wait\" 0)
+   (2 \"Swank Sentinel\" \"Semaphore timed wait\" 0)
+   (1 \"listener\" \"Active\" 0)
+   (0 \"Initial\" \"Sleep\" 0))"
   (setq *thread-list* (all-threads))
   (when (and *emacs-connection*
              (use-threads-p)

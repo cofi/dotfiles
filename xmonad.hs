@@ -164,7 +164,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
 
   where shutdown = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 2 0"
         logout = "qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 1 3 0"
-        termExec = myTerm ++ " -e"
+        termExec = myTerm ++ " -e "
         dmenuOptions = buildOptions [ ("-fn", promptFont)
                                     , ("-nb", promptBG)
                                     , ("-sb", promptBG)
@@ -175,7 +175,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
         withHome relativePath = home ++ "/" ++ relativePath
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
-                       ++ dmenuOptions ++ ") && " ++ termExec ++ " $cmd"
+                       ++ dmenuOptions ++ ") && " ++ termExec ++ "$cmd"
         respawn = "killall trayer ; xmonad --restart"
         nextNonEmpty = moveTo Next NonEmptyWS
         prevNonEmpty = moveTo Prev NonEmptyWS

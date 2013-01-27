@@ -1,5 +1,4 @@
-(add-to-loadpath "~/.elisp/vendor/python")
-;;; setup for ipython 0.11
+;; setup for ipython 0.11
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args ""
       python-shell-prompt-regexp "In \\[[0-9]+\\]: "

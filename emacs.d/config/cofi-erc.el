@@ -48,6 +48,10 @@
                                 "333"   ; who set the topic
                                 "353"   ; Names notice
                                 ))
+(setq erc-track-exclude '("irc.freenode.net:7000"
+                          "localhost:6667"
+                          "&bitlbee"
+                          ))
 
 (setq erc-track-showcount t
       erc-track-shorten-start 4

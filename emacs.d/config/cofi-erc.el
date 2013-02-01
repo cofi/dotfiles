@@ -97,9 +97,10 @@
       tls-program)
 
 (defun cofi/erc-connect-freenode ()
-    (erc-tls
-     :server "irc.freenode.net"
-     :port 7000))
+  (interactive)
+  (erc-tls
+   :server "irc.freenode.net"
+   :port 7000))
 
 (defun cofi/erc ()
   (interactive)

@@ -109,9 +109,6 @@
                  (lambda ()
                    (setq tab-width 4)
                    (setq mode-name "py"))
-                 ;; evil settings
-                 (lambda ()
-                   (setq evil-word "[:word:]"))
                  (gen-local-fill-keymap-hook
                      "C-c p"     cofi-rope-map
                      "M-n"       'flymake-goto-next-error

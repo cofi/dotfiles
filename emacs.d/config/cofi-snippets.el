@@ -26,7 +26,7 @@
       (insert (make-string count ? )))))
 
 (defun cofi/no-yas ()
-  (setq yas--dont-activate t))
+  (setq yas-dont-activate t))
 
 (add-to-hooks 'cofi/no-yas '(magit-mode-hook
                             calc-mode-hook))

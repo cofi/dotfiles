@@ -116,6 +116,8 @@
 (defun cofi/erc-previous-url-button ()
   "Go to the previous URL button in this buffer."
   (interactive)
+  (when (eq (get-text-property (point) 'erc-callback) 'browse-url)
+    (backward-word))
   (let ((url-pos (do ((point (point) (previous-single-property-change point 'erc-callback)))
                      ((or (null point) (eq (get-text-property point 'erc-callback) 'browse-url)) point))))
     (when url-pos

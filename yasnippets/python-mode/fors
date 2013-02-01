@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name : for statement
 # key: fors
+# condition: (cofi/snippet-in-code)
 # --
 for ${var} in ${collection}:
     $0

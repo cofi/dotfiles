@@ -423,4 +423,9 @@ Returns nil if `X' not in `XS'."
   `(when cofi/mail-instance
      ,@body))
 
+(defun* cofi/contains-any (lst test &optional (test-fun #'memq))
+  "Test if `lst' contains any of `test'."
+   (cl-loop for x in test
+            thereis (funcall test-fun x lst)))
+
 (provide 'cofi-util)

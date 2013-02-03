@@ -31,7 +31,6 @@
                      auctex
                      auto-complete
                      auto-dictionary
-                     autopair
                      bookmark+
                      boxquote
                      c-eldoc
@@ -98,6 +97,7 @@
                                  cofi-shell
                                  cofi-workgroups
                                  cofi-write
+                                 cofi-smartparens
                                  cofi-completion))
 (defvar cofi/full-settings '(cofi-programming
                              ))

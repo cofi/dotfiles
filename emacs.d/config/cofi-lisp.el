@@ -76,8 +76,6 @@
 
 (setq slime-net-coding-system 'utf-8-unix)
 
-(add-hook 'sldb-mode-hook #'(lambda () (setq autopair-dont-activate t)))
-
 ;;; keep our repl clean
 (setq slime-repl-history-trim-whitespaces t
       slime-repl-history-remove-duplicates t)

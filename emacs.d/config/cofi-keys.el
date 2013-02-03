@@ -15,7 +15,7 @@
   "i"   'toggle-input-method
   "l"   'outline-minor-mode
   "o"   'orgstruct++-mode
-  "p"   'autopair-mode
+  "p"   'smartparens-mode
   "P"   'pretty-mode
   "r"   'auto-revert-mode
   "s"   'flyspell-mode

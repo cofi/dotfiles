@@ -19,8 +19,7 @@
 
 (require-and-exec 'eldoc
   (add-to-hooks 'eldoc-mode '(python-mode-hook
-                              emacs-lisp-mode-hook))
-  (eldoc-add-command 'autopair-insert-opening))
+                              emacs-lisp-mode-hook)))
 
 (setq doc-view-continuous t)
 
@@ -101,10 +100,6 @@
 ;; ==================================================
 
 ;; Default modes ========================================
-(setq autopair-autowrap t)
-(require-and-exec 'autopair
-  (add-to-hooks #'autopair-mode '(text-mode-hook)))
-
 (require-and-exec 'saveplace
                   (setq save-place-file (cofi/var-file "emacs/places"))
                   (setq-default save-place t))

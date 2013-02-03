@@ -103,7 +103,6 @@
     (available . ac-ropemacs-available)))
 
 (add-all-to-hook 'python-mode-hook
-                 #'autopair-mode
                  #'show-paren-mode
                  #'auto-fill-mode
                  (lambda ()
@@ -121,14 +120,10 @@
       pylookup-html-locations '("~/doc/python-2.7/")
       pylookup-completing-read #'helm-completing-read-default)
 
-;; Triple strings for autopair
 (add-hook 'python-mode-hook
           #'(lambda ()
-              ;; move single quote to string class for quote pairing
-              (modify-syntax-entry ?' "\"")
-              (setq autopair-handle-action-fns
-                    (list #'autopair-default-handle-action
-                          #'autopair-python-triple-quote-action))))
+              ;; move single quote to string class
+              (modify-syntax-entry ?' "\"")))
 
 ;;; load ropemacs
 (add-hook 'python-mode-hook

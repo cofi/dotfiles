@@ -39,6 +39,7 @@
                      diminish
                      eldoc-eval
                      elein
+                     epc
                      evil-numbers
                      flymake-cursor
                      full-ack
@@ -95,9 +96,9 @@
                                  cofi-org
                                  cofi-vcs
                                  cofi-shell
+                                 cofi-smartparens
                                  cofi-workgroups
                                  cofi-write
-                                 cofi-smartparens
                                  cofi-completion))
 (defvar cofi/full-settings '(cofi-programming
                              ))

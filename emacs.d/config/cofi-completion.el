@@ -81,6 +81,7 @@
                             ac-source-slime-fuzzy
                             ac-source-slime-simple))
         (python-mode     . (ac-source-words-in-buffer
+                            ac-source-jedi-direct
                             ac-source-nropemacs
                             ac-source-nropemacs-dot))
         (java-mode       . (ac-source-words-in-buffer

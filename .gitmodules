@@ -76,3 +76,6 @@
 [submodule "elisp/vendor/smartparens"]
 	path = elisp/vendor/smartparens
 	url = git://github.com/Fuco1/smartparens.git
+[submodule "elisp/vendor/emacs-jedi"]
+	path = elisp/vendor/emacs-jedi
+	url = git://github.com/tkf/emacs-jedi.git

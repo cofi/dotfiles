@@ -126,17 +126,24 @@
               (modify-syntax-entry ?' "\"")))
 
 ;;; load ropemacs
-(add-hook 'python-mode-hook
+(add-all-to-hook 'python-mode-hook
           #'(lambda ()
-              (pymacs-load "ropemacs" "rope-")
-              ;; move useful global commands to local keymap
-              (fill-keymap 'local
-                           "M-?"   'rope-code-assist
-                           "C-M-?" 'rope-lucky-assist
-                           "C-c g" 'rope-goto-definition
-                           "C-c d" 'rope-show-doc
-                           "C-c t" 'rope-show-calltip)))
+              (pymacs-load "ropemacs" "rope-"))
+          ;; move useful global commands to local keymap
+          (gen-local-fill-keymap-hook
+           "M-?"   'rope-code-assist
+           "C-M-?" 'rope-lucky-assist
+           ))
 
+(add-to-loadpath "~/.elisp/vendor/emacs-jedi/")
+(require-and-exec 'jedi
+  (add-all-to-hook 'python-mode-hook
+                   'jedi:setup
+                   (gen-local-fill-keymap-hook
+                    "C-c d" 'jedi:show-doc
+                    "C-c t" 'jedi:get-in-function-call
+                    "C-c g" 'jedi:goto-definition
+                    )))
 
 (add-hook 'python-mode-hook 'highlight-80+-mode)
 

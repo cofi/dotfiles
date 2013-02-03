@@ -1,5 +1,3 @@
-(load-file "~/.elisp/cedet/common/cedet.el")
-
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 (defun cofi/fortune2scratch ()

@@ -34,6 +34,8 @@
                                "C-c c t" 'semantic-analyze-proto-impl-toggle
                                "C-c c s" 'semantic-ia-show-summary
                                "C-c c g" 'semantic-ia-fast-jump
+                               "C-c c j" 'semantic-complete-jump-local
+                               "C-c c J" 'semantic-complete-jump
                                "C-c c c" 'semantic-ia-describe-class))
 
 (provide 'cofi-cedet)

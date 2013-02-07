@@ -57,7 +57,7 @@
                        '(font-lock-comment-face))))
 
 (defun cofi/snippet-in-code ()
-  (not (or (cofi/snippet-in-code)
+  (not (or (cofi/snippet-in-comment)
         (cofi/snippet-in-string))))
 
 (provide 'cofi-snippets)

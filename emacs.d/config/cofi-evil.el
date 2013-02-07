@@ -342,7 +342,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (forward-char 1)
   (recursive-edit))
 
-(add-hook 'ace-jump-mode-hook 'exit-recursive-edit)
+(add-hook 'ace-jump-mode-end-hook 'exit-recursive-edit)
 
 (evil-add-hjkl-bindings *bc-menu-mode-map* 'emacs)
 

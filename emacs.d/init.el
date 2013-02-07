@@ -1,5 +1,4 @@
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(load (setq custom-file "~/.emacs.d/custom.el"))
 (defun cofi/fortune2scratch ()
   "Return a comment-padded fortune cookie."
   (let ((cookie (shell-command-to-string "fortune -a")))

@@ -9,10 +9,21 @@
       (cl-remove-if (lambda (pair) (member (car pair) '(python-mode)))
                     semantic-new-buffer-setup-functions))
 
+(setq semantic-default-submodes '(global-semantic-idle-scheduler-mode
+                                  global-semanticdb-minor-mode
+                                  global-semantic-decoration-mode
+                                  global-semantic-idle-breadcrumbs-mode
+                                  global-semantic-idle-local-symbol-highlight-mode
+                                  global-semantic
+                                  ))
+
 ;;; decoration
 (require 'semantic/decorate/mode)
 (semantic-toggle-decoration-style "semantic-decoration-on-private-members" t)
 (semantic-toggle-decoration-style "semantic-decoration-on-protected-members" t)
+
+(setq semantic-idle-breadcrumbs-format-tag-list-function
+      #'semantic-idle-breadcrumbs--format-innermost-first)
 
 ;;; tags
 (dolist (mode '(c-mode c++-mode java-mode))

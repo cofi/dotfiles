@@ -1,6 +1,3 @@
-;; Enable EDE (Project Management) features
-;; (global-ede-mode 1)
-
 (require 'semantic)
 (require 'semantic/db-file)
 (require 'semantic/idle)
@@ -12,17 +9,8 @@
 
 ;;; decoration
 (require 'semantic/decorate/mode)
-(global-semantic-decoration-mode 1)
-(global-semantic-idle-local-symbol-highlight-mode 1)
 (semantic-toggle-decoration-style "semantic-decoration-on-private-members" t)
 (semantic-toggle-decoration-style "semantic-decoration-on-protected-members" t)
-
-;; (setq semantic-idle-breadcrumbs-format-tag-list-function #'semantic-idle-breadcrumbs--format-innermost-first)
-;; (global-semantic-idle-breadcrumbs-mode 1)
-
-;; (global-srecode-minor-mode 1)
-
-;; (cogre-uml-enable-unicode)
 
 ;;; tags
 (dolist (mode '(c-mode c++-mode java-mode))

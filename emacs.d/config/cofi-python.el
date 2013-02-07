@@ -145,6 +145,9 @@
                     "C-c g" 'jedi:goto-definition
                     )))
 
+(add-hook 'python-mode-hook
+          (lambda () (setq header-line-format '((t (:eval (which-function)))))))
+
 (add-hook 'python-mode-hook 'highlight-80+-mode)
 
 (require-and-exec 'pydoc-info

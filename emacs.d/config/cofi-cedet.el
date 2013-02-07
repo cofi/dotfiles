@@ -5,7 +5,9 @@
 (global-semantic-highlight-func-mode 1)
 (setq semanticdb-default-save-directory (cofi/var-file "emacs/semanticdb"))
 
-;;; idle
+(setq semantic-new-buffer-setup-functions
+      (cl-remove-if (lambda (pair) (member (car pair) '(python-mode)))
+                    semantic-new-buffer-setup-functions))
 
 ;;; decoration
 (require 'semantic/decorate/mode)

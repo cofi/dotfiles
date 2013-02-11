@@ -428,4 +428,19 @@ Returns nil if `X' not in `XS'."
    (cl-loop for x in test
             thereis (funcall test-fun x lst)))
 
+(defun cofi/pos-in-string-p (pos)
+  (let ((face-props (get-text-property pos 'face)))
+    (cofi/contains-any (if (listp face-props)
+                           face-props
+                         (list face-props))
+                       '(font-lock-doc-face
+                         font-lock-string-face))))
+
+(defun cofi/pos-in-comment-p (pos)
+  (let ((face-props (get-text-property pos 'face)))
+    (cofi/contains-any (if (listp face-props)
+                           face-props
+                         (list face-props))
+                       '(font-lock-comment-face))))
+
 (provide 'cofi-util)

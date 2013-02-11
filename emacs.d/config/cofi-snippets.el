@@ -41,23 +41,8 @@
       (insert region))))
 
 ;;; snippet helpers
-(defun cofi/snippet-in-string ()
-  (let ((face-props (get-text-property (point) 'face)))
-    (cofi/contains-any (if (listp face-props)
-                           face-props
-                         (list face-props))
-                       '(font-lock-doc-face
-                         font-lock-string-face))))
-
-(defun cofi/snippet-in-comment ()
-  (let ((face-props (get-text-property (point) 'face)))
-    (cofi/contains-any (if (listp face-props)
-                           face-props
-                         (list face-props))
-                       '(font-lock-comment-face))))
-
 (defun cofi/snippet-in-code ()
-  (not (or (cofi/snippet-in-comment)
-        (cofi/snippet-in-string))))
+  (not (or (cofi/pos-in-comment-p (point))
+        (cofi/pos-in-string-p (point)))))
 
 (provide 'cofi-snippets)

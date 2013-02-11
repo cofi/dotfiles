@@ -89,14 +89,14 @@
                                  cofi-project
                                  cofi-snippets
                                  cofi-ui
-                                 cofi-modeline
                                  cofi-org
                                  cofi-vcs
                                  cofi-shell
                                  cofi-smartparens
                                  cofi-workgroups
                                  cofi-write
-                                 cofi-completion))
+                                 cofi-completion
+                                 cofi-modeline))
 (defvar cofi/full-settings '(cofi-programming
                              ))
 

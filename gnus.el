@@ -48,7 +48,7 @@
                  #'mail-attachment-check)
 
 ;;; writing
-(add-hook 'message-mode-hook #'cofi/write-mail)
+(add-hook 'message-mode-hook 'cofi/write-mail)
 (setq gnus-add-to-list t)
 (setq message-elide-ellipsis "\n[%l lines snipped]\n")
 

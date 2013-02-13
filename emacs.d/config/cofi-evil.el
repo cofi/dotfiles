@@ -118,6 +118,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              ":"     'evil-repeat-find-char-reverse)
 
 (fill-keymap evil-motion-state-map
+             "y"     'evil-yank
+             "Y"     (kbd "y$")
              "_"     'evil-first-non-blank
              "C-e"   'end-of-line
              "C-S-d" 'evil-scroll-up

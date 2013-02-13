@@ -3,7 +3,7 @@
 (setq sp-pairs '((t
                   .
                   ((:open "\"" :close "\"" :actions (insert wrap))
-                   (:open "'"  :close "'"  :actions (insert wrap) :unless '(sp-point-after-word-p))
+                   (:open "'"  :close "'"  :actions (insert wrap) :unless (sp-point-after-word-p))
                    (:open "("  :close ")"  :actions (insert wrap))
                    (:open "["  :close "]"  :actions (insert wrap))
                    (:open "{"  :close "}"  :actions (insert wrap))

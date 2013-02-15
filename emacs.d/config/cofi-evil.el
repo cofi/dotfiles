@@ -323,24 +323,40 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (evil-define-key 'insert message-mode-map
   (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 
+(defmacro cofi/without-evil-visual-hooks (&rest body)
+  `(let ((old-mark (mark)))
+     (remove-hook 'pre-command-hook #'evil-visual-pre-command t)
+     (remove-hook 'post-command-hook #'evil-visual-post-command t)
+     (unwind-protect
+         (progn
+           ,@body)
+        (add-hook 'pre-command-hook #'evil-visual-pre-command nil t)
+        (add-hook 'post-command-hook #'evil-visual-post-command nil t)
+        (set-mark old-mark))))
+
 (evil-define-motion evil-ace-jump-char-mode (count)
   :type exclusive
-  (ace-jump-mode 5)
+  (cofi/without-evil-visual-hooks
+   (ace-jump-mode 5))
   (recursive-edit))
 
 (evil-define-motion evil-ace-jump-line-mode (count)
   :type line
-  (ace-jump-mode 9)
+  (cofi/without-evil-visual-hooks
+   (ace-jump-mode 9))
   (recursive-edit))
 
 (evil-define-motion evil-ace-jump-word-mode (count)
   :type exclusive
-  (ace-jump-mode 1)
-  (recursive-edit))
+  (unwind-protect
+      (cofi/without-evil-visual-hooks
+       (ace-jump-mode 1))
+    (recursive-edit)))
 
 (evil-define-motion evil-ace-jump-char-direct-mode (count)
   :type inclusive
-  (ace-jump-mode 5)
+  (cofi/without-evil-visual-hooks
+   (ace-jump-mode 5))
   (forward-char 1)
   (recursive-edit))
 

@@ -330,7 +330,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
      (remove-hook 'post-command-hook #'evil-visual-post-command t)
      (unwind-protect
          (progn
-           ,@body)
+           ,@body
+           (recursive-edit))
         (add-hook 'pre-command-hook #'evil-visual-pre-command nil t)
         (add-hook 'post-command-hook #'evil-visual-post-command nil t)
         (set-mark old-mark))))
@@ -338,28 +339,23 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (evil-define-motion evil-ace-jump-char-mode (count)
   :type exclusive
   (cofi/without-evil-visual-hooks
-   (ace-jump-mode 5))
-  (recursive-edit))
+   (ace-jump-mode 5)))
 
 (evil-define-motion evil-ace-jump-line-mode (count)
   :type line
   (cofi/without-evil-visual-hooks
-   (ace-jump-mode 9))
-  (recursive-edit))
+   (ace-jump-mode 9)))
 
 (evil-define-motion evil-ace-jump-word-mode (count)
   :type exclusive
-  (unwind-protect
-      (cofi/without-evil-visual-hooks
-       (ace-jump-mode 1))
-    (recursive-edit)))
+  (cofi/without-evil-visual-hooks
+   (ace-jump-mode 1)))
 
 (evil-define-motion evil-ace-jump-char-direct-mode (count)
   :type inclusive
   (cofi/without-evil-visual-hooks
-   (ace-jump-mode 5))
-  (forward-char 1)
-  (recursive-edit))
+   (ace-jump-mode 5)
+   (forward-char 1)))
 
 (add-hook 'ace-jump-mode-end-hook 'exit-recursive-edit)
 

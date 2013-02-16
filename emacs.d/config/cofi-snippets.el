@@ -40,6 +40,9 @@
       (goto-char (point-max))
       (insert region))))
 
+(add-hook 'snippet-mode-hook #'whitespace-mode)
+(add-to-list 'auto-mode-alist '("\\.snippet\\'" . snippet-mode))
+
 ;;; snippet helpers
 (defun cofi/snippet-in-code ()
   (not (or (cofi/pos-in-comment-p (point))

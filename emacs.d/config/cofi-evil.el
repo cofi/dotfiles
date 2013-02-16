@@ -351,11 +351,11 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (cofi/without-evil-visual-hooks
    (ace-jump-mode 1)))
 
-(evil-define-motion evil-ace-jump-char-direct-mode (count)
-  :type inclusive
+(evil-define-motion evil-ace-jump-char-to-mode (count)
+  :type exclusive
   (cofi/without-evil-visual-hooks
    (ace-jump-mode 5)
-   (forward-char 1)))
+   (forward-char -1)))
 
 (add-hook 'ace-jump-mode-end-hook 'exit-recursive-edit)
 

@@ -332,9 +332,12 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
          (progn
            ,@body
            (recursive-edit))
-        (add-hook 'pre-command-hook #'evil-visual-pre-command nil t)
-        (add-hook 'post-command-hook #'evil-visual-post-command nil t)
-        (set-mark old-mark))))
+       (if (evil-visual-state-p)
+           (progn
+             (add-hook 'pre-command-hook #'evil-visual-pre-command nil t)
+             (add-hook 'post-command-hook #'evil-visual-post-command nil t)
+             (set-mark old-mark))
+         (push-mark old-mark)))))
 
 (evil-define-motion evil-ace-jump-char-mode (count)
   :type exclusive

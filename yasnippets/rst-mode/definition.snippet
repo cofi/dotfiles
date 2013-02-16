@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name : Definition
+# key : def
+# contributor : Michael Markert <markert.michael@gmail.com>
+# condition: (not (string-match-p "^[ \t].*" (buffer-substring (point-at-bol) (point-at-eol))))
+# condition: (cofi/snippet-in-code)
+# --
+$1
+    $0

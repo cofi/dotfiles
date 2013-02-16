@@ -137,11 +137,20 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
 (fill-keymaps (list evil-operator-state-map
                     evil-visual-state-map)
-             ;; works like `t'
-             "SPC"   'evil-ace-jump-char-mode
              ;; works like `f'
-             "C-SPC" 'evil-ace-jump-char-direct-mode
+             "SPC"   'evil-ace-jump-char-mode
+             ;; works like `t'
+             "C-SPC" 'evil-ace-jump-char-to-mode
              "S-SPC" 'evil-ace-jump-word-mode)
+
+(defadvice evil-visual-line (before spc-for-line-jump activate)
+  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-line-mode))
+
+(defadvice evil-visual-char (before spc-for-char-jump activate)
+  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
+
+(defadvice evil-visual-block (before spc-for-char-jump activate)
+  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
 
 (require-and-exec 'sackspace
   (sack/install-in-evil))

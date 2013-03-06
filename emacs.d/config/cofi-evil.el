@@ -205,7 +205,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (kbd "M-K") 'org-metaup
   (kbd "M-L") 'org-metaright)
 
-(evil-define-key 'normal rdictcc-permanent-translation-mode
+(evil-define-key 'normal rdictcc-permanent-translation-mode-map
   "j" 'rdictcc-next-line
   "k" 'rdictcc-previous-line
   "h" 'rdictcc-backward-char

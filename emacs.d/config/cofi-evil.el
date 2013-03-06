@@ -132,6 +132,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              "SPC" 'cofi/yas-expand-or-spc
              "j"   'cofi/evil-maybe-exit
              "C-h" 'backward-delete-char
+             "C-k" 'kill-line
              "C-y" 'yank
              "C-e" 'end-of-line)
 

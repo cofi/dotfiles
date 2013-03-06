@@ -252,7 +252,7 @@ Note: This assumes all files are in the org-directory."
 (setq org-export-latex-listings t)
 (setq org-export-latex-default-class "koma-article")
 
-(setq org-latex-to-pdf-process '("latexmk -bibtex -pdf %b"))
+(setq org-latex-pdf-process '("latexmk -bibtex -pdf %b"))
 
 (add-hook 'org-mode-hook 'reftex-mode)
 

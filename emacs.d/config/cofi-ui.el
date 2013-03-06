@@ -21,6 +21,12 @@
   (add-to-hooks 'eldoc-mode '(python-mode-hook
                               emacs-lisp-mode-hook)))
 
+(eval-after-load 'auto-dictionary
+  '(add-hook 'kill-buffer-hook
+             (defun cofi/maybe-cancel-adict-timer ()
+               (when adict-timer
+                 (cancel-timer adict-timer)))))
+
 (setq doc-view-continuous t)
 
 (setq pp^L-^L-string (concat (make-string 30 ? ) "⁂" (make-string 30 ? ))

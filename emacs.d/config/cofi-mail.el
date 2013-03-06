@@ -2,7 +2,7 @@
 (require 'gnus-load)
 
 ;;; offlineimap
-(setq offlineimap-command "offlineimap -u MachineUI")
+(setq offlineimap-command "timeout -k 30s 8m offlineimap -u MachineUI")
 
 (defun mail-attachment-check ()
   "Check if attachment is mentioned but not included"

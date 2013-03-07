@@ -89,6 +89,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-z", manPrompt promptConfig)
                  , ("M-q", dirExecPromptNamed acPromptConfig spawn (withHome ".quick") "Quicks: ")
                  , ("M-S-q", dirExecPromptNamed acPromptConfig spawn (withHome ".quick") "Quicks: ")
+                 , ("M-S-g", dirExecPromptNamed acPromptConfig spawn (withHome "Games/bin") "Game: ")
                    -- Window/workspace management
                  , ("M-S-h", sendMessage MirrorShrink)
                  , ("M-S-l", sendMessage MirrorExpand)
@@ -185,8 +186,6 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
         shiftToPrev = shiftTo Prev EmptyWS
         acPromptConfig = promptConfig { autoComplete = Just 500000 }
         programBindings = prefixKeymap "M-o" [ ("m", spawn "smplayer")
-                                             , ("t", spawn "tome")
-                                             , ("w", spawn "wesnoth")
                                              , ("d", spawn "dolphin")
                                              , ("o", spawn "okular")
                                              , ("c", spawn "calibre")

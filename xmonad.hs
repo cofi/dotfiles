@@ -157,6 +157,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-<F2>", sendMessage $ JumpToLayout "Two")
                  , ("M-<F3>", sendMessage $ JumpToLayout "Three")
                  , ("M-<F12>", sendMessage $ JumpToLayout "Full")
+                 , ("M-s", sendMessage $ ToggleStruts)
                  ]
                  ++ searchBindings
                  ++ scratchpadBindings

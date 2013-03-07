@@ -1,11 +1,10 @@
-(add-to-loadpath "~/.elisp/vendor/auto-complete"
-                 "~/.elisp/vendor/ac-slime")
+(add-to-loadpath "~/.elisp/vendor/auto-complete")
+
 (require-and-exec 'auto-complete
     (require 'auto-complete-config)
     (require 'auto-complete-latex)
     (setq ac-l-dict-directory "~/.emacs.d/completion-dicts/ac-l-dict/")
     (add-hook 'LaTeX-mode-hook #'ac-l-setup)
-    (require 'ac-slime)
 
     (ac-define-source pysmell
       '((depends . pysmell)

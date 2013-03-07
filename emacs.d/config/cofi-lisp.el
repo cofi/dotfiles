@@ -1,5 +1,6 @@
 (add-to-loadpath "~/.elisp/slime/"
                  "~/.elisp/slime/contrib"
+                 "~/.elisp/vendor/ac-slime"
                  "~/.elisp/vendor/clojure-mode/")
 
 (dolist (hook '(clojure-mode-hook lisp-mode-hook))
@@ -32,6 +33,7 @@
   (add-to-hooks #'enable-paredit-mode paredit-mode-hooks))
 
 (require 'slime)
+(require 'ac-slime)
 (defadvice paredit-newline (before slime-eval-print-in-scratch activate)
   "Call `SLIME-EVAL-PRINT-LAST-EXPRESSION' in slime scratch."
   (if (and slime-mode (string= "*slime-scratch*" (buffer-name)))

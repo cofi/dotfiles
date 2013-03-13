@@ -270,4 +270,13 @@
                                 nil t)
                (erc-server-buffer))))
 
+(defadvice erc-send-current-line (before send-no-blank-line activate)
+  (save-excursion
+    (goto-char (point-max))
+    (let ((real-end (progn (skip-chars-backward " \t\n")
+                           (while (get-text-property (point) 'read-only)
+                             (forward-char 1))
+                           (point))))
+      (delete-forward-char (- (point-max) real-end)))))
+
 (provide 'cofi-erc)

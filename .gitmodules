@@ -16,9 +16,6 @@
 [submodule "elisp/vendor/pretty-mode"]
 	path = elisp/vendor/pretty-mode
 	url = git://github.com/cofi/pretty-mode.git
-[submodule "yasnippets/org-mode"]
-	path = yasnippets/org-mode
-	url = git@github.com:cofi/yasnippet-org-mode.git
 [submodule "elisp/vendor/pylookup"]
 	path = elisp/vendor/pylookup
 	url = git://github.com/tsgates/pylookup.git
@@ -76,3 +73,6 @@
 [submodule "elisp/vendor/emacs-jedi"]
 	path = elisp/vendor/emacs-jedi
 	url = git://github.com/tkf/emacs-jedi.git
+[submodule "elisp/vendor/erc-image"]
+	path = elisp/vendor/erc-image
+	url = git://github.com/kidd/erc-image.el.git

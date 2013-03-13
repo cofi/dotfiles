@@ -316,6 +316,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "lisp" "urxvtcd -title lisp -e sbcl" (title =? "lisp") scratchFloat
               , NS "tmux" "urxvtcd -e sh -c 'tmux attach -t tmux || tmux new -s tmux'" (prefixTitle "tmux") scratchFloat
               ]
+              , NS "r" "urxvtcd -title rpad -e R" (title =? "rpad") scratchFloat
   where scratchFloat = customFloating size
         orgFloat = customFloating orgsize
         size = W.RationalRect (1/4) (1/4) (1/2) (1/2)
@@ -334,6 +335,7 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("d", namedScratchpadAction scratchpads "dict")
                                         , ("x", namedScratchpadAction scratchpads "tmux")
                                         ]
+                                        , ("r", namedScratchpadAction scratchpads "r")
 
 -- Search----------------------------------------
 searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- searchList]

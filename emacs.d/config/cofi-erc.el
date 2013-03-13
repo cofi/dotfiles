@@ -30,7 +30,7 @@
 (setq erc-prompt-for-nickserv-password nil)
 
 (setq erc-autojoin-channels-alist
-      '(("freenode\\.net" . ("#tud-ersties" "#pocoo" "#stumpwm" "#evil-mode"))))
+      '(("freenode\\.net" . ("#tud-ersties" "#pocoo" "#stumpwm" "#evil-mode" "#emacs" "#python" "#python.de"))))
 
 (setq erc-autojoin-timing 'ident)
 
@@ -115,7 +115,8 @@
     (erc
      :server "localhost")))
 
-(setq erc-spelling-dictionaries '(("#tud-ersties" "german")))
+(setq erc-spelling-dictionaries '(("#tud-ersties" "german")
+                                  ("#python.de" "german")))
 
 (defun cofi/erc-previous-url-button ()
   "Go to the previous URL button in this buffer."

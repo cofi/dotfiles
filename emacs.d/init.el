@@ -59,6 +59,7 @@
                      scratch
                      sml-modeline
                      twittering-mode
+                     sackspace
                      undo-tree
                      workgroups
                      yaml-mode

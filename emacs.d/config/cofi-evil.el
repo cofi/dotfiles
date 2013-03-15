@@ -14,6 +14,7 @@
       evil-leader/in-all-states t)
 (require 'evil-leader)
 (require 'evil)
+(sackspace-mode 1)
 
 (setq evil-normal-state-tag   (propertize "N" 'face '((:background "green" :foreground "black")))
       evil-emacs-state-tag    (propertize "E" 'face '((:background "orange" :foreground "black")))
@@ -153,9 +154,6 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (defadvice evil-visual-block (before spc-for-char-jump activate)
   (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
 
-(require-and-exec 'sackspace
-  (sack/install-in-evil))
-
 (evil-define-key 'normal org-mode-map
   (kbd "RET") 'org-open-at-point
   "za"        'org-cycle
@@ -214,6 +212,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "b" 'rdictcc-backward-word
   "w" 'rdictcc-forward-word)
 
+(defvar slime-mode nil)
 (defadvice evil-goto-definition (around evil-clever-goto-def activate)
   "Make use of emacs', slime's and etags possibilities for finding definitions."
   (case major-mode

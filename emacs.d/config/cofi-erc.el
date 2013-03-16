@@ -1,10 +1,13 @@
 (require 'erc)
+(add-to-loadpath "~/.elisp/vendor/erc-image/")
+(require 'erc-image)
 (setq erc-modules '(
                     autoaway
                     autojoin
                     button
                     completion
                     irccontrols
+                    image
                     keep-place
                     list
                     log
@@ -28,6 +31,8 @@
 (erc-services-mode 1)
 (erc-spelling-mode 1)
 (setq erc-prompt-for-nickserv-password nil)
+
+(setq erc-image-inline-rescale-to-window t)
 
 (setq erc-autojoin-channels-alist
       '(("freenode\\.net" . ("#tud-ersties" "#pocoo" "#stumpwm" "#evil-mode" "#emacs" "#python" "#python.de"))))

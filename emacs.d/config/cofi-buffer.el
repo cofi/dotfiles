@@ -51,6 +51,8 @@
                     (mode . gnus-group-mode)
                     (mode . gnus-summary-mode)
                     (mode . gnus-article-mode)))
+           ("ERC" (or (mode . erc-mode)
+                     (name . "ERC .*")))
 
            ("Terminals" (mode . term-mode))
 

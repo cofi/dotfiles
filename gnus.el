@@ -199,6 +199,7 @@
                        (return)))))
 
 (setq gnus-check-new-newsgroups nil)
+(setq gnus-asynchronous t)
 
 
 (gnus-add-configuration '(reply-yank (vertical 1.0

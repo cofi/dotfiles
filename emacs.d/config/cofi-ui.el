@@ -142,6 +142,13 @@
 ;; prettyfying ==============================
 (add-to-list 'load-path "~/.elisp/vendor/pretty-mode/")
 (require-and-exec 'pretty-mode
+  (defadvice indent-region (around no-pretty-on-indent activate)
+    (if pretty-mode
+        (progn
+          (pretty-mode -1)
+          ad-do-it
+          (pretty-mode 1))
+      ad-do-it))
   (dolist (mode '(python-mode c-mode java-mode cpp-mode))
           (pretty-add-keywords mode '(("="  . "←")
                                       ("==" . "≡"))))

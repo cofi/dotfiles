@@ -43,9 +43,6 @@
 [submodule "elisp/vendor/evil-surround"]
 	path = elisp/vendor/evil-surround
 	url = git://github.com/timcharper/evil-surround.git
-[submodule "elisp/vendor/evil-leader"]
-	path = elisp/vendor/evil-leader
-	url = git://github.com/cofi/evil-leader.git
 [submodule "zsh/zsh-completions"]
 	path = zsh/zsh-completions
 	url = git://github.com/zsh-users/zsh-completions.git

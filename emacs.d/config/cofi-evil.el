@@ -1,8 +1,7 @@
 (require 'cofi-util)
 (require 'cofi-func)
 (add-to-loadpath "~/.elisp/vendor/evil/"
-                 "~/.elisp/vendor/evil-surround/"
-                 "~/.elisp/vendor/evil-leader/")
+                 "~/.elisp/vendor/evil-surround/")
 (require 'undo-tree)
 (require 'evil-numbers)
 (setq evil-find-skip-newlines t)

@@ -32,8 +32,6 @@
 (erc-spelling-mode 1)
 (setq erc-prompt-for-nickserv-password nil)
 
-(setq erc-image-inline-rescale-to-window t)
-
 (setq erc-autojoin-channels-alist
       '(("freenode\\.net" . ("#tud-ersties" "#pocoo" "#stumpwm" "#evil-mode" "#emacs" "#python" "#python.de"))))
 

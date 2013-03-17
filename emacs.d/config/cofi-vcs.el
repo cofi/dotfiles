@@ -29,6 +29,8 @@
                                     (if (file-exists-p ".git/svn")
                                         (magit-svn-mode))))
 
+(add-hook 'git-commit-mode-hook #'flyspell-mode)
+
 ;;; (a)hg
 (eval-after-load "monky"
   '(fill-keymaps '(monky-status-mode-map

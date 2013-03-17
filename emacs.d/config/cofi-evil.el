@@ -6,7 +6,8 @@
 (require 'evil-numbers)
 (setq evil-find-skip-newlines t)
 (setq evil-move-cursor-back nil
-      evil-cross-lines t)
+      evil-cross-lines t
+      evil-intercept-esc 'always)
 (setq evil-default-cursor #'cofi/evil-cursor)
 (setq evil-mode-line-format nil)
 (setq evil-leader/leader ","

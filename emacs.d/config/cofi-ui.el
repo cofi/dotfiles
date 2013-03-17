@@ -51,7 +51,7 @@
 
 (mouse-avoidance-mode 'cat-and-mouse)
 
-(setq comment-style 'align)
+(setq comment-style 'plain)
 
 (setq x-select-enable-primary t)
 

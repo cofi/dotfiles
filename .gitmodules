@@ -1,6 +1,3 @@
-[submodule "elisp/vendor/haskell-mode"]
-	path = elisp/vendor/haskell-mode
-	url = git://github.com/pheaver/haskell-mode.git
 [submodule "elisp/vendor/keychain-environment"]
 	path = elisp/vendor/keychain-environment
 	url = git://github.com/cofi/keychain-environment.el.git

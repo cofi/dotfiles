@@ -37,8 +37,7 @@
     (defun ac-yasnippet-candidates ()
       (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas--get-snippet-tables))))
 
-    (setq ac-fuzzy-enable t
-          ac-auto-start 2
+    (setq ac-auto-start 2
           ac-auto-show-menu t
           ac-quick-help-delay 1
           ac-quick-help-height 50)

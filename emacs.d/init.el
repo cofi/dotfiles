@@ -38,12 +38,15 @@
                      elein
                      epc
                      evil-numbers
+                     evil-leader
                      flymake-cursor
                      full-ack
+                     ghc
                      gist
                      gitconfig-mode
                      git-commit-mode
                      gitignore-mode
+                     haskell-mode
                      highlight-parentheses
                      highlight-80+
                      htmlize

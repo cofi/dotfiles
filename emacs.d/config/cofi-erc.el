@@ -135,8 +135,10 @@
   (concat "\\(www\\.\\|\\(s?https?\\|ftp\\|file\\|gopher\\|news\\|telnet\\|wais\\|mailto\\):\\)" ; protocol
           "\\(//[-a-zA-Z0-9_.]+:[0-9]\\)?"  ;
           "[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;.,()]+[-a-zA-Z0-9_=#$@~`%&*+\\/()|]"))
-
-(cofi/set-key erc-mode-map (kbd "<backtab>") 'cofi/erc-previous-url-button)
+(eval-after-load 'erc-button
+  '(cofi/set-key erc-button-keymap
+                 "<backtab>" 'cofi/erc-previous-url-button
+                 "C-c <backtab>" 'erc-button-previous))
 
 (defun cofi/erc-buffer ()
   (interactive)

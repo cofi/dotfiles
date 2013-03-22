@@ -2,7 +2,7 @@
 import XMonad hiding ((|||))
 import qualified XMonad.StackSet as W
 
-import XMonad.Util.EZConfig (additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
 import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
 
@@ -41,6 +41,8 @@ import XMonad.Prompt.DirExec (dirExecPromptNamed)
 import XMonad.Prompt.Man (manPrompt)
 import XMonad.Prompt.Window
 
+import Graphics.X11.ExtraTypes.XF86
+
 import Data.List (isPrefixOf, findIndex)
 import qualified Data.Map as M
 import System.Directory (getHomeDirectory)
@@ -64,6 +66,7 @@ main = do
                          , manageHook = myManageHook
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir
+                         `additionalKeys` volumeKeys
     where
       myStartupHook = setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false "
@@ -203,6 +206,13 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                                            , ("k", spawn "mpd ~/.mpdconf --kill")
                                            , ("q", spawn "qmpdclient")
                                            ]
+volumeKeys = [((0, xF86XK_AudioLowerVolume), spawn "pads down 5")
+            , ((0, xF86XK_AudioRaiseVolume), spawn "pads up 5")
+            , ((shiftMask, xF86XK_AudioLowerVolume), spawn "pads in-down 5")
+            , ((shiftMask, xF86XK_AudioRaiseVolume), spawn "pads in-up 5")
+            , ((0, xF86XK_AudioMute), spawn "pads mute")
+            , ((shiftMask, xF86XK_AudioMute), spawn "pads in-mute")
+            ]
 
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
@@ -315,8 +325,8 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "dict" "urxvtcd -title dict -e pdictcc --limit 5" (title =? "dict") scratchFloat
               , NS "lisp" "urxvtcd -title lisp -e sbcl" (title =? "lisp") scratchFloat
               , NS "tmux" "urxvtcd -e sh -c 'tmux attach -t tmux || tmux new -s tmux'" (prefixTitle "tmux") scratchFloat
-              ]
               , NS "r" "urxvtcd -title rpad -e R" (title =? "rpad") scratchFloat
+              ]
   where scratchFloat = customFloating size
         orgFloat = customFloating orgsize
         size = W.RationalRect (1/4) (1/4) (1/2) (1/2)
@@ -334,8 +344,8 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("n", namedScratchpadAction scratchpads "network")
                                         , ("d", namedScratchpadAction scratchpads "dict")
                                         , ("x", namedScratchpadAction scratchpads "tmux")
-                                        ]
                                         , ("r", namedScratchpadAction scratchpads "r")
+                                        ]
 
 -- Search----------------------------------------
 searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- searchList]

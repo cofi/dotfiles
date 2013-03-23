@@ -88,7 +88,6 @@
                                  cofi-desktop
                                  cofi-ediff
                                  cofi-elisp
-                                 cofi-erc
                                  cofi-files
                                  cofi-func
                                  cofi-keys
@@ -105,6 +104,7 @@
                                  cofi-completion
                                  cofi-modeline))
 (defvar cofi/full-settings '(cofi-programming
+                             cofi-erc
                              ))
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")

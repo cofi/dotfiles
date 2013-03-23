@@ -1,8 +1,9 @@
+(require 'cl-lib)
 (add-to-loadpath "~/.elisp/vendor/calfw/"
                  "~/.elisp/vendor/org-mode/lisp"
                  "~/.elisp/vendor/org-mode/contrib/lisp")
 ;;; remove bundled org from load path
-(setq load-path (remove-if  (p (string-match "/usr/share/emacs/.*/org" x)) load-path))
+(setq load-path (cl-remove-if  (p (string-match "/usr/share/emacs/.*/org" x)) load-path))
 (setq org-modules '(org-bibtex org-docview org-gnus org-info org-w3m org-toc org-contacts))
 
 (require 'cofi-autoloads)

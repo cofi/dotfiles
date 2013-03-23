@@ -1,4 +1,5 @@
 (require 'cofi-util)
+(require 'cl-lib)
 
 (setq-default c-basic-offset 4)
 (setq c-default-style '((java-mode . "java")
@@ -17,9 +18,9 @@
   (when (and (buffer-file-name) (ends-with (buffer-file-name) ".h"))
     (let* ((name (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))
            (siblings (ls-files "." nil name)))
-      (when (find-if (lambda (f)
-                       (string-match (gen-extension-re "cc" "c++" "cpp" "cxx") (downcase f)))
-                     siblings)
+      (when (cl-find-if (lambda (f)
+                          (string-match (gen-extension-re "cc" "c++" "cpp" "cxx") (downcase f)))
+                        siblings)
         (c++-mode)))))
 
 (add-hook 'c-mode-hook #'cofi/maybe-change-c-to-c++)

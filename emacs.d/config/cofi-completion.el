@@ -95,10 +95,10 @@
         ((inferior-python-mode)                           . python-mode)))
 
     (defun cofi/set-ac-sources ()
-      (let* ((alias (cdr (find major-mode cofi/ac-mode-aliases :key #'car :test #'member)))
+      (let* ((alias (cdr (cl-find major-mode cofi/ac-mode-aliases :key #'car :test #'member)))
              (mode-sources (cdr (assoc (or alias major-mode) cofi/ac-mode-sources))))
-        (setq ac-sources (remove-duplicates (append mode-sources
-                                                    cofi/ac-base-sources)))))
+        (setq ac-sources (cl-remove-duplicates (append mode-sources
+                                                       cofi/ac-base-sources)))))
 
     (add-to-hooks #'cofi/set-ac-sources '(after-change-major-mode-hook
                                           mumamo-after-change-major-mode-hook))
@@ -132,8 +132,8 @@
 
 (defun cofi/completion-functions ()
   "Get a completion function according to current major mode."
-  (let ((alias (cdr (find major-mode cofi/completion-mode-aliases :key #'car :test #'member))))
-    (remove-duplicates
+  (let ((alias (cdr (cl-find major-mode cofi/completion-mode-aliases :key #'car :test #'member))))
+    (cl-remove-duplicates
      (append (cdr (assoc (or alias major-mode) cofi/mode-completers))
              cofi/base-completers))))
 

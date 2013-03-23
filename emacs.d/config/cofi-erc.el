@@ -1,3 +1,4 @@
+(require 'cl-lib)
 (require 'erc)
 (add-to-loadpath "~/.elisp/vendor/erc-image/")
 (require 'erc-image)
@@ -111,7 +112,7 @@
 
 (defun cofi/erc ()
   (interactive)
-  (unless (find "ERC" (make-frame-names-alist) :key #'car :test #'string=)
+  (unless (cl-find "ERC" (make-frame-names-alist) :key #'car :test #'string=)
     (select-frame (make-frame '((name . "ERC")
                                 (alpha . (85 70)))))
     (cofi/erc-connect-freenode)
@@ -157,7 +158,7 @@
                                   choice)))))
 
 (defun cofi/erc-find-erc-frame ()
-  (find-if (p (string= (frame-parameter x 'name) "ERC")) (frame-list)))
+  (cl-find-if (p (string= (frame-parameter x 'name) "ERC")) (frame-list)))
 
 (defun cofi/erc-frame-urgency (&rest ignore)
   (x-urgency-hint (cofi/erc-find-erc-frame) t)
@@ -272,8 +273,8 @@
   (interactive)
   (with-current-buffer "&bitlbee"
     (erc-query (completing-read "Chat with: "
-                                (remove-if (p (member x (list "root" (erc-current-nick))))
-                                           (erc-get-channel-nickname-list))
+                                (cl-remove-if (p (member x (list "root" (erc-current-nick))))
+                                              (erc-get-channel-nickname-list))
                                 nil t)
                (erc-server-buffer))))
 

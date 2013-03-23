@@ -1,12 +1,12 @@
-(require 'cl)
+(require 'cl-lib)
 (require 'queue)
 
-(defmacro require-and-exec (feature &optional &rest body)
+(defmacro require-and-exec (feature &rest body)
   "Require the feature and execute body if it was successfull loaded."
-  (declare (indent 1))
+  (declare (indent defun))
   `(if (require ,feature nil 'noerror)
-        (progn ,@body)
-    (message (format "%s not loaded" ,feature))))
+       (progn ,@body)
+     (message (format "%s not loaded" ,feature))))
 
 (defmacro load-and-exec (file &optional &rest body)
   "Load the file and execute body if it was successfull loaded."
@@ -73,11 +73,11 @@
 
 (defun modified-buffers? ()
   "Returns first modified buffer or nil if there is none."
-  (loop for b in (buffer-list)
-        when (and (buffer-live-p b)
-                (buffer-modified-p b)
-                (buffer-file-name b))
-        return b))
+  (cl-loop for b in (buffer-list)
+           when (and (buffer-live-p b)
+                     (buffer-modified-p b)
+                     (buffer-file-name b))
+           return b))
 
 (defun dot? (fname &optional dotfiles)
   "Determines if `FNAME' is a dot or dotfile if `DOTFILES' is non-nil."
@@ -89,21 +89,21 @@
 (defun ls-no-dots (directory &optional full dotfiles match)
   "Returns files in `directory' without `.' and `..'.
 `full', `match' and `nosort' act as in `directory-files'"
-    (remove-if (lambda (f) (dot? f dotfiles))
-               (directory-files directory full match)))
+  (cl-remove-if (lambda (f) (dot? f dotfiles))
+                (directory-files directory full match)))
 
 (defun ls-dirs (directory &optional dotfiles match)
   "Returns all dirs in `DIR'.
 `DOTFILES' -- if non-nil don't include dirs starting with a `.'
 `MATCH' -- if non-nil only include dirs matching the regexp"
-  (remove-if-not #'file-directory-p
-                 (ls-no-dots directory t dotfiles match)))
+  (cl-remove-if-not #'file-directory-p
+                    (ls-no-dots directory t dotfiles match)))
 
 (defun ls-files (directory &optional dotfiles match)
   "Returns all files in `DIR'.
 `DOTFILES' -- if non-nil don't include files starting with a `.'
 `MATCH' -- if non-nil only include files matching the regexp"
-  (remove-if #'file-directory-p
+  (cl-remove-if #'file-directory-p
              (ls-no-dots directory t dotfiles match)))
 
 (defun enqueue-all (queue l)
@@ -119,10 +119,10 @@
             dir failed its dirs will not be searched."
   (let ((dirs (queue-create)))
     (queue-enqueue dirs dir)
-    (loop while (> (queue-length dirs) 0)
-          nconc (let ((d (queue-dequeue dirs)))
-                  (enqueue-all dirs (ls-dirs d dotfiles dmatch))
-                  (ls-files d dotfiles fmatch)))))
+    (cl-loop while (> (queue-length dirs) 0)
+             nconc (let ((d (queue-dequeue dirs)))
+                     (enqueue-all dirs (ls-dirs d dotfiles dmatch))
+                     (ls-files d dotfiles fmatch)))))
 
 (defun ls-files-deep-1 (dir &optional dotfiles fmatch dmatch)
   "Returns all files within `DIR' descending one level.
@@ -130,8 +130,8 @@
 `FMATCH' -- if non-nil only include files matching the regexp
 `DMATCH' -- if non-nil only include and search dirs matching the regexp"
   (let ((dirs (cons dir (ls-dirs dir dotfiles dmatch))))
-    (loop for d in dirs
-          nconc (ls-files d dotfiles fmatch))))
+    (cl-loop for d in dirs
+             nconc (ls-files d dotfiles fmatch))))
 
 (defun parent-dir (file-name)
   "Parent directory of given file."
@@ -142,16 +142,16 @@
   "Searches for file `Makefile' in up to 3 parent dirs of `file-or-dir'."
   (let ((f "Makefile")
         (dir (file-name-directory file-or-dir)))
-    (loop for i from 1 to 3             ; try 3 dirs up
-          if (file-exists-p (concat dir f))
-          return dir
-          else
-          do (setq dir (parent-dir dir)))))
+    (cl-loop for i from 1 to 3             ; try 3 dirs up
+             if (file-exists-p (concat dir f))
+             return dir
+             else
+             do (setq dir (parent-dir dir)))))
 
 (defun makefile-targets (makefile)
   "Gathers alphanumeric makefile targets from `MAKEFILE'."
   (let ((targets '())
-        (was-open (find makefile (buffer-list) :key #'buffer-file-name :test #'string=))
+        (was-open (cl-find makefile (buffer-list) :key #'buffer-file-name :test #'string=))
         (buf (find-file-noselect makefile)))
     (with-current-buffer buf
       (goto-char (point-min))
@@ -163,9 +163,9 @@
 
 (defun combinate (xs ys combinator)
   "Combinate each x with each y using the given combinator."
-  (loop for x in xs
-       append (loop for y in ys
-                    collect (funcall combinator x y))))
+  (cl-loop for x in xs
+           append (cl-loop for y in ys
+                           collect (funcall combinator x y))))
 
 (defun range (end-or-start &optional end step)
   "Range of numbers from `START' to (including) `END' with stepwidth `STEP'.
@@ -178,8 +178,8 @@ Mimicks Python's `range'"
         (end (if end
                  end
                end-or-start)))
-    (loop for i from start to end by step
-          collect i)))
+    (cl-loop for i from start to end by step
+             collect i)))
 
 (defun empty? (x)
   "Test if `x' is empty."
@@ -192,16 +192,16 @@ Mimicks Python's `range'"
   "Sum `VALUES' weighted according to `WEIGHTS' and divide by the sum of `WEIGHTS'.
 Tailored specific to org tables, i.e. input expected as strings and output are
 strings."
-  (loop for v in values
-        for w in weights
-        unless (or (empty? v) (empty? w))
-        sum (string-to-number w) into wsum
-        collect (* (string-to-number v) (string-to-number w))
-                into weighted-values
-        finally (return (let ((weighted-sum (/ (reduce #'+ weighted-values) wsum)))
-                          (if (= weighted-sum 0)
-                              ""
-                            (format "%.1f" weighted-sum))))))
+  (cl-loop for v in values
+           for w in weights
+           unless (or (empty? v) (empty? w))
+           sum (string-to-number w) into wsum
+           collect (* (string-to-number v) (string-to-number w))
+           into weighted-values
+           finally (cl-return (let ((weighted-sum (/ (apply #'+ weighted-values) wsum)))
+                                (if (= weighted-sum 0)
+                                    ""
+                                  (format "%.1f" weighted-sum))))))
 
 (defmacro turn-on-file (mode)
   "Return a `turn-on' fun for given mode that only turns on in buffers that visit files."
@@ -235,11 +235,13 @@ See `pour-mappings-to'"
 (defun fill-keymap (keymap &rest mappings)
   "Fill `KEYMAP' with `MAPPINGS'.
 See `pour-mappings-to'."
+  (declare (indent defun))
   (pour-mappings-to keymap mappings))
 
 (defun fill-keymaps (keymaps &rest mappings)
   "Fill `KEYMAPS' with `MAPPINGS'.
 See `pour-mappings-to'."
+  (declare (indent defun))
   (dolist (keymap keymaps keymaps)
     (let ((map (if (symbolp keymap)
                    (symbol-value keymap)
@@ -249,11 +251,13 @@ See `pour-mappings-to'."
 (defmacro gen-fill-keymap-hook (keymap &rest mappings)
   "Build fun that fills `KEYMAP' with `MAPPINGS'.
 See `pour-mappings-to'."
+  (declare (indent defun))
   `(lambda () (fill-keymap ,keymap ,@mappings)))
 
 (defmacro gen-local-fill-keymap-hook (&rest mappings)
   "Build fun that fills local keymap with `MAPPINGS'.
 See `pour-mappings-to'."
+  (declare (indent defun))
   `(lambda () (fill-keymap 'local ,@mappings)))
 
 (defun pour-mappings-to (map mappings)
@@ -282,9 +286,11 @@ See `pour-mappings-to'."
 
 (defmacro cmd (name &rest code)
   "Macro for shorter keybindings."
-  `(defun ,(intern (concat "cofi-cmd/" (symbol-name name))) ()
-     (interactive)
-     ,@code))
+  `(progn
+     (defun ,(intern (concat "cofi-cmd/" (symbol-name name))) ()
+       (interactive)
+       ,@code)
+     ',(intern (concat "cofi-cmd/" (symbol-name name)))))
 
 (defmacro cmd-arg (name args iflag &rest code)
   "Macro for shorter keybindings with argument.
@@ -292,9 +298,11 @@ See `pour-mappings-to'."
 For example:
   (cmd-arg foo (num) \"p\"
     (message \"num-prefix: %d\" num)"
-  `(defun ,(intern (concat "cofi-cmd/" (symbol-name name))) ,args
-     (interactive ,iflag)
-     ,@code))
+  `(progn
+     (defun ,(intern (concat "cofi-cmd/" (symbol-name name))) ,args
+       (interactive ,iflag)
+       ,@code)
+     ',(intern (concat "cofi-cmd/" (symbol-name name)))))
 
 (defun gen-extension-re (&rest extensions)
   "Generate a regexp that matches all `EXTENSIONS'."
@@ -322,10 +330,10 @@ For example:
   `(lambda (x)
     ,@body))
 
-(defstruct (cofi/ring
-            (:constructor nil)
-            (:constructor cofi/make-ring (vec &key curr))
-            (:conc-name cofi/ring--))
+(cl-defstruct (cofi/ring
+               (:constructor nil)
+               (:constructor cofi/make-ring (vec &key curr))
+               (:conc-name cofi/ring--))
   "Constant ring buffer."
   vec curr)
 
@@ -366,14 +374,14 @@ For example:
   "Test if library is byte-compiled."
   (string-match-p "\\.elc$" (locate-library library)))
 
-(defun* find-index (x xs &key (test (get-equal x)))
-  "Alike `FINE' but return index.
+(cl-defun find-index (x xs &key (test (get-equal x)))
+  "Alike `cl-find' but return index.
 Returns nil if `X' not in `XS'."
-    (loop for a being the elements of xs
-          count t into i
-          do (if (funcall test a x)
-                 (return (1- i)))
-          finally (return nil)))
+  (cl-loop for a being the elements of xs
+           count t into i
+           do (if (funcall test a x)
+                  (cl-return (1- i)))
+           finally (cl-return nil)))
 
 (defun def-assoc (key alist default)
   "Return cdr of `KEY' in `ALIST' or `DEFAULT' if key is no car in alist."
@@ -395,8 +403,6 @@ Returns nil if `X' not in `XS'."
   (ignore-errors
     (string= begin
              (substring string 0 (length begin)))))
-
-(setq byte-compile-warnings '(not cl-functions))
 
 (defun byte-compile-config-on-save ()
   "Compile elisp files in the emacs.d dir unless they are themes."
@@ -423,10 +429,10 @@ Returns nil if `X' not in `XS'."
   `(when cofi/mail-instance
      ,@body))
 
-(defun* cofi/contains-any (lst test &optional (test-fun #'memq))
+(cl-defun cofi/contains-any (lst test &optional (test-fun #'memq))
   "Test if `lst' contains any of `test'."
-   (cl-loop for x in test
-            thereis (funcall test-fun x lst)))
+  (cl-loop for x in test
+           thereis (funcall test-fun x lst)))
 
 (defun cofi/pos-in-string-p (pos)
   (let ((face-props (get-text-property pos 'face)))

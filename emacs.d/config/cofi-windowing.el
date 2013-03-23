@@ -67,6 +67,7 @@
 
 (require-and-exec 'winner
   (winner-mode 1))
+(require 'cl-lib)
 
 ;;; override winner-set with a winner-boring-buffers that accepts RE
 (defun winner-set (conf)
@@ -89,10 +90,10 @@
                            (winner-get-point (window-buffer win) win))
                      ;; modified start
                      (not (let ((buffer-name (buffer-name (window-buffer win))))
-                          (or (find-if (lambda (re)
-                                        (string-match-p re buffer-name))
-                                      winner-boring-buffers-rx)
-                             (member buffer-name winner-boring-buffers)))))
+                            (or (cl-find-if (lambda (re)
+                                              (string-match-p re buffer-name))
+                                            winner-boring-buffers-rx)
+                                (member buffer-name winner-boring-buffers)))))
                      ;; modified end
           (push win xwins)))            ; delete this window
 

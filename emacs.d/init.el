@@ -75,7 +75,7 @@
       (package-install package))))
 
 (defvar cofi/hostname (car (split-string system-name "\\." t)))
-(defvar on-mobile? (find cofi/hostname '("hitchhiker") :test #'string=))
+(defvar on-mobile? (cl-find cofi/hostname '("hitchhiker") :test #'string=))
 
 (load "private" 'noerror)
 (require 'cofi-evil)

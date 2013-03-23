@@ -157,6 +157,10 @@
  ;; rdictcc
  "C-c t" 'rdictcc-translate-word-at-point
 
+ ;; completion
+ "M-/" 'cofi/complete
+ "C-M-/" 'cofi/uncommon-complete
+
  "RET"   'newline-and-indent
  ;; maps
  "C-x m" cofi-minor-mode-map

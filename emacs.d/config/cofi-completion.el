@@ -1,3 +1,4 @@
+(require 'cl-lib)
 (require-and-exec 'auto-complete
     (require 'auto-complete-config)
     (require 'auto-complete-latex)
@@ -8,25 +9,26 @@
       '((depends . pysmell)
         (candidates . pysmell-get-all-completions)))
 
-    (defun ac-org-contacts-candidates ()
-      (loop for (name _ properties) in (org-contacts-filter)
-            for email = (cdr (assoc org-contacts-email-property properties))
-            when email
-            collect (format "%s <%s>" (org-no-properties name) email)))
+    (require-and-exec 'org-contacts
+      (defun ac-org-contacts-candidates ()
+        (loop for (name _ properties) in (org-contacts-filter)
+              for email = (cdr (assoc org-contacts-email-property properties))
+              when email
+              collect (format "%s <%s>" (org-no-properties name) email)))
 
-    (defun ac-email-prefix ()
-      (when (save-excursion (re-search-backward "^\\(?:To\\|Cc\\|Bcc\\): \\(.*\\)" nil t))
-        (let ((simple-match-point (match-beginning 1)))
-          ;; check for multiple addresses
-          (if (re-search-backward ", \\(.*\\)" simple-match-point t)
-              (match-beginning 1)
-            simple-match-point))))
+      (defun ac-email-prefix ()
+        (when (save-excursion (re-search-backward "^\\(?:To\\|Cc\\|Bcc\\): \\(.*\\)" nil t))
+          (let ((simple-match-point (match-beginning 1)))
+            ;; check for multiple addresses
+            (if (re-search-backward ", \\(.*\\)" simple-match-point t)
+                (match-beginning 1)
+              simple-match-point))))
 
-    (ac-define-source org-contacts
-      '((depends . org-contacts)
-        (candidates . ac-org-contacts-candidates)
-        (prefix . ac-email-prefix)
-        (cache . t)))
+      (ac-define-source org-contacts
+        '((depends . org-contacts)
+          (candidates . ac-org-contacts-candidates)
+          (prefix . ac-email-prefix)
+          (cache . t))))
 
     ;; override original faulting funs
     (defun ac-yasnippet-table-hash (table)

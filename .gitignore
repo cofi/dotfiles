@@ -11,3 +11,4 @@ emacs.d/elpa/
 emacs.d/custom.el
 emacs.d/semanticdb
 emacs.d/session.*
+emacs.d/var/pcache/

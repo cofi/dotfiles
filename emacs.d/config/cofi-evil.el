@@ -261,8 +261,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "N" 'make-frame-command
   "C" 'delete-frame
 
-  "g" 'magit-status
-  "h" 'monky-status
+  "v" 'cofi/open-vcs
 
   "s" 'cofi/switch-file
   ";" 'cofi/end-prog-line

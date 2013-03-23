@@ -31,6 +31,13 @@
 
 (add-hook 'git-commit-mode-hook #'flyspell-mode)
 
+(defun cofi/open-vcs ()
+  (interactive)
+  (call-interactively (cond
+                       ((locate-dominating-file (buffer-file-name) ".git") #'magit-status)
+                       ((locate-dominating-file (buffer-file-name) ".hg") #'monky-status)
+                       (t #'magit-status))))
+
 ;;; (a)hg
 (eval-after-load "monky"
   '(fill-keymaps '(monky-status-mode-map

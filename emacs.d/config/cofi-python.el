@@ -102,19 +102,28 @@
     (requires   . 0)
     (available . ac-ropemacs-available)))
 
+(defun cofi/python-send-dwim (arg)
+  "Send region if region is active and current defun else."
+  (interactive "p")
+  (if (region-active-p)
+      (python-shell-send-region (region-beginning) (region-end))
+    (python-shell-send-defun arg)))
+
 (add-all-to-hook 'python-mode-hook
                  #'show-paren-mode
                  #'auto-fill-mode
+                 #'which-func-mode
                  (lambda ()
                    (setq tab-width 4)
                    (setq mode-name "py"))
                  (gen-local-fill-keymap-hook
                      "C-c p"     cofi-rope-map
-                     "M-n"       'flymake-goto-next-error
-                     "M-p"       'flymake-goto-prev-error
-                 #'which-func-mode
-                     "C-c SPC"   'flymake-mode
-                     "C-c ?"     'pylookup-lookup)
+                     "M-n"       #'flymake-goto-next-error
+                     "M-p"       #'flymake-goto-prev-error
+                     "C-c SPC"   #'flymake-mode
+                     "C-c ?"     #'pylookup-lookup
+                     "C-c C-c"   #'cofi/python-send-dwim
+                     "C-c C-b"   #'python-shell-send-buffer)
                  )
 
 (setq pylookup-db-file (cofi/var-file "pylookup.db")

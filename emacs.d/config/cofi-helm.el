@@ -2,29 +2,38 @@
                  "~/.elisp/vendor/helm-descbinds"
                  "~/.elisp/vendor/helm-slime")
 ;; Settings ----------------------------------------
-(setq helm-c-boring-file-regexp
-      (rx (or
-           ;; directories
-           (and "/"
-              (or ".svn" "CVS" "_darcs" ".git" ".hg" "auto" "_region_" ".prv" "__pycache__")
-              (or "/" eol))
-           ;; files
-           (and line-start  (or ".#" "."))
-           (and (or ".class" ".la" ".o" "~" ".pyc") eol)))
+(setq helm-boring-file-regexp-list
+      (append
+       (list
+        (gen-extension-re ".svn" ".git" ".hg"
+                          "prv"
+                          "pyc"
+                          "elc"
+                          "~"
+                          "class" "la" "o"
+                          )
+        (rx (and line-start  (or ".#" "."))))
+        (mapcar (lambda (s) (concat "\\`" s "$"))
+                '(
+                  "__pycache__"
+                  "auto" "_region_"
+                  "_darcs"
+                  "CVS")))
 
-      helm-c-boring-buffer-regexp
-      (rx (or
-           (and line-start  " ")
-           ;; helm-buffer
-           "*helm"
-           "*ac-mode-"
-           "Map_Sym.txt"
-           "*Ibuffer*"
-           "*Help*"
-           "*Pp Eval Output*"
-           "*Completions*"
-           "*Customize"
-           "*Messages*")))
+      helm-boring-buffer-regexp-list
+      (list
+       (rx (or
+            (and line-start  " ")
+            ;; helm-buffer
+            "*helm"
+            "*ac-mode-"
+            "Map_Sym.txt"
+            "*Ibuffer*"
+            "*Help*"
+            "*Pp Eval Output*"
+            "*Completions*"
+            "*Customize"
+            "*Messages*"))))
 
 (setq helm-idle-delay 0.3
       helm-input-idle-delay 0
@@ -39,17 +48,18 @@
 (setq helm-M-x-requires-pattern 0)
 
 (on-full-instance
- (run-with-timer 10 1800  #'start-process "updatedb" "*updatedb*" "python" (expand-file-name "~/dev/updatedb.py")))
+ (defvar cofi/updatedb-timer
+       (run-with-timer 10 1800  #'start-process "updatedb" "*updatedb*" "python" (expand-file-name "~/dev/updatedb.py"))))
 
-(setq helm-c-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
+(setq helm-locate-command (format "locate -d %s -i -r %%s" (cofi/var-file "locate.db")))
 
-(setq helm-c-default-info-index-list '("ansicl" "elisp" "cl" "org" "gnus" "tramp" "stumpwm"
-                                       "zsh" "coreutils" "find" "libc"
-                                       "make" "emacs" "eieio" "latex2e"
-                                       "gawk" "sed" "wget" "binutils" "ld"
-                                       "grep" "gzip" "libtool"
-                                       "texinfo" "info" "gdb"
-                                       "sphinx" "python"))
+(setq helm-default-info-index-list '("ansicl" "elisp" "cl" "org" "gnus" "tramp" "stumpwm"
+                                     "zsh" "coreutils" "find" "libc"
+                                     "make" "emacs" "eieio" "latex2e"
+                                     "gawk" "sed" "wget" "binutils" "ld"
+                                     "grep" "gzip" "libtool"
+                                     "texinfo" "info" "gdb"
+                                     "sphinx" "python"))
 
 ;; --------------------------------------------------
 (require-and-exec 'helm
@@ -85,7 +95,7 @@
       ad-do-it))
 
   (require-and-exec 'helm-descbinds
-    (helm-descbinds-install))
+    (helm-descbinds-mode))
   ;; Sources ----------------------------------------
   (defun cofi/helm-dir-deep (source-name dir &optional dotfiles fmatch dmatch)
     "Returns an helm source for a particular directory."
@@ -198,7 +208,7 @@
 
   (defun cofi/helm-lacarte ()
     (interactive)
-    (helm :sources helm-c-source-lacarte
+    (helm :sources helm-source-lacarte
           :buffer "*helm lacarte*"))
   (cofi/set-key 'global "<f10>" 'cofi/helm-lacarte)
 

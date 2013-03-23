@@ -314,12 +314,10 @@ Note: This assumes all files are in the org-directory."
     (cofi-org-cyclic n year month day mark)))
 
 (defun cofi-org-cyclic (n year month day &optional mark)
-  "Uses `ENTRY' and `COFI-BOUNDARY' from outer scope.
+  "Uses `COFI-BOUNDARY' from outer scope.
 Same arguments as in diary cyclic."
-  (when (and
-         (or (not (boundp 'cofi-boundary)) cofi-boundary)
-         (org-cyclic n year month day mark))
-    entry))
+  (and cofi-boundary
+       (org-cyclic n year month day mark)))
 ;; ========================================
 ;; contacts ====================
 (setq org-contacts-files `(,(format "%s/contacts.org" org-directory)))

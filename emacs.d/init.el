@@ -53,6 +53,8 @@
                      keyfreq
                      keywiz
                      lacarte
+                     magit
+                     magit-gh-pulls
                      markdown-mode
                      multi-term
                      offlineimap

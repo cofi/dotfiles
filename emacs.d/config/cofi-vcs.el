@@ -1,5 +1,4 @@
-(add-to-loadpath "~/.elisp/vendor/magit"
-                 "~/.elisp/vendor/monky")
+(add-to-loadpath "~/.elisp/vendor/monky")
 
 (setq vc-handled-backends '(SVN)
       vc-follow-symlinks t)
@@ -20,8 +19,8 @@
           (kill-buffer (current-buffer))
         (bury-buffer))
     (quit-window kill-buffer (selected-window))))
+
 ;; load magit autoloads
-(require '50magit)
 (eval-after-load "magit"
   '(fset 'magit-quit-window #'cofi/vcs-quit-window))
 

@@ -112,6 +112,7 @@
                      "C-c p"     cofi-rope-map
                      "M-n"       'flymake-goto-next-error
                      "M-p"       'flymake-goto-prev-error
+                 #'which-func-mode
                      "C-c SPC"   'flymake-mode
                      "C-c ?"     'pylookup-lookup)
                  )

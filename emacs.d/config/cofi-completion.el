@@ -1,5 +1,3 @@
-(add-to-loadpath "~/.elisp/vendor/auto-complete")
-
 (require-and-exec 'auto-complete
     (require 'auto-complete-config)
     (require 'auto-complete-latex)

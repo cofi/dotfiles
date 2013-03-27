@@ -62,6 +62,7 @@
  "C-M-<delete>"    'sp-unwrap-sexp
 
  "M-D"      'sp-splice-sexp
+ "M-r"      'sp-splice-sexp-killing-around
  "M-<down>" 'sp-splice-sexp-killing-backward
  "M-<up>"   'sp-splice-sexp-killing-forward)
 

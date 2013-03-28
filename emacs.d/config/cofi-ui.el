@@ -22,10 +22,11 @@
                               emacs-lisp-mode-hook)))
 
 (eval-after-load 'auto-dictionary
-  '(add-hook 'kill-buffer-hook
-             (defun cofi/maybe-cancel-adict-timer ()
-               (when adict-timer
-                 (cancel-timer adict-timer)))))
+  '(progn
+     (defun cofi/maybe-cancel-adict-timer ()
+       (when adict-timer
+         (cancel-timer adict-timer)))
+     (add-hook 'kill-buffer-hook #'cofi/maybe-cancel-adict-timer)))
 
 (setq doc-view-continuous t)
 

@@ -27,6 +27,8 @@
                     track
                     truncate))
 
+(setq erc-button-keys-added t)          ; keep your hands off the erc keymap
+
 (erc-update-modules)
 (erc-autojoin-mode 1)
 (erc-services-mode 1)

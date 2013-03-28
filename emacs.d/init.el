@@ -34,7 +34,6 @@
                      cdlatex
                      dedicated
                      diminish
-                     eldoc-eval
                      elein
                      epc
                      evil-numbers

@@ -12,7 +12,8 @@
 (require 'smartparens)
 
 (push 'sldb-mode sp-ignore-modes-list)
-(setq sp-highlight-pair-overlay nil)
+(setq sp-highlight-pair-overlay nil
+      sp-navigate-close-if-unbalanced t)
 
 (sp-with-modes '(emacs-lisp-mode
                  inferior-emacs-lisp-mode

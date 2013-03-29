@@ -212,6 +212,8 @@
 
           appt-mode-string
           " "
+          (t erc-modified-channels-object)
+          " "
           (:eval (let* ((users (mapcar (lambda (user-data) (erc-server-user-nickname (car user-data)))
                                        (erc-sort-channel-users-by-activity (erc-get-channel-user-list))))
                         (user-string (mapconcat #'identity users ", ")))

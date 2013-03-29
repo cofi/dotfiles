@@ -262,10 +262,8 @@
 ;;; curse you erc for not letting me setup buffers via a function
 (defun erc-setup-buffer (buffer)
   ;; show buffer in erc frame if possible
-  (let ((old-frame (selected-frame)))
-    (select-frame (or (cofi/erc-find-erc-frame) old-frame))
-    (display-buffer buffer)
-    (select-frame old-frame)))
+  (with-selected-frame (or (cofi/erc-find-erc-frame) (selected-frame))
+    (display-buffer buffer)))
 
 (defadvice show-paren-function (around dont-paren-my-erc activate)
   (unless (eq major-mode 'erc-mode)

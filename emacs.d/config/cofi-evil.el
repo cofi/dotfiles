@@ -331,7 +331,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (evil-define-key 'insert message-mode-map
   (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 
-(defmacro cofi/without-evil-visual-hooks (&rest body)
+(defmacro cofi/enclose-ace-jump (&rest body)
   `(let ((old-mark (mark))
          (ace-jump-mode-scope 'window))
      (remove-hook 'pre-command-hook #'evil-visual-pre-command t)
@@ -349,22 +349,22 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
 (evil-define-motion evil-ace-jump-char-mode (count)
   :type exclusive
-  (cofi/without-evil-visual-hooks
+  (cofi/enclose-ace-jump
    (ace-jump-mode 5)))
 
 (evil-define-motion evil-ace-jump-line-mode (count)
   :type line
-  (cofi/without-evil-visual-hooks
+  (cofi/enclose-ace-jump
    (ace-jump-mode 9)))
 
 (evil-define-motion evil-ace-jump-word-mode (count)
   :type exclusive
-  (cofi/without-evil-visual-hooks
+  (cofi/enclose-ace-jump
    (ace-jump-mode 1)))
 
 (evil-define-motion evil-ace-jump-char-to-mode (count)
   :type exclusive
-  (cofi/without-evil-visual-hooks
+  (cofi/enclose-ace-jump
    (ace-jump-mode 5)
    (forward-char -1)))
 

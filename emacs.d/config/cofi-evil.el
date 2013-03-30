@@ -332,7 +332,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 
 (defmacro cofi/without-evil-visual-hooks (&rest body)
-  `(let ((old-mark (mark)))
+  `(let ((old-mark (mark))
+         (ace-jump-mode-scope 'window))
      (remove-hook 'pre-command-hook #'evil-visual-pre-command t)
      (remove-hook 'post-command-hook #'evil-visual-post-command t)
      (unwind-protect

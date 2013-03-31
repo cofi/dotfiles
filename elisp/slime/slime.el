@@ -1090,7 +1090,7 @@ See `slime-lisp-implementations'")
 
 (defvar slime-inferior-lisp-program-history '()
   "History list of command strings.  Used by `slime'.")
-                                                  
+
 (defun slime-read-interactive-args ()
   "Return the list of args which should be passed to `slime-start'.
 
@@ -1112,18 +1112,18 @@ The rules for selecting the arguments are rather complicated:
   (let ((table slime-lisp-implementations))
     (cond ((not current-prefix-arg) (slime-lisp-options))
           ((eq current-prefix-arg '-)
-           (let ((key (completing-read 
-                       "Lisp name: " (mapcar (lambda (x) 
-                                               (list (symbol-name (car x)))) 
+           (let ((key (completing-read
+                       "Lisp name: " (mapcar (lambda (x)
+                                               (list (symbol-name (car x))))
                                              table)
                        nil t)))
              (slime-lookup-lisp-implementation table (intern key))))
           (t
            (destructuring-bind (program &rest program-args)
-               (split-string (read-string 
+               (split-string (read-shell-command
                               "Run lisp: " inferior-lisp-program
                               'slime-inferior-lisp-program-history))
-             (let ((coding-system 
+             (let ((coding-system
                     (if (eq 16 (prefix-numeric-value current-prefix-arg))
                         (read-coding-system "set slime-coding-system: "
                                             slime-net-coding-system)
@@ -1318,7 +1318,7 @@ Return the created process."
   "Start a Swank server in the inferior Lisp and connect."
   (slime-delete-swank-port-file 'quiet)
   (slime-start-swank-server process args)
-  (slime-read-port-and-connect process nil))
+  (slime-read-port-and-connect process))
 
 (defvar slime-inferior-lisp-args nil
   "A buffer local variable in the inferior proccess.
@@ -1376,9 +1376,8 @@ See `slime-start'."
        (message (message "Unable to delete swank port file %S"
                          (slime-swank-port-file)))))))
 
-(defun slime-read-port-and-connect (inferior-process retries)
-  (slime-cancel-connect-retry-timer)
-  (slime-attempt-connection inferior-process retries 1))
+(defun slime-read-port-and-connect (inferior-process)
+  (slime-attempt-connection inferior-process nil 1))
 
 (defun slime-attempt-connection (process retries attempt)
   ;; A small one-state machine to attempt a connection with
@@ -1409,7 +1408,7 @@ See `slime-start'."
            (assert (not slime-connect-retry-timer))
            (setq slime-connect-retry-timer
                  (run-with-timer
-                  0.3 0.3
+                  0.3 nil
                   #'slime-timer-call #'slime-attempt-connection
                   process (and retries (1- retries))
                   (1+ attempt)))))))
@@ -4630,42 +4629,43 @@ With prefix argument include internal symbols."
         (set-syntax-table lisp-mode-syntax-table)
         (goto-char (point-min)))))
 
+(defvar slime-apropos-namespaces
+  '((:variable "Variable")
+    (:function "Function")
+    (:generic-function "Generic Function")
+    (:macro "Macro")
+    (:special-operator "Special Operator")
+    (:setf "Setf")
+    (:type "Type")
+    (:class "Class")
+    (:alien-type "Alien type")
+    (:alien-struct "Alien struct")
+    (:alien-union "Alien type")
+    (:alien-enum "Alien enum")))
+
 (defun slime-print-apropos (plists)
   (dolist (plist plists)
     (let ((designator (plist-get plist :designator)))
       (assert designator)
       (slime-insert-propertized `(face slime-apropos-symbol) designator))
     (terpri)
-    (loop for (prop namespace)
-          in '((:variable "Variable")
-               (:function "Function")
-               (:generic-function "Generic Function")
-               (:macro "Macro")
-               (:special-operator "Special Operator")
-               (:setf "Setf")
-               (:type "Type")
-               (:class "Class")
-               (:alien-type "Alien type")
-               (:alien-struct "Alien struct")
-               (:alien-union "Alien type")
-               (:alien-enum "Alien enum"))
-          ;; Properties not listed here will not show up in the buffer
-          do
-          (let ((value (plist-get plist prop))
+    (loop for (prop value) on plist by #'cddr
+          unless (eq prop :designator) do
+          (let ((namespace (cadr (or (assq prop slime-apropos-namespaces)
+                                     (error "Unknown property: %S" prop))))
                 (start (point)))
-            (when value
-              (princ "  ")
-              (slime-insert-propertized `(face slime-apropos-label) namespace)
-              (princ ": ")
-              (princ (etypecase value
-                       (string value)
-                       ((member :not-documented) "(not documented)")))
-              (add-text-properties
-               start (point)
-               (list 'type prop 'action 'slime-call-describer
-                     'button t 'apropos-label namespace
-                     'item (plist-get plist :designator)))
-              (terpri))))))
+            (princ "  ")
+            (slime-insert-propertized `(face slime-apropos-label) namespace)
+            (princ ": ")
+            (princ (etypecase value
+                     (string value)
+                     ((member nil :not-documented) "(not documented)")))
+            (add-text-properties
+             start (point)
+             (list 'type prop 'action 'slime-call-describer
+                   'button t 'apropos-label namespace
+                   'item (plist-get plist :designator)))
+            (terpri)))))
 
 (defun slime-call-describer (arg)
   (let* ((pos (if (markerp arg) arg (point)))
@@ -5455,6 +5455,11 @@ FRAMES is a list (NUMBER DESCRIPTION &optional PLIST) describing the initial
 portion of the backtrace. Frames are numbered from 0.
 CONTS is a list of pending Emacs continuations."
   (with-current-buffer (sldb-get-buffer thread)
+    (assert (if (equal sldb-level level)
+                (equal sldb-condition condition)
+              t)
+            () "Bug: sldb-level is equal but condition differs\n%s\n%s"
+            sldb-condition condition)
     (unless (equal sldb-level level)
       (setq buffer-read-only nil)
       (slime-save-local-variables (slime-popup-restore-data)
@@ -6379,7 +6384,7 @@ was called originally."
   (let ((id (get-text-property (point) 'thread-index))
         (file (slime-swank-port-file)))
     (slime-eval-async `(swank:start-swank-server-in-thread ,id ,file)))
-  (slime-read-port-and-connect nil nil))
+  (slime-read-port-and-connect nil))
 
 (defun slime-thread-debug ()
   (interactive)

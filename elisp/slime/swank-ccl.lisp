@@ -180,6 +180,11 @@
   (with-output-to-string (stream)
     (ccl:report-compiler-warning c stream :short t)))
 
+;; Needed because `ccl:report-compiler-warning' would return
+;; "Nonspecific warning".
+(defmethod compiler-warning-short-message ((c ccl::shadowed-typecase-clause))
+  (princ-to-string c))
+
 (defimplementation call-with-compilation-hooks (function)
   (handler-bind ((ccl:compiler-warning 'handle-compiler-warning))
     (let ((ccl:*merge-compiler-warnings* nil))
@@ -406,6 +411,22 @@
       (if pc
         (pc-source-location lfun pc)
         (function-source-location lfun)))))
+
+(defun function-name-package (name)
+  (etypecase name
+    (null nil)
+    (symbol (symbol-package name))
+    ((cons (eql setf) symbol) (symbol-package (cadr name)))
+    ((cons (eql :internal)) (function-name-package (car (last name))))
+    ((cons (and symbol (not keyword)) (cons list null))
+     (symbol-package (car name)))
+    (standard-method (function-name-package (ccl:method-name name)))))
+
+(defimplementation frame-package (frame-number)
+  (with-frame (p context) frame-number
+    (let* ((lfun (ccl:frame-function p context))
+           (name (ccl:function-name lfun)))
+      (function-name-package name))))
 
 (defimplementation eval-in-frame (form index)
   (with-frame (p context) index
@@ -672,6 +693,10 @@
   (with-slots (object) uv
     (loop for i below (ccl:uvsize object) append 
           (label-value-line (princ-to-string i) (ccl:uvref object i)))))
+
+(defimplementation type-specifier-p (symbol)
+  (or (ccl:type-specifier-p symbol)
+      (not (eq (type-specifier-arglist symbol) :not-available))))
 
 ;;; Multiprocessing
 

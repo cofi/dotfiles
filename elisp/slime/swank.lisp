@@ -2328,7 +2328,8 @@ TAGS has is a list of strings."
   (with-bindings *backtrace-printer-bindings*
     (loop for var in (frame-locals index) collect
           (destructuring-bind (&key name id value) var
-            (list :name (prin1-to-string name)
+            (list :name (let ((*package* (or (frame-package index) *package*)))
+                          (prin1-to-string name))
                   :id id
                   :value (to-line value *print-right-margin*))))))
 
@@ -2420,9 +2421,8 @@ The time is measured in seconds."
                                    :loadp (if loadp t)
                                    :faslfile faslfile))))))
 
-(defun compile-file-with-compile-file (pathname load-p &rest options
-                                       &key policy
-                                       &allow-other-keys)
+(defun swank-compile-file* (pathname load-p &rest options &key policy
+                                                      &allow-other-keys)
   (multiple-value-bind (output-pathname warnings? failure?)
       (swank-compile-file pathname
                           (fasl-pathname pathname options)
@@ -2433,7 +2433,7 @@ The time is measured in seconds."
     (declare (ignore warnings?))
     (values t (not failure?) load-p output-pathname)))
 
-(defvar *compile-file-for-emacs-hook* '(compile-file-with-compile-file))
+(defvar *compile-file-for-emacs-hook* '(swank-compile-file*))
 
 (defslimefun compile-file-for-emacs (filename load-p &rest options)
   "Compile FILENAME and, when LOAD-P, load the result.
@@ -2451,6 +2451,8 @@ Record compiler notes signalled as `compiler-condition's."
                  (when tried
                    (return (values success load? output-pathname))))))))))
 
+;; FIXME: now that *compile-file-for-emacs-hook* is there this is
+;; redundant and confusing.
 (defvar *fasl-pathname-function* nil
   "In non-nil, use this function to compute the name for fasl-files.")
 

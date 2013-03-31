@@ -438,6 +438,9 @@
       (sb-introspect:deftype-lambda-list typespec-operator)
     (if foundp arglist (call-next-method))))
 
+(defimplementation type-specifier-p (symbol)
+  (or (sb-ext:valid-type-specifier-p symbol)
+      (not (eq (type-specifier-arglist symbol) :not-available))))
 
 (defvar *buffer-name* nil)
 (defvar *buffer-tmpfile* nil)
@@ -1270,9 +1273,18 @@ stack."
     (code-location-source-location
      (sb-di:frame-code-location (nth-frame index)))))
 
+(defvar *keep-non-valid-locals* nil)
+
 (defun frame-debug-vars (frame)
   "Return a vector of debug-variables in frame."
-  (sb-di::debug-fun-debug-vars (sb-di:frame-debug-fun frame)))
+  (let ((all-vars (sb-di::debug-fun-debug-vars (sb-di:frame-debug-fun frame))))
+    (cond (*keep-non-valid-locals* all-vars)
+          (t (let ((loc (sb-di:frame-code-location frame)))
+               (remove-if (lambda (var)
+                            (ecase (sb-di:debug-var-validity var loc)
+                              (:valid nil)
+                              ((:invalid :unknown) t)))
+                          all-vars))))))
 
 (defun debug-var-value (var frame location)
   (ecase (sb-di:debug-var-validity var location)
@@ -1350,6 +1362,16 @@ stack."
                (sb-di:preprocess-for-eval form
                                           (sb-di:frame-code-location frame)))
              frame)))
+
+(defimplementation frame-package (frame-number)
+  (let* ((frame (nth-frame frame-number))
+         (fun (sb-di:debug-fun-fun (sb-di:frame-debug-fun frame))))
+    (when fun
+      (let ((name (function-name fun)))
+        (typecase name
+          (null nil)
+          (symbol (symbol-package name))
+          ((cons (eql setf) (cons symbol)) (symbol-package (cadr name))))))))
 
 #+#.(swank-backend::sbcl-with-restart-frame)
 (progn

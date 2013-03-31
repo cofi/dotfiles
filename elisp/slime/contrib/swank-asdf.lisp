@@ -11,55 +11,50 @@
 (in-package :swank)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (defvar *asdf-directory*
-    (merge-pathnames #p"cl/asdf/" (user-homedir-pathname))
-    "Directory in which your favorite and/or latest version
-     of the ASDF source code is located")
-  (defvar *upgrade-asdf-p* nil
-    "Should we upgrade ASDF immediately upon startup?
-     This is recommended if you upgrade ASDF at all."))
+;;; The best way to load ASDF is from an init file of an
+;;; implementation.  If ASDF is not loaded at the time swank-asdf is
+;;; loaded, it will be tried first with (require "asdf"), if that
+;;; doesn't help and *asdf-path* is set, it will be loaded from that
+;;; file.
+;;; To set *asdf-path* put the following into ~/.swank.lisp:
+;;; (defparameter swank::*asdf-path* #p"/path/to/asdf/asdf.lisp")
+  (defvar *asdf-path* nil
+    "Path to asdf.lisp file, to be loaded in case (require \"asdf\") fails."))
 
-;;; Doing our best to load ASDF
-;; First, try loading asdf from your implementation.
-;; Use eval to not fail on old CLISP.
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (member :asdf *features*)
-    (ignore-errors (eval '(require "asdf")))))
+    (ignore-errors (funcall 'require "asdf"))))
 
-;; If not found, load asdf from wherever the user specified it
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (member :asdf *features*)
-    (ignore-errors
-     (handler-bind ((warning #'muffle-warning))
-       (let ((asdf-lisp (probe-file
-                         (make-pathname :name "asdf" :type "lisp"
-                                        :defaults *asdf-directory*))))
-         (when asdf-lisp (load asdf-lisp)))))))
+    (handler-bind ((warning #'muffle-warning))
+      (when *asdf-path*
+        (load *asdf-path* :if-does-not-exist nil)))))
 
 ;; If still not found, error out.
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (member :asdf *features*)
     (error "Could not load ASDF.
-Please install ASDF2 and in your ~~/.swank.lisp specify:
- (defparameter swank::*asdf-directory* #p\"/path/containing/asdf/\")")))
-
-;;; If ASDF is found, try to upgrade it to the latest installed version.
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (when *upgrade-asdf-p*
-    (handler-bind ((warning #'muffle-warning))
-      (pushnew *asdf-directory* asdf:*central-registry*)
-      (ignore-errors (asdf:oos 'asdf:load-op :asdf)))))
+Please update your implementation or
+install ASDF2 and in your ~~/.swank.lisp specify:
+ (defparameter swank::*asdf-path* #p\"/path/containing/asdf/asdf.lisp\")")))
 
 ;;; If ASDF is too old, punt.
+;; Quicklisp has 2.014.6 for the longest time, now 2.26.
+;; CLISP ships with 2.11? Too bad, have them upgrade or
+;; install an upgrade yourself and configure *asdf-path*
+;; It's just not worth the hassle supporting something
+;; that doesn't even have COERCE-PATHNAME.
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (unless (or #+asdf2 (asdf:version-satisfies (asdf:asdf-version) "2.000"))
-    (error "Your ASDF version is too old.
-Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
- (defparameter swank::*asdf-directory* #p\"/path/containing/asdf/\")")))
+  (unless (or #+asdf3 t #+asdf2
+              (asdf:version-satisfies (asdf:asdf-version) "2.14.6"))
+    (error "Your ASDF is too old. ~
+            The oldest version supported by swank-asdf is 2.014.6.")))
 
 ;;; Import functionality from ASDF that isn't available in all ASDF versions.
 ;;; Please do NOT depend on any of the below as reference:
 ;;; they are sometimes stripped down versions, for compatibility only.
+;;; Indeed, they are supposed to work on *OLDER*, not *NEWER* versions of ASDF.
 ;;;
 ;;; The way I got these is usually by looking at the current definition,
 ;;; using git blame in one screen to locate which commit last modified it,
@@ -98,48 +93,9 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
                  ((defmethod) (defmethod* version aname args))
                  ((defvar) (defvar* name aname args)))))))
 
-(asdefs "2.015"
- (defvar *wild* #-cormanlisp :wild #+cormanlisp "*"))
+(asdefs "2.15"
+ (defvar *wild* #-cormanlisp :wild #+cormanlisp "*")
 
-(asdefs "2.010"
- (defun collect-sub*directories (directory collectp recursep collector)
-   (when (funcall collectp directory)
-     (funcall collector directory))
-   (dolist (subdir (subdirectories directory))
-     (when (funcall recursep subdir)
-       (collect-sub*directories subdir collectp recursep collector)))))
-
-(asdefs "2.011"
- (defun find-symbol* (s p)
-   (find-symbol (string s) p)))
-
-(asdefs "2.012"
- (defvar *wild-file*
-   (make-pathname :name *wild* :type *wild*
-                  :version (or #-(or abcl xcl) *wild*) :directory nil))
- (defvar *wild-directory*
-   (make-pathname :directory `(:relative ,*wild*)
-                  :name nil :type nil :version nil)))
-
-(asdefs "2.014"
- (defun ensure-directory-pathname (pathspec)
-   (cond
-     ((stringp pathspec)
-      (ensure-directory-pathname (pathname pathspec)))
-     ((not (pathnamep pathspec))
-      (error "Invalid pathname designator ~S" pathspec))
-     ((wild-pathname-p pathspec)
-      (error "Can't reliably convert wild pathname ~S" pathspec))
-     ((asdf::directory-pathname-p pathspec)
-      pathspec)
-     (t
-      (make-pathname :directory (append (or (pathname-directory pathspec)
-                                            (list :relative))
-                                        (list (file-namestring pathspec)))
-                     :name nil :type nil :version nil
-                     :defaults pathspec)))))
-
-(asdefs "2.015"
  (defun collect-asds-in-directory (directory collect)
    (map () collect (directory-asd-files directory)))
 
@@ -149,7 +105,7 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
        (collect-sub*directories-asd-files
         directory :exclude exclude :collect collect))))
 
-(asdefs "2.016"
+(asdefs "2.16"
  (defun load-sysdef (name pathname)
    (declare (ignore name))
    (let ((package (asdf::make-temporary-package)))
@@ -159,7 +115,7 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
                   (asdf::pathname-directory-pathname
                    (translate-logical-pathname pathname))))
             (asdf::asdf-message
-             "~&; Loading system definition from ~A into ~A~%"
+             "~&; Loading system definition from ~A into ~A~%" ;
              pathname package)
             (load pathname))
      (delete-package package))))
@@ -179,12 +135,12 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
                          #+sbcl
                          (when (find-symbol "RESOLVE-SYMLINKS" '#:sb-impl)
                            '(:resolve-symlinks nil)))))))
-(asdefs "2.017"
+(asdefs "2.17"
  (defun collect-sub*directories-asd-files
      (directory &key
                 (exclude asdf::*default-source-registry-exclusions*)
                 collect)
-   (collect-sub*directories
+   (asdf::collect-sub*directories
     directory
     (constantly t)
     (lambda (x) (not (member (car (last (pathname-directory x)))
@@ -198,7 +154,7 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
  (defun filter-logical-directory-results (directory entries merger)
    (if (typep directory 'logical-pathname)
        (loop for f in entries
-             when 
+             when
              (if (typep f 'logical-pathname)
                  f
                  (let ((u (ignore-errors (funcall merger f))))
@@ -212,39 +168,36 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
  (defun directory-asd-files (directory)
    (directory-files directory asdf::*wild-asd*)))
 
-(asdefs "2.019"
+(asdefs "2.19"
     (defun subdirectories (directory)
-      (let* ((directory (ensure-directory-pathname directory))
-             #-(or abcl cormanlisp genera xcl)
+      (let* ((directory (asdf::ensure-directory-pathname directory))
+             #-(or abcl cormanlisp xcl)
              (wild (asdf::merge-pathnames*
                     #-(or abcl allegro cmu lispworks sbcl scl xcl)
-                    *wild-directory*
+                    asdf::*wild-directory*
                 #+(or abcl allegro cmu lispworks sbcl scl xcl) "*.*"
                 directory))
              (dirs
-               #-(or abcl cormanlisp genera xcl)
+               #-(or abcl cormanlisp xcl)
                (ignore-errors
                 (directory* wild . #.(or #+clozure '(:directories t :files nil)
                                          #+mcl '(:directories t))))
                #+(or abcl xcl) (system:list-directory directory)
-               #+cormanlisp (cl::directory-subdirs directory)
-               #+genera (fs:directory-list directory))
-             #+(or abcl allegro cmu genera lispworks sbcl scl xcl)
+               #+cormanlisp (cl::directory-subdirs directory))
+             #+(or abcl allegro cmu lispworks sbcl scl xcl)
              (dirs (loop for x in dirs
                          for d = #+(or abcl xcl) (extensions:probe-directory x)
                          #+allegro (excl:probe-directory x)
                          #+(or cmu sbcl scl) (asdf::directory-pathname-p x)
-                         #+genera (getf (cdr x) :directory)
                          #+lispworks (lw:file-directory-p x)
                          when d collect #+(or abcl allegro xcl) d
-                           #+genera (ensure-directory-pathname (first x))
                          #+(or cmu lispworks sbcl scl) x)))
         (filter-logical-directory-results
          directory dirs
          (let ((prefix (or (normalize-pathname-directory-component
                             (pathname-directory directory))
                            ;; because allegro 8.x returns NIL for #p"FOO:"
-                           '(:absolute)))) 
+                           '(:absolute))))
            (lambda (d)
              (let ((dir (normalize-pathname-directory-component
                          (pathname-directory d))))
@@ -257,13 +210,14 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
                               (last dir))))))))))))
 
 (asdefs "2.21"
+ (defun component-loaded-p (c)
+   (and (gethash 'load-op (asdf::component-operation-times
+                           (asdf::find-component c nil))) t))
+
  (defun normalize-pathname-directory-component (directory)
    (cond
      #-(or cmu sbcl scl)
      ((stringp directory) `(:absolute ,directory) directory)
-     #+gcl
-     ((and (consp directory) (stringp (first directory)))
-      `(:absolute ,@directory))
      ((or (null directory)
           (and (consp directory)
                (member (first directory) '(:absolute :relative))))
@@ -286,8 +240,8 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
     :type (make-pathname-component-logical (pathname-type pathname))
     :version (make-pathname-component-logical (pathname-version pathname)))))
 
-(asdefs "2.022"
- (defun directory-files (directory &optional (pattern *wild-file*))
+(asdefs "2.22"
+ (defun directory-files (directory &optional (pattern asdf::*wild-file*))
    (let ((dir (pathname directory)))
      (when (typep dir 'logical-pathname)
        (when (wild-pathname-p dir)
@@ -310,14 +264,17 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
                          :version (make-pathname-component-logical
                                    (pathname-version f)))))))))
 
-(asdefs "2.27"
- (defmethod component-relative-pathname ((component asdf:component))
+(asdefs "2.26.149"
+ (defmethod component-relative-pathname ((system asdf:system))
    (asdf::coerce-pathname
-    (or (and (slot-boundp component 'asdf::relative-pathname)
-             (slot-value component 'asdf::relative-pathname))
-        (asdf::component-name component))
-    :type (asdf::source-file-type component (asdf::component-system component))
-    :defaults (asdf::component-parent-pathname component))))
+    (and (slot-boundp system 'asdf::relative-pathname)
+         (slot-value system 'asdf::relative-pathname))
+    :type :directory
+    :defaults (system-source-directory system)))
+ (defun load-asd (pathname &key name &allow-other-keys)
+   (asdf::load-sysdef (or name (string-downcase (pathname-name pathname)))
+                      pathname)))
+
 
 ;;; Taken from ASDF 1.628
 (defmacro while-collecting ((&rest collectors) &body body)
@@ -326,7 +283,7 @@ Please upgrade to ASDF2 and in your ~~/.swank.lisp specify:
 ;;; Now for SLIME-specific stuff
 
 (defun asdf-operation (operation)
-  (or (find-symbol* operation :asdf)
+  (or (asdf::find-symbol* operation :asdf)
       (error "Couldn't find ASDF operation ~S" operation)))
 
 (defun map-system-components (fn system)
@@ -409,10 +366,11 @@ Example:
 \(operate-on-system \"swank\" 'compile-op :force t)"
   (handler-case
       (with-compilation-hooks ()
-	(apply #'asdf:operate (asdf-operation operation-name)
+        (apply #'asdf:operate (asdf-operation operation-name)
                system-name keyword-args)
         t)
-    (asdf:compile-error () nil)))
+    ((or asdf:compile-error #+asdf3 asdf/lisp-build:compile-file-error)
+      () nil)))
 
 (defun unique-string-list (&rest lists)
   (sort (delete-duplicates (apply #'append lists) :test #'string=) #'string<))
@@ -428,17 +386,15 @@ AND in its source-registry. (legacy name)"
             for defaults = (eval dir)
             when defaults
             do (collect-asds-in-directory defaults #'c))
-      #+asdf2
-      (progn
-        (asdf:ensure-source-registry)
-        (if (asdf:version-satisfies (asdf:asdf-version) "2.015")
-            (loop :for k :being :the :hash-keys :of asdf::*source-registry*
-                  :do (c k))
-            (dolist (entry (asdf::flatten-source-registry))
-              (destructuring-bind (directory &key recurse exclude) entry
-                (register-asd-directory
-                 directory
-                 :recurse recurse :exclude exclude :collect #'c)))))))))
+      (asdf:ensure-source-registry)
+      (if (or #+asdf3 t (asdf:version-satisfies (asdf:asdf-version) "2.15"))
+          (loop :for k :being :the :hash-keys :of asdf::*source-registry*
+                :do (c k))
+          (dolist (entry (asdf::flatten-source-registry))
+            (destructuring-bind (directory &key recurse exclude) entry
+              (register-asd-directory
+               directory
+               :recurse recurse :exclude exclude :collect #'c))))))))
 
 (defslimefun list-all-systems-known-to-asdf ()
   "Returns a list of all systems ASDF knows already."
@@ -484,9 +440,7 @@ already knows."
         files)))
 
 (defslimefun asdf-system-loaded-p (name)
-  (and (gethash 'asdf:load-op
-                (asdf::component-operation-times (asdf:find-system name)))
-       t))
+  (component-loaded-p name))
 
 (defslimefun asdf-system-directory (name)
   (namestring (asdf:system-source-directory name)))
@@ -494,21 +448,26 @@ already knows."
 (defun pathname-system (pathname)
   (let ((component (pathname-component pathname)))
     (when component
-      (asdf:component-system component))))
+      (asdf:component-name (asdf:component-system component)))))
 
 (defslimefun asdf-determine-system (file buffer-package-name)
   (or
-   (pathname-system file)
-   (progn ; If not found, let's rebuild the table first
-     (recompute-pathname-component-table)
-     (pathname-system file))
+   (and file
+        (pathname-system file))
+   (and file
+        (progn
+          ;; If not found, let's rebuild the table first
+          (recompute-pathname-component-table)
+          (pathname-system file)))
    ;; If we couldn't find an already defined system,
    ;; try finding a system that's named like BUFFER-PACKAGE-NAME.
-   (loop :with package = (guess-buffer-package buffer-package-name)
-         :for name :in (package-names package)
-         :for system = (asdf:find-system (asdf::coerce-name name) nil)
-         :when system :do (register-system-pathnames system)
-         :thereis (pathname-system file))))
+   (loop with package = (guess-buffer-package buffer-package-name)
+         for name in (package-names package)
+         for system = (asdf:find-system (asdf::coerce-name name) nil)
+         when (and system
+                   (or (not file)
+                       (pathname-system file)))
+         return (asdf:component-name system))))
 
 (defslimefun delete-system-fasls (name)
   (let ((removed-count
@@ -536,11 +495,10 @@ already knows."
 ;; Doing list-all-systems-in-central-registry might be quite slow
 ;; since it accesses a file-system, so run it once at the background
 ;; to initialize caches.
-(eval-when (:load-toplevel :execute)
-  (when (eql *communication-style* :spawn)
-    (spawn (lambda ()
-             (ignore-errors (list-all-systems-in-central-registry)))
-           :name "init-asdf-fs-caches")))
+(when (eql *communication-style* :spawn)
+  (spawn (lambda ()
+           (ignore-errors (list-all-systems-in-central-registry)))
+         :name "init-asdf-fs-caches"))
 
 ;;; Hook for compile-file-for-emacs
 
@@ -559,7 +517,7 @@ already knows."
 (defun try-compile-asd-file (pathname load-p &rest options)
   (declare (ignore load-p options))
   (when (equalp (pathname-type pathname) "asd")
-    (load-sysdef (string-downcase (pathname-name pathname)) pathname)
+    (load-asd pathname)
     (values t t nil pathname)))
 
 (pushnew 'try-compile-asd-file *compile-file-for-emacs-hook*)

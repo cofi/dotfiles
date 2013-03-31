@@ -1,3 +1,107 @@
+2013-03-12  Helmut Eller  <heller@common-lisp.net>
+
+	* slime.el (slime-read-interactive-args): Use read-shell-command
+	to enable completion.  Patch by Daimrod/Greg.
+
+2013-03-08  Mark Evenson  <evenson@tethys.local>
+
+	* swank-abcl.lisp: Allow SLIME inspector to perform class
+	finalization.
+
+2013-03-02  Stas Boukarev  <stassats@gmail.com>
+
+	* slime-autoloads.el: Don't load autoloads when slime is already
+	loaded, there's no sense in doing so.
+
+2013-02-20  Stas Boukarev  <stassats@gmail.com>
+
+	* slime.el (slime-attempt-connection): Don't run the timer with a
+	repeat argument, slime-attempt-connection will reinstantiate the
+	timer if needed, otherwise it can be a possible source of race
+	conditions.
+
+2013-02-13  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-allegro.lisp (eval-in-frame): debugger:frame-var-name can
+	return nil; ignore those vars.
+
+	* slime.el (sldb-setup): Allegro somehow managed to enter sldb at
+	the same level twice.  Add an assertion that checks that the
+	condition is the same if sldb-level is the same as last time.
+
+2013-02-08  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-lispworks.lisp (frame-package): Implemented.
+	(function-name-package): New.
+
+2013-02-08  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-allegro.lisp (handle-compiler-warning): Ignore "Closure
+	will be stack allocated" notes.  Those are harmless and there are
+	too many of them.
+	(pc-source-location, ldb-code-to-src-loc): Handle case when
+	excl::ldb-code-pc returns nil.
+
+2013-02-02  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-backend.lisp (type-specifier-p): New.
+	Implement it for ACL, ECL, CCL, Clisp, SBCL, LW.
+
+2013-01-12  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-backend.lisp: Add a couple of ignore declarations.
+
+2013-01-11  Stas Boukarev  <stassats@gmail.com>
+
+	* swank-ecl.lisp (accept-connection): Fix a typo, line => :line.
+
+2013-01-11  Helmut Eller  <heller@common-lisp.net>
+
+	* swank.lisp (swank-compile-file*): Renamed from
+	compile-file-with-compile-file.
+
+2013-01-10  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-ecl.lisp (frame-var-value): Return the value without name.
+
+2013-01-09  Helmut Eller  <heller@common-lisp.net>
+
+	* swank.lisp (frame-locals-for-emacs): Print variable names in
+	frame-package.
+
+2013-01-09  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-sbcl.lisp (frame-debug-vars): Only include :valid locals.
+	(*keep-non-valid-locals*): New.
+	(frame-package): New.
+
+2013-01-07  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-ccl.lisp (compiler-warning-short-message): Add a method
+	for ccl::shadowed-typecase-clause.  Whithout that we only get
+	"Nonspecific warning".
+	(function-name-package): Factored out from frame-package.  Add
+	case for standard-method.
+
+2013-01-07  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-ecl.lisp (describe-symbol-for-emacs): Include bound
+	symbols even those without documentation.
+
+	* slime.el (slime-print-apropos): Do some input validation to
+	detect bugs on the Lisp side.
+
+	* swank-backend.lisp (describe-symbol-for-emacs): Allow NIL where
+	:NOT-DOCUMENTED was needed.
+
+2013-01-05  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-ccl.lisp (frame-package): Implemented.
+
+2013-01-05  Helmut Eller  <heller@common-lisp.net>
+
+	* swank-loader.lisp (init): Add a :quiet argument.
+
 2012-12-27  Stas Boukarev  <stassats@gmail.com>
 
 	* swank.lisp (find-definitions-find-symbol-or-package): Rename

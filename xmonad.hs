@@ -2,7 +2,7 @@
 import XMonad hiding ((|||))
 import qualified XMonad.StackSet as W
 
-import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.Run
 import XMonad.Util.NamedScratchpad
 
@@ -41,8 +41,6 @@ import XMonad.Prompt.DirExec (dirExecPromptNamed)
 import XMonad.Prompt.Man (manPrompt)
 import XMonad.Prompt.Window
 
-import Graphics.X11.ExtraTypes.XF86
-
 import Data.List (isPrefixOf, findIndex)
 import qualified Data.Map as M
 import System.Directory (getHomeDirectory)
@@ -66,7 +64,6 @@ main = do
                          , manageHook = myManageHook
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir
-                         `additionalKeys` volumeKeys
     where
       myStartupHook = setWMName "LG3D"
       trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false "
@@ -161,6 +158,13 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-<F3>", sendMessage $ JumpToLayout "Three")
                  , ("M-<F12>", sendMessage $ JumpToLayout "Full")
                  , ("M-s", sendMessage $ ToggleStruts)
+                 -- volume
+                 , ("<XF86AudioRaiseVolume>", spawn "pads up 5")
+                 , ("<XF86AudioLowerVolume>", spawn "pads down 5")
+                 , ("<XF86AudioMute>", spawn "pads mute")
+                 , ("S-<XF86AudioRaiseVolume>", spawn "pads in-up 5")
+                 , ("S-<XF86AudioLowerVolume>", spawn "pads in-down 5")
+                 , ("S-<XF86AudioMute>", spawn "pads in-mute")
                  ]
                  ++ searchBindings
                  ++ scratchpadBindings
@@ -206,14 +210,6 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                                            , ("k", spawn "mpd ~/.mpdconf --kill")
                                            , ("q", spawn "qmpdclient")
                                            ]
-volumeKeys = [((0, xF86XK_AudioLowerVolume), spawn "pads down 5")
-            , ((0, xF86XK_AudioRaiseVolume), spawn "pads up 5")
-            , ((shiftMask, xF86XK_AudioLowerVolume), spawn "pads in-down 5")
-            , ((shiftMask, xF86XK_AudioRaiseVolume), spawn "pads in-up 5")
-            , ((0, xF86XK_AudioMute), spawn "pads mute")
-            , ((shiftMask, xF86XK_AudioMute), spawn "pads in-mute")
-            ]
-
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"
                     , ppSep     = " :: "

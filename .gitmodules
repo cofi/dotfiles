@@ -64,3 +64,6 @@
 [submodule "elisp/vendor/erc-image"]
 	path = elisp/vendor/erc-image
 	url = git://github.com/kidd/erc-image.el.git
+[submodule "elisp/vendor/macrostep"]
+	path = elisp/vendor/macrostep
+	url = git://github.com/joddie/macrostep.git

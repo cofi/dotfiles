@@ -211,6 +211,22 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "b" 'rdictcc-backward-word
   "w" 'rdictcc-forward-word)
 
+(evil-define-key 'normal macrostep-keymap
+    (kbd "RET") 'macrostep-expand
+    "=" 'macrostep-expand
+    "e" 'macrostep-expand
+
+    (kbd "DEL") 'macrostep-collapse
+    "u" 'macrostep-collapse
+    "c" 'macrostep-collapse
+
+    (kbd "TAB") 'macrostep-next-macro
+    "n" 'macrostep-next-macro
+    (kbd "M-TAB") 'macrostep-prev-macro
+    "p" 'macrostep-prev-macro
+    "q" 'macrostep-collapse-all
+    (kbd "C-c C-c") 'macrostep-collapse-all)
+
 (defvar slime-mode nil)
 (defadvice evil-goto-definition (around evil-clever-goto-def activate)
   "Make use of emacs', slime's and etags possibilities for finding definitions."

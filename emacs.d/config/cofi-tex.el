@@ -62,7 +62,7 @@
         ))
 
 (add-all-to-hook 'LaTeX-mode-hook
-                 (gen-local-fill-keymap-hook "." (cmd dot-newline (insert ".\n")))
+                 (gen-local-fill-keymap-hook "C-." (cmd dot-newline (insert ".\n")))
                  #'visual-line-mode)
 
 (require-and-exec 'info-look

@@ -138,7 +138,7 @@
   (defun cofi/update-helm-sources ()
     (interactive)
     (setq cofi/helm-uni-sources
-          (let* ((dirs '("OS" "IPL" "BP" "AI" "CE" "PS"))
+          (let* ((dirs '("IL" "OA" "CPL" "ALT"))
                  (subdirs '("aufgaben" "uebungen" "notes" "praktika"))
                  (file-filters `(("aufgaben" ,(gen-extension-re "pdf"))
                                  ("uebungen" ,(concat "Makefile" "\\|"
@@ -147,6 +147,7 @@
                                                                         "java"
                                                                         "py"
                                                                         "hs"
+                                                                        "scala"
                                                                         "lisp"
                                                                         "org"
                                                                         "clj")))

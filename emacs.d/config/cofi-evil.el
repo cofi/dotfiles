@@ -13,7 +13,7 @@
       evil-leader/in-all-states t)
 (require 'evil-leader)
 (require 'evil)
-(sackspace-mode 1)
+(sackspace-global-mode 1)
 
 (setq evil-normal-state-tag   (propertize "N" 'face '((:background "green" :foreground "black")))
       evil-emacs-state-tag    (propertize "E" 'face '((:background "orange" :foreground "black")))

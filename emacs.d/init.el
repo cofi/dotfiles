@@ -41,6 +41,7 @@
                      flymake-cursor
                      full-ack
                      ghc
+                     ggtags
                      gist
                      gitconfig-mode
                      git-commit-mode

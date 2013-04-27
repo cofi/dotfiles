@@ -139,10 +139,9 @@
           "\\(//[-a-zA-Z0-9_.]+:[0-9]\\)?"  ;
           "[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;.,()]+[-a-zA-Z0-9_=#$@~`%&*+\\/()|]"))
 
-(eval-after-load 'erc-button
-  '(fill-keymap erc-button-keymap
-		"<backtab>" 'cofi/erc-previous-url-button
-		"C-c <backtab>" 'erc-button-previous))
+(fill-keymap erc-mode-map
+  "<backtab>" 'cofi/erc-previous-url-button
+  "C-c <backtab>" 'erc-button-previous)
 
 (defun cofi/erc-buffer ()
   (interactive)

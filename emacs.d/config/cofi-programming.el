@@ -8,6 +8,7 @@
                           c-mode-hook
                           c++-mode-hook
                           java-mode-hook
+                          scala-mode-hook
                           ))
 
 (mapc 'require '(
@@ -17,6 +18,7 @@
               cofi-haskell
               cofi-lisp
               cofi-python
+              cofi-scala
               cofi-tags
               cofi-tex
               cofi-c

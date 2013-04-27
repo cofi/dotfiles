@@ -31,6 +31,7 @@
   (sp-local-pair "$" "$")
   (sp-local-pair "\\[" "\\]")
   (sp-local-pair "\\(" "\\)")
+  (sp-local-pair "\\{" "\\}")
   (sp-local-pair "\\left(" "\\right)")
   (sp-local-pair "\\left\\{" "\\right\\}"))
 

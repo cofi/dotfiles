@@ -23,6 +23,9 @@
 
 (autoload 'dired-jump "dired" "Jump to current buffer's file in dired" t)
 
+(autoload 'eassist-switch-h-cpp "eassist" nil t)
+(autoload 'eassist-list-methods "eassist" nil t)
+
 (autoload 'ebib "ebib" nil t)
 
 (autoload 'goto-last-change "goto-chg" nil t)

@@ -1,6 +1,4 @@
-(autoload 'any-ini-mode "any-ini-mode")
-(add-to-list 'auto-mode-alist '("\\.ini\\'" . any-ini-mode))
-(add-to-list 'auto-mode-alist '("\\.conf\\'" . any-ini-mode))
+(require 'generic-x)
 
 (autoload 'bc-set               "breadcrumb" "Set bookmark in current point."   t)
 (autoload 'bc-previous          "breadcrumb" "Go to previous bookmark."         t)

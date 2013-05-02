@@ -5,16 +5,17 @@
 (setq helm-boring-file-regexp-list
       (append
        (list
-        (gen-extension-re ".svn" ".git" ".hg"
+        (gen-extension-re "svn" "git" "hg"
                           "prv"
                           "pyc"
                           "elc"
                           "~"
                           "class" "la" "o"
-                          )
-        (rx (and line-start  (or ".#" "."))))
-        (mapcar (lambda (s) (concat "\\`" s "$"))
+                          ))
+        (mapcar (lambda (s) (concat "/" s "$"))
                 '(
+                  "\\.#.*"
+                  "\\..*"
                   "__pycache__"
                   "auto" "_region_"
                   "_darcs"
@@ -44,6 +45,15 @@
       helm-enable-shortcuts t)
 
 (setq helm-ff-transformer-show-only-basename nil)
+
+(defun cofi/remove-boring-files (files source)
+  (helm-skip-boring-files files))
+
+(setf (cdr (assoc 'filtered-candidate-transformer helm-source-find-files))
+      '(cofi/remove-boring-files helm-find-files-transformer))
+
+(let ((c-t (assoc 'candidate-transformer (cdr (assoc 'file helm-type-attributes)))))
+  (setcdr c-t (cons 'helm-skip-boring-files (cdr c-t))))
 
 (setq helm-M-x-requires-pattern 0)
 

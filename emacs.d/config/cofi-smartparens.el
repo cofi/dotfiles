@@ -22,6 +22,9 @@
   (sp-local-pair "'" nil :actions nil)
   (sp-local-pair "`" "'" :when '(sp-in-string-p) :actions '(insert wrap)))
 
+(sp-with-modes '(scala-mode)
+  (sp-local-pair "'" nil :actions nil))
+
 (sp-with-modes '(text-mode)
   (sp-local-pair "`" "'" :actions '(insert wrap)))
 

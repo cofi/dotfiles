@@ -49,11 +49,12 @@
 (defun cofi/remove-boring-files (files source)
   (helm-skip-boring-files files))
 
-(setf (cdr (assoc 'filtered-candidate-transformer helm-source-find-files))
-      '(cofi/remove-boring-files helm-find-files-transformer))
-
-(let ((c-t (assoc 'candidate-transformer (cdr (assoc 'file helm-type-attributes)))))
-  (setcdr c-t (cons 'helm-skip-boring-files (cdr c-t))))
+(eval-after-load "helm-files"
+  '(progn
+     (setf (cdr (assoc 'filtered-candidate-transformer helm-source-find-files))
+           '(cofi/remove-boring-files helm-find-files-transformer))
+     (let ((c-t (assoc 'candidate-transformer (cdr (assoc 'file helm-type-attributes)))))
+       (setcdr c-t (cons 'helm-skip-boring-files (cdr c-t))))))
 
 (setq helm-M-x-requires-pattern 0)
 

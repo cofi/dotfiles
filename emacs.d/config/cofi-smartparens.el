@@ -46,6 +46,7 @@
 
 (fill-keymap sp-keymap
  ")"     'sp-up-sexp
+ "C-)"   'sp-forward-slurp-sexp
  "C-M-f" 'sp-forward-sexp
  "C-M-b" 'sp-backward-sexp
 

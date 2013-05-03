@@ -6,6 +6,16 @@
 (when (fboundp 'blink-cursor-mode) (blink-cursor-mode -1))
 ;; ==================================================
 
+(eval-after-load "isearch"
+  '(progn
+     (defun cofi/isearch-accept-even-partial-match ()
+       (interactive)
+       (isearch-done))
+
+     (eval-after-load "evil"
+       '(cofi/set-key evil-ex-search-keymap "M-RET" #'cofi/isearch-accept-even-partial-match))
+     (cofi/set-key isearch-mode-map "M-RET" #'cofi/isearch-accept-even-partial-match)))
+
 ;; other packages ========================================
 (setq hl-paren-colors '("#9C0F0F" "#BF0303" "#E20800" "#E85752" "#F08682" "#F9CCCA"))
 (require-and-exec 'highlight-parentheses

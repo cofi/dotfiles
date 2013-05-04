@@ -320,7 +320,6 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
 
               , NS "capture" "org-capture" (title =? "Capture Frame") orgFloat
               , NS "agenda" "org-agenda" (title =? "Agenda Frame") orgFloat
-              , NS "network" "urxvtcd -title wicd -e wicd-curses" (title =? "wicd") scratchFloat
               , NS "calc" "emacsclient -a '' -c -e '(cofi-full-calc)'" (title =? "calc") scratchFloat
               , NS "dict" "urxvtcd -title dict -e pdictcc --limit 5" (title =? "dict") scratchFloat
               , NS "tmux" "urxvtcd -e sh -c 'tmux attach -t tmux || tmux new -s tmux'" (prefixTitle "tmux") scratchFloat
@@ -339,7 +338,6 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("m", namedScratchpadAction scratchpads "monitor")
                                         , ("o", namedScratchpadAction scratchpads "capture")
                                         , ("a", namedScratchpadAction scratchpads "agenda")
-                                        , ("n", namedScratchpadAction scratchpads "network")
                                         , ("d", namedScratchpadAction scratchpads "dict")
                                         , ("x", namedScratchpadAction scratchpads "tmux")
                                         , ("r", namedScratchpadAction scratchpads "r")

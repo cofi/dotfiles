@@ -1,2 +1,0 @@
-#! /bin/sh
-emacs23 --name 'Wanderlust Mail' -wl

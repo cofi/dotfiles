@@ -45,7 +45,7 @@
 (add-to-hooks #'smartparens-mode '(text-mode-hook prog-mode-hook))
 
 (fill-keymap sp-keymap
- ")"     'sp-up-sexp
+ "M-)"   'sp-up-sexp
  "C-)"   'sp-forward-slurp-sexp
  "C-M-f" 'sp-forward-sexp
  "C-M-b" 'sp-backward-sexp

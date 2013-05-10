@@ -1,4 +1,6 @@
 (require 'cl-lib)
+(require 'cofi-util)
+(require 'cofi-snippets)
 (require-and-exec 'auto-complete
     (require 'auto-complete-config)
     (require 'auto-complete-latex)
@@ -30,12 +32,9 @@
           (prefix . ac-email-prefix)
           (cache . t))))
 
-    ;; override original faulting funs
-    (defun ac-yasnippet-table-hash (table)
-      (yas--table-hash table))
-
     (defun ac-yasnippet-candidates ()
-      (apply #'append (mapcar #'ac-yasnippet-candidate-1 (yas--get-snippet-tables))))
+      (cl-remove-if (lambda (name) (ends-with name ".snippet"))
+       (cofi/active-snippet-names)))
 
     (setq ac-auto-start 2
           ac-auto-show-menu t

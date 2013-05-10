@@ -40,6 +40,15 @@
       (goto-char (point-max))
       (insert region))))
 
+(defun cofi/active-snippet-names ()
+  "Return the names of currently active snippets."
+  (let (names)
+    (mapc (lambda (hash-table)
+            (maphash (lambda (key _) (push key names)) hash-table))
+          (mapcar #'yas--table-hash
+                  (yas--get-snippet-tables)))
+    names))
+
 (add-hook 'snippet-mode-hook #'whitespace-mode)
 (add-to-list 'auto-mode-alist '("\\.snippet\\'" . snippet-mode))
 

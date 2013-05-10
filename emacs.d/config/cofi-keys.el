@@ -51,12 +51,12 @@
   "d" 'adict-guess-dictionary
   "e" 'eval-and-replace
   "r" 're-builder
-  "g" 'ack
-  "G" (cmd ack (let ((ack-prompt-for-directory 'always))
-             (call-interactively #'ack)))
+  "g" 'ack-and-a-half
+  "G" (cmd ack (let ((ack-and-a-half-prompt-for-directory 'always))
+             (call-interactively #'ack-and-a-half)))
   "M-g" 'ack-same
-  "M-G" (cmd ack-same (let ((ack-prompt-for-directory 'always))
-               (call-interactively #'ack-same)))
+  "M-G" (cmd ack-same (let ((ack-and-a-half-prompt-for-directory 'always))
+               (call-interactively #'ack-and-a-half-same)))
   "s" 'sort-lines
   "u" 'cofi-update-all-buffers
   "w" 'count-words-region)

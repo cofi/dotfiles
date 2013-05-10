@@ -25,6 +25,7 @@
   (dolist (package '(
                      all
                      ace-jump-mode
+                     ack-and-a-half
                      auctex
                      auto-complete
                      auto-dictionary
@@ -39,7 +40,6 @@
                      evil-numbers
                      evil-leader
                      flymake-cursor
-                     full-ack
                      ghc
                      ggtags
                      gist

@@ -49,6 +49,16 @@
                   (yas--get-snippet-tables)))
     names))
 
+(defun cofi/yas-insert-file-skeleton ()
+  (when (and (save-excursion (goto-char 1)
+                             (and (bobp) (eobp)))
+             (member "skeleton.snippet" (cofi/active-snippet-names)))
+    (save-buffer)
+    (insert "skeleton.snippet")
+    (yas-expand)))
+
+(add-hook 'find-file-hook #'cofi/yas-insert-file-skeleton)
+
 (add-hook 'snippet-mode-hook #'whitespace-mode)
 (add-to-list 'auto-mode-alist '("\\.snippet\\'" . snippet-mode))
 

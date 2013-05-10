@@ -43,10 +43,11 @@
           ac-quick-help-height 50)
 
     (fill-keymap ac-complete-mode-map
-                 "C-l" 'ac-expand-common
-                 "C-j" 'ac-next
-                 "C-k" 'ac-previous
-                 "ESC" 'ac-stop)
+      "RET" 'ac-complete
+      "C-l" 'ac-expand-common
+      "C-j" 'ac-next
+      "C-k" 'ac-previous
+      "ESC" 'ac-stop)
 
     (setq ac-dictionary-directories '("~/.emacs.d/completion-dicts"))
 

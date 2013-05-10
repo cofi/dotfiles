@@ -314,7 +314,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "python" "urxvtcd -e ipython" (title =? "ipython") scratchFloat
               , NS "clojure" "urxvtcd -e clj" (title =? "clj") scratchFloat
               , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
-              , NS "scala" "urxvtcd -title scala -e sbt console" (title =? "scala") scratchFloat
+              , NS "scala" "urxvtcd -title scala -e scala" (title =? "scala") scratchFloat
               , NS "lisp" "urxvtcd -title lisp -e sbcl" (title =? "lisp") scratchFloat
               , NS "r" "urxvtcd -title rpad -e R" (title =? "rpad") scratchFloat
 

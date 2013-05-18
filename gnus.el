@@ -149,6 +149,9 @@
                                       "y"     'cofi-gnus-copy-archived-at
                                       "~"     (cmd gnus-mark-as-read (gnus-summary-mark-article nil ?R))
                                       "S-SPC" 'gnus-summary-prev-page))
+(add-hook 'gnus-group-mode-hook
+          (gen-local-fill-keymap-hook
+            "C-w" nil))
 (require 'offlineimap)
 (add-hook 'gnus-group-mode-hook
           (gen-local-fill-keymap-hook "<f12>" 'offlineimap))

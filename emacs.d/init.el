@@ -31,6 +31,9 @@
                      auto-dictionary
                      bookmark+
                      boxquote
+                     cljdoc
+                     clojure-mode
+                     clojure-test-mode
                      c-eldoc
                      cdlatex
                      dedicated

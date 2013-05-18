@@ -16,9 +16,6 @@
 [submodule "elisp/vendor/emacs-eclim"]
 	path = elisp/vendor/emacs-eclim
 	url = https://github.com/senny/emacs-eclim.git
-[submodule "elisp/vendor/clojure-mode"]
-	path = elisp/vendor/clojure-mode
-	url = git://github.com/technomancy/clojure-mode.git
 [submodule "elisp/vendor/calfw"]
 	path = elisp/vendor/calfw
 	url = git://github.com/kiwanami/emacs-calfw.git

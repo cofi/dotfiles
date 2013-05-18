@@ -1,14 +1,12 @@
 (add-to-loadpath "~/.elisp/slime/"
                  "~/.elisp/slime/contrib"
-                 "~/.elisp/vendor/ac-slime"
-                 "~/.elisp/vendor/clojure-mode/")
+                 "~/.elisp/vendor/ac-slime")
 
-(dolist (hook '(clojure-mode-hook lisp-mode-hook))
-  (add-hook hook (gen-local-fill-keymap-hook
-                     "C-c '"   'slime-selector
-                     "C-c C-;" 'slime-insert-balanced-comments
-                     "C-c M-;" 'slime-remove-balanced-comments
-                     "C-c C-d C-a" 'slime-arglist)))
+(add-hook 'slime-mode-hook (gen-fill-keymap-hook 'slime-mode-map
+                             "C-c '"       'slime-selector
+                             "C-c C-;"     'slime-insert-balanced-comments
+                             "C-c M-;"     'slime-remove-balanced-comments
+                             "C-c C-d C-a" 'slime-arglist))
 
 ;;; CL
 (add-major-mode "\\.cl$" 'lisp-mode)

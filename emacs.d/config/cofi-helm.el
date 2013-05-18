@@ -11,6 +11,7 @@
                           "elc"
                           "~"
                           "class" "la" "o"
+                          "aux" "out" " fdb_latexmk"
                           ))
         (mapcar (lambda (s) (concat "/" s "$"))
                 '(

@@ -23,13 +23,6 @@
    :ignore-case t
    :doc-spec '(("(ansicl)Symbol Index"))))
 
-;;; paredit
-(require 'paredit)
-(let ((paredit-mode-hooks '(lisp-mode-hook
-                            clojure-mode-hook
-                            slime-repl-mode-hook)))
-  (add-to-hooks #'enable-paredit-mode paredit-mode-hooks))
-
 (require 'slime)
 (require 'ac-slime)
 (defadvice paredit-newline (before slime-eval-print-in-scratch activate)

@@ -2,6 +2,8 @@
 (require 'cofi-func)
 (add-to-loadpath "~/.elisp/vendor/evil/"
                  "~/.elisp/vendor/evil-surround/")
+(setq undo-tree-save-history t
+      undo-tree-history-directory-alist `(("." . ,(cofi/var-file "undo-tree-history"))))
 (require 'undo-tree)
 (require 'evil-numbers)
 (setq evil-find-skip-newlines t)

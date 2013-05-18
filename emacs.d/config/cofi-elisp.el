@@ -5,6 +5,8 @@
           (lambda ()
             (setq mode-name "eL")))
 
+(cofi/set-key read-expression-map "TAB" 'lisp-complete-symbol)
+
 (add-hook 'emacs-lisp-mode-hook
           (gen-local-fill-keymap-hook "C-c C-c" 'eval-buffer
                                       "C-c C-r" 'ielm

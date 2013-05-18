@@ -78,7 +78,7 @@
   (make-directory fasl-dir t)
   (setq slime-compile-file-options `(:fasl-directory ,fasl-dir)))
 
-(require-and-exec 'slime-autoloads
+(require-and-exec 'slime
   (slime-setup '(slime-fancy
                  slime-banner
                  helm-slime
@@ -99,11 +99,6 @@
                                               'slime-fuzzy-complete-symbol
                                               'slime-simple-complete-symbol))
   (setq slime-protocol-version 'ignore))
-
-(when (fboundp 'anything-slime-complete)
-  (setq slime-complete-symbol-function #'anything-slime-complete))
-
-(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 
 ;;; from http://bc.tech.coop/blog/070425.html
 (defun slime-new-repl (&optional new-port)

@@ -14,8 +14,4 @@
 
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
-(add-to-hooks #'enable-paredit-mode '(lisp-interaction-mode-hook
-                                      emacs-lisp-mode-hook
-                                      inferior-emacs-lisp-mode))
-
 (provide 'cofi-elisp)

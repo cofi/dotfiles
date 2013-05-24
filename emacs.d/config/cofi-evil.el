@@ -405,8 +405,10 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   (setq cofi/current-line (line-number-at-pos)))
 
 (defun cofi/relative-line (line-number)
-  (propertize (format "%2d" (abs (- line-number cofi/current-line)))
-              'face 'linum))
+  (let ((relative (abs (- line-number cofi/current-line))))
+    (propertize (format "%2d" relative) 'face (if (= relative 0)
+                                                  'linum-current-line
+                                                'linum))))
 
 (defun cofi/evil-toggle-relative-lines ()
   (if (eq linum-format #'cofi/relative-line)

@@ -1,6 +1,7 @@
 # -*- mode: snippet -*-
 # name : Footnote
 # key : fn
+# condition: (or (eq major-mode 'rst-mode) (not (cofi/snippet-in-code)))
 # contributor : Michael Markert <markert.michael@gmail.com>
 # --
 [${1:#}]_$0

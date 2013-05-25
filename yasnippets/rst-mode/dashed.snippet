@@ -1,6 +1,7 @@
 # -*- coding: utf-8 mode: snippet -*-
 #name : Section title
 #key: --
+# condition: (or (eq major-mode 'rst-mode) (not (cofi/snippet-in-code)))
 # --
 ${1:sec}
 ${1:$(make-string (string-width text) ?-)}

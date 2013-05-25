@@ -69,10 +69,7 @@
     (defvar cofi/ac-base-sources '(ac-source-semantic
                                    ac-source-words-in-buffer
                                    ac-source-words-in-same-mode-buffers
-                                   ac-source-yasnippet
-                                   ac-source-dictionary
-                                   ac-source-filename
-                                   ac-source-abbrev))
+                                   ac-source-yasnippet))
 
     (setq-default ac-sources cofi/ac-base-sources)
 

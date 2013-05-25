@@ -159,4 +159,6 @@
 
 (add-to-list 'completion-styles 'substring 'append)
 
+(setq completion-styles '(basic partial-completion initials substring))
+
 (provide 'cofi-completion)

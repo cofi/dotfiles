@@ -60,6 +60,12 @@
             message-mode
             ))
 
+    (ac-define-source words-in-same-mode-buffers
+      '((init . ac-update-word-index)
+        (candidates . (ac-word-candidates
+                       (lambda (buffer)
+                         (eq major-mode (buffer-local-value 'major-mode buffer)))))))
+
     (defvar cofi/ac-base-sources '(ac-source-semantic
                                    ac-source-words-in-buffer
                                    ac-source-words-in-same-mode-buffers

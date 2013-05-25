@@ -16,11 +16,6 @@
 
 (autoload 'cdlatex-mode "cdlatex" "CDLaTeX Mode" t)
 
-(autoload 'clipper-create "clipper" "Create a new clip." t)
-(autoload 'clipper-delete "clipper" "Delete an existing clip." t)
-(autoload 'clipper-insert "clipper" "Insert a clip into the current buffer." t)
-(autoload 'clipper-edit-clip "clipper" "Edit an existing clip." t)
-
 (autoload 'dired-jump "dired" "Jump to current buffer's file in dired" t)
 
 (autoload 'eassist-switch-h-cpp "eassist" nil t)

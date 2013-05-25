@@ -28,7 +28,6 @@
 ;;; insert keymap
 (defkeymap cofi-insert-map
   "b" 'insert-buffer
-  "c" 'clipper-insert
   "f" 'insert-file
   "s" 'yas-insert-snippet)
 

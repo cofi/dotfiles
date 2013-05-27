@@ -11,19 +11,6 @@
       magit-commit-all-when-nothing-staged nil)
 (add-hook 'magit-commit-mode-hook 'visual-line-mode)
 
-;;; overwrite magit-quit-window with a more sensible fun
-(defun cofi/vcs-quit-window (&optional kill-buffer)
-  (interactive "P")
-  (if (one-window-p)
-      (if kill-buffer
-          (kill-buffer (current-buffer))
-        (bury-buffer))
-    (quit-window kill-buffer (selected-window))))
-
-;; load magit autoloads
-(eval-after-load "magit"
-  '(fset 'magit-quit-window #'cofi/vcs-quit-window))
-
 (add-hook 'magit-status-mode-hook (lambda ()
                                     (if (file-exists-p ".git/svn")
                                         (magit-svn-mode))))
@@ -36,11 +23,5 @@
                        ((locate-dominating-file (buffer-file-name) ".git") #'magit-status)
                        ((locate-dominating-file (buffer-file-name) ".hg") #'monky-status)
                        (t #'magit-status))))
-
-;;; (a)hg
-(eval-after-load "monky"
-  '(fill-keymaps '(monky-status-mode-map
-                   monky-log-mode-map)
-                 "q" 'cofi/vcs-quit-window))
 
 (provide 'cofi-vcs)

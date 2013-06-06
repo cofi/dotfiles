@@ -108,6 +108,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                                  (erc-mode                     . normal))
          do (evil-set-initial-state mode state))
 
+(require 'ace-jump-mode)
 (fill-keymap evil-normal-state-map
              "Y"     (kbd "y$")
              "+"     'evil-numbers/inc-at-pt

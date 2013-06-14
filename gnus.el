@@ -189,8 +189,7 @@
 (require 'gnus-notifications)
 (add-hook 'gnus-after-getting-new-news-hook 'gnus-notifications)
 
-(add-hook 'gnus-after-getting-new-news-hook
-          (defun cofi/set-mail-urgency ()
+(defun cofi/set-mail-urgency ()
             (loop for (group . rest) in gnus-newsrc-alist
                   when (and (<= (gnus-group-level group) gnus-notifications-minimum-level)
                           (let ((unread (gnus-group-unread group)))
@@ -199,7 +198,9 @@
 
                   do (prog1
                          (x-urgency-hint (selected-frame) t)
-                       (return)))))
+                       (return))))
+
+(add-hook 'gnus-after-getting-new-news-hook #'cofi/set-mail-urgency)
 
 (setq gnus-check-new-newsgroups nil)
 (setq gnus-asynchronous t)

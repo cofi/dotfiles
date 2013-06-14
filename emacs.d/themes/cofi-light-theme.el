@@ -68,23 +68,6 @@
      `(dired-marked ((t (:foreground "red" :bold t))))
      `(dired-symlink ((t (:foreground "#00316E"))))
 
-     ;; dired+
-     `(diredp-flag-mark-line ((t (:background "cornsilk2" :foreground "red" :bold t))))
-     `(diredp-flag-mark ((t (:background "purple" :foreground "white"))))
-     `(diredp-read-priv ((t (:background ,bg :foreground "#008C00"))))
-     `(diredp-write-priv ((t (:background ,bg :foreground "#0000BF"))))
-     `(diredp-exec-priv ((t (:background ,bg :foreground "firebrick"))))
-     `(diredp-no-priv ((t (:background ,bg :foreground ,fg))))
-     `(diredp-dir-priv ((t (:foreground "#8B0017"))))
-     `(diredp-symlink ((t (:foreground "#00316E"))))
-
-     `(diredp-file-name ((t (:foreground "#803F00"))))
-     `(diredp-file-suffix ((t (:foreground "#638000"))))
-     `(diredp-compressed-file-suffix ((t (:foreground "gold2"))))
-     `(diredp-inode+size ((t (:foreground "#8F6B32"))))
-     `(diredp-date-time ((t (:foreground "navy"))))
-     `(diredp-dir-heading ((t (:background ,bg :foreground "#6A0056"))))
-
      ;; ediff
      `(ediff-current-diff-face-A ((t (:background "pale green" :foreground "firebrick"))))
      `(ediff-current-diff-face-Ancestor ((t (:background "violet red" :foreground "black"))))

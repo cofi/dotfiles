@@ -92,7 +92,7 @@
      `(ediff-odd-diff-face-C ((t (:background "gray" :foreground "white"))))
 
      ;; font lock
-     `(font-lock-builtin-face ((t (:foreground "#B3925D"))))
+     `(font-lock-builtin-face ((t (:foreground "#EEDCB5"))))
      `(font-lock-comment-face ((t (:foreground "burlywood"))))
      `(font-lock-constant-face ((t (:foreground "#806DC1"))))
      `(font-lock-doc-face ((t (:foreground "#FFDD00"))))
@@ -179,7 +179,7 @@
      `(org-agenda-date-weekend ((t (:foreground "brown"))))
      `(org-meta-line ((t (:foreground "tan4"))))
 
-     ;; anything
+     ;; helm
      `(helm-header ((t (:foreground "gold" :background "black"))))
 
      ;; ido

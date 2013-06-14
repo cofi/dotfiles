@@ -3,7 +3,7 @@
 (deftheme cofi-dark
   "cofi theme.")
 
-(let ((bg "#202020")
+(let ((bg "#0e0d0f")
       (fg "#FFFFFF")
       (vc-added "green")
       (vc-removed "red")
@@ -13,11 +13,11 @@
     (custom-theme-set-faces
      'cofi-dark
      ;; basic faces
-     `(default ((((min-colors 4096)) (:background ,bg :foreground ,fg))))
+     `(default ((t (:background ,bg :foreground ,fg))))
      `(border ((t (:background "black"))))
      `(header-line ((t (:foreground ,fg :background ,bg :bold t))))
      `(highlight ((t (:background "sienna"))))
-     `(fringe ((t (:background "gray17"))))
+     `(fringe ((t (:background ,bg))))
 
      `(primary-selection ((t (:foreground "gold" :background "black"))))
      `(secondary-selection ((t (:foreground "black" :background "gold"))))
@@ -25,7 +25,7 @@
      `(minibuffer-prompt ((t (:foreground "orange" :bold t))))
 
      `(region ((t (:background "gray33"))))
-     `(hl-line ((t (:background "gray20"))))
+     `(hl-line ((t (:background "#202020"))))
      `(tooltip ((t (:background "white" :foreground "black"))))
 
      ;; modeline
@@ -40,9 +40,9 @@
      `(diff-changed-face ((t (:foreground ,vc-changed))))
      `(diff-removed-face ((t (:foreground ,vc-removed))))
      `(diff-context-face ((t (:foreground ,vc-context))))
-     `(diff-file-header-face ((t (:foreground "gold" :background ,bg))))
-     `(diff-function-face ((t (:foreground "gray50" :background ,bg))))
-     `(diff-header-face ((t (:foreground "gold" :background nil))))
+     `(diff-file-header-face ((t (:foreground "gold" :background unspecified))))
+     `(diff-function-face ((t (:foreground "gray50" :background unspecified))))
+     `(diff-header-face ((t (:foreground "gold" :background unspecified))))
      `(diff-hunk-header-face ((t (:foreground "gold"))))
      `(diff-index-face ((t (:bold t :background "gray70"))))
      `(diff-nonexistent-face ((t (:bold t :background "gray70"))))
@@ -52,7 +52,7 @@
      `(ibuffer-git-del-face ((t (:foreground ,vc-removed))))
 
      ;; magit
-     `(magit-diff-file-header ((t (:foreground "gold" :background ,bg))))
+     `(magit-diff-file-header ((t (:foreground "gold" :background unspecified))))
      `(magit-diff-hunk-header ((t (:foreground "gold"))))
      `(magit-diff-none ((t (:foreground ,vc-context))))
      `(magit-diff-add ((t (:foreground ,vc-added))))
@@ -60,6 +60,11 @@
      `(magit-item-highlight ((t (:inherit hl-line))))
      `(magit-log-head-label-local ((t (:foreground "LightSkyBlue4" :box 1))))
      `(magit-log-head-label-remote ((t (:foreground "OliveDrab4" :box 1))))
+
+     `(monky-diff-add ((t (:foreground ,vc-added))))
+     `(monky-diff-del ((t (:foreground ,vc-removed))))
+     `(monky-diff-title ((t (:foreground "gold" :background ,bg))))
+     `(monky-header ((t (:foreground "gold" :background unspecified))))
 
      ;; dired
      `(dired-boring ((t (:foreground "rosy brown"))))
@@ -103,14 +108,14 @@
      ;; font lock
      `(font-lock-builtin-face ((t (:foreground "#B3925D"))))
      `(font-lock-comment-face ((t (:foreground "burlywood"))))
-     `(font-lock-constant-face ((t (:foreground "firebrick"))))
+     `(font-lock-constant-face ((t (:foreground "#806DC1"))))
      `(font-lock-doc-face ((t (:foreground "#FFDD00"))))
      `(font-lock-doc-string-face ((t (:foreground "#FFDD00"))))
      `(font-lock-function-name-face ((t (:foreground "#6193CF"))))
      `(font-lock-keyword-face ((t (:foreground "#CF4913" :bold t))))
      `(font-lock-preprocessor-face ((t (:foreground "cadet blue"))))
      `(font-lock-reference-face ((t (:foreground "violet red"))))
-     `(font-lock-string-face ((t (:foreground "sienna1"))))
+     `(font-lock-string-face ((t (:foreground "#60bdf4"))))
      `(font-lock-type-face ((t (:italic t :foreground "#00BB00"))))
      `(font-lock-variable-name-face ((t (:foreground "gold"))))
      `(font-lock-warning-face ((t (:bold t :foreground "red"))))
@@ -150,21 +155,21 @@
      `(smerge-other-face ((t (:foreground "DarkOliveGreen4"))))
 
      ;; rst
-     `(rst-level-1-face ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
-     `(rst-level-2-face ((t (:bold t :foreground "#80B3FF" :background ,bg))))
-     `(rst-level-3-face ((t (:bold t :foreground "#6193CF" :background ,bg))))
-     `(rst-level-4-face ((t (:bold t :foreground "#2C72C7" :background ,bg))))
-     `(rst-level-5-face ((t (:bold t :foreground "#0066FF" :background ,bg))))
-     `(rst-level-6-face ((t (:bold t :foreground "#0057AE" :background ,bg))))
+     `(rst-level-1-face ((t (:bold t :foreground "#A4C0E4" :background unspecified))))
+     `(rst-level-2-face ((t (:bold t :foreground "#80B3FF" :background unspecified))))
+     `(rst-level-3-face ((t (:bold t :foreground "#6193CF" :background unspecified))))
+     `(rst-level-4-face ((t (:bold t :foreground "#2C72C7" :background unspecified))))
+     `(rst-level-5-face ((t (:bold t :foreground "#0066FF" :background unspecified))))
+     `(rst-level-6-face ((t (:bold t :foreground "#0057AE" :background unspecified))))
 
      ;; markdown
-     `(markdown-header-face   ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
-     `(markdown-header-face-1 ((t (:bold t :foreground "#A4C0E4" :background ,bg))))
-     `(markdown-header-face-2 ((t (:bold t :foreground "#80B3FF" :background ,bg))))
-     `(markdown-header-face-3 ((t (:bold t :foreground "#6193CF" :background ,bg))))
-     `(markdown-header-face-4 ((t (:bold t :foreground "#2C72C7" :background ,bg))))
-     `(markdown-header-face-5 ((t (:bold t :foreground "#0066FF" :background ,bg))))
-     `(markdown-header-face-6 ((t (:bold t :foreground "#0057AE" :background ,bg))))
+     `(markdown-header-face   ((t (:bold t :foreground "#A4C0E4" :background unspecified))))
+     `(markdown-header-face-1 ((t (:bold t :foreground "#A4C0E4" :background unspecified))))
+     `(markdown-header-face-2 ((t (:bold t :foreground "#80B3FF" :background unspecified))))
+     `(markdown-header-face-3 ((t (:bold t :foreground "#6193CF" :background unspecified))))
+     `(markdown-header-face-4 ((t (:bold t :foreground "#2C72C7" :background unspecified))))
+     `(markdown-header-face-5 ((t (:bold t :foreground "#0066FF" :background unspecified))))
+     `(markdown-header-face-6 ((t (:bold t :foreground "#0057AE" :background unspecified))))
 
      ;; Org
      `(org-hide ((t (:foreground ,bg))))
@@ -196,6 +201,13 @@
      `(ido-only-match ((t (:foreground "#dfaf8f"))))
      `(ido-subdir ((t (:foreground  "#8c5353"))))
 
+     ;; erc
+     `(erc-input-face ((t (:foreground ,fg))))
+     `(erc-notice-face ((t (:foreground "royal blue"))))
+     `(erc-current-nick-face ((t (:foreground "orange" :bold t))))
+     `(erc-prompt-face ((t (:foreground "orange" :bold t :background unspecified))))
+     `(erc-timestamp-face ((t (:foreground "lawn green"))))
+
      ;; workgroups
      `(wg-mode-line-face ((t (:foreground "light sky blue"))))
      `(wg-brace-face ((t (:foreground "light slate blue"))))
@@ -207,6 +219,10 @@
      ;; flyspell
      `(flyspell-duplicate ((t (:underline "gold3"))))
      `(flyspell-incorrect ((t (:underline "OrangeRed"))))
+
+     ;; ace-jump
+     `(ace-jump-face-foreground ((t (:foreground "orange"))))
+     `(ace-jump-face-background ((t (:foreground "#4e4d4f"))))
 
      ;; misc
      `(which-func ((t (:foreground "gold"))))

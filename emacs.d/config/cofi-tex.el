@@ -35,9 +35,10 @@
 (setq TeX-auto-save t
       TeX-save-query nil
       TeX-parse-self t
-      TeX-newline-function #'reindent-then-newline-and-indent
-      TeX-PDF-mode t)
+      TeX-newline-function #'reindent-then-newline-and-indent)
+
 (setq-default TeX-master 'dwim)
+(add-hook 'LaTeX-mode-hook #'TeX-PDF-mode)
 
 (eval-after-load "cdlatex"
   '(progn

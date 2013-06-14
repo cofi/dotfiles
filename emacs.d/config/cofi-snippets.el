@@ -26,10 +26,9 @@
       (insert (make-string count ? )))))
 
 (defun cofi/no-yas ()
-  (setq yas-dont-activate t))
+  (member major-mode '(magit-mode-hook calc-mode-hook)))
 
-(add-to-hooks 'cofi/no-yas '(magit-mode-hook
-                            calc-mode-hook))
+(setq-default yas--dont-activate '(minibufferp cofi/no-yas))
 
 (defun cofi/region-to-snippet (begin end)
   "Write new snippet based on current region."

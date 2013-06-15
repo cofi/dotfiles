@@ -60,8 +60,6 @@
 ;; no, my sentences don't end with two instead of one space
 (setq sentence-end-double-space nil)
 
-(mouse-avoidance-mode 'cat-and-mouse)
-
 (setq comment-style 'plain)
 
 (setq x-select-enable-primary t)

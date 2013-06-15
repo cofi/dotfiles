@@ -433,7 +433,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       ieee= S.searchEngine "ieee" "http://ieeexplore.ieee.org/search/searchresult.jsp?queryText="
       thesaurus = S.searchEngine "th" "http://thesaurus.com/browse/"
       wow = S.searchEngine "wow" "http://www.wowhead.com/search?q="
-      emacs = S.searchEngine "emacs" "https://www.google.com/cse?cx=004774160799092323420%3A6-ff2s0o6yi&sa=Search&q="
+      emacs = S.searchEngine "emacs" "http://www.emacswiki.org/cgi-bin/wiki?search="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
 

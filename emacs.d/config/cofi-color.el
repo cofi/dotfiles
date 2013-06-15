@@ -1,5 +1,6 @@
 (setq custom-theme-directory "~/.emacs.d/themes/")
 
+(setq hl-paren-colors '("#F08682" "#E85752" "#E20800" "#BF0303" "#9C0F0F" "#840C0C" "#7A0B0B"))
 (defvar cofi/current-colorscheme nil)
 (defvar cofi/colorschemes '("cofi-dark" "cofi-light"))
 (defun cofi/colorscheme (scheme)

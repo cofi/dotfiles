@@ -226,6 +226,10 @@
       (erc-cmd-DEOP (erc-current-nick))
     (erc-message "PRIVMSG" (format "chanserv op %s %s" (erc-default-target) (erc-current-nick)))))
 
+(defun erc-cmd-RENICK ()
+  (erc-message "PRIVMSG" (format "nickserv ghost %s" erc-nick))
+  (erc-cmd-NICK erc-nick))
+
 (defun cofi/erc-color-nick (&optional user channel-data)
   (cl-flet* ((luminance (r g b) (floor (+ (* 0.299 r) (* 0.587 g) (* 0.117 b))))
              (to-hex (r g b) (format "#%02x%02x%02x" r g b))

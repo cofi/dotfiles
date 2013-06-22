@@ -181,6 +181,7 @@
 
      ;; helm
      `(helm-header ((t (:foreground "gold" :background "black"))))
+     `(helm-selection ((t (:background "gray15" :underline t))))
 
      ;; ido
      `(ido-first-match ((t (:foreground "#d0bf8f" :bold t))))

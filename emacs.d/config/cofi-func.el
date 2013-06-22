@@ -91,6 +91,13 @@ will not be passed to `start-kbd-macro'."
   (interactive)
   (cofi/macro-dwim 0))
 
+(defun cofi/split-shell (vertical)
+  (interactive "p")
+  (if vertical
+      (split-window-vertically)
+    (split-window-horizontally))
+  (eshell))
+
 (defconst cofi-alias-file (expand-file-name "~/config/diralias")
   "File contains line separated entries of `DIR' `ALIAS'.
 Neither dir nor alias may contain spaces.")

@@ -286,6 +286,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
   "C" 'delete-window
 
+  "s" 'cofi/split-shell
+
   "v" 'cofi/open-vcs
 
   "." 'evil-ex)

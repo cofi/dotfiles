@@ -116,6 +116,15 @@
       (python-shell-send-region (region-beginning) (region-end))
     (python-shell-send-defun arg)))
 
+(defun cofi/python-send-statement ()
+  "Send current-line without whitespace to inferior shell."
+  (interactive)
+  (python-shell-send-string (buffer-substring-no-properties
+                             (save-excursion (python-nav-beginning-of-statement)
+                                             (point))
+                             (save-excursion (python-nav-end-of-statement)
+                                             (point)))))
+
 (add-all-to-hook 'python-mode-hook
                  #'show-paren-mode
                  #'auto-fill-mode

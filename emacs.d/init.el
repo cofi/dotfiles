@@ -18,64 +18,66 @@
                  "~/.elisp/vendor/keychain-environment"
                  "~/.elisp/vendor/pylookup")
 
+(require 'package)
+(package-initialize)
 (require 'cofi-util)
-(require-and-exec 'package
-  (pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")))
-  (package-initialize)
-  (dolist (package '(
-                     all
-                     ace-jump-mode
-                     ack-and-a-half
-                     auctex
-                     auto-complete
-                     auto-dictionary
-                     bookmark+
-                     boxquote
-                     cljdoc
-                     clojure-mode
-                     clojure-test-mode
-                     c-eldoc
-                     cdlatex
-                     dedicated
-                     diminish
-                     elein
-                     epc
-                     evil-numbers
-                     evil-leader
-                     flymake-cursor
-                     ghc
-                     ggtags
-                     gist
-                     gitconfig-mode
-                     git-commit-mode
-                     gitignore-mode
-                     haskell-mode
-                     highlight-parentheses
-                     highlight-80+
-                     htmlize
-                     keyfreq
-                     keywiz
-                     lacarte
-                     magit
-                     magit-gh-pulls
-                     markdown-mode
-                     multi-term
-                     offlineimap
-                     paredit
-                     pp-c-l
-                     rainbow-mode
-                     scratch
-                     sml-modeline
-                     twittering-mode
-                     sackspace
-                     undo-tree
-                     workgroups
-                     yaml-mode
-                     yasnippet
-                     zencoding-mode
-                     ))
-    (unless (package-installed-p package)
-      (package-install package))))
+(pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")))
+(dolist (package '(
+                   all
+                   ace-jump-mode
+                   ack-and-a-half
+                   auctex
+                   auto-complete
+                   auto-dictionary
+                   bookmark+
+                   boxquote
+                   cljdoc
+                   clojure-mode
+                   clojure-test-mode
+                   c-eldoc
+                   cdlatex
+                   dedicated
+                   diminish
+                   elein
+                   elpy
+                   epc
+                   evil-numbers
+                   evil-leader
+                   flymake-cursor
+                   ghc
+                   ggtags
+                   gist
+                   gitconfig-mode
+                   git-commit-mode
+                   gitignore-mode
+                   haskell-mode
+                   highlight-parentheses
+                   highlight-80+
+                   htmlize
+                   keyfreq
+                   keywiz
+                   lacarte
+                   magit
+                   magit-gh-pulls
+                   markdown-mode
+                   multi-term
+                   offlineimap
+                   paredit
+                   pp-c-l
+                   rainbow-mode
+                   scratch
+                   sml-modeline
+                   twittering-mode
+                   sackspace
+                   undo-tree
+                   queue
+                   workgroups
+                   yaml-mode
+                   yasnippet
+                   zencoding-mode
+                   ))
+  (unless (package-installed-p package)
+    (package-install package)))
 
 (defvar cofi/hostname (car (split-string system-name "\\." t)))
 (defvar on-mobile? (cl-find cofi/hostname '("hitchhiker") :test #'string=))

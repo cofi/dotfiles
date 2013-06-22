@@ -1,3 +1,5 @@
+(require 'cl-lib)
+
 ;; setup for ipython 0.11
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args ""
@@ -101,6 +103,11 @@
     (prefix     . c-dot)
     (requires   . 0)
     (available . ac-ropemacs-available)))
+
+(cl-loop for f in '(python-shell-send-region
+                    python-shell-send-defun
+                    python-shell-send-string)
+         do (declare-function f "python.el"))
 
 (defun cofi/python-send-dwim (arg)
   "Send region if region is active and current defun else."

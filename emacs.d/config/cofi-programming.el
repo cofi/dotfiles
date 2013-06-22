@@ -11,6 +11,22 @@
                           scala-mode-hook
                           ))
 
+(defconst header-which-function-mode-header
+  '(t (:eval (which-function))))
+
+(define-minor-mode header-which-function-mode
+  "Minor mode to show current functio in header."
+  nil nil nil
+  (if header-which-function-mode
+      (progn
+        (which-function-mode 1)
+        (push header-which-function-mode-header header-line-format))
+    (which-function-mode -1)
+    (setq header-line-format (remove header-which-function-mode-header header-line-format))))
+
+(add-to-hooks #'header-which-function-mode '(python-mode-hook
+                                             c-mode-common-hook))
+
 (mapc 'require '(
               cofi-cedet
               cofi-markers

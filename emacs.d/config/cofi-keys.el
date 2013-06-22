@@ -14,6 +14,7 @@
   "h"   'hs-minor-mode
   "i"   'toggle-input-method
   "l"   'outline-minor-mode
+  "m"   'flymake-mode
   "o"   'orgstruct++-mode
   "p"   'smartparens-mode
   "P"   'pretty-mode

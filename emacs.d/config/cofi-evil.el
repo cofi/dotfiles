@@ -257,6 +257,12 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
       (delete-region (point-at-bol) (point-at-eol)))))
 (add-hook 'evil-insert-state-exit-hook #'cofi/clear-empty-lines)
 
+(defvar cofi-leader-code-map (let ((map (make-sparse-keymap)))
+                               (fill-keymap map
+                                 "s" 'cofi/switch-file
+                                 ";" 'cofi/end-prog-line
+                                 )))
+
 (evil-leader/set-key
   "e" 'cofi/file
   "E" 'cofi/file-alternate
@@ -275,14 +281,12 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "m" 'compile
 
   "n" 'split-window-horizontally
-  "c" 'delete-window
-  "N" 'make-frame-command
-  "C" 'delete-frame
+
+  "c" cofi-leader-code-map
+
+  "C" 'delete-window
 
   "v" 'cofi/open-vcs
-
-  "s" 'cofi/switch-file
-  ";" 'cofi/end-prog-line
 
   "." 'evil-ex)
 

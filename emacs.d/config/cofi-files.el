@@ -56,14 +56,32 @@
                  cofi/dired-find-file-external-program
                  (dired-get-file-for-visit)))
 
-(require-and-exec 'dired+)
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 (add-hook 'dired-mode-hook (gen-local-fill-keymap-hook
-                            "C-<return>" #'cofi/dired-find-file-external))
+                            "C-<return>" #'cofi/dired-find-file-external
+                            "P" #'cofi/dired-pack-marked))
 
 (add-hook 'dired-mode-hook (lambda ()
                              (on-mail-instance
                                (turn-on-gnus-dired-mode))))
+
+(defun cofi/dired-pack-marked (format name)
+  "Pack marked files in a dired buffer to an archive."
+  (interactive (list (progn
+                       (unless (dired-get-marked-files)
+                         (error "No files marked."))
+                       (completing-read "Archive format: " '("zip"
+                                                             "tar.xz"
+                                                             "tar.bz2"
+                                                             "tar.gz")
+                                        nil t nil nil "zip"))
+                     (read-string "Archive name: ")))
+  (let ((files (mapconcat #'identity (dired-get-marked-files) " ")))
+    (async-shell-command
+     (cond
+      ((string= format "zip") (format "zip %s.zip %s" name files))
+      (t (format "tar -caf %s%s %s" name format files))))))
+
 ;;; ========================================
 
 (setq ack-prompt-for-directory 'unless-guessed)

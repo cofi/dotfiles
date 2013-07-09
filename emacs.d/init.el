@@ -41,8 +41,9 @@
                    elein
                    elpy
                    epc
-                   evil-numbers
+                   ess
                    evil-leader
+                   evil-numbers
                    flymake-cursor
                    ghc
                    ggtags

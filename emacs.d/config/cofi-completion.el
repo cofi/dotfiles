@@ -58,6 +58,8 @@
             text-mode
             org-mode
             message-mode
+            ess-mode
+            inferior-ess-mode
             ))
 
     (ac-define-source words-in-same-mode-buffers
@@ -91,6 +93,9 @@
                             ac-source-css-property))
         (message-mode    . (ac-source-words-in-buffer
                             ac-source-org-contacts))
+        (ess-mode        . (ac-source-R-args
+                            ac-source-R-objects
+                            ac-source-R))
         ))
 
     (defvar cofi/ac-mode-aliases

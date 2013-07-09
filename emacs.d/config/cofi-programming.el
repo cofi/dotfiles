@@ -30,6 +30,7 @@
 (mapc 'require '(
               cofi-cedet
               cofi-markers
+              cofi-ess
               cofi-flymake
               cofi-haskell
               cofi-lisp

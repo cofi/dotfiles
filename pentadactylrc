@@ -140,3 +140,5 @@ map -g user ,s -ex strip-anchor
 " C-g as ESC
 map  -g user <C-g> <ESC>
 imap -g user <C-g> <ESC>
+
+map -g user <C-q> <ESC>

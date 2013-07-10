@@ -2,7 +2,8 @@
                  "~/.elisp/slime/contrib"
                  "~/.elisp/vendor/ac-slime")
 
-(add-hook 'slime-mode-hook (gen-fill-keymap-hook 'slime-mode-map
+
+(add-hook 'slime-mode-hook (gen-fill-keymap-hook slime-mode-map
                              "C-c '"       'slime-selector
                              "C-c C-;"     'slime-insert-balanced-comments
                              "C-c M-;"     'slime-remove-balanced-comments

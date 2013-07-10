@@ -18,7 +18,7 @@
 (sp-with-modes '(emacs-lisp-mode
                  inferior-emacs-lisp-mode
                  lisp-interaction-mode
-                 common-lisp-mode)
+                 lisp-mode)
   (sp-local-pair "'" nil :actions nil)
   (sp-local-pair "`" "'" :when '(sp-in-string-p) :actions '(insert wrap)))
 

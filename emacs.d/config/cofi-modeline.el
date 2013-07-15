@@ -41,10 +41,14 @@
                 ;; sml modeline
                 (sml-modeline-mode (:eval (list (sml-modeline-create))))
                 ;; workgroup
-                (wg-mode-line-on (:eval (wg-mode-line-string)))
+                (cofi/full-emacs
+                 (:eval (if (and (bound-and-true-p wg-mode-line-on)
+                               (bound-and-true-p workgroups-mode))
+                            (wg-mode-line-string)
+                          "")))
                 ;; line and column
                 "<%l,%c>"
-                (cofi/mail-instance (:eval (offlineimap-mode-line)))
+                (cofi/comm-instance (:eval (offlineimap-mode-line)))
                 " "
                 ;; recursive edit
                 "%[("

@@ -86,7 +86,8 @@
 (load "private" 'noerror)
 (require 'cofi-evil)
 
-(defvar cofi/standard-settings '(cofi-color
+(defvar cofi/standard-settings '(
+                                 cofi-color
                                  cofi-autoloads
                                  cofi-helm
                                  cofi-buffer
@@ -98,23 +99,25 @@
                                  cofi-func
                                  cofi-keys
                                  cofi-mail
-                                 cofi-project
                                  cofi-snippets
                                  cofi-ui
                                  cofi-org
-                                 cofi-vcs
-                                 cofi-shell
                                  cofi-smartparens
-                                 cofi-workgroups
                                  cofi-write
                                  cofi-completion
-                                 cofi-modeline))
-(defvar cofi/full-settings '(cofi-programming
-                             cofi-erc
+                                 cofi-workgroups
+                                 cofi-modeline
+                                 ))
+
+(defvar cofi/full-settings '(
+                             cofi-programming
+                             cofi-project
+                             cofi-vcs
+                             cofi-shell
                              ))
 
 (defvar cofi/full-emacs t "Load all settings not just minimal.")
-(defvar cofi/mail-instance nil "This is an email instance.")
+(defvar cofi/comm-instance nil "This is an comm instance.")
 
 (mapc #'require cofi/standard-settings)
 
@@ -123,21 +126,24 @@
         cofi/before-kill-hook nil))
 
 (add-to-list 'command-switch-alist
-             '("gnus" . (lambda (&rest ignore)
-                        (setq cofi/mail-instance t)
-                        (setq cofi/full-emacs nil)
-                        (add-hook 'emacs-startup-hook 'gnus 'append)
-                        (run-with-timer 10 600 'offlineimap)
-                        ;; Exit Emacs after quitting gnus
-                        (add-hook 'gnus-after-exiting-gnus-hook 'save-buffers-kill-emacs)
-                        (add-hook 'emacs-startup-hook #'cofi/dont-mess-with-history 'append))))
+             '("comm" . (lambda (&rest ignore)
+                          (setq cofi/comm-instance t
+                                cofi/full-emacs nil)
+                          (require 'cofi-erc)
+                          (add-hook 'emacs-startup-hook 'gnus 'append)
+                          (run-with-timer 10 600 'offlineimap)
+                          ;; Exit Emacs after quitting gnus
+                          (add-hook 'gnus-after-exiting-gnus-hook #'save-buffers-kill-emacs)
+                          (add-hook 'gnus-after-exiting-gnus-hook #'erc-log-save-all-buffers)
+                          (add-hook 'gnus-after-exiting-gnus-hook (lambda () (erc-cmd-GQUIT ""))
+                          (add-hook 'emacs-startup-hook #'cofi/dont-mess-with-history 'append)))))
 
 (add-to-list 'command-switch-alist
              '("test" . (lambda (&rest ignore)
                           (add-hook 'emacs-startup-hook #'cofi/dont-mess-with-history 'append))))
 
 (add-hook 'emacs-startup-hook (lambda ()
-                                (on-mail-instance
+                                (on-comm-instance
                                   (global-linum-mode -1))
                                 (on-full-instance
                                   (mapc #'require cofi/full-settings)

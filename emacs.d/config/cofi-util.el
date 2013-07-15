@@ -425,8 +425,8 @@ Returns nil if `X' not in `XS'."
   `(when cofi/full-emacs
      ,@body))
 
-(defmacro on-mail-instance (&rest body)
-  `(when cofi/mail-instance
+(defmacro on-comm-instance (&rest body)
+  `(when cofi/comm-instance
      ,@body))
 
 (cl-defun cofi/contains-any (lst test &optional (test-fun #'memq))

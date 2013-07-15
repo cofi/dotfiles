@@ -62,7 +62,7 @@
                             "P" #'cofi/dired-pack-marked))
 
 (add-hook 'dired-mode-hook (lambda ()
-                             (on-mail-instance
+                             (on-comm-instance
                                (turn-on-gnus-dired-mode))))
 
 (defun cofi/dired-pack-marked (format name)

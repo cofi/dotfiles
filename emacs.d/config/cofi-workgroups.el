@@ -7,7 +7,7 @@
       wg-file (cofi/var-file "emacs/wg")
       wg-morph-on nil)
 
-(require-and-exec 'workgroups
-  (workgroups-mode))
+;; (require-and-exec 'workgroups
+;;   (workgroups-mode))
 
 (provide 'cofi-workgroups)

@@ -379,10 +379,6 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
     (setq linum-format #'cofi/relative-line))
   (linum-update-current))
 
-(defface linum-current-line '((t (:bold t :background "#202020" :foreground "yellow")))
-  "Face linum uses for the current line"
-  :group 'linum)
-
 (defun cofi/linum-dynamic-lines (line-number)
   (let ((width (ceiling (log (count-lines (point-min) (point-max)) 10))))
     (propertize (format (format "%%%dd" width) line-number)

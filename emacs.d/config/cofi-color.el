@@ -26,6 +26,10 @@
   ""
   :group 'mode-line-faces)
 
+(defface linum-current-line '((t (:bold t :background "#202020" :foreground "yellow")))
+  "Face linum uses for the current line"
+  :group 'linum)
+
 (cofi/colorscheme 'cofi-dark)
 
 (provide 'cofi-color)

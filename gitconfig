@@ -16,6 +16,7 @@
 
 [branch]
     autosetupmerge = true
+    autosetuprebase = always
 
 [color]
     status = auto

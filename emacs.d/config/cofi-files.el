@@ -76,11 +76,11 @@
                                                              "tar.gz")
                                         nil t nil nil "zip"))
                      (read-string "Archive name: ")))
-  (let ((files (mapconcat #'identity (dired-get-marked-files) " ")))
+  (let ((files (mapconcat #'identity (dired-get-marked-files t) " ")))
     (async-shell-command
      (cond
       ((string= format "zip") (format "zip %s.zip %s" name files))
-      (t (format "tar -caf %s%s %s" name format files))))))
+      (t (format "tar -caf %s.%s %s" name format files))))))
 
 ;;; ========================================
 

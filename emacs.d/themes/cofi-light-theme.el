@@ -3,8 +3,9 @@
 (deftheme cofi-light
   "cofi theme.")
 
-(let ((bg "#fdf6e3")
-      (fg "black")
+
+(let ((bg "#f7efdf")
+      (fg "#5E3E2C")
       (vc-added "green4")
       (vc-removed "red4")
       (vc-changed "blue4")
@@ -17,7 +18,7 @@
      `(default ((((min-colors 4096)) (:background ,bg :foreground ,fg))))
      `(border ((t (:background "black"))))
      `(header-line ((t (:foreground ,fg :background ,bg :bold t))))
-     `(highlight ((t (:background "#E5E5E5"))))
+     `(highlight ((t (:background "#F0F0F0"))))
      `(fringe ((t (:background ,bg))))
 
      `(primary-selection ((t (:foreground "gold" :background "black"))))
@@ -25,8 +26,8 @@
 
      `(minibuffer-prompt ((t (:foreground "firebrick" :bold t))))
 
-     `(region ((t (:background "#586e75"))))
-     `(hl-line ((t (:background "#E5E5E5"))))
+     `(region ((t (:background "#82A3B3"))))
+     `(hl-line ((t (:background "#E4DCCC"))))
      `(tooltip ((t (:background ,bg :foreground ,fg))))
 
      ;; modeline
@@ -88,14 +89,15 @@
 
      ;; font lock -- syntax
      `(font-lock-builtin-face ((t (:foreground "#8B0017"))))
-     `(font-lock-comment-face ((t (:foreground "#425568"))))
-     `(font-lock-constant-face ((t (:foreground "#BF5E00"))))
+     `(font-lock-comment-face ((t (:foreground "#5E5E5E"))))
+     `(font-lock-constant-face ((t (:foreground "#B95942"))))
      `(font-lock-doc-face ((t (:foreground "#75511A"))))
+     `(font-lock-doc-string-face ((t (:foreground "#75511A"))))
      `(font-lock-function-name-face ((t (:foreground "#2642D2"))))
      `(font-lock-keyword-face ((t (:foreground "#AC4311" :bold t))))
      `(font-lock-preprocessor-face ((t (:foreground "#3D355D"))))
      `(font-lock-string-face ((t (:foreground "#B20000"))))
-     `(font-lock-type-face ((t (:foreground "#802A00"))))
+     `(font-lock-type-face ((t (:foreground "#308444"))))
      `(font-lock-variable-name-face ((t (:foreground "#1E5976"))))
      `(font-lock-warning-face ((t (:bold t :foreground "red"))))
 
@@ -193,10 +195,18 @@
      `(flyspell-duplicate ((t (:underline "gold3"))))
      `(flyspell-incorrect ((t (:underline "OrangeRed"))))
 
+     ;; cedet
+     `(semantic-decoration-on-protected-members-face ((t (:underline "slate blue"))) )
+     `(semantic-decoration-on-private-members-face ((t (:underline "red2"))) )
+
+     ;; helm
+     `(helm-selection ((t (:underline t :foreground "white" :background "blue3" :bold t))))
+
      ;; misc
      `(which-func ((t (:foreground "gold"))))
 
-     `(linum ((t (:foreground "#000000" :background "#B5C5D5"))))
+     `(linum ((t (:foreground "#AFAFAF" :background "#EDE4D4"))))
+     `(linum-current-line ((t (:foreground ,fg :background "#B4BAAA"))))
 
      `(trailing-whitespace ((t (:background "red" :foreground "yellow"))))
 

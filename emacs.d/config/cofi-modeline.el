@@ -42,8 +42,7 @@
                 (sml-modeline-mode (:eval (list (sml-modeline-create))))
                 ;; workgroup
                 (cofi/full-emacs
-                 (:eval (if (and (bound-and-true-p wg-mode-line-on)
-                               (bound-and-true-p workgroups-mode))
+                 (:eval (if (bound-and-true-p workgroups-mode)
                             (wg-mode-line-string)
                           "")))
                 ;; line and column

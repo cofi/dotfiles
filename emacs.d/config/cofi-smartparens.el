@@ -30,13 +30,14 @@
 
 (sp-with-modes '(tex-mode
                  plain-tex-mode
-                 latex-mode)
-  (sp-local-pair "$" "$")
-  (sp-local-pair "\\[" "\\]")
-  (sp-local-pair "\\(" "\\)")
-  (sp-local-pair "\\{" "\\}")
-  (sp-local-pair "\\left(" "\\right)")
-  (sp-local-pair "\\left\\{" "\\right\\}"))
+                 latex-mode
+                 org-mode)
+  (sp-local-pair "$" " $")
+  (sp-local-pair "\\[" " \\]")
+  (sp-local-pair "\\(" " \\)")
+  (sp-local-pair "\\{" " \\}")
+  (sp-local-pair "\\left(" " \\right)")
+  (sp-local-pair "\\left\\{" " \\right\\}"))
 
 (sp-with-modes '(markdown-mode
                  rst-mode)

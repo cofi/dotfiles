@@ -1,5 +1,6 @@
 (require 'cl-lib)
 (add-to-loadpath "~/.elisp/vendor/calfw/"
+                 "~/.elisp/vendor/org-agenda-property/"
                  "~/.elisp/vendor/org-mode/lisp"
                  "~/.elisp/vendor/org-mode/contrib/lisp")
 ;;; remove bundled org from load path
@@ -12,6 +13,8 @@
     (setq org-directory "~/Org/"
           org-agenda-files "~/Org/agenda")
   (setq org-directory "~/"))
+
+(require 'org-agenda-property)
 
 (setq org-refile-targets '((buffer-file-name :maxlevel . 3)
                            (org-agenda-files :maxlevel . 2)

@@ -1,4 +1,3 @@
-(add-to-loadpath "~/.elisp/vendor/yasnippet")
 (setq yas-prompt-functions '(yas-ido-prompt
                              yas-completing-prompt))
 (setq yas-snippet-dirs '("~/.yasnippets" "~/dev/snippets"))
@@ -8,7 +7,6 @@
 (setq yas-verbosity 2)
 (require-and-exec 'yasnippet
   (yas-global-mode 1))
-
 (define-key yas-minor-mode-map "\C-c&" nil)
 
 (defun yas-org-very-safe-expand ()

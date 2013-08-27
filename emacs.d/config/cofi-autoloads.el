@@ -25,6 +25,8 @@
 
 (autoload 'goto-last-change "goto-chg" nil t)
 
+(autoload 'ghc-init "ghc" nil t)
+
 (autoload 'monky-status "monky" nil t)
 
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))

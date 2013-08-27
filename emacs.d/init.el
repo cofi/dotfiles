@@ -53,7 +53,6 @@
                    gitignore-mode
                    haskell-mode
                    highlight-parentheses
-                   highlight-80+
                    highlight-symbol
                    htmlize
                    keyfreq

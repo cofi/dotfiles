@@ -67,7 +67,7 @@
 (erc-track-mode 1)
 
 (setq erc-server-reconnect-attempts 4
-      erc-server-reconnect-timeout 5)
+      erc-server-reconnect-timeout 30)
 
 (setq erc-keywords nil)
 (setq erc-join-buffer 'window-noselect)

@@ -234,48 +234,12 @@ Note: This assumes all files are in the org-directory."
 
 ;; Exporting
 (setq org-hide-emphasis-markers t)
-(setq org-emphasis-alist
-      '(("*" bold "<b>" "</b>")
-        ("/" italic "<i>" "</i>")
-        ("_" underline "<span style=\"text-decoration:underline;\">" "</span>")
-        ("=" org-code "<code>" "</code>" verbatim)
-        ("~" org-verbatim "<code>" "</code>" verbatim)
-        ("+" (:strike-through t) "<del>" "</del>")
-        ("@" org-warning "<b>" "</b>")))
-
-(setq org-export-latex-emphasis-alist
-      '(("*" "\\textbf{%s}" nil)
-        ("/" "\\emph{%s}" nil)
-        ("_" "\\underline{%s}" nil)
-        ("+" "\\st{%s}" nil)
-        ("=" "\\verb=%s=" nil)
-        ("~" "\\verb~%s~" t)
-        ("@" "\\alert{%s}" nil)
-        ("$" "\\(%s\\)" nil)))
-
 (setq org-export-latex-listings t)
 (setq org-export-latex-default-class "koma-article")
 
 (setq org-latex-pdf-process '("latexmk -bibtex -pdf %b"))
 
 (add-hook 'org-mode-hook 'reftex-mode)
-
-(eval-after-load "org-latex"
-  '(let ((sections '(("\\section{%s}"       . "\\section*{%s}")
-                     ("\\subsection{%s}"    . "\\subsection*{%s}")
-                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                     ("\\paragraph{%s}"     . "\\paragraph*{%s}")
-                     ("\\subparagraph{%s}"  . "\\subparagraph*{%s}"))))
-     (pour-lists org-export-latex-classes
-                 `(("koma-article"
-                    "\\documentclass[a4paper,10pt]{scrartcl}"
-                    ,@sections)
-                   ("sig-alternate"
-                    "\\documentclass{sig-alternate}"
-                    ,@sections)
-                   ("sig-strict"
-                    "\\documentclass{sig-strict}"
-                    ,@sections)))))
 
 (require 'org-protocol)
 

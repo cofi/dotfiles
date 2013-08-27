@@ -238,18 +238,17 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                    (or (slime-find-definitions (symbol-name (symbol-at-point)))
                        ad-do-it)
                  ad-do-it))
-    (emacs-lisp-mode (condition-case nil
-                         (find-function (symbol-at-point))
-                       (error (condition-case nil
-                                  (find-variable (symbol-at-point))
-                                (error ad-do-it)))))
+    (emacs-lisp-mode (cond
+                      ((functionp (symbol-at-point)) (find-function-at-point))
+                      ((/= (variable-at-point) 0) (find-variable-at-point))
+                      ((function-called-at-point) (find-function (function-called-at-point)))
+                      (t ad-do-it)))
     (otherwise
      (let ((tag (symbol-name (symbol-at-point))))
-       (if (and (boundp 'gtags-mode) gtags-mode)
-           (gtags-goto-tag tag nil)
-         (if (and tags-file-name (find-tag-noselect tag))
-             (find-tag tag)
-           ad-do-it))))))
+       (cond
+        ((bound-and-true-p 'ggtags-mode) (ggtags-find-tag tag))
+        ((and tags-file-name (find-tag-noselect tag)) (find-tag tag))
+        (t ad-do-it))))))
 
 (defun cofi/clear-empty-lines ()
   (let ((line (buffer-substring (point-at-bol) (point-at-eol))))

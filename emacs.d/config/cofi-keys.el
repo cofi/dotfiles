@@ -47,6 +47,7 @@
 (defkeymap cofi-quick-map
   "a" 'align-regexp
   "A" 'align
+  "M-a" #'align-current
   "c" 'calc
   "d" 'adict-guess-dictionary
   "e" 'eval-and-replace
@@ -184,8 +185,8 @@
   "C-v" #'find-variable-at-point
   "C-e" #'toggle-debug-on-error)
 
-                            (local-set-key (kbd "q") 'kill-this-buffer)))
 (add-hook 'diff-mode-hook (lambda ()
+                            (local-set-key (kbd "q") 'kill-this-buffer)))
 
 (add-hook 'artist-mode-init-hook
           (gen-local-fill-keymap-hook

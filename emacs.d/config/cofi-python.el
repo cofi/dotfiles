@@ -158,13 +158,11 @@
 
 (add-to-loadpath "~/.elisp/vendor/emacs-jedi/")
 (require-and-exec 'jedi
-  (add-all-to-hook 'python-mode-hook
-                   'jedi:setup
-                   (gen-local-fill-keymap-hook
-                    "C-c d" 'jedi:show-doc
-                    "C-c t" 'jedi:get-in-function-call
-                    "C-c g" 'jedi:goto-definition
-                    )))
+  (add-to-hook 'python-mode-hook #'jedi:setup)
+  (fill-keymap jedi-mode-map
+    "C-c d" #'jedi:show-doc
+    "C-c t" #'jedi:get-in-function-call
+    "C-c g" #'jedi:goto-definition))
 
 (add-hook 'python-mode-hook
           (lambda () (setq header-line-format '((t (:eval (which-function)))))))

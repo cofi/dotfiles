@@ -53,6 +53,8 @@
 ;; ==================================================
 
 ;; Settings ========================================
+(setq gc-cons-threshold (* 20 (expt 2 20))) ; gc after 20MB
+
 (setq frame-title-format "emacs %b - <%f>"
       icon-title-format "emacs %b")
 

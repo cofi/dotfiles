@@ -120,7 +120,8 @@
                                 (alpha . (85 70)))))
     (cofi/erc-connect-freenode)
     (erc
-     :server "localhost")))
+     :server "localhost")
+    (run-at-time "00:00" (* 24 60 60) #'cofi/erc-signal-new-day)))
 
 (setq erc-spelling-dictionaries '(("#tud-ersties" "german")
                                   ("#python.de" "german")))
@@ -262,8 +263,6 @@
 
 (defun cofi/erc-signal-new-day ()
   (erc-display-line (format-time-string "A new day has come, it is now %A, day %d of %B in %Y") 'all))
-
-(run-at-time "00:00" (* 24 60 60) #'cofi/erc-signal-new-day)
 
 ;;; curse you erc for not letting me setup buffers via a function
 (defun erc-setup-buffer (buffer)

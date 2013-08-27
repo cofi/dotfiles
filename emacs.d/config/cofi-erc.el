@@ -33,6 +33,7 @@
 (erc-autojoin-mode 1)
 (erc-services-mode 1)
 (erc-spelling-mode 1)
+(erc-fill-mode -1)
 (setq erc-prompt-for-nickserv-password nil)
 
 (setq erc-autojoin-channels-alist

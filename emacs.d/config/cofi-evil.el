@@ -271,6 +271,10 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "d" 'dired-jump
   "D" 'cofi-dired-alias
 
+  "h n" #'highlight-symbol-next-in-defun
+  "h p" #'highlight-symbol-prev-in-defun
+  "h q" #'highlight-symbol-query-replace
+
   "m" 'compile
 
   "n" 'split-window-horizontally

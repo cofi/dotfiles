@@ -116,7 +116,7 @@
 ;;; ========================================
 ;;; recent files ====================
 (setq recentf-auto-cleanup 'never)
-(setq recentf-max-saved-items 200)
+(setq recentf-max-saved-items 5000)
 (setq recentf-save-file (cofi/var-file "emacs/recentf"))
 (require-and-exec 'recentf
    (recentf-mode 1)

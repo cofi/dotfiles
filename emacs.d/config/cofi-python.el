@@ -146,11 +146,6 @@
       pylookup-html-locations '("~/doc/python-2.7/")
       pylookup-completing-read #'helm-completing-read-default)
 
-(add-hook 'python-mode-hook
-          #'(lambda ()
-              ;; move single quote to string class
-              (modify-syntax-entry ?' "\"")))
-
 ;;; load ropemacs
 (add-all-to-hook 'python-mode-hook
           #'(lambda ()

@@ -52,9 +52,9 @@
  "C-M-b" 'sp-backward-sexp
 
  "C-M-d" 'sp-down-sexp
- "C-M-a" 'sp-backward-down-sexp
+ "C-M-A" 'sp-backward-down-sexp
 
- "C-M-e" 'sp-up-sexp
+ "C-M-E" 'sp-up-sexp
  "C-M-u" 'sp-backward-up-sexp
 
  "C-M-n" 'sp-next-sexp

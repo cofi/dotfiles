@@ -125,20 +125,26 @@
                              (save-excursion (python-nav-end-of-statement)
                                              (point)))))
 
+(require 'elpy)
+
 (add-all-to-hook 'python-mode-hook
                  #'show-paren-mode
                  #'auto-fill-mode
-                 #'which-func-mode
                  (lambda ()
                    (setq tab-width 4)
                    (setq mode-name "py"))
                  (gen-local-fill-keymap-hook
                      "C-c p"     cofi-rope-map
-                     "M-n"       #'flymake-goto-next-error
-                     "M-p"       #'flymake-goto-prev-error
-                     "C-c SPC"   #'flymake-mode
+                     "M-n"       #'python-nav-forward-statement
+                     "M-p"       #'python-nav-backward-statement
+                     "C-c C-d"   #'elpy-doc
                      "C-c ?"     #'pylookup-lookup
+                     "C-c C-r"   #'elpy-refactor
+                     "C-c C-t"   #'elpy-test
                      "C-c C-c"   #'cofi/python-send-dwim
+                     "C-c C-l"   #'cofi/python-send-statement
+                     "C-c C-f"   #'python-shell-send-file
+                     "C-c C-e"   #'python-eldoc-at-point
                      "C-c C-b"   #'python-shell-send-buffer)
                  )
 
@@ -158,7 +164,7 @@
 
 (add-to-loadpath "~/.elisp/vendor/emacs-jedi/")
 (require-and-exec 'jedi
-  (add-to-hook 'python-mode-hook #'jedi:setup)
+  (add-hook 'python-mode-hook #'jedi:setup)
   (fill-keymap jedi-mode-map
     "C-c d" #'jedi:show-doc
     "C-c t" #'jedi:get-in-function-call

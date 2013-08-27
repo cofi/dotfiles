@@ -118,6 +118,20 @@ Note: This assumes all files are in the org-directory."
 
 (setq org-special-ctrl-a/e t)
 
+(setq org-use-speed-commands t)
+(defun cofi/evil-org-select-speed-command (char)
+  (interactive "c")
+  (let* ((default (assoc (string char) org-speed-commands-default))
+         (user (assoc (string char) org-speed-commands-user))
+         (cmd (or (cdr default) (cdr user))))
+    (when cmd
+      (cond
+       ((commandp cmd) (call-interactively cmd))
+       ((listp cmd) (eval cmd))))))
+
+(eval-after-load "evil"
+  '(evil-define-key 'normal org-mode-map (kbd "C-'") #'cofi/evil-org-select-speed-command))
+
 ;; ToDo
 (setq org-todo-keywords '((sequence
                           "TODO"

@@ -179,13 +179,13 @@
              "p" #'cofi/narrow-to-paragraph
              "P" #'narrow-to-page)
 
-(add-hook 'diff-mode-hook '(lambda ()
 (fill-keymap help-map
   "C-f" #'find-function-at-point
   "C-v" #'find-variable-at-point
   "C-e" #'toggle-debug-on-error)
 
                             (local-set-key (kbd "q") 'kill-this-buffer)))
+(add-hook 'diff-mode-hook (lambda ()
 
 (add-hook 'artist-mode-init-hook
           (gen-local-fill-keymap-hook

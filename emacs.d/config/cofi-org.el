@@ -1,3 +1,4 @@
+;; -*- mode: emacs-lisp; mode: rainbow -*-
 (require 'cl-lib)
 (add-to-loadpath "~/.elisp/vendor/calfw/"
                  "~/.elisp/vendor/org-agenda-property/"
@@ -128,6 +129,15 @@ Note: This assumes all files are in the org-directory."
                           "CANCELLED"
                           "DONE"
                           )))
+
+(setq org-todo-keyword-faces
+      '(("TODO" . org-warning)
+        ("STARTED" . "yellow")
+        ("WAITING" . "sienna")
+        ("DEFERRED" . "orange")
+        ("DELEGATED" . "slate blue")
+        ("CANCELLED" . "dark violet")
+        ("DONE" . "green")))
 
 (setq org-hide-leading-stars t)
 

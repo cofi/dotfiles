@@ -182,6 +182,12 @@
 
 (fill-keymap help-map
   "C-h" nil
+  "h" nil
+  "C-c" nil
+  "RET" nil
+  "C-o" nil
+  "C-w" nil
+  "g" nil
   "C-l" #'find-library
   "C-f" #'find-function-at-point
   "C-v" #'find-variable-at-point

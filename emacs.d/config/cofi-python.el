@@ -135,8 +135,6 @@
                    (setq mode-name "py"))
                  (gen-local-fill-keymap-hook
                      "C-c p"     cofi-rope-map
-                     "M-n"       #'python-nav-forward-statement
-                     "M-p"       #'python-nav-backward-statement
                      "C-c C-d"   #'elpy-doc
                      "C-c ?"     #'pylookup-lookup
                      "C-c C-r"   #'elpy-refactor

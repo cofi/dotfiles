@@ -193,6 +193,14 @@
   "C-v" #'find-variable-at-point
   "C-e" #'toggle-debug-on-error)
 
+(eval-after-load "flymake"
+  '(progn
+     (defvar flymake-mode-map (make-sparse-keymap))
+     (cl-pushnew (cons 'flymake-mode flymake-mode-map) minor-mode-map-alist)
+     (fill-keymap flymake-mode-map
+       [remap prev-error] #'flymake-goto-prev-error
+       [remap next-error] #'flymake-goto-next-error)))
+
 (add-hook 'diff-mode-hook (lambda ()
                             (local-set-key (kbd "q") 'kill-this-buffer)))
 

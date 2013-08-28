@@ -181,6 +181,8 @@
              "P" #'narrow-to-page)
 
 (fill-keymap help-map
+  "C-h" nil
+  "C-l" #'find-library
   "C-f" #'find-function-at-point
   "C-v" #'find-variable-at-point
   "C-e" #'toggle-debug-on-error)

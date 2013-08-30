@@ -283,6 +283,9 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "h p" #'highlight-symbol-prev-in-defun
   "h q" #'highlight-symbol-query-replace
 
+  "SPC" #'delete-trailing-whitespace
+  "S-SPC" #'cofi/flush-empty-lines
+
   "m" 'compile
 
   "n" 'split-window-horizontally

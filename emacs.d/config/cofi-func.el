@@ -330,4 +330,13 @@ Fill new sentence unless called with prefix or was at eol."
           (end (progn (forward-paragraph) (point))))
       (narrow-to-region beg end))))
 
+(defun cofi/flush-empty-lines ()
+  "Remove empty lines in region or buffer."
+  (interactive)
+  (if (region-active-p)
+      (save-restriction
+        (narrow-to-region (region-beginning) (region-end))
+        (flush-lines "^$"))
+    (flush-lines "^$")))
+
 (provide 'cofi-func)

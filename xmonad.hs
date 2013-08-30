@@ -23,7 +23,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.EwmhDesktops
 
-import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Layout.NoBorders (noBorders, smartBorders)
 import XMonad.Layout.Grid (Grid(..))
 import XMonad.Layout.PerWorkspace (onWorkspace)
 import XMonad.Layout.LayoutCombinators (JumpToLayout(..), (|||))
@@ -263,15 +263,16 @@ threePane = named "Three" $ ThreeCol 1 0.04 0.4
 centerGrid = named "CenterGrid" $ centerMaster Grid
 
 myLayout = windowArrange $ smartBorders $ avoidStruts $
-  onWorkspace "1:comm" (unevenTile ||| Grid ||| Full) $
+  onWorkspace "1:comm" (unevenTile ||| Grid ||| full) $
   onWorkspace "hide" Grid $
-  tiled ||| Mirror tiled ||| twoPane ||| threePane ||| centerGrid ||| float ||| Full
+  tiled ||| Mirror tiled ||| twoPane ||| threePane ||| centerGrid ||| float ||| full
   where
     float = named "Float" simplestFloat
     unevenTile = ResizableTall 2 incDelta 0.8 []
     tiled = ResizableTall 1 incDelta goldenRatio []
     goldenRatio = toRational (2/(1 + sqrt 5 :: Double))
     incDelta = 0.04
+    full = noBorders Full
 ----------------------------------------
 
 -- Queries ----------------------------------------

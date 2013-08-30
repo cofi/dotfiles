@@ -34,10 +34,6 @@
 (autoload 'multi-term-dedicated-open "multi-term" nil t)
 (autoload 'multi-term-next "multi-term" nil t)
 
-(autoload 'point-stack-push "point-stack" nil t)
-(autoload 'point-stack-pop "point-stack" nil t)
-(autoload 'point-stack-forward-stack-pop "point-stack" nil t)
-
 (autoload 'try-pysmell-complete "pysmell" "PySmell-Hippie-Completer" t)
 
 (autoload 'pylookup-lookup "pylookup"

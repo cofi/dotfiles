@@ -365,6 +365,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (fill-keymap evil-normal-state-map
   "[ e"   #'previous-error
   "] e"   #'next-error
+  "[ SPC" #'cofi/create-blank-line-previous
+  "] SPC" #'cofi/create-blank-line-next
   )
 
 (evil-define-key 'insert message-mode-map

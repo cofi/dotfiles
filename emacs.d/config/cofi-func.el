@@ -339,4 +339,18 @@ Fill new sentence unless called with prefix or was at eol."
         (flush-lines "^$"))
     (flush-lines "^$")))
 
+(defun cofi/create-blank-line-previous (count)
+  "Create `count' blank lines before to the current line."
+  (interactive "p")
+  (save-excursion
+    (forward-line -1)
+    (insert (make-string count ?\n))))
+
+(defun cofi/create-blank-line-next (count)
+  "Create `count' blank lines after to the current line."
+  (interactive "p")
+  (save-excursion
+    (forward-line 1)
+    (insert (make-string count ?\n))))
+
 (provide 'cofi-func)

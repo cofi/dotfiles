@@ -371,6 +371,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "] s"   #'cofi/switch-with-next-line
   "[ y"   #'cofi/copy-previous-line
   "] y"   #'cofi/copy-next-line
+  "[ x"   #'backward-sexp
+  "] x"   #'forward-sexp
   )
 
 (evil-define-key 'insert message-mode-map

@@ -142,6 +142,8 @@ Neither dir nor alias may contain spaces.")
     (helm-find-files nil)))
 
 ;; Taken from http://www.emacswiki.org/emacs/ArtistMode
+(declare-function 'artist-fc-get-fn-from-symbol "artist" '(symbol))
+(declare-function 'artist-select-operation "artist" '(op-symbol))
 (eval-after-load 'artist
   '(progn
      (defun artist-ido-select-operation (type)

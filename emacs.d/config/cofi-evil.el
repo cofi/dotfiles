@@ -369,6 +369,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "] SPC" #'cofi/create-blank-line-next
   "[ s"   #'cofi/switch-with-previous-line
   "] s"   #'cofi/switch-with-next-line
+  "[ y"   #'cofi/copy-previous-line
+  "] y"   #'cofi/copy-next-line
   )
 
 (evil-define-key 'insert message-mode-map
@@ -414,5 +416,19 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                                                   evil-operator-state-exit-hook))
 
 ;;; TODO: Figure out how a fun can be run if emacs is waiting for more input
+
+(defun cofi/copy-previous-line (count)
+  "Copy the line `count' before to the current."
+  (interactive "p")
+  (save-excursion
+    (forward-line (- count))
+    (evil-yank-line (point-at-bol) (point-at-eol) 'line)))
+
+(defun cofi/copy-next-line (count)
+  "Copy the line `count' after to the current."
+  (interactive "p")
+  (save-excursion
+    (forward-line count)
+    (evil-yank-line (point-at-bol) (point-at-eol) 'line)))
 
 (provide 'cofi-evil)

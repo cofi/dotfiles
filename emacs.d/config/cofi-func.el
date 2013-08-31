@@ -339,6 +339,27 @@ Fill new sentence unless called with prefix or was at eol."
         (flush-lines "^$"))
     (flush-lines "^$")))
 
+(defun cofi/switch-with-next-line (count)
+  "Switch the current line with the line `count' after it."
+  (interactive "p")
+  (save-excursion
+    (let ((current-line (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
+          (c-bol (point-at-bol)))
+      (delete-region (point-at-bol) (point-at-eol))
+      (forward-line count)
+      (let ((previous-line (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
+            (p-bol (point-at-bol)))
+        (save-excursion
+          (goto-char c-bol)
+          (insert previous-line))
+        (delete-region (point-at-bol) (point-at-eol))
+        (insert current-line)))))
+
+(defun cofi/switch-with-previous-line (count)
+  "Switch the current line with the line `count' before it."
+  (interactive "p")
+  (cofi/switch-with-next-line (- count)))
+
 (defun cofi/create-blank-line-previous (count)
   "Create `count' blank lines before to the current line."
   (interactive "p")

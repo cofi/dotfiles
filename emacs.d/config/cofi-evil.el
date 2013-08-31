@@ -367,6 +367,8 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "] e"   #'next-error
   "[ SPC" #'cofi/create-blank-line-previous
   "] SPC" #'cofi/create-blank-line-next
+  "[ s"   #'cofi/switch-with-previous-line
+  "] s"   #'cofi/switch-with-next-line
   )
 
 (evil-define-key 'insert message-mode-map

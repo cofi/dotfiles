@@ -362,6 +362,11 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
     ;; shadow rotating in evil-window-map
     "C-R" 'winner-redo)
 
+(fill-keymap evil-normal-state-map
+  "[ e"   #'previous-error
+  "] e"   #'next-error
+  )
+
 (evil-define-key 'insert message-mode-map
   (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 

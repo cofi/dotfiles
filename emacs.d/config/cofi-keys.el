@@ -183,6 +183,7 @@
   "C-w" nil
   "g" nil
   "C-l" #'find-library
+  "C-L" #'locate-library
   "C-f" #'find-function-at-point
   "C-v" #'find-variable-at-point
   "C-e" #'toggle-debug-on-error)

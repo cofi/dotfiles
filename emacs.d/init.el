@@ -42,6 +42,7 @@
                    elpy
                    epc
                    ess
+                   evil-indent-textobject
                    evil-leader
                    evil-numbers
                    flymake-cursor

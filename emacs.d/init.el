@@ -56,6 +56,8 @@
                    highlight-parentheses
                    highlight-symbol
                    htmlize
+                   jinja2-mode
+                   json-mode
                    keyfreq
                    keywiz
                    lacarte
@@ -64,6 +66,7 @@
                    markdown-mode
                    multi-term
                    offlineimap
+                   org-journal
                    paredit
                    pp-c-l
                    rainbow-mode

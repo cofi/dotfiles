@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : elif
+# key : elif
+# --
+else if {
+    $0
+}

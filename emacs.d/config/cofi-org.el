@@ -71,6 +71,7 @@ Note: This assumes all files are in the org-directory."
       org-agenda-skip-scheduled-if-done t
       org-agenda-skip-scheduled-if-deadline-is-shown t
       org-agenda-start-on-weekday nil
+      org-agenda-span 21
       org-indirect-buffer-display 'current-window
       org-agenda-restore-windows-after-quit t
       org-agenda-window-setup 'other-window

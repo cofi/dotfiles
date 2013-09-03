@@ -7,7 +7,6 @@
                         (c-mode . "linux")))
 
 (setq comment-multi-line t)
-(setq-default c-auto-newline t)
 
 (defun cofi-c-line-comments ()
   (setq comment-start "//"

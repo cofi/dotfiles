@@ -119,7 +119,13 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              "go"    'goto-char
              "C-t"   'transpose-chars
              "C-:"   'eval-expression
-             ":"     'evil-repeat-find-char-reverse)
+             ":"     'evil-repeat-find-char-reverse
+             "gH"    'evil-window-top
+             "gL"    'evil-window-bottom
+             "gM"    'evil-window-middle
+             "H"     'beginning-of-line
+             "L"     'end-of-line
+             )
 
 (fill-keymap evil-motion-state-map
              "y"     'evil-yank

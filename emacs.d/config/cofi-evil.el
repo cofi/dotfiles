@@ -273,10 +273,10 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
 
   "g g" #'ack-and-a-half
-  "g G" (cmd ack (let ((ack-and-a-half-prompt-for-directory 'always))
+  "g G" (cmd ack (let ((ack-and-a-half-prompt-for-directory t))
                    (call-interactively #'ack-and-a-half)))
   "g s" #'ack-and-a-half-same
-  "g S" (cmd ack-same (let ((ack-and-a-half-prompt-for-directory 'always))
+  "g S" (cmd ack-same (let ((ack-and-a-half-prompt-for-directory t))
                         (call-interactively #'ack-and-a-half-same)))
 
   "h n" #'highlight-symbol-next-in-defun

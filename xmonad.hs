@@ -48,7 +48,6 @@ import System.Posix.Unistd (getSystemID, SystemID(..))
 import Text.Printf
 
 main = do
---   spawn trayer
   homeDir <- getHomeDirectory
   systemID <- getSystemID
   xmproc <- spawnPipe $ xmobar systemID
@@ -66,8 +65,6 @@ main = do
                          } `additionalKeysP` myKeys homeDir
     where
       myStartupHook = setWMName "LG3D"
-      trayer = "trayer --transparent true --alpha 255 --edge top --align right --padding 2 --expand false "
-               ++ "--heighttype pixel --height 10 --widthtype percent --width 15 --SetPartialStrut true"
       xmobar systemID = case (nodeName systemID) of
         "hitchhiker" -> "xmobar ~/.xmobar/laptop"
         "coficore"   -> "xmobar ~/.xmobar/desktop"
@@ -135,7 +132,8 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-C-1", screenWorkspace 0 >>= flip whenJust (windows . W.view))
                  , ("M-C-2", screenWorkspace 1 >>= flip whenJust (windows . W.view))
                  , ("M-C-3", screenWorkspace 2 >>= flip whenJust (windows . W.view))
-                 , ("M-d", spawn "disper -C")
+--                  , ("M-d", spawn "disper -C")
+                 , ("M-d", spawn "xrandr --output DP-0 --auto --left-of LVDS-0")
 
                  , ("M-<Escape>", kill)
                  , ("M-S-<Escape>", kill1)
@@ -151,7 +149,6 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-m", raiseMaybe (spawn "gnus") gnusQuery)
                  , ("M-f", raiseMaybe (spawnOn "2:browse" "firefox") firefoxQuery)
                  , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
-                 , ("M-i", raiseMaybe (runInTerm "" "weechat-curses") weechatQuery)
                    -- Layoutjumper
                  , ("M-<F1>", sendMessage $ JumpToLayout "Float")
                  , ("M-<F2>", sendMessage $ JumpToLayout "Two")
@@ -185,7 +182,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
         launcher = "cmd=$(yeganesh -- -p 'Run:'" ++ dmenuOptions ++ ") && $cmd"
         termLauncher = "cmd=$(yeganesh -p withTerm -- -p 'Run in Terminal:'"
                        ++ dmenuOptions ++ ") && " ++ termExec ++ "$cmd"
-        respawn = "killall trayer ; xmonad --restart"
+        respawn = "xmonad --restart"
         nextNonEmpty = moveTo Next NonEmptyWS
         prevNonEmpty = moveTo Prev NonEmptyWS
         nextEmpty = moveTo Next EmptyWS
@@ -277,9 +274,7 @@ myLayout = windowArrange $ smartBorders $ avoidStruts $
 
 -- Queries ----------------------------------------
 prefixTitle prefix = fmap (prefix `isPrefixOf`) title
-weechatQuery = prefixTitle "weechat"
 emacsQuery = prefixTitle "emacs"
-wanderlustQuery = title =? "Wanderlust Mail"
 gnusQuery = title =? "Gnus Mail"
 newsbeuterQuery = title =? "newsbeuter"
 firefoxQuery = className =? "Firefox"
@@ -288,7 +283,6 @@ firefoxQuery = className =? "Firefox"
 myManageHook = (composeAll . concat $
                [ [ isFullscreen    --> doFullFloat
                  , isDialog        --> doCenterFloat
-                 , weechatQuery    --> doShift "1:comm"
                  , gnusQuery       --> doShift "mail"
                  , newsbeuterQuery --> doShift "feeds"
                  ]
@@ -302,11 +296,11 @@ myManageHook = (composeAll . concat $
                 ])
                <+> manageDocks
   where ignores = []
-        floats = ["Plasma-desktop", "Lancelot", "Kmix"]
+        floats = ["Plasma-desktop", "Kmix"]
         cfloats = ["MPlayer", "Smplayer", "Vlc", "Kaffeine"]
         browse = []
         code  = []
-        comms = ["Kopete"]
+        comms = []
 ----------------------------------------
 
 scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
@@ -396,7 +390,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , ctan
                                                   , rfc
                                                   , duden
-                                                  , wow
                                                   , S.prefixAware google
                                                   ]
 
@@ -433,7 +426,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       acm = S.searchEngine "acm" "https://dl.acm.org/results.cfm?query="
       ieee= S.searchEngine "ieee" "http://ieeexplore.ieee.org/search/searchresult.jsp?queryText="
       thesaurus = S.searchEngine "th" "http://thesaurus.com/browse/"
-      wow = S.searchEngine "wow" "http://www.wowhead.com/search?q="
       emacs = S.searchEngine "emacs" "http://www.emacswiki.org/cgi-bin/wiki?search="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld

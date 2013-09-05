@@ -40,6 +40,8 @@ bind-key N mark-feed-read
 
 color background white  black
 color listnormal white  black
+color listnormal_unread white  black
 color listfocus  white  red   bold
+color listfocus_unread  white  red   bold
 color info       yellow black bold
 color article    white  black

@@ -182,6 +182,7 @@
   "C-o" nil
   "C-w" nil
   "g" nil
+  "C-s" #'yas-visit-snippet-file
   "C-l" #'find-library
   "C-S-l" #'locate-library
   "C-f" #'find-function-at-point

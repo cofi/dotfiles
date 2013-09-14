@@ -45,6 +45,14 @@
 
 (add-to-hooks #'smartparens-mode '(text-mode-hook prog-mode-hook))
 
+(defun cofi/sp-kill-surrounding-sexp ()
+  "Kill from beginning to end of sexp."
+  (interactive)
+  (kill-region (progn (sp-beginning-of-sexp)
+                      (1- (point)))
+               (progn (sp-end-of-sexp)
+                      (point))))
+
 (fill-keymap sp-keymap
  "M-)"   'sp-up-sexp
  "C-)"   'sp-forward-slurp-sexp
@@ -61,6 +69,7 @@
  "C-M-p" 'sp-previous-sexp
 
  "C-M-k" 'sp-kill-sexp
+ "M-K"   'cofi/sp-kill-surrounding-sexp
 
  "M-F" 'sp-forward-symbol
  "M-B" 'sp-backward-symbol

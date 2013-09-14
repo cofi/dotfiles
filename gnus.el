@@ -189,16 +189,23 @@
 (require 'gnus-notifications)
 (add-hook 'gnus-after-getting-new-news-hook 'gnus-notifications)
 
+(defvar cofi--gnus-frame nil)
+(add-hook 'gnus-started-hook (lambda () (setq cofi--gnus-frame (selected-frame))))
 (defun cofi/set-mail-urgency ()
-            (loop for (group . rest) in gnus-newsrc-alist
-                  when (and (<= (gnus-group-level group) gnus-notifications-minimum-level)
-                          (let ((unread (gnus-group-unread group)))
-                            (and (numberp unread)
-                               (> unread 0))))
+  "Set urgency hint for frame most recently showing gnus."
+  (loop for (group . rest) in gnus-newsrc-alist
+        when (and (<= (gnus-group-level group) gnus-notifications-minimum-level)
+                  (let ((unread (gnus-group-unread group)))
+                    (and (numberp unread)
+                         (> unread 0))))
 
-                  do (prog1
-                         (x-urgency-hint (selected-frame) t)
-                       (return))))
+        do (prog1
+               (x-urgency-hint (if (frame-live-p cofi--gnus-frame)
+                                   cofi--gnus-frame
+                                 (setq cofi--gnus-frame nil)
+                                 (selected-frame))
+                               t)
+             (return))))
 
 (add-hook 'gnus-after-getting-new-news-hook #'cofi/set-mail-urgency)
 

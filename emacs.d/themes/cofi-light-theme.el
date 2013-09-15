@@ -4,8 +4,8 @@
   "cofi theme.")
 
 
-(let ((bg "#f7efdf")
-      (fg "#5E3E2C")
+(let ((bg "#F7EFDF")
+      (fg "#313131")
       (vc-added "green4")
       (vc-removed "red4")
       (vc-changed "blue4")
@@ -88,7 +88,7 @@
      `(ediff-odd-diff-face-C ((t (:background "gray" :foreground "white"))))
 
      ;; font lock -- syntax
-     `(font-lock-builtin-face ((t (:foreground "#8B0017"))))
+     `(font-lock-builtin-face ((t (:foreground "#A82E4D"))))
      `(font-lock-comment-face ((t (:foreground "#5E5E5E"))))
      `(font-lock-constant-face ((t (:foreground "#B95942"))))
      `(font-lock-doc-face ((t (:foreground "#75511A"))))
@@ -96,7 +96,7 @@
      `(font-lock-function-name-face ((t (:foreground "#2642D2"))))
      `(font-lock-keyword-face ((t (:foreground "#AC4311" :bold t))))
      `(font-lock-preprocessor-face ((t (:foreground "#3D355D"))))
-     `(font-lock-string-face ((t (:foreground "#B20000"))))
+     `(font-lock-string-face ((t (:foreground "#3450A2"))))
      `(font-lock-type-face ((t (:foreground "#308444"))))
      `(font-lock-variable-name-face ((t (:foreground "#1E5976"))))
      `(font-lock-warning-face ((t (:bold t :foreground "red"))))

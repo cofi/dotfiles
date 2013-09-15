@@ -1,6 +1,5 @@
 (add-to-loadpath "~/.elisp/slime/"
-                 "~/.elisp/slime/contrib"
-                 "~/.elisp/vendor/ac-slime")
+                 "~/.elisp/slime/contrib")
 
 
 (add-hook 'slime-mode-hook (gen-fill-keymap-hook slime-mode-map
@@ -25,7 +24,6 @@
    :doc-spec '(("(ansicl)Symbol Index"))))
 
 (require 'slime)
-(require 'ac-slime)
 (defadvice paredit-newline (before slime-eval-print-in-scratch activate)
   "Call `SLIME-EVAL-PRINT-LAST-EXPRESSION' in slime scratch."
   (if (and slime-mode (string= "*slime-scratch*" (buffer-name)))

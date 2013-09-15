@@ -28,6 +28,7 @@
                    ack-and-a-half
                    auctex
                    auto-complete
+                   ac-slime
                    auto-dictionary
                    bookmark+
                    boxquote

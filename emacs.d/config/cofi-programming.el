@@ -56,4 +56,9 @@
 (setq compilation-auto-jump-to-first-error t
       compilation-scroll-output 'first-error)
 
+(defadvice package-menu-execute (around no-error-jump activate)
+  (let ((compilation-auto-jump-to-first-error nil)
+        (compilation-scroll-output nil))
+    ad-do-it))
+
 (provide 'cofi-programming)

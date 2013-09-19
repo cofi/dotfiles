@@ -13,6 +13,7 @@
 (setq evil-mode-line-format nil)
 (setq evil-leader/leader ","
       evil-leader/in-all-states t)
+(setq evil-search-module 'evil-search)
 (global-evil-leader-mode)
 (require 'evil)
 (sackspace-global-mode 1)

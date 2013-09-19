@@ -323,5 +323,6 @@ Same arguments as in diary cyclic."
 (require 'org-google-weather)
 (setq org-google-weather-icon-directory "/usr/share/icons/oxygen/16x16/status/")
 ;; ==================================================
+(setq org-journal-dir "~/Journal/")
 
 (provide 'cofi-org)

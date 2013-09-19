@@ -56,10 +56,12 @@ Note: This assumes all files are in the org-directory."
                                                  (org-meta-return))))
 
 (defun cofi/org-get-full-formatted-outline-path ()
-  (mapconcat #'identity (append
-                         (org-get-outline-path)
-                         (list (substring-no-properties (org-get-heading))))
-             " > "))
+  (if (org-before-first-heading-p)
+      ""
+      (mapconcat #'identity (append
+                             (org-get-outline-path)
+                             (list (substring-no-properties (org-get-heading))))
+                 " > ")))
 
 (add-hook 'org-mode-hook (lambda ()
                            (setq header-line-format

@@ -295,7 +295,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 
   "m" 'compile
 
-  "n" 'split-window-horizontally
+  "n" #'evil-ex-nohighlight
 
   "c s" #'cofi/switch-file
   "c ;" #'cofi/end-prog-line

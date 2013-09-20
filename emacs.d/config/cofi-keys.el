@@ -186,7 +186,9 @@
   "C-l" #'find-library
   "C-S-l" #'locate-library
   "C-f" #'find-function-at-point
+  "M-f" #'find-function
   "C-v" #'find-variable-at-point
+  "M-v" #'find-variable
   "C-e" #'toggle-debug-on-error)
 
 (eval-after-load "flymake"

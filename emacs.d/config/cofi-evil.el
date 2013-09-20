@@ -154,14 +154,13 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
              "C-SPC" 'evil-ace-jump-char-to-mode
              "S-SPC" 'evil-ace-jump-word-mode)
 
-(defadvice evil-visual-line (before spc-for-line-jump activate)
-  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-line-mode))
+(defun cofi-evil-adjust-ace-binding ()
+  (let ((f (cl-case evil-visual-selection
+             (line #'evil-ace-jump-line-mode)
+             (t #'evil-ace-jump-char-mode))))
+  (define-key evil-visual-state-map (kbd "SPC") f)))
 
-(defadvice evil-visual-char (before spc-for-char-jump activate)
-  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
-
-(defadvice evil-visual-block (before spc-for-char-jump activate)
-  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
+(add-hook 'evil-visual-state-entry-hook #'cofi-evil-adjust-ace-binding)
 
 (evil-define-key 'normal org-mode-map
   (kbd "RET") 'org-open-at-point
@@ -240,7 +239,7 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
 (defvar slime-mode nil)
 (defadvice evil-goto-definition (around evil-clever-goto-def activate)
   "Make use of emacs', slime's and etags possibilities for finding definitions."
-  (case major-mode
+  (cl-case major-mode
     (lisp-mode (if slime-mode
                    (or (slime-find-definitions (symbol-name (symbol-at-point)))
                        ad-do-it)

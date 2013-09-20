@@ -42,6 +42,7 @@
                    elein
                    elpy
                    epc
+                   ercn
                    ess
                    evil-indent-textobject
                    evil-leader

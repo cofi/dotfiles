@@ -7,6 +7,7 @@
                     autojoin
                     button
                     completion
+                    ercn
                     irccontrols
                     image
                     keep-place
@@ -173,6 +174,13 @@
   (let ((s (buffer-substring-no-properties (point-min) (point-max))))
     (when (string-match-p (format "\\b%s\\b" (erc-current-nick)) s)
       (cofi/erc-frame-urgency))))
+
+(setq ercn-notify-rules
+      '((current-nick . all)
+        (keyword . all)
+        (query-buffer . all)))
+
+(add-hook 'ercn-notify 'cofi/erc-frame-urgency)
 
 (add-hook 'erc-insert-post-hook #'cofi/erc-urgency-on-nick)
 

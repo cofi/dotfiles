@@ -41,8 +41,10 @@
           ac-quick-help-delay 0.3
           ac-quick-help-height 50)
 
-    (fill-keymap ac-complete-mode-map
+    (fill-keymap ac-completing-map
+      "<return>" 'ac-complete
       "RET" 'ac-complete
+      [M-h] 'ac-quick-help
       "C-l" 'ac-expand-common
       "C-j" 'ac-next
       "C-k" 'ac-previous

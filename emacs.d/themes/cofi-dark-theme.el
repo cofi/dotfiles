@@ -29,7 +29,7 @@
      `(tooltip ((t (:background "white" :foreground "black"))))
 
      ;; modeline
-     `(mode-line ((t (:background "#2E2D2F" :foreground ,fg :height 80))))
+     `(mode-line ((t (:background "#2E2D2F" :foreground ,fg :height 80 :box nil))))
      `(mode-line-inactive ((t (:background ,fg :foreground "#000000" :height 80))))
      `(mode-line-buffer ((t (:bold t :foreground "#FFAA00"))))
      `(mode-line-major-mode ((t (:bold t :foreground "gold"))))

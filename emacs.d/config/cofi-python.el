@@ -160,7 +160,8 @@
            "C-M-?" 'rope-lucky-assist
            ))
 
-(add-to-loadpath "~/.elisp/vendor/emacs-jedi/")
+(add-to-loadpath "~/.elisp/vendor/emacs-jedi/"
+                 "~/.elisp/vendor/python-environment/")
 (require-and-exec 'jedi
   (add-hook 'python-mode-hook #'jedi:setup)
   (fill-keymap jedi-mode-map

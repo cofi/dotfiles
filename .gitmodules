@@ -70,3 +70,12 @@
 [submodule "elisp/vendor/org-agenda-property"]
 	path = elisp/vendor/org-agenda-property
 	url = git://github.com/Bruce-Connor/org-agenda-property.git
+[submodule "elisp/vendor/magit"]
+	path = elisp/vendor/magit
+	url = https://github.com/magit/magit.git
+[submodule "elisp/vendor/git-modes"]
+	path = elisp/vendor/git-modes
+	url = https://github.com/magit/git-modes.git
+[submodule "elisp/vendor/python-environment"]
+	path = elisp/vendor/python-environment
+	url = https://github.com/tkf/emacs-python-environment.git

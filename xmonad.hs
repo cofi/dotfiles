@@ -205,6 +205,8 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                                            , ("o", spawn "mpd ~/.mpdconf")
                                            , ("k", spawn "mpd ~/.mpdconf --kill")
                                            , ("q", spawn "qmpdclient")
+                                           , ("<XF86AudioRaiseVolume>", spawn "mpc volume +10")
+                                           , ("<XF86AudioLowerVolume>", spawn "mpc volume -10")
                                            ]
 -- PrettyPrinter ----------------------------------------
 myPP h = defaultPP  { ppCurrent = xmobarColor "yellow" "black" . wrap "[" "]"

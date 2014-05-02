@@ -108,18 +108,22 @@
 (push "gnutls-cli --priority secure256 --x509cafile=/etc/ssl/certs/ca.pem -p %p %h"
       tls-program)
 
-(defun cofi/erc-connect-freenode ()
-  (interactive)
-  (erc-tls
-   :server "irc.freenode.net"
-   :port 7000))
+(defun cofi/erc-connect-freenode (&optional no-tls)
+  (interactive "P")
+  (if no-tls
+      (erc
+       :server "irc.freenode.net"
+       :port 6667)
+    (erc-tls
+     :server "irc.freenode.net"
+     :port 7000)))
 
-(defun cofi/erc ()
+(defun cofi/erc (&optional no-tls)
   (interactive)
   (unless (cl-find "ERC" (make-frame-names-alist) :key #'car :test #'string=)
     (select-frame (make-frame '((name . "ERC")
                                 (alpha . (85 70)))))
-    (cofi/erc-connect-freenode)
+    (cofi/erc-connect-freenode no-tls)
     (erc
      :server "localhost")
     (run-at-time "00:00" (* 24 60 60) #'cofi/erc-signal-new-day)))

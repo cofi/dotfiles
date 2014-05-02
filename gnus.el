@@ -18,7 +18,7 @@
           (org-set-property org-contacts-email-property (concat mails " " mail)))))))
 
 ;;; methods
-(setq imap-shell-program "/usr/lib/dovecot/imap -c ~/config/dovecot.conf"
+(setq nnimap-shell-program "/usr/lib/dovecot/imap -c ~/config/dovecot.conf"
       gnus-select-method '(nnimap "Mail"
                                   (nnimap-stream shell))
       gnus-secondary-select-methods '((nntp "news.gmane.org")

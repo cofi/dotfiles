@@ -112,3 +112,5 @@
     xfuncname="^(\\((def|test).*)$"
 [diff "python"]
     xfuncname="^\\s*(class.*\\(.*\\)|def.*)(\\(|:)"
+[push]
+	default = matching

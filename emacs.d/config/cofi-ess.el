@@ -5,6 +5,9 @@
 (add-to-hooks #'eldoc-mode '(ess-mode-hook
                              inferior-ess-mode-hook))
 
+(add-to-hooks #'smartparens-mode '(ess-mode-hook
+                                   inferior-ess-mode-hook))
+
 (add-to-hooks #'auto-complete-mode '(ess-mode-hook
                                      inferior-ess-mode-hook))
 

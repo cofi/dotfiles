@@ -3,7 +3,7 @@
 (deftheme cofi-dark
   "cofi theme.")
 
-(let ((bg "#0e0d0f")
+(let ((bg "#131113")
       (fg "#FFFFFF")
       (vc-added "green")
       (vc-removed "red")

@@ -79,3 +79,6 @@
 [submodule "elisp/vendor/python-environment"]
 	path = elisp/vendor/python-environment
 	url = https://github.com/tkf/emacs-python-environment.git
+[submodule "elisp/vendor/sphinx-doc"]
+	path = elisp/vendor/sphinx-doc
+	url = https://github.com/naiquevin/sphinx-doc.el.git

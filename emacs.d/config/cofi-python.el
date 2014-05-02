@@ -1,4 +1,6 @@
 (require 'cl-lib)
+(add-to-loadpath "~/.elisp/vendor/pylookup"
+                 "~/.elisp/vendor/sphinx-doc/")
 
 ;; setup for ipython 0.11
 (setq python-shell-interpreter "ipython"
@@ -180,5 +182,8 @@
    :doc-spec
    '(("(python)Index" pydoc-info-lookup-transform-entry)
      ("(sphinx)Index" pydoc-info-lookup-transform-entry))))
+
+(autoload 'sphinx-doc-mode "sphinx-doc" nil t)
+(add-hook 'python-mode-hook 'sphinx-doc-mode)
 
 (provide 'cofi-python)

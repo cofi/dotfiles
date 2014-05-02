@@ -80,57 +80,57 @@ include "/usr/share/X11/locale/en_US.UTF-8/Compose"
 <Multi_key> <asciicircum> <-> : "⁻" U207B #SUPERSCRIPT -
 
 #GREEK LETTERS
-<Multi_key> <g> <a> : "α" U03B1 # GRREK SMALL LETTER ALPHA
-<Multi_key> <g> <b> : "β" U03B2 # GRREK SMALL LETTER BETA
-<Multi_key> <g> <c> : "γ" U03B3 # GRREK SMALL LETTER GAMMA
-<Multi_key> <g> <d> : "δ" U03B4 # GRREK SMALL LETTER DELTA
-<Multi_key> <g> <e> : "ε" U03B5 # GRREK SMALL LETTER EPSILON
-<Multi_key> <g> <z> : "ζ" U03B6 # GRREK SMALL LETTER ZETA
-<Multi_key> <g> <h> : "η" U03B7 # GRREK SMALL LETTER ETA
-<Multi_key> <g> <g> : "θ" U03B8 # GRREK SMALL LETTER THETA
-<Multi_key> <g> <i> : "ι" U03B9 # GRREK SMALL LETTER IOTA
-<Multi_key> <g> <k> : "κ" U03BA # GRREK SMALL LETTER KAPPA
-<Multi_key> <g> <l> : "λ" U03BB # GRREK SMALL LETTER LAMBDA
-<Multi_key> <g> <m> : "μ" U03BC # GRREK SMALL LETTER MU
-<Multi_key> <g> <n> : "ν" U03BD # GRREK SMALL LETTER NU
-<Multi_key> <g> <f> : "ξ" U03BE # GRREK SMALL LETTER XI
-<Multi_key> <g> <o> : "ο" U03BF # GRREK SMALL LETTER OMIKRON
-<Multi_key> <g> <p> : "π" U03C0 # GRREK SMALL LETTER PI
-<Multi_key> <g> <r> : "ρ" U03C1 # GRREK SMALL LETTER RHO
-#<Multi_key> <g> <s> : "ς" U03C2 # GRREK SMALL LETTER FINAL SIGMA
-<Multi_key> <g> <s> : "σ" U03C3 # GRREK SMALL LETTER SIGMA
-<Multi_key> <g> <t> : "τ" U03C4 # GRREK SMALL LETTER TAU
-<Multi_key> <g> <u> : "υ" U03C5 # GRREK SMALL LETTER UPSILON
-<Multi_key> <g> <v> : "φ" U03C6 # GRREK SMALL LETTER PHI
-<Multi_key> <g> <x> : "χ" U03C7 # GRREK SMALL LETTER CHI
-<Multi_key> <g> <y> : "ψ" U03C8 # GRREK SMALL LETTER PSI
-<Multi_key> <g> <w> : "ω" U03C9 # GRREK SMALL LETTER OMEGA
+<Multi_key> <g> <a> : "α" U03B1 # GREEK SMALL LETTER ALPHA
+<Multi_key> <g> <b> : "β" U03B2 # GREEK SMALL LETTER BETA
+<Multi_key> <g> <c> : "γ" U03B3 # GREEK SMALL LETTER GAMMA
+<Multi_key> <g> <d> : "δ" U03B4 # GREEK SMALL LETTER DELTA
+<Multi_key> <g> <e> : "ε" U03B5 # GREEK SMALL LETTER EPSILON
+<Multi_key> <g> <z> : "ζ" U03B6 # GREEK SMALL LETTER ZETA
+<Multi_key> <g> <h> : "η" U03B7 # GREEK SMALL LETTER ETA
+<Multi_key> <g> <g> : "θ" U03B8 # GREEK SMALL LETTER THETA
+<Multi_key> <g> <i> : "ι" U03B9 # GREEK SMALL LETTER IOTA
+<Multi_key> <g> <k> : "κ" U03BA # GREEK SMALL LETTER KAPPA
+<Multi_key> <g> <l> : "λ" U03BB # GREEK SMALL LETTER LAMBDA
+<Multi_key> <g> <m> : "μ" U03BC # GREEK SMALL LETTER MU
+<Multi_key> <g> <n> : "ν" U03BD # GREEK SMALL LETTER NU
+<Multi_key> <g> <f> : "ξ" U03BE # GREEK SMALL LETTER XI
+<Multi_key> <g> <o> : "ο" U03BF # GREEK SMALL LETTER OMIKRON
+<Multi_key> <g> <p> : "π" U03C0 # GREEK SMALL LETTER PI
+<Multi_key> <g> <r> : "ρ" U03C1 # GREEK SMALL LETTER RHO
+#<Multi_key> <g> <s> : "ς" U03C2 # GREEK SMALL LETTER FINAL SIGMA
+<Multi_key> <g> <s> : "σ" U03C3 # GREEK SMALL LETTER SIGMA
+<Multi_key> <g> <t> : "τ" U03C4 # GREEK SMALL LETTER TAU
+<Multi_key> <g> <u> : "υ" U03C5 # GREEK SMALL LETTER UPSILON
+<Multi_key> <g> <v> : "φ" U03C6 # GREEK SMALL LETTER PHI
+<Multi_key> <g> <x> : "χ" U03C7 # GREEK SMALL LETTER CHI
+<Multi_key> <g> <y> : "ψ" U03C8 # GREEK SMALL LETTER PSI
+<Multi_key> <g> <w> : "ω" U03C9 # GREEK SMALL LETTER OMEGA
 
 
-<Multi_key> <g> <A> : "Α" U03B1 # GRREK CAPITAL LETTER ALPHA
-<Multi_key> <g> <B> : "Β" U03B2 # GRREK CAPITAL LETTER BETA
-<Multi_key> <g> <C> : "Γ" U03B3 # GRREK CAPITAL LETTER GAMMA
-<Multi_key> <g> <D> : "Δ" U03B4 # GRREK CAPITAL LETTER DELTA
-<Multi_key> <g> <E> : "Ε" U03B5 # GRREK CAPITAL LETTER EPSILON
-<Multi_key> <g> <Z> : "Ζ" U03B6 # GRREK CAPITAL LETTER ZETA
-<Multi_key> <g> <H> : "Η" U03B7 # GRREK CAPITAL LETTER ETA
-<Multi_key> <g> <G> : "Θ" U03B8 # GRREK CAPITAL LETTER THETA
-<Multi_key> <g> <I> : "Ι" U03B9 # GRREK CAPITAL LETTER IOTA
-<Multi_key> <g> <K> : "Κ" U03BA # GRREK CAPITAL LETTER KAPPA
-<Multi_key> <g> <L> : "Λ" U03BB # GRREK CAPITAL LETTER LAMBDA
-<Multi_key> <g> <M> : "Μ" U03BC # GRREK CAPITAL LETTER MU
-<Multi_key> <g> <N> : "Ν" U03BD # GRREK CAPITAL LETTER NU
-<Multi_key> <g> <F> : "Ξ" U03BE # GRREK CAPITAL LETTER XI
-<Multi_key> <g> <O> : "Ο" U03BF # GRREK CAPITAL LETTER OMIKRON
-<Multi_key> <g> <P> : "Π" U03C0 # GRREK CAPITAL LETTER PI
-<Multi_key> <g> <R> : "Ρ" U03C1 # GRREK CAPITAL LETTER RHO
-<Multi_key> <g> <S> : "Σ" U03C3 # GRREK CAPITAL LETTER SIGMA
-<Multi_key> <g> <T> : "Τ" U03C4 # GRREK CAPITAL LETTER TAU
-<Multi_key> <g> <U> : "Υ" U03C5 # GRREK CAPITAL LETTER UPSILON
-<Multi_key> <g> <V> : "Φ" U03C6 # GRREK CAPITAL LETTER PHI
-<Multi_key> <g> <X> : "Χ" U03C7 # GRREK CAPITAL LETTER CHI
-<Multi_key> <g> <Y> : "Ψ" U03C8 # GRREK CAPITAL LETTER PSI
-<Multi_key> <g> <W> : "Ω" U03C9 # GRREK CAPITAL LETTER OMEGA
+<Multi_key> <g> <A> : "Α" U0391 # GREEK CAPITAL LETTER ALPHA
+<Multi_key> <g> <B> : "Β" U0302 # GREEK CAPITAL LETTER BETA
+<Multi_key> <g> <C> : "Γ" U0393 # GREEK CAPITAL LETTER GAMMA
+<Multi_key> <g> <D> : "Δ" U0394 # GREEK CAPITAL LETTER DELTA
+<Multi_key> <g> <E> : "Ε" U0395 # GREEK CAPITAL LETTER EPSILON
+<Multi_key> <g> <Z> : "Ζ" U0396 # GREEK CAPITAL LETTER ZETA
+<Multi_key> <g> <H> : "Η" U0397 # GREEK CAPITAL LETTER ETA
+<Multi_key> <g> <G> : "Θ" U0398 # GREEK CAPITAL LETTER THETA
+<Multi_key> <g> <I> : "Ι" U0399 # GREEK CAPITAL LETTER IOTA
+<Multi_key> <g> <K> : "Κ" U039A # GREEK CAPITAL LETTER KAPPA
+<Multi_key> <g> <L> : "Λ" U039B # GREEK CAPITAL LETTER LAMBDA
+<Multi_key> <g> <M> : "Μ" U039C # GREEK CAPITAL LETTER MU
+<Multi_key> <g> <N> : "Ν" U039D # GREEK CAPITAL LETTER NU
+<Multi_key> <g> <F> : "Ξ" U039E # GREEK CAPITAL LETTER XI
+<Multi_key> <g> <O> : "Ο" U039F # GREEK CAPITAL LETTER OMIKRON
+<Multi_key> <g> <P> : "Π" U03A0 # GREEK CAPITAL LETTER PI
+<Multi_key> <g> <R> : "Ρ" U03A1 # GREEK CAPITAL LETTER RHO
+<Multi_key> <g> <S> : "Σ" U03A3 # GREEK CAPITAL LETTER SIGMA
+<Multi_key> <g> <T> : "Τ" U03A4 # GREEK CAPITAL LETTER TAU
+<Multi_key> <g> <U> : "Υ" U03A5 # GREEK CAPITAL LETTER UPSILON
+<Multi_key> <g> <V> : "Φ" U03A6 # GREEK CAPITAL LETTER PHI
+<Multi_key> <g> <X> : "Χ" U03A7 # GREEK CAPITAL LETTER CHI
+<Multi_key> <g> <Y> : "Ψ" U03A8 # GREEK CAPITAL LETTER PSI
+<Multi_key> <g> <W> : "Ω" U03A9 # GREEK CAPITAL LETTER OMEGA
 
 <Multi_key> <S> <S> : "★" U2605 # BLACK STAR
 <Multi_key> <S> <s> : "☆" U2606 # WHITE STAR

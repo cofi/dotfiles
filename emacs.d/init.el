@@ -40,6 +40,7 @@
                    dedicated
                    diminish
                    elein
+                   elfeed
                    elpy
                    epc
                    ercn
@@ -136,6 +137,7 @@
                           (setq cofi/comm-instance t
                                 cofi/full-emacs nil)
                           (require 'cofi-erc)
+                          (require 'cofi-news)
                           (add-hook 'emacs-startup-hook 'gnus 'append)
                           (run-with-timer 10 600 'offlineimap)
                           ;; Exit Emacs after quitting gnus

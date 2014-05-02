@@ -51,7 +51,7 @@
   (kill-region (progn (sp-beginning-of-sexp)
                       (1- (point)))
                (progn (sp-end-of-sexp)
-                      (point))))
+                      (1+  (point)))))
 
 (fill-keymap sp-keymap
  "M-)"   'sp-up-sexp

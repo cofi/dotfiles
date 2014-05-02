@@ -171,9 +171,6 @@
     "C-c t" #'jedi:get-in-function-call
     "C-c g" #'jedi:goto-definition))
 
-(add-hook 'python-mode-hook
-          (lambda () (setq header-line-format '((t (:eval (which-function)))))))
-
 (require-and-exec 'pydoc-info
   (require 'info-look)
   (info-lookup-add-help

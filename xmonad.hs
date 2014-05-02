@@ -148,7 +148,7 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-S-e", spawn "emacsclient -c")
                  , ("M-S-m", raiseMaybe (spawn "gnus") gnusQuery)
                  , ("M-f", raiseMaybe (spawnOn "2:browse" "firefox") firefoxQuery)
-                 , ("M-S-f", raiseMaybe (runInTerm "" "newsbeuter") newsbeuterQuery)
+                 , ("M-S-f", raise elfeedQuery)
                    -- Layoutjumper
                  , ("M-<F1>", sendMessage $ JumpToLayout "Float")
                  , ("M-<F2>", sendMessage $ JumpToLayout "Two")
@@ -276,7 +276,7 @@ myLayout = windowArrange $ smartBorders $ avoidStruts $
 prefixTitle prefix = fmap (prefix `isPrefixOf`) title
 emacsQuery = prefixTitle "emacs"
 gnusQuery = title =? "Gnus Mail"
-newsbeuterQuery = title =? "newsbeuter"
+elfeedQuery = title =? "Elfeed"
 firefoxQuery = className =? "Firefox"
 
 -- Tie area ----------------------------------------
@@ -284,7 +284,6 @@ myManageHook = (composeAll . concat $
                [ [ isFullscreen    --> doFullFloat
                  , isDialog        --> doCenterFloat
                  , gnusQuery       --> doShift "mail"
-                 , newsbeuterQuery --> doShift "feeds"
                  ]
                 ,[ className =? f --> doFloat            | f <- floats ]
                 ,[ className =? f --> doCenterFloat      | f <- cfloats ]

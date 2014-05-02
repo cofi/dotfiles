@@ -64,7 +64,7 @@ main = do
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir
     where
-      myStartupHook = setWMName "LG3D"
+      myStartupHook = ewmhDesktopsStartup >> setWMName "LG3D"
       xmobar systemID = case (nodeName systemID) of
         "hitchhiker" -> "xmobar ~/.xmobar/laptop"
         "coficore"   -> "xmobar ~/.xmobar/desktop"

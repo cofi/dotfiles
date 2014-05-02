@@ -103,8 +103,8 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
                  , ("M-C-<Tab>", toggleWS)
                  , ("M-]", nextEmpty)
                  , ("M-[", prevEmpty)
-                 , ("M-S-]", shiftToNext)
-                 , ("M-S-[", shiftToPrev)
+                 , ("M-S-]", shiftToNextEmpty)
+                 , ("M-S-[", shiftToPrevEmpty)
                  , ("M-S-`", windows $ W.shift "hide")
                  , ("M-`", windows $ W.greedyView "hide")
 
@@ -187,8 +187,8 @@ myKeys home = [ ("M-<Backspace>", spawn respawn)
         prevNonEmpty = moveTo Prev NonEmptyWS
         nextEmpty = moveTo Next EmptyWS
         prevEmpty = moveTo Prev EmptyWS
-        shiftToNext = shiftTo Next EmptyWS
-        shiftToPrev = shiftTo Prev EmptyWS
+        shiftToNextEmpty = shiftTo Next EmptyWS
+        shiftToPrevEmpty = shiftTo Prev EmptyWS
         acPromptConfig = promptConfig { autoComplete = Just 500000 }
         programBindings = prefixKeymap "M-o" [ ("m", spawn "smplayer")
                                              , ("d", spawn "dolphin")

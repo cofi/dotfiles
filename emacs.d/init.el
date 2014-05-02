@@ -16,7 +16,7 @@
                  "~/.emacs.d/config"
                  "~/.elisp/vendor/sackspace"
                  "~/.elisp/vendor/keychain-environment"
-                 "~/.elisp/vendor/pylookup")
+)
 
 (require 'package)
 (package-initialize)
@@ -52,9 +52,6 @@
                    ghc
                    ggtags
                    gist
-                   gitconfig-mode
-                   git-commit-mode
-                   gitignore-mode
                    haskell-mode
                    highlight-parentheses
                    highlight-symbol
@@ -64,8 +61,6 @@
                    keyfreq
                    keywiz
                    lacarte
-                   magit
-                   magit-gh-pulls
                    markdown-mode
                    multi-term
                    offlineimap

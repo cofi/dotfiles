@@ -60,6 +60,7 @@ main = do
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = updatePointer (Relative 0.5 0.5) >> dynamicLogWithPP (myPP xmproc)
+                         , handleEventHook = handleEventHook defaultConfig <+> fullscreenEventHook
                          , manageHook = myManageHook
                          , startupHook = myStartupHook
                          } `additionalKeysP` myKeys homeDir

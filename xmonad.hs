@@ -56,7 +56,7 @@ main = do
                          , borderWidth = 1
                          , normalBorderColor = "#000000"
                          , focusedBorderColor = "#9A0000"
-                         , workspaces = ["1:comm", "2:browse", "3:code"] ++ map show [4..9] ++ ["mail", "feeds", "hide"]
+                         , workspaces = ["1:comm", "2:browse", "3:code"] ++ map show [4..9] ++ ["mail", "feeds", "hide", "games"]
                          , modMask = mod4Mask -- use the Windows button as mod
                          , layoutHook = myLayout
                          , logHook = updatePointer (Relative 0.5 0.5) >> dynamicLogWithPP (myPP xmproc)
@@ -294,12 +294,14 @@ myManageHook = (composeAll . concat $
                 ,[ className =? b --> doShift "2:browse" | b <- browse ]
                 ,[ className =? c --> doShift "3:code"   | c <- code ]
                 ,[ className =? i --> doIgnore           | i <- ignores ]
+                ,[ className =? g --> doShift "games"    | g <- games ]
                 ,[ namedScratchpadManageHook scratchpads ]
                 ])
                <+> manageDocks
   where ignores = []
         floats = ["Plasma-desktop", "Kmix", "Klipper"]
         cfloats = ["MPlayer", "Smplayer", "Vlc", "Kaffeine"]
+        games = ["ck2"]
         browse = []
         code  = []
         comms = []

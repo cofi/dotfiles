@@ -297,7 +297,7 @@ myManageHook = (composeAll . concat $
                 ])
                <+> manageDocks
   where ignores = []
-        floats = ["Plasma-desktop", "Kmix"]
+        floats = ["Plasma-desktop", "Kmix", "Klipper"]
         cfloats = ["MPlayer", "Smplayer", "Vlc", "Kaffeine"]
         browse = []
         code  = []

@@ -95,6 +95,7 @@
     "v" 'cofi/visit-org-agenda-files
     "V" 'cofi/helm-org-files
     "c" 'cfw:open-org-calendar
+    "C" 'calendar
     "f" 'org-footnote-action
     "SPC" (cmd set-todo (let ((current-prefix-arg '(4))) (call-interactively 'org-todo))))
 

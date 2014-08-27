@@ -21,6 +21,10 @@
           (elfeed-make-tagger :before "14 days ago"
                               :add 'expiring))
 
+(add-hook 'elfeed-new-entry-hook
+          (lambda (entry)
+            (setf (elfeed-entry-content entry) nil)))
+
 (defun cofi/elfeed ()
   (interactive)
   (condition-case nil

@@ -86,8 +86,7 @@
 (setq browse-url-browser-function '(("/usr/share/doc/hyperspec" . w3m-browse-url)
                                     ("."                        . browse-url-firefox)))
 ;; tab settings
-(setq-default tab-stop-list (range 4 160 4)
-              indent-tabs-mode nil     ; no nasty tabs i say!
+(setq-default indent-tabs-mode nil     ; no nasty tabs i say!
               tab-width 4)
 (setq-default fill-column 80)
 (setq tab-always-indent 'complete)

@@ -21,11 +21,6 @@ function! YRRunAfterMaps()
     nnoremap Y   :<C-U>YRYankCount 'y$'<CR>
 endfunction
 
-"System clipboard goodness
-nnoremap <C-v>   "*p
-inoremap <C-v>  <ESC>"*pa
-vnoremap <C-c>  "*y
-
 "Movement
 	"Buffer movement
     nnoremap <Leader>p         :bp<CR>

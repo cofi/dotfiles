@@ -384,6 +384,9 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
   "] x"   #'forward-sexp
   )
 
+(cofi/set-key evil-ex-search-keymap "C-r" 'evil-paste-from-register)
+(cofi/set-key evil-visual-state-map "/" "y/\C-r\"\C-m")
+
 (evil-define-key 'insert message-mode-map
   (kbd "RET") #'cofi/mail-return-keep-citation-markers)
 

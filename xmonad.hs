@@ -365,6 +365,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , wiki
                                                   , wikiD
                                                   , amazon
+                                                  , play
                                                   , github
                                                   , bitbucket
                                                   , sourceforge
@@ -394,6 +395,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , ctan
                                                   , rfc
                                                   , duden
+                                                  , goodreads
                                                   , S.prefixAware google
                                                   ]
 
@@ -424,6 +426,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       nullege = S.searchEngine "null" "http://nullege.com/codes/search/"
       lispdoc = S.searchEngine "ld" "http://lispdoc.com/?q="
       amazon = S.searchEngine "ama" "http://www.amazon.de/s/url=search-alias%3Daps&x=0&y=0&field-keywords="
+      play = S.searchEngine "play" "https://play.google.com/store/search?q="
       duden = S.searchEngine "duden" "http://www.duden.de/suchen/dudenonline/"
       sourceforge = S.searchEngine "sf" "http://sourceforge.net/search/?q="
       scholar = S.searchEngine "scholar" "https://scholar.google.de/scholar?q="
@@ -431,6 +434,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       ieee= S.searchEngine "ieee" "http://ieeexplore.ieee.org/search/searchresult.jsp?queryText="
       thesaurus = S.searchEngine "th" "http://thesaurus.com/browse/"
       emacs = S.searchEngine "emacs" "http://www.emacswiki.org/cgi-bin/wiki?search="
+      goodreads = S.searchEngine "goodreads" "https://www.goodreads.com/search?query="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
 

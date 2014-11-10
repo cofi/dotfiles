@@ -1,7 +1,5 @@
 (require 'cl-lib)
 (require 'erc)
-(add-to-loadpath "~/.elisp/vendor/erc-image/")
-(require 'erc-image)
 (setq erc-modules '(
                     autoaway
                     autojoin
@@ -9,7 +7,6 @@
                     completion
                     ercn
                     irccontrols
-                    image
                     keep-place
                     list
                     log

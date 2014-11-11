@@ -21,7 +21,10 @@
 (require 'package)
 (package-initialize)
 (require 'cofi-util)
-(pour-lists package-archives '(("marmalade" . "http://marmalade-repo.org/packages/")))
+(pour-lists package-archives '(
+                               ("marmalade" . "http://marmalade-repo.org/packages/")
+                               ("melpa"     . "http://melpa.org/packages/")
+                               ))
 (dolist (package '(
                    all
                    ace-jump-mode

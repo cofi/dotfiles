@@ -26,8 +26,8 @@
       evil-operator-state-tag (propertize "O" 'face '((:background "purple"))))
 
 ;;; evil-surround
-(require-and-exec 'surround
-  (setq-default surround-pairs-alist '((?\( . ("(" . ")"))
+(require-and-exec 'evil-surround
+  (setq-default evil-surround-pairs-alist '((?\( . ("(" . ")"))
                                        (?\[ . ("[" . "]"))
                                        (?\{ . ("{" . "}"))
 
@@ -41,7 +41,7 @@
                                        (?b . ("[" . "]"))
                                        (?B . ("{" . "}"))
                                        (?< . ("<" . ">"))
-                                       (?t . surround-read-tag)))
+                                       (?t . evil-surround-read-tag)))
 
   (defun cofi/surround-add-pair (trigger begin-or-fun &optional end)
     "Add a surround pair.
@@ -52,9 +52,9 @@ If `end' is nil `begin-or-fun' will be treated as a fun."
                 (if end
                     (cons begin-or-fun end)
                   begin-or-fun))
-          surround-pairs-alist))
+          evil-surround-pairs-alist))
 
-  (global-surround-mode 1)
+  (global-evil-surround-mode 1)
   (add-to-hooks (lambda ()
                   (cofi/surround-add-pair "`" "`"  "'"))
                 '(emacs-lisp-mode-hook lisp-mode-hook))

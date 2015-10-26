@@ -361,7 +361,6 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , acm
                                                   , ieee
                                                   , ixquick
-                                                  , duck
                                                   , wiki
                                                   , wikiD
                                                   , amazon
@@ -399,7 +398,8 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , wh
                                                   , curse
                                                   , bnet
-                                                  , S.prefixAware google
+                                                  , google
+                                                  , S.prefixAware duck
                                                   ]
 
       -- new ones

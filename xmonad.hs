@@ -396,6 +396,9 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
                                                   , rfc
                                                   , duden
                                                   , goodreads
+                                                  , wh
+                                                  , curse
+                                                  , bnet
                                                   , S.prefixAware google
                                                   ]
 
@@ -435,6 +438,9 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       thesaurus = S.searchEngine "th" "http://thesaurus.com/browse/"
       emacs = S.searchEngine "emacs" "http://www.emacswiki.org/cgi-bin/wiki?search="
       goodreads = S.searchEngine "goodreads" "https://www.goodreads.com/search?query="
+      wh = S.searchEngine "wow" "http://www.wowhead.com/search?q="
+      curse = S.searchEngine "curse" "http://www.curse.com/search/addons?game-slug=wow&search="
+      bnet = S.searchEngine "bnet" "http://eu.battle.net/wow/en/search?q="
       -- new names
       mathworld = S.namedEngine "math" S.mathworld
 

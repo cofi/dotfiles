@@ -453,7 +453,7 @@ searchBindings = [("M-S-/ " ++ key, S.selectSearch engine) | (key, engine) <- se
       formatSearch name fstring = S.searchEngineF name (\s -> (printf fstring s) :: String)
       dopy s = case f of
                  ""    -> "http://python.org"
-                 "doc" -> "http://docs.python.org" ++ r
+                 "doc" -> "http://docs.python.org/" ++ r
                  "doc3" -> "http://docs.python.org/py3k/" ++ r
                  "lib" -> "http://docs.python.org/library/" ++ r ++ ".html"
                  "lib3" -> "http://docs.python.org/py3k/library/" ++ r ++ ".html"

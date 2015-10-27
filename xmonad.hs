@@ -315,6 +315,7 @@ scratchpads = [ NS "term" "urxvtcd -title term" (title =? "term") scratchFloat
               , NS "haskell" "urxvtcd -e ghci" (title =? "ghci") scratchFloat
               , NS "scala" "urxvtcd -title scala -e scala" (title =? "scala") scratchFloat
               , NS "lisp" "urxvtcd -title lisp -e sbcl" (title =? "lisp") scratchFloat
+              , NS "lua" "urxvtcd -title lua -e lua" (title =? "lua") scratchFloat
               , NS "r" "urxvtcd -title rpad -e R" (title =? "rpad") scratchFloat
 
               , NS "capture" "org-capture" (title =? "Capture Frame") orgFloat
@@ -334,6 +335,7 @@ scratchpadBindings = prefixKeymap "M-;" [ ("t", namedScratchpadAction scratchpad
                                         , ("c", namedScratchpadAction scratchpads "calc")
                                         , ("C", namedScratchpadAction scratchpads "clojure")
                                         , ("l", namedScratchpadAction scratchpads "lisp")
+                                        , ("S-l", namedScratchpadAction scratchpads "lua")
                                         , ("m", namedScratchpadAction scratchpads "monitor")
                                         , ("o", namedScratchpadAction scratchpads "capture")
                                         , ("a", namedScratchpadAction scratchpads "agenda")

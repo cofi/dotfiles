@@ -25,12 +25,6 @@
 [submodule "elisp/vendor/gnus"]
 	path = elisp/vendor/gnus
 	url = http://git.gnus.org/gnus.git
-[submodule "elisp/vendor/evil"]
-	path = elisp/vendor/evil
-	url = git://gitorious.org/evil/evil.git
-[submodule "elisp/vendor/evil-surround"]
-	path = elisp/vendor/evil-surround
-	url = git://github.com/timcharper/evil-surround.git
 [submodule "zsh/zsh-completions"]
 	path = zsh/zsh-completions
 	url = git://github.com/zsh-users/zsh-completions.git

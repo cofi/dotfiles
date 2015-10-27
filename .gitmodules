@@ -1,9 +1,6 @@
 [submodule "elisp/vendor/keychain-environment"]
 	path = elisp/vendor/keychain-environment
 	url = git://github.com/cofi/keychain-environment.el.git
-[submodule "elisp/vendor/google-weather-el"]
-	path = elisp/vendor/google-weather-el
-	url = git://git.naquadah.org/google-weather-el.git
 [submodule "elisp/vendor/mk-project"]
 	path = elisp/vendor/mk-project
 	url = git://github.com/mattkeller/mk-project.git

@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: for ipairs
+# key: fori
+# condition: (cofi/snippet-in-code)
+# --
+for $1 in ipairs($2) do
+   $0
+end

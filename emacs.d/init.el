@@ -66,6 +66,7 @@
                    keyfreq
                    keywiz
                    lacarte
+                   lua-mode
                    markdown-mode
                    multi-term
                    offlineimap

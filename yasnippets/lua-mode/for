@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: for
+# key: for
+# condition: (cofi/snippet-in-code)
+# --
+for $1 in $2 do
+   $0
+end

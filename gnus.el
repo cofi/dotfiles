@@ -18,12 +18,12 @@
           (org-set-property org-contacts-email-property (concat mails " " mail)))))))
 
 ;;; methods
-(setq nnimap-shell-program "/usr/lib/dovecot/imap -c ~/config/dovecot.conf"
+(setq imap-shell-program "/usr/lib/dovecot/imap -c ~/config/dovecot.conf"
+      nnimap-shell-program imap-shell-program
       gnus-select-method '(nnimap "Mail"
                                   (nnimap-stream shell))
       gnus-secondary-select-methods '((nntp "news.gmane.org")
                                       (nntp "news.eternal-september.org")))
-
 ;;; sending
 (setq sendmail-program "msmtp"
       message-sendmail-extra-arguments '("-a" "gmail")
